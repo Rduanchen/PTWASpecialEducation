@@ -5,7 +5,7 @@
         <!-- Number buttons -->
             <div class="row">
                 <div class="col-12 mb-2">
-                    <input type="text" class="form-control rtl-input" id="keyboardInput" v-model="Num">
+                    <input type="text" class="form-control rtl-input" id="keyboardInput" v-model="Num" readonly>
                 </div>
             </div>
             <div class="row">
