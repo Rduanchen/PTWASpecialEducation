@@ -34,6 +34,15 @@
               </TrueFalseGame>
               <SelectGame v-if="GameConfig.GameType == 'SelectGame'" :question=GameConfig.Questions[1].Question :imgsrc=GameConfig.Questions[1].img :answer=GameConfig.Questions[1].Answer></SelectGame>
               <NumberInputGame v-if="GameConfig.GameType == 'NumberInputGame'" :question=GameConfig.Questions[Nowlevel-1].Question :answer=GameConfig.Questions[Nowlevel-1].Answer :imgsrc=GameConfig.Questions[Nowlevel-1].img></NumberInputGame>
+              <ClassifyGame v-if="GameConfig.GameType == 'ClassifyGame'"
+               :question=GameConfig.Questions[Nowlevel-1].Question 
+               :answer=GameConfig.Questions[Nowlevel-1].Answer>
+              </ClassifyGame>
+              <SortGame v-if="GameConfig.GameType == 'SortGame'"
+               :question=GameConfig.Questions[Nowlevel-1].Question 
+               :answer=GameConfig.Questions[Nowlevel-1].Answer>
+              </SortGame>
+
             </div>
           </div>
           <div class="col-3 card SideBar">
@@ -89,6 +98,8 @@ import array2csv from '@/utilitys/array2csv.js';
 import TrueFalseGame from '@/views/GameTemplate/TrueFalseGame.vue';
 import SelectGame from '@/views/GameTemplate/SelectGame.vue';
 import NumberInputGame from '@/views/GameTemplate/NumberInputGame.vue';
+import ClassifyGame from '@/views/GameTemplate/ClassifyGame.vue';
+import SortGame from '@/views/GameTemplate/SortGame.vue';
 export default {
     data() {
       return {
@@ -192,7 +203,9 @@ export default {
     components: {
         TrueFalseGame,
         SelectGame,
-        NumberInputGame
+        NumberInputGame,
+        ClassifyGame,
+        SortGame
     }
 }
 </script>

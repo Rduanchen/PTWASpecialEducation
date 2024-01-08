@@ -56,6 +56,11 @@ const router = createRouter({
       component:()=>import("@/components/draganddrop.vue")
     },
     {
+      path:"/ClassifyGame",
+      name:"ClassifyGame",
+      component:()=>import("@/views/GameTemplate/ClassifyGame.vue")
+    },
+    {
       path:"/SortGame",
       name:"SortGame",
       component:()=>import("@/views/GameTemplate/SortGame.vue")

@@ -17,15 +17,15 @@ const yuckyMeals = ref([
 
 <template>
   <h1>Favorite Foods</h1>
-  <draggable v-model="meals" tag="ul" group="meals">
+  <draggable v-model="meals" group="meals" >
     <template #item="{ element: meal }">
-      <li>{{ meal }}</li>
+      <button type="button" class="btn btn-primary m-1">{{ meal }}</button>
     </template>
   </draggable>
   <h1>Terrible Foods</h1>
-  <draggable v-model="yuckyMeals" tag="ul" group="meals">
+  <draggable v-model="yuckyMeals"  group="meals">
     <template #item="{ element: meal }">
-      <li>{{ meal }}</li>
+      <button type="button" class="btn btn-primary m-1">{{ meal }}</button>
     </template>
   </draggable>
 </template>

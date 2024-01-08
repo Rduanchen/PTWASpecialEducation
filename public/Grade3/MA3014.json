@@ -1,0 +1,46 @@
+{
+    "id": "MA3014",
+    "introvideo": "src",
+    "TotalLevel": 5,
+    "GameType": "ClassifyGame",
+    "ItemsWithImage": true,
+    "Questions": [
+        {   
+            "Question": [
+                {
+                    "Question":"請將下列物品分類"
+                },
+                {
+                    "text": "1",
+                    "img": "../../assets/images/pics/cover_info.png"
+                },
+                {
+                    "text": "2",
+                    "img": "../../assets/images/pics/cover_info.png"
+                },
+                {
+                    "text": "3",
+                    "img": "../../assets/images/pics/cover_info.png"
+                },
+                {
+                    "text": "4",
+                    "img": "../../assets/images/pics/cover_info.png"
+                },
+                {
+                    "text": "5",
+                    "img": "../../assets/images/pics/cover_info.png"
+                }
+            ],
+            "Answer": [
+                {
+                    "GroupName": "組別目前只能兩個",
+                    "Items":["1","2","3"]
+                },
+                {
+                    "GroupName": "未加上照片功能",
+                    "Items":["4","5"]
+                }
+            ]
+        }
+    ]
+}
