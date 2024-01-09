@@ -55,6 +55,12 @@
                :question=GameConfig.Questions[Nowlevel-1].Question 
                :answer=GameConfig.Questions[Nowlevel-1].Answer
                @check-answer="CheckAnswer"></SortGame>
+              
+              <FindTheItemGame v-if="GameConfig.GameType == 'FindTheItemGame'"
+               :question=GameConfig.Questions[Nowlevel-1].Question 
+               :answer=GameConfig.Questions[Nowlevel-1].Answer
+               :imgsrc=GameConfig.Questions[Nowlevel-1].img
+               @check-answer="CheckAnswer"></FindTheItemGame>
 
             </div>
           </div>
@@ -113,6 +119,7 @@ import SelectGame from '@/views/GameTemplate/SelectGame.vue';
 import NumberInputGame from '@/views/GameTemplate/NumberInputGame.vue';
 import ClassifyGame from '@/views/GameTemplate/ClassifyGame.vue';
 import SortGame from '@/views/GameTemplate/SortGame.vue';
+import FindTheItemGame from '@/views/GameTemplate/FindTheItemGame.vue';
 export default {
     data() {
       return {
@@ -222,7 +229,8 @@ export default {
         SelectGame,
         NumberInputGame,
         ClassifyGame,
-        SortGame
+        SortGame,
+        FindTheItemGame
     }
 }
 </script>

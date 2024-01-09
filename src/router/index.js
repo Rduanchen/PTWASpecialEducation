@@ -64,6 +64,11 @@ const router = createRouter({
       path:"/SortGame",
       name:"SortGame",
       component:()=>import("@/views/GameTemplate/SortGame.vue")
+    },
+    {
+      path:"/FindTheItemGame",
+      name:"FindTheItemGame",
+      component:()=>import("@/views/GameTemplate/FindTheItemGame.vue")
     }
   ]
 });
