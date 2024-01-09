@@ -59,7 +59,7 @@ export default {
     
     },
     created() {
-        this.imageUrl=new URL(this.imgsrc, import.meta.url).href
+        this.imageUrl=new URL(`../../assets/GamePic/${this.imgsrc}`, import.meta.url).href
         console.log(this.imageUrl);
     }
 }
