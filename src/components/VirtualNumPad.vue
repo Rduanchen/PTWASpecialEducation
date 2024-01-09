@@ -41,7 +41,7 @@ export default {
         }
     },
     methods:{
-        input(num){
+        input(num){48
             this.Num+=num;
         },
         deleat(){
@@ -49,7 +49,7 @@ export default {
         },
         submit(){
             this.$emit('submit',this.Num);
-            console.log('Sent '+this.Num+'to parent');
+            console.log('Virtual NumPad Sent Num'+this.Num+' to parent');
         }
     }
 }

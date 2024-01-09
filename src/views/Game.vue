@@ -30,18 +30,31 @@
               <TrueFalseGame v-if="GameConfig.GameType == 'TrueFalse'"
                :question="GameConfig.Questions[Nowlevel - 1].Question"
                :answer="GameConfig.Questions[Nowlevel - 1].Answer"
-               :imgsrc="GameConfig.Questions[Nowlevel - 1].img">
+               :imgsrc="GameConfig.Questions[Nowlevel - 1].img"
+               @check-answer="CheckAnswer">
               </TrueFalseGame>
-              <SelectGame v-if="GameConfig.GameType == 'SelectGame'" :question=GameConfig.Questions[1].Question :imgsrc=GameConfig.Questions[1].img :answer=GameConfig.Questions[1].Answer></SelectGame>
-              <NumberInputGame v-if="GameConfig.GameType == 'NumberInputGame'" :question=GameConfig.Questions[Nowlevel-1].Question :answer=GameConfig.Questions[Nowlevel-1].Answer :imgsrc=GameConfig.Questions[Nowlevel-1].img></NumberInputGame>
+
+              <SelectGame v-if="GameConfig.GameType == 'SelectGame'" 
+              :question=GameConfig.Questions[1].Question 
+              :imgsrc=GameConfig.Questions[1].img 
+              :answer=GameConfig.Questions[1].Answer
+              @check-answer="CheckAnswer"></SelectGame>
+
+              <NumberInputGame v-if="GameConfig.GameType == 'NumberInputGame'" 
+              :question=GameConfig.Questions[Nowlevel-1].Question 
+              :answer=GameConfig.Questions[Nowlevel-1].Answer
+              :imgsrc=GameConfig.Questions[Nowlevel-1].img
+              @check-answer="CheckAnswer"></NumberInputGame>
+
               <ClassifyGame v-if="GameConfig.GameType == 'ClassifyGame'"
                :question=GameConfig.Questions[Nowlevel-1].Question 
-               :answer=GameConfig.Questions[Nowlevel-1].Answer>
-              </ClassifyGame>
+               :answer=GameConfig.Questions[Nowlevel-1].Answer
+               @check-answer="CheckAnswer"></ClassifyGame>
+
               <SortGame v-if="GameConfig.GameType == 'SortGame'"
                :question=GameConfig.Questions[Nowlevel-1].Question 
-               :answer=GameConfig.Questions[Nowlevel-1].Answer>
-              </SortGame>
+               :answer=GameConfig.Questions[Nowlevel-1].Answer
+               @check-answer="CheckAnswer"></SortGame>
 
             </div>
           </div>
@@ -134,6 +147,10 @@ export default {
 
     },
     methods: {
+        CheckAnswer(rep) {
+          //檢查答案
+          console.log('Game View Get Component Reply: '+rep);
+        },
         dataPreprocess() {
           //處裡遊戲的資料結構
           var level = 1;

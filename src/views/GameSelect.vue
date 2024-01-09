@@ -98,11 +98,11 @@ export default {
     // 在這裡你可以存取 this.$route.params.id
     this.ShowGrade = this.$route.params.id;
     (async () => {
-      var res = await fetchJson("/Grade"+this.ShowGrade+"/MathGrade"+this.ShowGrade+".json");
+      var res = await fetchJson("./Grade"+this.ShowGrade+"/MathGrade"+this.ShowGrade+".json");
       this.MathShowInfo = res.data;
-      res = await fetchJson("/Grade"+this.ShowGrade+"/ChineseGrade"+this.ShowGrade+".json");
+      res = await fetchJson("./Grade"+this.ShowGrade+"/ChineseGrade"+this.ShowGrade+".json");
       this.ChineseShowInfo = res.data;
-      res = await fetchJson("/Grade"+this.ShowGrade+"/TechnologyGrade"+this.ShowGrade+".json");
+      res = await fetchJson("./Grade"+this.ShowGrade+"/TechnologyGrade"+this.ShowGrade+".json");
       this.TechnologyShowInfo = res.data;
       console.log(this.MathShowInfo,this.ChineseShowInfo,this.TechnologyShowInfo);
       this.ShowInfo = this.MathShowInfo; //預設科目

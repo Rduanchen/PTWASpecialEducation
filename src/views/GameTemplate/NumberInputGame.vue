@@ -46,7 +46,7 @@ export default {
     },
     methods: {
         GetSubmitData(data){
-            console.log('get'+data);
+            console.log('Number Input Game Get:'+data);
             this.CheckAnswer(data);
         },
         CheckAnswer(data){
