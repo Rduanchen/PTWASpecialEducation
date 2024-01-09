@@ -140,7 +140,7 @@ export default {
         this.Grade = this.$route.params.Grade;
         this.Name = this.$route.params.GameName;
         (async () => {
-            const res = await fetchJson("/Grade"+this.Grade+"/"+this.GameID+".json");
+            const res = await fetchJson("./Grade"+this.Grade+"/"+this.GameID+".json");
             this.GameConfig = res.data;
             this.GameType = this.GameConfig.GameType;
         })();
