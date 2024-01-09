@@ -56,6 +56,9 @@ export default {
     },
     created() {
         this.imageUrl=new URL(this.imgsrc, import.meta.url).href
+        console.log(this.imgsrc);
+        console.log(import.meta.url);
+        console.log(this.imageUrl);
     },
     components: {
         VirtualNumPad
