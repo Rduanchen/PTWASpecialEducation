@@ -1,31 +1,42 @@
 <template>
-<div class="container">
-<div class="justify-content-center">
-    <div class="card mb-2">
-        <div class="card-body">
-            {{ question.Text }}
-        </div>
+    <div>
+        <canvas id="cvs" class="center" width="800" height="600" style="border: 1px solid #000" v-on:click="judge_position($event)"></canvas>
     </div>
-    <canvas id="cvs" class="center" width="800" height="600" style="border: 1px solid #000" v-on:click="judge_position($event)"></canvas>
-    <p class="h4">尚未被找到的:</p>
-    <div class="d-flex flex-row  flex-wrap">
-      <button v-for="(button,index) in btn" class="btn btn-primary m-1 flex-grow-1" :class="{'active-button': answered[index]==0} ">
-        {{ button }}
-      </button>
-    </div>
-</div>
-</div>
-</template>
-<script>
-export default {
+  </template>
+  
+  <script>
+  import gamepic from '@/assets/GamePic/FindItemGameSample1.jpg'
+  export default {
     name: 'FindTheItem',
     data(){
         return {
-            ObjPosition: [],
-            ObjPositionRange: [],
-            answered:[],
-            btn:{},
-            inputNumber: ''
+            ObjPosition: [
+                      [42,56],
+                      [625,115],
+                      [336,68],//
+                      [764,539],//
+                      [590,320],//
+                      [690,84],//5
+                      [229,170],//
+                      [88,204],//
+                      [62,484],//
+                      [699,361],
+                      [37,386]
+                  ],
+            ObjPositionRange: [
+                  [[22,30],[65,74]],//0
+                  [[604,96],[646,130]],//1
+                  [[315,48],[357,82]],//2
+                  [[743,504],[57,128]],//3
+                  [[491,564],[785,570]],//4
+                  [[681,68],[705,102]],//5
+                  [[65,170],[106,220]],//6
+                  [[486,531],[387,492]],//7
+                  [[48,471],[75,500]],//8
+                  [[687,340],[711,377]],//9
+                  [[12,375],[56,406]]//10
+              ],
+            answered:[]
         }
     },
     props: {
@@ -41,34 +52,38 @@ export default {
             type: Array,
             required: true
         },
-        //Other Game Methods
+        offset:{
+            type: Array,
+            required: true
+        }        //Other Game Methods
     },
     created() {
-        for(var i=0; i<this.question["ObjNum"]; i++){
+        // console.log(this.offset)
+        // console.log("Component page offset:",this.offset[0],this.offset[1]);
+        for(var i in this.question["ObjNum"]){
             this.answered.push(0);
-        }
-        for(var i in this.question.ObjName){
-            this.btn[i]=this.question.ObjName[i];
         }
     },
     mounted(){
         var cvs=document.getElementById("cvs");
         const ctx=cvs.getContext('2d');
         var img=new Image();
-        img.src=this.imageUrl=new URL(`../../assets/GamePic/${this.imgsrc}`, import.meta.url).href
+        img.src=gamepic;
+        // img.src=this.imageUrl=new URL('../../assets/GamePic/FindItemGameSample1.jpg', import.meta.url).href
         img.addEventListener("load", function() {
             ctx.drawImage(this,0,0,cvs.width,cvs.height);
         }, false);
-
+  
         var posX = $('#cvs').offset().left;
         var posY = $('#cvs').offset().top;
         console.log("page offset:",posX,posY);
-        this.ObjPosition=this.question["ObjLocation"];
-        this.ObjPositionRange=this.answer;
+        // this.ObjPosition=this.question["ObjLocation"];
+        // this.ObjPositionRange=this.answer;
+        alert(this.ObjPositionRange)
     },
     methods:{
         outCircle(x,y){
-            // console.log("draw circle on number")//DEBUG
+            console.log("draw circle on number")
             var canvas = document.getElementById("cvs");
             var ctx = canvas.getContext("2d");
             // 設定圓形參數
@@ -84,19 +99,18 @@ export default {
         },
         judge_position(event){
             
-            //DEBUG
-            // console.log("detect the mouse position...");
-            // console.log(event);
-            // console.log(event.pageX,event.pageY);
+            console.log("detect the mouse position...");
+            console.log(event);
+            console.log(event.pageX,event.pageY);
             var posX = $('#cvs').offset().left;
             var posY = $('#cvs').offset().top;
-            // console.log(event.pageX+posX,event.pageY+posY);//DEBUG
-            // console.log(this.ObjPositionRange[0][0][0],this.ObjPositionRange[0][0][1]);//DEBUG
+            // console.log(event.pageX+posX,event.pageY+posY);
+            // console.log(this.ObjPositionRange[0][0][0],this.ObjPositionRange[0][0][1]);
             for(var i=0;i<11;i++){
                 if((event.pageX>=(this.ObjPositionRange[i][0][0]+posX))&&(event.pageX<=(this.ObjPositionRange[i][0][1]+posX))){
-                    // console.log("x is right")//DEBUG
+                    console.log("x is right")
                     if((event.pageY>=(this.ObjPositionRange[i][1][0]+posY))&&(event.pageY<=(this.ObjPositionRange[i][1][1]+posY))){
-                        // console.log("y is right")//DEBUG
+                        console.log("y is right")
                         this.RightAns(i);
                     }  
                 }
@@ -104,7 +118,7 @@ export default {
             }   
         },
         RightAns(num){
-            // console.log(num," was clicked!") //DEBUG
+            console.log(num," was clicked!")
             var x=this.ObjPosition[num][0];
             var y=this.ObjPosition[num][1];
             //draw circle
@@ -127,17 +141,14 @@ export default {
             }
         },
         win(){
-            console.log("FindTheItemGame CheckAnswer :Wrong")
-            this.$emit('check-answer',true);
+            console.log("you win!")
         }
         
     }
-}
-</script>
-
-<style scoped>
-.active-button {
-  background-color: blue;
-  color: white;
-}
-</style>
+  }
+  </script>
+  
+  <style scoped>
+  
+  </style>
+  

@@ -1,0 +1,25 @@
+{
+    "id": "MA3017",
+    "introvideo": "src",
+    "TotalLevel": 1,
+    "GameType": "AutoNumberingGame",
+    "ConfigParameters":{
+        "background":true,
+        "GiveHint":true,
+        "InsideLevel":true,
+        "ImgType":"png"
+    },
+    "Questions": [
+        {   
+            "Question": {
+                "Text": "數數看上面有幾個物品",
+                "Root": "Source",
+                "ObjImgList": ["1", "2", "3", "4", "5", "6"],
+                "QuestionText": "Hello",
+                "Range":[7,10]
+            },
+            "Answer": [
+            ]
+        }
+    ]
+}

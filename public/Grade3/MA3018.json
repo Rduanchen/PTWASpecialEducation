@@ -1,0 +1,19 @@
+{
+    "id": "MA3017",
+    "introvideo": "src",
+    "TotalLevel": 1,
+    "GameType": "NumberingGame",
+    "ConfigParameters":{
+        
+    },
+    "Questions": [
+        {   
+            "Question": {
+                "text": "請數數看題目中有多少支棒棒糖",
+                "Range": [5, 10]
+            },
+            "Answer": 8,
+            "img": "NumberningGameSample.png"
+        }
+    ]
+}

@@ -62,6 +62,17 @@
                :imgsrc=GameConfig.Questions[Nowlevel-1].img
                @check-answer="CheckAnswer"></FindTheItemGame>
 
+              <AutoNumberingGame v-if="GameConfig.GameType == 'AutoNumberingGame'"
+                :question=GameConfig.Questions[Nowlevel-1].Question 
+                :answer=GameConfig.Questions[Nowlevel-1].Answer
+                @check-answer="CheckAnswer"></AutoNumberingGame>
+              
+              <NumberingGame v-if="GameConfig.GameType == 'NumberingGame'"
+                :question=GameConfig.Questions[Nowlevel-1].Question 
+                :answer=GameConfig.Questions[Nowlevel-1].Answer
+                :imgsrc=GameConfig.Questions[Nowlevel-1].img
+                @check-answer="CheckAnswer"></NumberingGame>
+
             </div>
           </div>
           <div class="col-3 card SideBar">
@@ -79,6 +90,7 @@
                   <a class="list-group-item"><img src="@/assets/buttonV3/calculator.png" class="img-hover-zoom"></a>
                   <a class="list-group-item"><img src="@/assets/buttonV3/record.png" class="img-hover-zoom"></a>
                 </div>
+                
                 <!-- Temp check box
                 For Switch Game Status
                 <select v-model="GameStatus">
@@ -120,6 +132,8 @@ import NumberInputGame from '@/views/GameTemplate/NumberInputGame.vue';
 import ClassifyGame from '@/views/GameTemplate/ClassifyGame.vue';
 import SortGame from '@/views/GameTemplate/SortGame.vue';
 import FindTheItemGame from '@/views/GameTemplate/FindTheItemGame.vue';
+import AutoNumberingGame from '@/views/GameTemplate/AutoNumberingGame.vue';
+import NumberingGame from '@/views/GameTemplate/NumberingGame.vue';
 export default {
     data() {
       return {
@@ -230,7 +244,9 @@ export default {
         NumberInputGame,
         ClassifyGame,
         SortGame,
-        FindTheItemGame
+        FindTheItemGame,
+        AutoNumberingGame,
+        NumberingGame
     }
 }
 </script>
