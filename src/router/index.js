@@ -79,6 +79,16 @@ const router = createRouter({
       path:"/NumberingGame",
       name:"NumberingGame",
       component:()=>import("@/views/GameTemplate/NumberingGame.vue")
+    },
+    {
+      path:"/Calculator",
+      name:"calculator",
+      component:()=>import("@/components/calculator.vue")
+    },
+    {
+      path:"/Link",
+      name:"link",
+      component:()=>import("@/components/link.vue")
     }
   ]
 });
