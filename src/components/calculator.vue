@@ -113,21 +113,33 @@
         this.Num=["0","1","2","3","4","5","6","7","8","9"];
       },
       addrow: function(evt) {
+        /**
+         * 增加新的一行(Add new row)
+         */
         this.Num_list.push([]);
         this.Sy_list.push([]);
       },
       removerow: function(evt) {
+        /**
+         * 移除最後一行(Remove last row)
+         */
         if(this.Num_list.length>1){
           this.Num_list.pop();
           this.Sy_list.pop();
         }
       },
       clear: function(evt) {
+        /**
+         * 清除所有資料，僅留下第一行(Clear all data, only leave the first row)
+         */
         this.Num_list = [[]];
         this.Sy_list = [[]];
         this.Carry = [];
       },
       sym_control: function() {
+        /**
+         * 控制符號的數量，每一行只能有一個符號(Control the number of symbol, each row can only have one symbol)
+         */
         this.Sy_list[0]=[];
         for(var i in this.Sy_list){
           if(this.Sy_list[i].length>1){
@@ -136,16 +148,24 @@
         }
       },
       Calculat: function(){
-        this.Ans=[];
-        var num=[];
-        var sy=[];
+        /**
+         * 計算答案(Calculate the answer)
+         */
+        this.Ans=[]; //Clear the answer
+        var num=[]; //Store the number(Temporally)
+        var sy=[]; //Store the symbol(Temporally)
+
+        //Push the Number to Array
         for(var i in this.Num_list){
           num.push(this.Num_list[i].join(''));
         }
 
+        //Push the Symbol to Array
         for(var i in this.Sy_list){
           sy.push(this.Sy_list[i].join(''));
         }
+
+        //Calculate the answer
         var ans=num[0];
         for(var i=0;i<=sy.length;i++){
           if(sy[i+1]=="+"){
@@ -162,6 +182,7 @@
           }
         }
         ans=ans.toString()
+        //Push the answer to Array, And vue will display it.
         for(var i in ans){
           this.Ans.push(ans[i]);
         }

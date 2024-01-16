@@ -2,17 +2,15 @@
     <div class="row">
         <canvas id="myCanvas"></canvas>
         <canvas id="myCanvas2"></canvas>
-        
     </div>
     <div class="row">
         <!-- <button @click="clearLastPath">Clear Last Path</button> -->
     </div>
-    
 </template>
-
 <script>
 import icon from '@/assets/GamePic/Cat.png';
 export default {
+    name: 'link2',
     data(){
         return{
             WindowWidth: window.innerWidth,
@@ -30,138 +28,6 @@ export default {
             canvas : $('#myCanvas2')[0],
             context : {},
             paths : []
-        }
-    },
-    mounted() {
-        var canvas1 = $('#myCanvas')[0];
-        var context1 = canvas1.getContext('2d');
-        // Set Canvas size to full screen
-        canvas1.width = window.innerWidth;
-        canvas1.height = window.innerHeight;
-        this.CountRowGap(this.QuestionDataStructure,270)
-        this.DrawReaizesImgOnCanvas(context1,icon,3);
-        var img = new Image();
-        img.src = icon;
-        this.DrawImgOnRow(context1,img,this.QuestionDataStructure);
-        // Listen for window resize event and update Canvas size
-        window.addEventListener('resize', () => {
-            canvas1.width = window.innerWidth;
-            canvas1.height = window.innerHeight;
-            this.DrawImgOnRow(context1,img,this.QuestionDataStructure);
-        });
-
-        var canvas = $('#myCanvas2')[0];
-        this.context = canvas.getContext('2d');
-        var context = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        var isDrawing = false;
-        var paths=[];
-        
-
-        function getEventPos(evt) {
-        var rect = canvas.getBoundingClientRect();
-            return {
-                x: evt.clientX - rect.left,
-                y: evt.clientY - rect.top
-            };
-        }
-        canvas.addEventListener('mousedown', function (e) {
-        this.DotLocation.push([[0,0],[0,0]])
-        // 记录起始点
-        var startPos = getEventPos(e);
-        var pass= this.JudegeRange(startPos.x,startPos.y)
-        if(pass){
-            if(isDrawing==false){
-                isDrawing = true;
-                // 将当前路径的起始点加入数组
-                this.paths.push({ startX: startPos.x, startY: startPos.y });
-            }
-            else{
-                isDrawing = false;
-                var endPos = getEventPos(e);
-
-                // 将当前路径的结束点加入数组
-                paths[paths.length - 1].endX = endPos.x;
-                paths[paths.length - 1].endY = endPos.y;
-
-                // 绘制线段
-                drawPaths();
-            }
-        }
-        });
-
-        canvas.addEventListener('mousemove', function (e) {
-        if (isDrawing) {
-            // 实时更新线段的另一端
-            var currentPos = getEventPos(e);
-
-
-            // 更新当前路径的另一端
-            paths[paths.length - 1].currentX = currentPos.x;
-            paths[paths.length - 1].currentY = currentPos.y;
-
-            // 清空画布并绘制所有路径
-            context.clearRect(0, 0, canvas.width, canvas.height);
-            drawPaths();
-        }
-        });
-
-        canvas.addEventListener('touchstart', function (e) {
-            e.preventDefault(); // 阻止浏览器默认的触摸事件行为
-            var startPos = getEventPos(e.touches[0]);
-            // 记录起始点
-            var pass= this.JudegeRange(startPos.x,startPos.y)
-            if(pass){
-                isDrawing = true;
-                // 将当前路径的起始点加入数组
-                paths.push({ startX: startPos.x, startY: startPos.y });   
-            }
-        });
-
-        canvas.addEventListener('touchmove', function (e) {
-        if (isDrawing) {
-            e.preventDefault(); // 阻止浏览器默认的触摸事件行为
-
-            // 实时更新线段的另一端
-            var currentPos = getEventPos(e.touches[0]);
-
-            // 更新当前路径的另一端
-            paths[paths.length - 1].currentX = currentPos.x;
-            paths[paths.length - 1].currentY = currentPos.y;
-
-            // 清空画布并绘制所有路径
-            context.clearRect(0, 0, canvas.width, canvas.height);
-            drawPaths();
-        }
-        });
-
-        canvas.addEventListener('touchend', function (e) {
-        if (isDrawing) {
-            e.preventDefault(); // 阻止浏览器默认的触摸事件行为
-
-            // 结束绘制
-            isDrawing = false;
-            var endPos = getEventPos(e.changedTouches[0]);
-
-            // 将当前路径的结束点加入数组
-            paths[paths.length - 1].endX = endPos.x;
-            paths[paths.length - 1].endY = endPos.y;
-
-            // 绘制线段
-            drawPaths();
-        }
-        });
-
-        function drawPaths() {
-        // 绘制所有路径
-        paths.forEach(path => {
-            context.beginPath();
-            context.moveTo(path.startX, path.startY);
-            context.lineTo(path.currentX, path.currentY);
-            context.stroke();
-            context.closePath();
-        });
         }
     },
     methods: {
@@ -290,25 +156,68 @@ export default {
             context.clearRect(0, 0, canvas.width, canvas.height);
             drawPaths();
         }
-        
+    },
+    mounted(){
+        var canvas1 = $('#myCanvas')[0];
+        var context1 = canvas1.getContext('2d');
+
+        // Set Canvas size to full screen
+        canvas1.width = window.innerWidth;
+        canvas1.height = window.innerHeight;
+        this.CountRowGap(this.QuestionDataStructure,270)
+        this.DrawReaizesImgOnCanvas(context1,icon,3);
+        var img = new Image();
+        img.src = icon;
+        this.DrawImgOnRow(context1,img,this.QuestionDataStructure);
+
+        // Listen for window resize event and update Canvas size
+        window.addEventListener('resize', () => {
+            canvas1.width = window.innerWidth;
+            canvas1.height = window.innerHeight;
+            this.DrawImgOnRow(context1,img,this.QuestionDataStructure);
+        });
+
+        var canvas = $('#myCanvas2')[0];
+        this.context = canvas.getContext('2d');
+        var context = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        var isDrawing = false;
+        var paths=[];
+
+        function getEventPos(evt) {
+        var rect = canvas.getBoundingClientRect();
+            return {
+                x: evt.clientX - rect.left,
+                y: evt.clientY - rect.top
+            };
+        }
+
+        canvas.addEventListener('mousedown', function (e) {
+            // 记录起始点
+            var startPos = getEventPos(e);
+            var pass= this.JudegeRange(startPos.x,startPos.y)
+            if(pass){
+                if(isDrawing==false){
+                    isDrawing = true;
+                    // 将当前路径的起始点加入数组
+                    this.paths.push({ startX: startPos.x, startY: startPos.y });
+                }
+                else{
+                    isDrawing = false;
+                    var endPos = getEventPos(e);
+
+                    // 将当前路径的结束点加入数组
+                    paths[paths.length - 1].endX = endPos.x;
+                    paths[paths.length - 1].endY = endPos.y;
+
+                    // 绘制线段
+                    drawPaths();
+                }
+            }
+        });
+
+
     }
 }
 </script>
-
-<style scoped>
-/* Your component styles go here */
-body, html {
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-}
-
-canvas {
-    display: block;
-    border: 2px solid #000;
-    position: absolute;
-    top: 0;
-    left: 0;
-    border: 1px solid #000;
-}
-</style>

@@ -40,6 +40,39 @@
     </div>
 </template>
 <script>
+/**
+ * FIXME:
+ * 1. Now the Game only Support Two Groups.
+ * 2. Now the Game only Support Text. We have toadd image here
+ * 3. Add Opton Feature and Game Config Parameters.
+ * 
+ * Game Description:
+ * You can classify the items into different groups.
+ * 
+ * Game Data Structure Sample:
+ * "Question": [
+                {
+                    "Question":"請將下列物品分類"
+                },
+                {
+                    "text": "1", //The text that display on card
+                    "img": "../../assets/images/pics/cover_info.png"  //The image route. Please make sure the image is in the right place
+                },
+                // You can add more items if you want
+            ],
+            "Answer": [
+                {
+                    "GroupName": "組別目前只能兩個",
+                    "Items":["1","2","3"]
+                },
+                {
+                    "GroupName": "未加上照片功能",
+                    "Items":["4","5"]
+                }
+                // Now we only support two groups
+            ]
+        }
+ */
 import draggable from 'vuedraggable';
 export default {
     name: 'ClassifyGame',
@@ -74,6 +107,8 @@ export default {
     },
     methods: {
         CheckAnswer(){
+            // This code will walk through all the groups and check if the answer is right
+            // Only when all the groups are right, the game will return true.
             if(this.Group1.length==this.answer[0]["Items"].length && this.Group2.length==this.answer[1]["Items"].length){
                 var Group1Status=true
                 var Group1Check=0

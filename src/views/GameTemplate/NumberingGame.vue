@@ -15,6 +15,22 @@
 </template>
 
 <script>
+/**
+ * Game Description:
+ * The game will show the image that offered on canvas.
+ * The player should click the button to answer.
+ * 
+ * Game Data Structure Sample:
+ *         {   
+            "Question": {
+                "text": "請數數看題目中有多少支棒棒糖", // Question Text(This will be disply on the buttom of the canvas)
+                "Range": [5, 10] //The Range of the button: [ Min, Max ] (Note That we strongly recommend that the range should be less than 10)
+            },
+            "Answer": 8, //The answer of the question
+            "img": "NumberningGameSample.png" //The image that will be display on the canvas(Please make sure the image's route is right)
+        }
+ * 
+ */
 import Desribepng from '@/assets/GamePic/Source/description.png';
 export default {
     Name: 'NumberingGame',

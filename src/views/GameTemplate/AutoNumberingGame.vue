@@ -17,6 +17,33 @@
 </template>
 
 <script>
+/**
+ * Game Description:
+ * The game will show random's amount of images on the canvas.
+ * The player should count the amount of images and click the button to answer.
+ * 
+ * Game Data Structure Sample:
+ * {
+ *      "Question": {
+ *          "Text": "數數看上面有幾個物品", //Question Text
+ *          "Root": "Source", //Image Folder Name
+ *          "ObjImgList": ["1", "2", "3", "4", "5", "6"], //Image Name. The type of image should be .png(Or you can change the type in ConfigParameters)
+ *          "Range":[7,10] //The Range of the amount of images: [ Min, Max ]. Note that if you change the range, button & picture amount will change.
+ *      },
+ *      "Answer": [
+ *          //No need to fill in
+ *      ],
+ * }
+ * 
+ * Option Feature:(Comming Soon)
+ * "ConfigParameters":{
+ *      "background":true, //The picture which display on the background
+ *      "GiveHint":true, //Give the hint to player(We will circle the object and give the number to player)
+ *      "InsideLevel":true, //The level will be inside the game
+ *      "ImgType":"png" //The type of image
+    },
+**/
+
 import Desribepng from '@/assets/GamePic/Source/description.png';
 export default {
     name: 'AutoNumberingGame',
@@ -60,18 +87,29 @@ export default {
         }
     },
     mounted() {
+        //Create canvas object
         this.canvas = this.$refs.canvas;
         this.context = this.canvas.getContext('2d');
+        //bind error text
         this.error_text = document.getElementById("error_msg");
+        //load description image FIXME:This is a temporary solution, will be removed in the future
         this.loadDescriptionImage();
     },
     methods: {
         getRandPicture() {
-            const num = Math.floor(Math.random() * this.picture_total) + 1;
-            var b = new URL(`../../assets/GamePic/${this.question.Root}/S_${num}${this.picture_type}`, import.meta.url).href;
+            /**
+             * Get random picture from the folder
+             * @return {string} b - The path of the picture
+             */
+            const num = Math.floor(Math.random() * this.question.ObjImgList.length) + 0; //Random number(Range: 0~picture_total-1)
+            var b = new URL(`../../assets/GamePic/${this.question.Root}/S_${this.question.ObjImgList[num]}${this.picture_type}`, import.meta.url).href; //load picture
             return b
         },
         randomPicturePosition() {
+            /**
+             * 1. Random the position of the picture
+             * 2. Draw the picture on the canvas
+             */
             var numImages = Math.floor(Math.random() * (this.question.Range[1]-this.question.Range[0])) + this.question.Range[0];
             const image = new Image();
             this.exist_image = 0;
@@ -104,6 +142,12 @@ export default {
             });
         },
         drawCircleWithText(x, y, text) {
+            /**
+             * Draw the circle with text
+             * @param {number} x - The x position of the circle
+             * @param {number} y - The y position of the circle
+             * @param {string} text - The text of the circle
+             */
             this.context.beginPath();
             this.context.arc(x, y, 50, 0, 2 * Math.PI);
             this.context.strokeStyle = 'black';
@@ -115,6 +159,13 @@ export default {
             this.context.fillText(text, x, y + 70);
         },
         judgeAnswer(num) {
+            /**
+             * Judge the answer is correct or not(via the number of the image)
+             * If the answer is correct, the game will start a new game
+             * If the answer is wrong, the game will give the hint to player
+             * If the player is wrong for 3 times, the game will give the hint to player
+             * @param {number} num - The answer
+             */
             console.log(num);
             //FIXME Wait for add Hint Swith
             if (num === this.exist_image) {
@@ -133,6 +184,9 @@ export default {
             this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         },
         drawClue() {
+            /**
+             * Draw the hint on the canvas
+             */
             let num = 1;
             for (const i in this.positions) {
                 this.drawCircleWithText(this.positions[i][0] + 50, this.positions[i][1] + 50, num.toString());
@@ -140,13 +194,20 @@ export default {
             }
         },
         win() {
-            if (this.level === 6) {
+            /**
+             * If the player win the game, the game will show the message and reload the game
+             * FIXME: Wait for add the level system, this game is endless now.
+             */
+            if (this.level == this.question.Level) {
                 setTimeout(() => {
                     location.reload();
                 }, 3000);
             }
         },
         newGame() {
+            /**
+             * Start a new game
+             */
             this.level += 1;
             this.win();
             this.errorMsg = "";
@@ -158,6 +219,10 @@ export default {
             setTimeout(this.randomPicturePosition, 1500);
         },
         loadDescriptionImage() {
+            /**
+             * Load the description image
+             * If the image was clicked, the game will start
+             */
             var start = true;
             const img = new Image();
             img.src = new URL(`../../assets/GamePic/${this.question.Root}/description.png`, import.meta.url).href;

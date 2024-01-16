@@ -15,8 +15,8 @@
                 "Text": "數數看上面有幾個物品",
                 "Root": "Source",
                 "ObjImgList": ["1", "2", "3", "4", "5", "6"],
-                "Range":[7,10],
-                "Level": 6
+                "QuestionText": "Hello",
+                "Range":[7,10]
             },
             "Answer": [
             ]

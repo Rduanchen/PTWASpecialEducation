@@ -89,6 +89,11 @@ const router = createRouter({
       path:"/Link",
       name:"link",
       component:()=>import("@/components/link.vue")
+    },
+    {
+      path:"/Link2",
+      name:"link2",
+      component:()=>import("@/components/link2.vue")
     }
   ]
 });
