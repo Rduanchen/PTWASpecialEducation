@@ -3,18 +3,15 @@
     <canvas id="myCanvas" class="position-absolute"></canvas>
     <canvas ref="myCanvas2" id="canvas2" class="position-absolute"></canvas>
 </div>
-<button @click="clearLastPath" id="myButton">清除上一个轨迹</button>
+<!-- <button @click="clearLastPath" id="myButton">清除上一个轨迹</button> -->
 
 
 </template>
-
 <script>
 import icon from '@/assets/GamePic/Cat.png';
 export default {
     data(){
         return{
-            WindowWidth: window.innerWidth,
-            WindowHeight: window.innerHeight,
             border: 30,
             ItemGap: 10,
             DotRadius: 10, //max
@@ -26,9 +23,13 @@ export default {
             ],
             isDrawing: false,
             paths: [],
-            TouchSensitive: 0,
+            TouchSensitive: 1, //This should be bigger than 0 , and the smaller more sensitive
             Min_Gap:30,
-            HeightWidth:{}
+            HeightWidth:{},
+            runtimes:0,
+            group:0,
+            ontouch_group:0,
+            row:0
         }
     },
     mounted() {
@@ -37,11 +38,13 @@ export default {
         // Set Canvas size to full screen
         canvas1.width = window.innerWidth;
         canvas1.height = window.innerHeight;
-        this.CountRowGap(this.QuestionDataStructure,270)
-        this.DrawReaizesImgOnCanvas(context1,icon,3);
+        // this.CountRowGap(this.QuestionDataStructure,270)
+        // this.DrawReaizesImgOnCanvas(context1,icon,3);
         var img = new Image();
         img.src = icon;
-        this.DrawImgOnRow(context1,img,this.QuestionDataStructure);
+        img.onload= () => {
+            this.DrawImgOnRow(context1,img,this.QuestionDataStructure);
+        }
         // Listen for window resize event and update Canvas size
         window.addEventListener('resize', () => {
             canvas1.width = window.innerWidth;
@@ -73,12 +76,9 @@ export default {
                 width=(window.innerWidth-(this.border*2 + this.Min_Gap *(Amount-1))) / Amount;
             // return height;
             return {'height':height,'width':width};
-
         },
-
         CountRowGap(question,ImgWidth){
             var Amount=question.length;
-            console.log("Amount:"+Amount);
             var space = (window.innerWidth-(this.border*2 + ImgWidth*Amount)) / (Amount-1);
             console.log("Each Row's Width:"+space);
             return space;
@@ -109,12 +109,10 @@ export default {
             console.log("Resized Image's Height:"+resizedImg.height);
             return resizedImg;
         },
-        DrawReaizesImgOnCanvas(context,Amount,bais,Dot_Direction='Right'){
+        DrawReaizesImgOnCanvas(context,Amount,bais,Dot_Direction,RowID){
             /**
              * 將圖片畫在Canvas上。(Draw Image on Canvas)
              */
-            // var canvas = $('#myCanvas')[0];
-            // var context = canvas.getContext('2d');
             var img = new Image();
             img.src = icon;//FIXME
             img.onload = () => {
@@ -122,43 +120,50 @@ export default {
                 var Img_data=this.CountItemSize(Amount);
                 var Image_Height=Img_data.height;   
                 var resizedImg=this.ResizeImg(Image_Height,img,'Height');   
-                // this.DotRadius=Image_Height/10;
-                if(Img_data.width<this.Min_Gap){
-                    console.log('Touched Min Gap');
-                    resizedImg=this.ResizeImg(Img_data.width,img,'Width');   
-                    this.DotRadius=1;
-                    this.border=5;
-                }
-                this.DotRadius=this.DotRadius>10?10:this.DotRadius;
+
+                this.DotRadius=resizedImg.height/15;
                 this.border=Image_Height/3;
-                this.TouchSensitive*=1.1;
+                var Sensitive=this.DotRadius/this.TouchSensitive
 
                 var height=this.border;
                 for(var i=0 ; i<Amount ; i++){
+                    //繪製圖片、連接點於Canvas，並將圖片的位置存入DotLocation。
+                    //用for 迴圈一次畫一排圖片
                     context.drawImage(resizedImg, bais, height , resizedImg.width, resizedImg.height);
                     context.beginPath();
                     if(Dot_Direction==='Right'){
                         context.arc((bais+resizedImg.width+this.border), (height+(resizedImg.height/2)), this.DotRadius, 0, 2 * Math.PI, false);
-                        this.DotLocation.push([[(bais+resizedImg.width+this.border-(this.DotRadius/2)-this.TouchSensitive),(height+(resizedImg.height/2)-(this.DotRadius/2)-this.TouchSensitive)],[(bais+resizedImg.width+this.border+(this.DotRadius/2)+this.TouchSensitive),(height+(resizedImg.height/2)+(this.DotRadius/2)+this.TouchSensitive)]])
+                        this.DotLocation.push([[RowID,this.group+1],[(bais+resizedImg.width+this.border-(this.DotRadius/2)-Sensitive),(height+(resizedImg.height/2)-(this.DotRadius/2)-Sensitive)],[(bais+resizedImg.width+this.border+(this.DotRadius/2)+Sensitive),(height+(resizedImg.height/2)+(this.DotRadius/2)+Sensitive)]])
                     }
                     else if(Dot_Direction==='Both'){
-                        //Right Side
-                        context.arc((bais+resizedImg.width+this.border), (height+(resizedImg.height/2)), this.DotRadius, 0, 2 * Math.PI, false);
-                        this.DotLocation.push([[(bais+resizedImg.width+this.border-(this.DotRadius/2)-this.TouchSensitive),(height+(resizedImg.height/2)-(this.DotRadius/2)-this.TouchSensitive)],[(bais+resizedImg.width+this.border+(this.DotRadius/2)+this.TouchSensitive),(height+(resizedImg.height/2)+(this.DotRadius/2)+this.TouchSensitive)]])
                         //Left Side
                         context.arc((bais-this.border), (height+(resizedImg.height/2)), this.DotRadius, 0, 2 * Math.PI, false);
-                        this.DotLocation.push([[((bais-this.border)-(this.DotRadius/2)-this.TouchSensitive),(height+(resizedImg.height/2)-(this.DotRadius/2)-this.TouchSensitive)],[(bais-this.border+(this.DotRadius/2)+this.TouchSensitive),(height+(resizedImg.height/2)+(this.DotRadius/2)+this.TouchSensitive)]]);
+                        this.DotLocation.push([[RowID,this.group+1],[((bais-this.border)-(this.DotRadius/2)-Sensitive),(height+(resizedImg.height/2)-(this.DotRadius/2)-Sensitive)],[(bais-this.border+(this.DotRadius/2)+Sensitive),(height+(resizedImg.height/2)+(this.DotRadius/2)+Sensitive)]]);
+                        this.group=this.group+1;
+
+                        //Right Side
+
+                        context.arc((bais+resizedImg.width+this.border), (height+(resizedImg.height/2)), this.DotRadius, 0, 2 * Math.PI, false);
+                        this.DotLocation.push([[RowID,this.group+1],[(bais+resizedImg.width+this.border-(this.DotRadius/2)-Sensitive),(height+(resizedImg.height/2)-(this.DotRadius/2)-Sensitive)],[(bais+resizedImg.width+this.border+(this.DotRadius/2)+Sensitive),(height+(resizedImg.height/2)+(this.DotRadius/2)+Sensitive)]])
+                        this.group=this.group-1;
+                        
+                        
                     }
                     else{
                         context.arc((bais-this.border), (height+(resizedImg.height/2)), this.DotRadius, 0, 2 * Math.PI, false);
-                        this.DotLocation.push([[((bais-this.border)-(this.DotRadius/2)-this.TouchSensitive),(height+(resizedImg.height/2)-(this.DotRadius/2)-this.TouchSensitive)],[(bais-this.border+(this.DotRadius/2)+this.TouchSensitive),(height+(resizedImg.height/2)+(this.DotRadius/2)+this.TouchSensitive)]]);
+                        this.DotLocation.push([[RowID,this.group+1],[((bais-this.border)-(this.DotRadius/2)-Sensitive),(height+(resizedImg.height/2)-(this.DotRadius/2)-Sensitive)],[(bais-this.border+(this.DotRadius/2)+Sensitive),(height+(resizedImg.height/2)+(this.DotRadius/2)+Sensitive)]]);
                     }
                     context.fillStyle = 'black';
                     context.fill();
                     context.closePath();
                     height=height+(resizedImg.height+this.ItemGap);
+
                 }
+                if(Dot_Direction==='Both'){
+                        this.group=this.group+1;
+                    }
             }
+
             console.log(this.DotLocation);
         },
         DrawImgOnRow(context,img_obj,question){
@@ -174,19 +179,16 @@ export default {
             RowAmount=question.length;
             var bais=0;
             for(var i=0; i<RowAmount ; i++){
-                    var dir= question.length-1-i;
-                    if(i==0){
-                        console.log('Right')
-                        this.DrawReaizesImgOnCanvas(context,question[0].length,bais,'Right');
-                    }
-                    else if(dir==0){
-                        console.log('Left')
-                        this.DrawReaizesImgOnCanvas(context,question[0].length,bais,'Left');
-                    }
-                    else{
-                        console.log('Both')
-                        this.DrawReaizesImgOnCanvas(context,question[0].length,bais,'Both');
-                    }
+                var dir= question.length-1-i;
+                if(i==0){
+                    this.DrawReaizesImgOnCanvas(context,question[0].length,bais,'Right',i);
+                }
+                else if(dir==0){
+                    this.DrawReaizesImgOnCanvas(context,question[0].length,bais,'Left',i);
+                }
+                else{
+                    this.DrawReaizesImgOnCanvas(context,question[0].length,bais,'Both',i);
+                }
                 bais=bais+space+resizedImg.width;
             }
         },
@@ -198,7 +200,10 @@ export default {
             };
         },
         handleMouseDown(e) {
-            if(this.JudgeRange(e.clientX,e.clientY)){
+            var rep =this.JudgeRange(e.clientX,e.clientY);
+            this.row=rep.RowID;
+            this.ontouch_group=rep.Group;
+            if(rep.Locate){
                 if (!this.isDrawing) {
                 this.isDrawing = true;
                 const startPos = this.getEventPos(e);
@@ -222,7 +227,8 @@ export default {
             }
         },
         handleMouseUp(e) {
-            if(this.JudgeRange(e.clientX,e.clientY)){
+            var rep =this.JudgeRange(e.clientX,e.clientY);
+            if(rep.Locate && this.ontouch_group==rep.Group && this.row!=rep.RowID){
                 if (this.isDrawing) {
                     this.isDrawing = false;
                     const endPos = this.getEventPos(e);
@@ -230,10 +236,14 @@ export default {
                     this.paths[this.paths.length - 1].endY = endPos.y;
                     this.drawPaths();
                 }
+                this.ontouch_group=0;
             }
         },
         handleTouchStart(e) {
-            if(this.JudgeRange(e.touches[0].clientX,e.touches[0].clientY)){
+            var rep =this.JudgeRange(e.touches[0].clientX,e.touches[0].clientY);
+            this.row=rep.RowID;
+            this.ontouch_group=rep.Group;
+            if(rep.Locate){
                 e.preventDefault();
                 this.isDrawing = true;
                 const startPos = this.getEventPos(e.touches[0]);
@@ -251,7 +261,8 @@ export default {
             }
         },
         handleTouchEnd(e) {
-            if(this.JudgeRange(e.changedTouches[0].clientX,e.changedTouches[0].clientY)){
+            var rep =this.JudgeRange(e.changedTouches[0].clientX,e.changedTouches[0].clientY);
+            if(rep.Locate && this.ontouch_group==rep.Group && this.row!=rep.RowID){
                 if (this.isDrawing) {
                     e.preventDefault();
                     this.isDrawing = false;
@@ -259,6 +270,7 @@ export default {
                     this.paths[this.paths.length - 1].endX = endPos.x;
                     this.paths[this.paths.length - 1].endY = endPos.y;
                     this.drawPaths();
+                    this.ontouch_group=0;
                 }
             }
             else{
@@ -282,15 +294,12 @@ export default {
         },
         JudgeRange(x,y){
             for(var i=0;i<this.DotLocation.length;i++){
-                if(x>=this.DotLocation[i][0][0] && x<=this.DotLocation[i][1][0] && y>=this.DotLocation[i][0][1] && y<=this.DotLocation[i][1][1]){
-                    console.log('True');
-                    return true;
-                }
-                else{
-                    console.log('False'+x+' '+y);
+                if(x>=this.DotLocation[i][1][0] && x<=this.DotLocation[i][2][0] && y>=this.DotLocation[i][1][1] && y<=this.DotLocation[i][2][1]){
+                    return {Locate:true , Group:this.DotLocation[i][0][1], RowID:this.DotLocation[i][0][0]};
                 }
             }
-            return false;
+            return {Locate:false , Group:undefined};
+            
         }
     }
 }
