@@ -1,13 +1,11 @@
 <template>
-    <div class="row">
-        <canvas id="myCanvas"></canvas>
-        <canvas id="myCanvas2"></canvas>
-        
-    </div>
-    <div class="row">
-        <!-- <button @click="clearLastPath">Clear Last Path</button> -->
-    </div>
-    
+<div class="canvas-container">
+    <canvas id="myCanvas" class="position-absolute"></canvas>
+    <canvas ref="myCanvas2" id="canvas2" class="position-absolute"></canvas>
+</div>
+<button @click="clearLastPath" id="myButton">清除上一个轨迹</button>
+
+
 </template>
 
 <script>
@@ -19,17 +17,18 @@ export default {
             WindowHeight: window.innerHeight,
             border: 30,
             ItemGap: 10,
-            DotRadius: 10,
+            DotRadius: 10, //max
             DotLocation:[],
             QuestionDataStructure:[
                 ['imgsrc','imgsrc','imgsrc','imgsrc','imgsrc'],
                 ['imgsrc','imgsrc','imgsrc','imgsrc','imgsrc'],
-                ['imgsrc','imgsrc','imgsrc','imgsrc','imgsrc'],
                 ['imgsrc','imgsrc','imgsrc','imgsrc','imgsrc']
             ],
-            canvas : $('#myCanvas2')[0],
-            context : {},
-            paths : []
+            isDrawing: false,
+            paths: [],
+            TouchSensitive: 0,
+            Min_Gap:30,
+            HeightWidth:{}
         }
     },
     mounted() {
@@ -49,120 +48,17 @@ export default {
             canvas1.height = window.innerHeight;
             this.DrawImgOnRow(context1,img,this.QuestionDataStructure);
         });
+        this.canvas = this.$refs.myCanvas2;
+        this.context = this.canvas.getContext('2d');
+        this.canvas.width= window.innerWidth;
+        this.canvas.height= window.innerHeight;
+        this.canvas.addEventListener('mousedown', this.handleMouseDown);
+        this.canvas.addEventListener('mousemove', this.handleMouseMove);
+        this.canvas.addEventListener('mouseup', this.handleMouseUp);
+        this.canvas.addEventListener('touchstart', this.handleTouchStart);
+        this.canvas.addEventListener('touchmove', this.handleTouchMove);
+        this.canvas.addEventListener('touchend', this.handleTouchEnd);
 
-        var canvas = $('#myCanvas2')[0];
-        this.context = canvas.getContext('2d');
-        var context = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        var isDrawing = false;
-        var paths=[];
-        
-
-        function getEventPos(evt) {
-        var rect = canvas.getBoundingClientRect();
-            return {
-                x: evt.clientX - rect.left,
-                y: evt.clientY - rect.top
-            };
-        }
-        canvas.addEventListener('mousedown', function (e) {
-        this.DotLocation.push([[0,0],[0,0]])
-        // 记录起始点
-        var startPos = getEventPos(e);
-        var pass= this.JudegeRange(startPos.x,startPos.y)
-        if(pass){
-            if(isDrawing==false){
-                isDrawing = true;
-                // 将当前路径的起始点加入数组
-                this.paths.push({ startX: startPos.x, startY: startPos.y });
-            }
-            else{
-                isDrawing = false;
-                var endPos = getEventPos(e);
-
-                // 将当前路径的结束点加入数组
-                paths[paths.length - 1].endX = endPos.x;
-                paths[paths.length - 1].endY = endPos.y;
-
-                // 绘制线段
-                drawPaths();
-            }
-        }
-        });
-
-        canvas.addEventListener('mousemove', function (e) {
-        if (isDrawing) {
-            // 实时更新线段的另一端
-            var currentPos = getEventPos(e);
-
-
-            // 更新当前路径的另一端
-            paths[paths.length - 1].currentX = currentPos.x;
-            paths[paths.length - 1].currentY = currentPos.y;
-
-            // 清空画布并绘制所有路径
-            context.clearRect(0, 0, canvas.width, canvas.height);
-            drawPaths();
-        }
-        });
-
-        canvas.addEventListener('touchstart', function (e) {
-            e.preventDefault(); // 阻止浏览器默认的触摸事件行为
-            var startPos = getEventPos(e.touches[0]);
-            // 记录起始点
-            var pass= this.JudegeRange(startPos.x,startPos.y)
-            if(pass){
-                isDrawing = true;
-                // 将当前路径的起始点加入数组
-                paths.push({ startX: startPos.x, startY: startPos.y });   
-            }
-        });
-
-        canvas.addEventListener('touchmove', function (e) {
-        if (isDrawing) {
-            e.preventDefault(); // 阻止浏览器默认的触摸事件行为
-
-            // 实时更新线段的另一端
-            var currentPos = getEventPos(e.touches[0]);
-
-            // 更新当前路径的另一端
-            paths[paths.length - 1].currentX = currentPos.x;
-            paths[paths.length - 1].currentY = currentPos.y;
-
-            // 清空画布并绘制所有路径
-            context.clearRect(0, 0, canvas.width, canvas.height);
-            drawPaths();
-        }
-        });
-
-        canvas.addEventListener('touchend', function (e) {
-        if (isDrawing) {
-            e.preventDefault(); // 阻止浏览器默认的触摸事件行为
-
-            // 结束绘制
-            isDrawing = false;
-            var endPos = getEventPos(e.changedTouches[0]);
-
-            // 将当前路径的结束点加入数组
-            paths[paths.length - 1].endX = endPos.x;
-            paths[paths.length - 1].endY = endPos.y;
-
-            // 绘制线段
-            drawPaths();
-        }
-        });
-
-        function drawPaths() {
-        // 绘制所有路径
-        paths.forEach(path => {
-            context.beginPath();
-            context.moveTo(path.startX, path.startY);
-            context.lineTo(path.currentX, path.currentY);
-            context.stroke();
-            context.closePath();
-        });
-        }
     },
     methods: {
         CountItemSize(Amount){ 
@@ -171,9 +67,13 @@ export default {
              * @param {number} Amount - 圖片數量 (Amount of Images)
              * @return {number} space - 回傳每個圖片的高度(Retrun Each Image's Height)
              */
-            var space = (window.innerHeight-(this.border*2 + this.ItemGap *(Amount-1))) / Amount;
-            console.log("Each Image's Height:"+space);
-            return space;
+            var height = (window.innerHeight-(this.border*2 + this.ItemGap *(Amount-1))) / Amount;
+            var width = (window.innerWidth-(this.border*2)) / Amount;
+            if(width<this.Min_Gap)
+                width=(window.innerWidth-(this.border*2 + this.Min_Gap *(Amount-1))) / Amount;
+            // return height;
+            return {'height':height,'width':width};
+
         },
 
         CountRowGap(question,ImgWidth){
@@ -209,7 +109,7 @@ export default {
             console.log("Resized Image's Height:"+resizedImg.height);
             return resizedImg;
         },
-        DrawReaizesImgOnCanvas(context,img_obj,Amount,bais,Dot_Direction='Right'){
+        DrawReaizesImgOnCanvas(context,Amount,bais,Dot_Direction='Right'){
             /**
              * 將圖片畫在Canvas上。(Draw Image on Canvas)
              */
@@ -218,25 +118,40 @@ export default {
             var img = new Image();
             img.src = icon;//FIXME
             img.onload = () => {
-                var Image_Height=this.CountItemSize(Amount);
-                var resizedImg=this.ResizeImg(Image_Height,img,'Height');
+                // var Image_Height=this.CountItemSize(Amount);
+                var Img_data=this.CountItemSize(Amount);
+                var Image_Height=Img_data.height;   
+                var resizedImg=this.ResizeImg(Image_Height,img,'Height');   
+                // this.DotRadius=Image_Height/10;
+                if(Img_data.width<this.Min_Gap){
+                    console.log('Touched Min Gap');
+                    resizedImg=this.ResizeImg(Img_data.width,img,'Width');   
+                    this.DotRadius=1;
+                    this.border=5;
+                }
+                this.DotRadius=this.DotRadius>10?10:this.DotRadius;
+                this.border=Image_Height/3;
+                this.TouchSensitive*=1.1;
+
                 var height=this.border;
                 for(var i=0 ; i<Amount ; i++){
                     context.drawImage(resizedImg, bais, height , resizedImg.width, resizedImg.height);
                     context.beginPath();
                     if(Dot_Direction==='Right'){
                         context.arc((bais+resizedImg.width+this.border), (height+(resizedImg.height/2)), this.DotRadius, 0, 2 * Math.PI, false);
-                        this.DotLocation.push([[(bais+resizedImg.width+this.border), (height+(resizedImg.height/2))],[(bais+resizedImg.width+this.border+this.DotRadius),(height+(resizedImg.height/2)+this.DotRadius)]]);
+                        this.DotLocation.push([[(bais+resizedImg.width+this.border-(this.DotRadius/2)-this.TouchSensitive),(height+(resizedImg.height/2)-(this.DotRadius/2)-this.TouchSensitive)],[(bais+resizedImg.width+this.border+(this.DotRadius/2)+this.TouchSensitive),(height+(resizedImg.height/2)+(this.DotRadius/2)+this.TouchSensitive)]])
                     }
                     else if(Dot_Direction==='Both'){
-                        //Left Side
-                        context.arc((bais+resizedImg.width+this.border), (height+(resizedImg.height/2)), this.DotRadius, 0, 2 * Math.PI, false);
-                        this.DotLocation.push([[(bais+resizedImg.width+this.border), (height+(resizedImg.height/2))],[(bais+resizedImg.width+this.border+this.DotRadius),(height+(resizedImg.height/2)+this.DotRadius)]]);
                         //Right Side
+                        context.arc((bais+resizedImg.width+this.border), (height+(resizedImg.height/2)), this.DotRadius, 0, 2 * Math.PI, false);
+                        this.DotLocation.push([[(bais+resizedImg.width+this.border-(this.DotRadius/2)-this.TouchSensitive),(height+(resizedImg.height/2)-(this.DotRadius/2)-this.TouchSensitive)],[(bais+resizedImg.width+this.border+(this.DotRadius/2)+this.TouchSensitive),(height+(resizedImg.height/2)+(this.DotRadius/2)+this.TouchSensitive)]])
+                        //Left Side
                         context.arc((bais-this.border), (height+(resizedImg.height/2)), this.DotRadius, 0, 2 * Math.PI, false);
+                        this.DotLocation.push([[((bais-this.border)-(this.DotRadius/2)-this.TouchSensitive),(height+(resizedImg.height/2)-(this.DotRadius/2)-this.TouchSensitive)],[(bais-this.border+(this.DotRadius/2)+this.TouchSensitive),(height+(resizedImg.height/2)+(this.DotRadius/2)+this.TouchSensitive)]]);
                     }
                     else{
                         context.arc((bais-this.border), (height+(resizedImg.height/2)), this.DotRadius, 0, 2 * Math.PI, false);
+                        this.DotLocation.push([[((bais-this.border)-(this.DotRadius/2)-this.TouchSensitive),(height+(resizedImg.height/2)-(this.DotRadius/2)-this.TouchSensitive)],[(bais-this.border+(this.DotRadius/2)+this.TouchSensitive),(height+(resizedImg.height/2)+(this.DotRadius/2)+this.TouchSensitive)]]);
                     }
                     context.fillStyle = 'black';
                     context.fill();
@@ -244,12 +159,15 @@ export default {
                     height=height+(resizedImg.height+this.ItemGap);
                 }
             }
+            console.log(this.DotLocation);
         },
         DrawImgOnRow(context,img_obj,question){
             /**
-             * 將圖片畫在Canvas上。(Draw Image on Canvas)
+             * 以行為單位，將圖片畫在Canvas上。(Draw Image on Canvas by Row)
              */
-            var Img_Height=this.CountItemSize(question[0].length);
+            // var Img_Height=this.CountItemSize(question[0].length);
+            var Img_data=this.CountItemSize(question[0].length);
+            var Img_Height=Img_data.height;
             var resizedImg=this.ResizeImg(Img_Height,img_obj,'Height');
             var space,RowAmount
             space=this.CountRowGap(question,resizedImg.width);
@@ -259,56 +177,147 @@ export default {
                     var dir= question.length-1-i;
                     if(i==0){
                         console.log('Right')
-                        this.DrawReaizesImgOnCanvas(context,resizedImg,question[0].length,bais,'Right');
+                        this.DrawReaizesImgOnCanvas(context,question[0].length,bais,'Right');
                     }
                     else if(dir==0){
                         console.log('Left')
-                        this.DrawReaizesImgOnCanvas(context,resizedImg,question[0].length,bais,'Left');
+                        this.DrawReaizesImgOnCanvas(context,question[0].length,bais,'Left');
                     }
                     else{
                         console.log('Both')
-                        this.DrawReaizesImgOnCanvas(context,resizedImg,question[0].length,bais,'Both');
+                        this.DrawReaizesImgOnCanvas(context,question[0].length,bais,'Both');
                     }
                 bais=bais+space+resizedImg.width;
             }
         },
-        JudegeRange(x,y){
-            for(var i in this.DotLocation){
-                if(x>=this.DotLocation[i][0][0] && x<=this.DotLocation[i][1][0] && y>=this.DotLocation[i][0][1] && y<=this.DotLocation[i][1][1]){
-                    return true;
-                }
-                else{
-                    return false;
+        getEventPos(evt) {
+            const rect = this.canvas.getBoundingClientRect();
+            return {
+                x: evt.clientX - rect.left,
+                y: evt.clientY - rect.top
+            };
+        },
+        handleMouseDown(e) {
+            if(this.JudgeRange(e.clientX,e.clientY)){
+                if (!this.isDrawing) {
+                this.isDrawing = true;
+                const startPos = this.getEventPos(e);
+                this.paths.push({ startX: startPos.x, startY: startPos.y });
+            } else {
+                // this.isDrawing = false;
+                // const endPos = this.getEventPos(e);
+                // this.paths[this.paths.length - 1].endX = endPos.x;
+                // this.paths[this.paths.length - 1].endY = endPos.y;
+                // this.drawPaths();
+            }
+            }
+        },
+        handleMouseMove(e) {
+            if (this.isDrawing) {
+                const currentPos = this.getEventPos(e);
+                this.paths[this.paths.length - 1].currentX = currentPos.x;
+                this.paths[this.paths.length - 1].currentY = currentPos.y;
+                this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                this.drawPaths();
+            }
+        },
+        handleMouseUp(e) {
+            if(this.JudgeRange(e.clientX,e.clientY)){
+                if (this.isDrawing) {
+                    this.isDrawing = false;
+                    const endPos = this.getEventPos(e);
+                    this.paths[this.paths.length - 1].endX = endPos.x;
+                    this.paths[this.paths.length - 1].endY = endPos.y;
+                    this.drawPaths();
                 }
             }
         },
-        clearLastPath(context,) {
-            // 移除数组中的最后一个路径
-            paths.pop();
-
-            // 清空画布并重新绘制所有路径
-            context.clearRect(0, 0, canvas.width, canvas.height);
-            drawPaths();
+        handleTouchStart(e) {
+            if(this.JudgeRange(e.touches[0].clientX,e.touches[0].clientY)){
+                e.preventDefault();
+                this.isDrawing = true;
+                const startPos = this.getEventPos(e.touches[0]);
+                this.paths.push({ startX: startPos.x, startY: startPos.y });
+            }
+        },
+        handleTouchMove(e) {
+            if (this.isDrawing) {
+                e.preventDefault();
+                const currentPos = this.getEventPos(e.touches[0]);
+                this.paths[this.paths.length - 1].currentX = currentPos.x;
+                this.paths[this.paths.length - 1].currentY = currentPos.y;
+                this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                this.drawPaths();
+            }
+        },
+        handleTouchEnd(e) {
+            if(this.JudgeRange(e.changedTouches[0].clientX,e.changedTouches[0].clientY)){
+                if (this.isDrawing) {
+                    e.preventDefault();
+                    this.isDrawing = false;
+                    const endPos = this.getEventPos(e.changedTouches[0]);
+                    this.paths[this.paths.length - 1].endX = endPos.x;
+                    this.paths[this.paths.length - 1].endY = endPos.y;
+                    this.drawPaths();
+                }
+            }
+            else{
+                this.isDrawing = false;
+                this.clearLastPath();
+            }
+        },
+        drawPaths() {
+            this.paths.forEach(path => {
+                this.context.beginPath();
+                this.context.moveTo(path.startX, path.startY);
+                this.context.lineTo(path.currentX, path.currentY);
+                this.context.stroke();
+                this.context.closePath();
+            });
+        },
+        clearLastPath() {
+            this.paths.pop();
+            this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            this.drawPaths();
+        },
+        JudgeRange(x,y){
+            for(var i=0;i<this.DotLocation.length;i++){
+                if(x>=this.DotLocation[i][0][0] && x<=this.DotLocation[i][1][0] && y>=this.DotLocation[i][0][1] && y<=this.DotLocation[i][1][1]){
+                    console.log('True');
+                    return true;
+                }
+                else{
+                    console.log('False'+x+' '+y);
+                }
+            }
+            return false;
         }
-        
     }
 }
 </script>
 
 <style scoped>
 /* Your component styles go here */
-body, html {
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
+.canvas-container {
+    display: flex; /* 使用 Flexbox 布局 */
+    flex-direction: column; /* 子元素垂直排列 */
+    align-items: center; /* 子元素水平居中 */
+    position: relative; /* 相對定位，作為子元素的定位參考 */
 }
 
 canvas {
-    display: block;
-    border: 2px solid #000;
-    position: absolute;
+    border: 1px solid #000;
+    position: absolute; /* 絕對定位來疊加 */
     top: 0;
     left: 0;
-    border: 1px solid #000;
 }
+
+#myButton {
+    margin-top: 20px; /* 按鈕與 canvas 區塊之間的距離 */
+    /* 其他按鈕樣式 */
+}
+
+
+
+
 </style>
