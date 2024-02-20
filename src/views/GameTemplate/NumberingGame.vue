@@ -56,7 +56,7 @@ export default {
         }
     },
     mounted(){
-        this.imageUrl=new URL(`../../assets/GamePic/${this.imgsrc}`, import.meta.url).href
+        this.imageUrl=new URL(`../../assets/GamePic/${this.imgsrc}`, import.meta.url).href;
         for(var i=this.question.Range[0];i<=this.question.Range[1];i++){
             this.btn.push(i);
         }
