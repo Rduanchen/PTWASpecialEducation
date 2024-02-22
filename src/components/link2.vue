@@ -4,8 +4,6 @@
         <canvas ref="myCanvas2" id="canvas2" class="position-absolute"></canvas>
     </div>
     <!-- <button @click="clearLastPath" id="myButton">清除上一个轨迹</button> -->
-    
-    
     </template>
     <script>
     import icon from '@/assets/GamePic/Cat.png';
