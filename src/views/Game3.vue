@@ -27,40 +27,52 @@
               </div>
             </div>
             <div class="row Game_Component">
-                <!-- Dynamic import component -->
-                <!-- <component
-                    :if="GameType!='SelfDefine'"
-                    :is="GameConfig.GameType" 
-                    :GameData="GameData[Nowlevel-1]" 
-                    :GameConfig="GameConfig"
-                    @add-record="GameDataRecord"
-                    @play-effect="EffectPlayer"
-                    @next-question="NextQuestion">
-                </component>
-                <component
-                    :if="GameType=='SelfDefine'"
+              <TrueFalseGame v-if="GameConfig.GameType == 'TrueFalse'"
+               :question="GameConfig.Questions[Nowlevel - 1].Question"
+               :answer="GameConfig.Questions[Nowlevel - 1].Answer"
+               :imgsrc="GameConfig.Questions[Nowlevel - 1].img"
+               @check-answer="CheckAnswer">
+              </TrueFalseGame>
 
-                    :is="GameConfig.GameType"
-                    :GameData="GameData[Nowlevel-1]" 
-                    :GameConfig="GameConfig"
+              <SelectGame v-if="GameConfig.GameType == 'SelectGame'" 
+              :question=GameConfig.Questions[1].Question 
+              :imgsrc=GameConfig.Questions[1].img 
+              :answer=GameConfig.Questions[1].Answer
+              @check-answer="CheckAnswer"></SelectGame>
 
-                    @add-record="GameDataRecord"
-                    @download-data="tocsv"
-                    
-                    @play-effect="EffectPlayer"
-                    
-                    @next-question="NextQuestion"
-                    @previous-question="PreviousQuestion"
-                    @change-level="changelevel"
+              <NumberInputGame v-if="GameConfig.GameType == 'NumberInputGame'" 
+              :question=GameConfig.Questions[Nowlevel-1].Question 
+              :answer=GameConfig.Questions[Nowlevel-1].Answer
+              :imgsrc=GameConfig.Questions[Nowlevel-1].img
+              @check-answer="CheckAnswer"></NumberInputGame>
 
-                    @start-game="StartGame"
-                    @reload-page="reloadPage"
-                    @change-status="ChangeGameStatus"
+              <ClassifyGame v-if="GameConfig.GameType == 'ClassifyGame'"
+               :question=GameConfig.Questions[Nowlevel-1].Question 
+               :answer=GameConfig.Questions[Nowlevel-1].Answer
+               @check-answer="CheckAnswer"></ClassifyGame>
 
-                    @timer-start="startTimer"
-                    @timer-pause="pauseTimer"
-                    @timer-reset="resetTimer">
-                </component> -->
+              <SortGame v-if="GameConfig.GameType == 'SortGame'"
+               :question=GameConfig.Questions[Nowlevel-1].Question 
+               :answer=GameConfig.Questions[Nowlevel-1].Answer
+               @check-answer="CheckAnswer"></SortGame>
+              
+              <FindTheItemGame v-if="GameConfig.GameType == 'FindTheItemGame'"
+               :question=GameConfig.Questions[Nowlevel-1].Question 
+               :answer=GameConfig.Questions[Nowlevel-1].Answer
+               :imgsrc=GameConfig.Questions[Nowlevel-1].img
+               @check-answer="CheckAnswer"></FindTheItemGame>
+
+              <AutoNumberingGame v-if="GameConfig.GameType == 'AutoNumberingGame'"
+                :question=GameConfig.Questions[Nowlevel-1].Question 
+                :answer=GameConfig.Questions[Nowlevel-1].Answer
+                @check-answer="CheckAnswer"></AutoNumberingGame>
+              
+              <NumberingGame v-if="GameConfig.GameType == 'NumberingGame'"
+                :question=GameConfig.Questions[Nowlevel-1].Question 
+                :answer=GameConfig.Questions[Nowlevel-1].Answer
+                :imgsrc=GameConfig.Questions[Nowlevel-1].img
+                @check-answer="CheckAnswer"></NumberingGame>
+
             </div>
           </div>
           <div class="col-3 card SideBar">
@@ -89,11 +101,6 @@
                 </select> -->
             </div>
           </div>
-          <div class="testcontrolpanel">
-            <button type="button" v-on:click="EffectPlayer('CorrectSound')">CorrectSound</button>
-            <button type="button" v-on:click="EffectPlayer('WrongSound')">WrongSound</button>
-            <button type="button" v-on:click="EffectPlayer('FireWorkAnimation')">FireWorkAnimation</button>
-          </div>
             <!--Modal -->
               <div class="fade modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
               <div class="modal-dialog modal-xl">
@@ -119,6 +126,14 @@
 <script>
 import fetchJson from '@/utilitys/fetch-json.js';
 import array2csv from '@/utilitys/array2csv.js';
+import TrueFalseGame from '@/views/GameTemplate/TrueFalseGame.vue';
+import SelectGame from '@/views/GameTemplate/SelectGame.vue';
+import NumberInputGame from '@/views/GameTemplate/NumberInputGame.vue';
+import ClassifyGame from '@/views/GameTemplate/ClassifyGame.vue';
+import SortGame from '@/views/GameTemplate/SortGame.vue';
+import FindTheItemGame from '@/views/GameTemplate/FindTheItemGame.vue';
+import AutoNumberingGame from '@/views/GameTemplate/AutoNumberingGame.vue';
+import NumberingGame from '@/views/GameTemplate/NumberingGame.vue';
 export default {
     data() {
       return {
@@ -136,7 +151,6 @@ export default {
             Technology: "多元科技",
         },
         GameConfig: {},
-        GameData: {},
         time: 0,
         intervalId: null,
       };
@@ -153,6 +167,10 @@ export default {
         })();
     },
     methods: {
+        CheckAnswer(rep) {
+          //檢查答案
+          console.log('Game View Get Component Reply: '+rep);
+        },
         dataPreprocess() {
           //處裡遊戲的資料結構
           var level = 1;
@@ -165,10 +183,6 @@ export default {
           download_data.push('填入答案紀錄');
           console.log(levelname);
           array2csv(levelname);
-        },
-        ChangeGameStatus(status) {
-          //改變遊戲狀態
-          this.GameStatus = status;
         },
         StartGame() {
             this.GameStatus = "Progressing";
@@ -229,40 +243,16 @@ export default {
           this.pauseTimer();
           this.time = 0;
         }
-        ,
-        GameDataRecord(data) {
-          //紀錄遊戲資料
-          console.log("Game Data Record");
-        },
-        EffectPlayer(type) {
-          //播放音效
-          console.log("Play Effect, type"+type);
-            switch (type) {
-                case "CorrectSound":
-                    var sound = new Audio("@/assets/Effects/CorrectAnswer.mp3");
-                    spund.play();
-                    break;
-                case "WrongSound":
-                    var sound = new Audio("@/assets/Effects/WrongAnswer.mp3");
-                    // sound.oncanplaythrough = function() {
-                    //     sound.play();
-                    // };
-                    break;
-                case "FireWorkAnimation":
-                    console.log("FireWorkAnimation");
-                    break;
-            }
-        }
       },
     components: {
-        TrueFalseGame: () => import('@/views/GameTemplate/TrueFalseGame.vue'),
-        SelectGame: () => import('@/views/GameTemplate/SelectGame.vue'),
-        NumberInputGame: () =>import('@/views/GameTemplate/NumberInputGame.vue'),
-        ClassifyGame: () => import('@/views/GameTemplate/ClassifyGame.vue'),
-        SortGame: () => import('@/views/GameTemplate/SortGame.vue'),
-        FindTheItemGame:() => import('@/views/GameTemplate/FindTheItemGame.vue'),
-        AutoNumberingGame: () => import('@/views/GameTemplate/AutoNumberingGame.vue'),
-        NumberingGame:()=>import('@/views/GameTemplate/NumberingGame.vue'),
+        TrueFalseGame,
+        SelectGame,
+        NumberInputGame,
+        ClassifyGame,
+        SortGame,
+        FindTheItemGame,
+        AutoNumberingGame,
+        NumberingGame
     }
 }
 </script>
