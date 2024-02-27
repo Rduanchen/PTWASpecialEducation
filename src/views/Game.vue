@@ -165,7 +165,6 @@ export default {
             this.GameConfig = res.data;
             this.GameType = this.GameConfig.GameType;
         })();
-
     },
     methods: {
         CheckAnswer(rep) {
@@ -199,10 +198,17 @@ export default {
           location.reload();
         },
         changelevel(change2level) {
-          this.Nowlevel = change2level;
-          this.pauseTimer();
-          //FIXME 傳資料進入CSV
-          this.resetTimer();
+          
+          if (change2level > this.GameConfig.TotalLevel || change2level < 1) {
+            console.log("The level is out of range")
+          }
+          else{
+            this.Nowlevel = change2level;
+            this.pauseTimer();
+            //FIXME 傳資料進入CSV
+            this.resetTimer();
+          }
+          
         },
         NextQuestion() {
           if (this.Nowlevel < this.GameConfig.TotalLevel) {
