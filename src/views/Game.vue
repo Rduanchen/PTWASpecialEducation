@@ -20,34 +20,41 @@
           <div class="row levelbutton">
             <div class="d-grid gap-2 d-md-flex justify-content-center mb-3 levebar" style="width: 100;">
               <button type="button" class="btn btn-primary" disabled>關卡</button>
-              <div v-for="(i, key) in GameConfig.Questions" :key="key" class="grid-item">
-                <button type="button" class="btn btn-primary w-auto" @click="changelevel(key+1)">{{ key+1 }}</button>
+              <div v-for="(i, key) in GameData.Questions" :key="key" class="grid-item">
+                <!-- <button type="button" class="btn btn-primary w-auto" @click="changelevel(key+1)">{{ key+1 }}</button> -->
+                <button type="button" class="btn btn-primary w-auto">{{ key+1 }}</button>
               </div>
               <button type="button" class="btn btn-primary" disabled v-if="GameStatus=='Progressing'">時間 : {{ time }}</button>
             </div>
           </div>
+          
           <div class="row Game_Component">
               <!-- Dynamic import component -->
-              <!-- <component
-                  :if="GameType!='SelfDefine'"
-                  :is="GameConfig.GameType" 
-                  :GameData="GameData[Nowlevel-1]" 
-                  :GameConfig="GameConfig"
-                  @add-record="GameDataRecord"
-                  @play-effect="EffectPlayer"
-                  @next-question="NextQuestion">
-              </component>
-              -->
+            <div class="games" v-if="GameStatus=='Progressing'">
               <component
-                  :if="GameType=='SelfDefine'"
+                v-if="GameType!='SelfDefine'"
+                v-bind:is="this.GameType" 
+                :id="this.GameID" 
+                :GameData="this.GameData.Questions[this.Nowlevel-1]"   
+                :GameConfig="this.GameConfig"  
+                @add-record="GameDataRecord"  
+                @play-effect="EffectPlayer"  
+                @next-question="NextQuestion">
+              </component>
+                               
+              <component
+                  v-if="GameType=='SelfDefine'"
 
-                  :is="GameConfig.GameType"
+                  :is="GameData.GameType"
+                  :id="GameID"
                   :GameData="GameData[Nowlevel-1]" 
                   :GameConfig="GameConfig"
                   :EnviromerntInfo="GetAllInfo()"
+                  @get-info="GetAllInfo"
 
                   @add-record="GameDataRecord"
-                  @download-data="tocsv"
+                  @download-data="ToCSV"
+                  @config-header="ConfigHeader"
                   
                   @play-effect="EffectPlayer"
                   
@@ -65,6 +72,10 @@
                   
                   >
               </component> 
+            </div>
+            <div class="intro" v-else>
+              <GameStartandOver :Status="GameStatus" @start-game="StartGame" @download-record="ToCSV" @restart="reloadPage"></GameStartandOver>
+            </div>
           </div>
         </div>
         <div class="col-3 card SideBar">
@@ -77,7 +88,7 @@
                 <a class="list-group-item" @click="StartGame()" v-if="GameStatus=='NotStart'"><img src="@/assets/buttonV3/start.png" class="img-hover-zoom"></a>
                 <a class="list-group-item" @click="reloadPage()" v-if="GameStatus=='Progressing'|| 'Done'"><img src="@/assets/buttonV3/restart.png" class="img-hover-zoom"></a>
                 <a class="list-group-item" v-if="GameStatus=='Progressing'"><img src="@/assets/buttonV3/hint.png" class="img-hover-zoom"></a>
-                <a class="list-group-item" @click="tocsv(this.download_data)" v-if="GameStatus=='Done'" ><img src="@/assets/buttonV3/download.png" class="img-hover-zoom"></a>
+                <a class="list-group-item" @click="ToCSV(this.download_data)" v-if="GameStatus=='Done'" ><img src="@/assets/buttonV3/download.png" class="img-hover-zoom"></a>
                 <a class="list-group-item" data-bs-toggle="modal" data-bs-target="#exampleModal"><img src="@/assets/buttonV3/info.png" class="img-hover-zoom"></a>
                 <a class="list-group-item"><img src="@/assets/buttonV3/calculator.png" class="img-hover-zoom"></a>
                 <a class="list-group-item"><img src="@/assets/buttonV3/record.png" class="img-hover-zoom"></a>
@@ -93,11 +104,14 @@
               </select> -->
           </div>
         </div>
-        <div class="testcontrolpanel">
+        <!-- <div class="testcontrolpanel">
             <button type="button" v-on:click="EffectPlayer('CorrectSound')">CorrectSound</button>
             <button type="button" v-on:click="EffectPlayer('WrongSound')">WrongSound</button>
             <button type="button" v-on:click="EffectPlayer('FireWorkAnimation')">FireWorkAnimation</button>
         </div>
+        <div class="box">
+            {{ download_data }}
+        </div> -->
         
         <img :src="EffectSrc" v-if="EffectWindow" id="Effects">
           <!--Modal -->
@@ -125,15 +139,20 @@
 <script>
 import fetchJson from '@/utilitys/fetch-json.js';
 import * as Arr2CSV from '@/utilitys/array2csv.js';
-import { formToJSON } from 'axios';
+import loading from '@/components/loading.vue';
+import GameStartandOver from '@/components/GameStartandOver.vue';
+// import TrueFalseGame from '@/views/GameTemplate/TrueFalseGame.vue';
+import axios from 'axios';
+import {defineAsyncComponent} from 'vue';
 
 
 export default {
   data() {
     return {
-      GameType: "",
+      GameType: "loading",
       GameStatus: "NotStart", //遊戲狀態
-      download_data: [], //下載的資料，格式為二維陣列。
+      download_data: [[]], //下載的資料，格式為二維陣列。
+      header: [],
       GameID: "",
       Subject: "",
       Grade: "",
@@ -147,6 +166,7 @@ export default {
       GameConfig: {},
       GameData: {},
       time: 0,
+      totaltime: 0,
       intervalId: null,
       EffectWindow: false,
       EffectSrc:'',
@@ -158,26 +178,14 @@ export default {
       this.Subject = this.$route.params.Subject;
       this.Grade = this.$route.params.Grade;
       this.Name = this.$route.params.GameName;
-      (async () => {
-          const res = await fetchJson("./Grade"+this.Grade+"/"+this.GameID+".json");
-          this.GameConfig = res.data;
-          this.GameType = this.GameConfig.GameType;
-      })();
+      axios.get(`../../Grade${this.Grade}/${this.GameID}.json`)
+      .then((res) => {
+        this.GameData = res.data;
+        this.GameType = this.GameData.GameType;
+        this.GameConfig = this.GameData.GameConfig;
+      })
   },
   methods: {
-      dataPreprocess() {
-        //處裡遊戲的資料結構
-        var level = 1;
-        var download_data = ['關卡'];
-        for (var i in this.GameConfig.Questions) {
-          download_data.push('第' + level + '關');
-          level++;
-        }
-        download_data.push('時間');
-        download_data.push('填入答案紀錄');
-        console.log(levelname);
-        array2csv(levelname);
-      },
       ChangeGameStatus(status) {
         //改變遊戲狀態
         this.GameStatus = status;
@@ -185,12 +193,19 @@ export default {
       StartGame() {
           this.GameStatus = "Progressing";
           this.startTimer();
-          this.dataPreprocess();
       },
-      tocsv(data) {
-          //Get Data From Component
-          console.log(data);
-          array2csv(data);
+      ConfigHeader(arr){
+        this.header=arr;
+      },
+      ToCSV(data=this.download_data,defaultheader=true) {
+        if (defaultheader) {
+          let download = Arr2CSV.MadeCsvFile(this.GameID,this.Name,this.Grade,this.Subject,data,this.totaltime);
+          Arr2CSV.DownloadCSV(download,this.Name);
+        }
+        else{
+          let download = Arr2CSV.MadeCsvFile(this.GameID,this.Name,this.Grade,this.Subject,data,this.totaltime,this.header);
+          Arr2CSV.DownloadCSV(download,this.Name);
+        }
       },
       reloadPage() {
         location.reload();
@@ -209,12 +224,17 @@ export default {
         
       },
       NextQuestion() {
-        if (this.Nowlevel < this.GameConfig.TotalLevel) {
+        if (this.Nowlevel < this.GameData.TotalLevel) {
           this.Nowlevel++;
         }
+        else{
+          this.GameStatus = "Done";
+          this.EffectPlayer("FireWorkAnimation");
+        }
         this.pauseTimer();
-        //FIXME 傳資料進入CSV
+        this.totaltime += this.time;
         this.resetTimer();
+        this.startTimer();
       },
       PreviousQuestion() {
         if (this.Nowlevel > 1) {
@@ -223,6 +243,7 @@ export default {
         this.pauseTimer();
         //FIXME 傳資料進入CSV
         this.resetTimer();
+        this.startTimer();
       },
       startTimer() {
         console.log("timer is started")
@@ -242,9 +263,25 @@ export default {
         this.time = 0;
       }
       ,
-      GameDataRecord(data) {
+      GameDataRecord(data,SelfDefine=false) {
         //紀錄遊戲資料
-        console.log("Game Data Record");
+        // default ["正確答案","學生作答答案","是否正確","作答秒數(累計)"]
+        // data格式[正確答案,學生作答答案,是否正確]
+        let record = [];
+        if (SelfDefine) {
+          record = Arr2CSV.ArrayTemplate2Record(data,this.Nowlevel,this.time,this.totaltime)
+          console.log("Self Define Game Data Record");
+        }
+        else{
+          record = [data[0],data[1],data[2],this.time,this.Nowlevel];
+          console.log("Default Game Data Record: "+record);
+        }
+        try {
+          this.download_data[this.Nowlevel-1].push(record);
+        } catch (error) {
+          this.download_data.push([]);
+          this.download_data[this.Nowlevel-1].push(record);
+        }
       },
       EffectPlayer(type) {
         //播放音效
@@ -268,13 +305,13 @@ export default {
                   this.EffectWindow = true;
                   this.EffectSrc = new URL(`../assets/Effects/Firework.gif`, import.meta.url).href;
                   var sound = new Audio();
-                  sound.src = new URL(`../assets/Effects/WrongAnswer.mp3`, import.meta.url).href
+                  sound.src = new URL(`../assets/Effects/harry.mp3`, import.meta.url).href
                   sound.oncanplaythrough = function(){
                     sound.play();
                   }
                   setInterval(() => {
                     this.EffectWindow = false;
-                  }, 2000);
+                  }, 3000);
                   break;
           }
       },
@@ -293,19 +330,28 @@ export default {
           intervalId: this.intervalId,
           EffectWindow: this.EffectWindow,
           EffectSrc: this.EffectSrc,
-          
         }
       }
     },
   components: {
-      TrueFalseGame: () => import('@/views/GameTemplate/TrueFalseGame.vue'),
-      SelectGame: () => import('@/views/GameTemplate/SelectGame.vue'),
-      NumberInputGame: () =>import('@/views/GameTemplate/NumberInputGame.vue'),
-      ClassifyGame: () => import('@/views/GameTemplate/ClassifyGame.vue'),
-      SortGame: () => import('@/views/GameTemplate/SortGame.vue'),
-      FindTheItemGame:() => import('@/views/GameTemplate/FindTheItemGame.vue'),
-      AutoNumberingGame: () => import('@/views/GameTemplate/AutoNumberingGame.vue'),
-      NumberingGame:()=>import('@/views/GameTemplate/NumberingGame.vue'),
+      GameStartandOver,
+      loading,
+      TrueFalseGame: defineAsyncComponent(() => import('@/views/GameTemplate/TrueFalseGame.vue')),
+      SelectGame: defineAsyncComponent(() => import('@/views/GameTemplate/SelectGame.vue')),
+      NumberInputGame: defineAsyncComponent(() => import('@/views/GameTemplate/NumberInputGame.vue')),
+      ClassifyGame: defineAsyncComponent(() => import('@/views/GameTemplate/ClassifyGame.vue')),
+      SortGame: defineAsyncComponent(() => import('@/views/GameTemplate/SortGame.vue')),
+      FindTheItemGame: defineAsyncComponent(() => import('@/views/GameTemplate/FindTheItemGame.vue')),
+      AutoNumberingGame: defineAsyncComponent(() => import('@/views/GameTemplate/AutoNumberingGame.vue')),
+      NumberingGame: defineAsyncComponent(() => import('@/views/GameTemplate/NumberingGame.vue')),
+      // TrueFalseGame: () => import('@/views/GameTemplate/TrueFalseGame.vue'),
+      // SelectGame: () => import('@/views/GameTemplate/SelectGame.vue'),
+      // NumberInputGame: () =>import('@/views/GameTemplate/NumberInputGame.vue'),
+      // ClassifyGame: () => import('@/views/GameTemplate/ClassifyGame.vue'),
+      // SortGame: () => import('@/views/GameTemplate/SortGame.vue'),
+      // FindTheItemGame:() => import('@/views/GameTemplate/FindTheItemGame.vue'),
+      // AutoNumberingGame: () => import('@/views/GameTemplate/AutoNumberingGame.vue'),
+      // NumberingGame:()=>import('@/views/GameTemplate/NumberingGame.vue'),
   }
 }
 </script>
@@ -350,24 +396,24 @@ max-width: 100%; /* 或者是卡片寬度的百分比 */
 height: auto; /* 保持圖片的比例 */
 }
 .list-group {
-border: none !important; /* 移除邊框 */
+  border: none !important; /* 移除邊框 */
 }
 .list-group-item {
-border: none !important; /* 移除每個 list-group-item 的邊框 */
+  border: none !important; /* 移除每個 list-group-item 的邊框 */
 }
 /* 如果按鈕內有圖片，也要確保圖片不會超出按鈕的寬度 */
 .function-btn img {
-max-width: 100%;
-height: auto; /* 保持圖片的比例 */
+  max-width: 100%;
+  height: auto; /* 保持圖片的比例 */
 }
 .levebar{
-overflow-x: scroll;
+  overflow-x: scroll; 
 }
 .GameArea {
-background-color: #fff;
-border-radius: 10px;
-// border: #000 1px solid;
-height: 85vh;
+  background-color: #fff;
+  border-radius: 10px;
+  // border: #000 1px solid;
+  height: 85vh;
 }
 // .Game_Component {
 //   height: vh !important;
@@ -385,3 +431,4 @@ button{
   height: 100vh;
 }
 </style>
+
