@@ -54,41 +54,26 @@ export default {
     },
     methods:{
         CheckAnswer(answer){
-            console.log(answer);
-            console.log(typeof(this.answer));
             // typeof(answer);
             if(answer == this.GameData.Answer){
                 this.$emit('play-effect', 'CorrectSound',)
-                this.$emit('add-record',[this.GameData.Question,answer,"正確"])
+                this.$emit('add-record',[this.GameData.Answer,answer,"正確"])
                 this.$emit('next-question');
                 console.log('check answer : True');
             }
             else{
                 this.$emit('play-effect', 'WrongSound',)
-                this.$emit('add-record',[this.GameData.Question,answer,"錯誤"])
+                this.$emit('add-record',[this.GameData.Answer,answer,"錯誤"])
                 console.log('check answer : False');
             }
         },
-        //FIXME for test
-        playrighteffect(){
-            this.$emit('play-effect', 'CorrectSound',)
-        },
-        playwrongeffect(){
-            this.$emit('play-effect', 'WrongSound',)
-        },
-        addrecodr(){
-            this.$emit('add-record',[1,2,"錯誤","%%time%%","%%level%%"])
-        },
-        nextquestion(){
-            this.$emit('next-question');
-        }
+
     },
     created() {
         console.log(typeof(this.id));
         console.log(this.GameData.img);
         // this.imageUrl = require(`../../assets/${this.id}/${this.GameData.img}`);
-        var path = this.id+"/"+this.GameData.img
-        this.imageUrl=new URL(`../../assets/`+this.id+`/${this.GameData.img}`, import.meta.url).href
+        this.imageUrl=new URL(`../../assets/Games/`+this.id+`/${this.GameData.img}`, import.meta.url).href
         console.log(this.imageUrl);
         
     }

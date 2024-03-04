@@ -265,7 +265,7 @@ export default {
       ,
       GameDataRecord(data,SelfDefine=false) {
         //紀錄遊戲資料
-        // default ["正確答案","學生作答答案","是否正確","作答秒數(累計)"]
+        // default ["正確答案","學生作答答案","是否正確","作答秒數(關卡)","作答秒數(總時間)"]
         // data格式[正確答案,學生作答答案,是否正確]
         let record = [];
         if (SelfDefine) {
@@ -273,7 +273,7 @@ export default {
           console.log("Self Define Game Data Record");
         }
         else{
-          record = [data[0],data[1],data[2],this.time,this.Nowlevel];
+          record = [data[0],data[1],data[2],this.time,this.totaltime,this.Nowlevel];
           console.log("Default Game Data Record: "+record);
         }
         try {
@@ -344,14 +344,6 @@ export default {
       FindTheItemGame: defineAsyncComponent(() => import('@/views/GameTemplate/FindTheItemGame.vue')),
       AutoNumberingGame: defineAsyncComponent(() => import('@/views/GameTemplate/AutoNumberingGame.vue')),
       NumberingGame: defineAsyncComponent(() => import('@/views/GameTemplate/NumberingGame.vue')),
-      // TrueFalseGame: () => import('@/views/GameTemplate/TrueFalseGame.vue'),
-      // SelectGame: () => import('@/views/GameTemplate/SelectGame.vue'),
-      // NumberInputGame: () =>import('@/views/GameTemplate/NumberInputGame.vue'),
-      // ClassifyGame: () => import('@/views/GameTemplate/ClassifyGame.vue'),
-      // SortGame: () => import('@/views/GameTemplate/SortGame.vue'),
-      // FindTheItemGame:() => import('@/views/GameTemplate/FindTheItemGame.vue'),
-      // AutoNumberingGame: () => import('@/views/GameTemplate/AutoNumberingGame.vue'),
-      // NumberingGame:()=>import('@/views/GameTemplate/NumberingGame.vue'),
   }
 }
 </script>
