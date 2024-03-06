@@ -1,45 +1,20 @@
 <template>
   <header>
-    <!-- <nav class="navbar navbar-expand-lg bg-body-tertiary">
-      <div id="Function_area">
-          <div class="container-fluid">
-            <a class="navbar-brand">
-              <img src="@/assets/images/nav_bar/logo.png" alt="Logo" class="d-inline-block align-text-top" id="Title_logo">
-            </a>
-          <div class="col"><p></p></div>
-
-          </div>
-      </div>
-    </nav> -->
-    <nav class="container navbar navbar-expand-sm navbar-light sticky-top justify-content-evenly flex-nowrap" style="width: 100%;">
-        <a class="navbar-brand mt-2 mb-2" href="#" alt="Home">
+    <nav class="container navbar navbar-expand-md sticky-top justify-content-around" style="width: 100%;">
+        <a class="navbar-brand mt-2 mb-2 " href="#" alt="Home">
             <img src="@/assets/images/nav_bar/logo.png" />
         </a>
-        <div class="collapse navbar-collapse">
-          <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link" @click="ChangeSubject('Math')"><img src="@/assets/button/math.png"/></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" @click="ChangeSubject('Chinese')"><img src="@/assets/button/chinese.png"></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" @click="ChangeSubject('Technology')"><img src="@/assets/button/technology.png"></a>
-            </li>
-            </ul>
-            <form class="d-flex" role="search">
+        <!-- <div class="collapse navbar-collapse d-flex justify-content-around" id="navbarSupportedContent"> -->
+            <form class="mx-auto">
+              <button class="btn btn-primary m-1" @click="ChangeSubject('Math')">{{ Subjects['Math'] }}</button>
+              <button class="btn btn-primary m-1" @click="ChangeSubject('Chinese')" >{{ Subjects['Chinese'] }}</button>
+              <button class="btn btn-primary m-1" @click="ChangeSubject('Technology')" >{{ Subjects['Technology'] }}</button>
+            </form>
+            <form class="d-flex mx-auto" role="search">
                 <input class="form-control me-2" type="search" placeholder="輸入ID或者標題" aria-label="Search" v-model="SearchInput">
                 <button class="btn btn-primary text-nowrap" type="submit" v-on:click="SearchGame()">搜尋</button>
             </form>
-        </div>
-        <!-- <div class="container sticky-top" style="width: 30%;--bs-breadcrumb-divider: '>';">
-          <ol class="breadcrumb mb-0" >
-            <li class="breadcrumb-item text-white"><i class="bi bi-house"></i><a href="#"> 主頁</a></li>
-            <li class="breadcrumb-item active text-white" aria-current="page"><i class="bi bi-book-half"></i><a>  {{Subjects[Subject]}}</a></li>
-          </ol>
-        </div> -->
-        
-
+        <!-- </div> -->
       </nav>
   </header>
   <section v-if="ShowMenu">
@@ -51,14 +26,19 @@
     </div>
   </section>
 
-  <section class="GameSelectSection" style="overflow-y: hidden;" v-if="ShowContent">
+  <section class="GameSelectSection " style="overflow-y: hidden;" v-if="ShowContent">
       <div class="container">
           <div class="row">
-              <div class="col-3 SideBar mt-4">
+              <div class="col-3 SideBar mt-4 gap-2">
+                  <div class="row">
+                    <p class="h4">現在科目</p>
+                    <button class="btn btn-primary" disabled>{{ Subjects[Subject] }}</button>
+                  </div>
+                  <br>
                   <div class="card">
                   <div class="card-body" :key="Refresh">
                       <h5 class="card-title mt-2">請選擇科目</h5>
-                      <div class="list-group mt-2" v-for="(items,key) in ShowInfo" v-if="ShowInfo">
+                      <div class="list-group mt-2" v-for="(items,key) in this.ShowInfo" v-if="this.ShowInfo">
                         <a class="list-group-item list-group-item-action" v-on:click="SelectChapter(key)">{{ items.Title }}</a>
                       </div>
                   </div>
@@ -67,7 +47,7 @@
 
               <!-- NF img 的屬性需要修正 fs-->
               <div class="col-8 container ItemFrame mt-4" v-if="Show" :key="Refresh">
-                <div class="Charpter mb-4 px-0" v-for="items in ShowInfo[SelectedChapter].Section" v-if="ShowInfo">
+                <div class="Charpter mb-4 px-0" v-for="items in this.ShowInfo[SelectedChapter].Section" v-if="this.ShowInfo">
                 <div>
                     <h5 class="card-title mb-3">{{ items.Title }}</h5>
                     <div class="row GameCardGroup" style="overflow-x: auto;">
@@ -98,9 +78,9 @@
       <button class="btn btn-primary btn-lg" v-on:click="Return2Menu()" style="height: 3em; width: 10rem">返回目錄</button>
     </div>
 
-    <div v-if="SearchResult!=null" style="width: 100vw; height: 90vh;" class="row mt-5">
+    <div v-if="SearchResult!=null" style="width: 100vw; height: 90vh;" class="row mt-5 justify-content-md-center">
       <p class="h1 mb-3">搜尋結果:</p>
-      <div v-for="item in SearchResult" class="col-12 col-md-6 col-lg-4 d-flex align-self-stretch mb-3">
+      <div v-for="item in SearchResult" class="col-12 col-md-6 col-lg-4 d-flex align-self-stretch .justify-content-md-center mb-3">
         <div class="card GameCard col-3" style="width: 18rem; height: 20rem;">
           <div class="card-body">
             <img src="@/assets/images/pics/cover_info.jpeg" class="card-img-top" alt="...">
@@ -118,9 +98,10 @@
     </div>
     
   </section>
+  
 </template>
 
-<script type="Model">
+<script>
 import fetchJson from '@/utilitys/fetch-json.js';
 export default {
 data() {
@@ -131,8 +112,8 @@ data() {
     ShowMenu: true,
     ShowContent : false,
     ShowGrade: 0,
-    Subject: "Math", //預設科目
-    ShowInfo: {},
+    Subject: "", //預設科目
+    ShowInfo: null,
     MathShowInfo: null,//準備渲染的資料
     ChineseShowInfo: null,
     TechnologyShowInfo: null,
@@ -158,13 +139,38 @@ created() {
     res = await fetchJson("./Grade"+this.ShowGrade+"/TechnologyGrade"+this.ShowGrade+".json");
     this.TechnologyShowInfo = res.data;
     console.log(this.MathShowInfo,this.ChineseShowInfo,this.TechnologyShowInfo);
-    this.ShowInfo = this.MathShowInfo; //預設科目 FIXME
-    console.log(this.ShowInfo);
+    // this.ShowInfo = this.MathShowInfo;預設科目 FIXME
+    let S = sessionStorage.getItem("Subject");
+    if(S!=null){
+      switch(S){
+        case "Math":
+          this.ShowInfo = this.MathShowInfo;
+          this.Subject = "Math";
+          break;
+        case "Chinese":
+          this.ShowInfo = this.ChineseShowInfo; 
+          this.Subject = "Chinese";
+          break;
+        case "Technology":
+          this.ShowInfo = this.TechnologyShowInfo;
+          this.Subject = "Technology";
+          break;
+        default:
+          this.ShowInfo = this.MathShowInfo;
+      }
+      this.ShowMenu = false;
+      this.ShowContent = true; 
+    }
   })();
-  
+  if (sessionStorage.getItem("Chapter")!=null){
+    this.SelectedChapter = sessionStorage.getItem("Chapter");
+    this.Show = true;
+  }
 },
+
 methods: {
   SelectChapter(key){
+    sessionStorage.setItem("Chapter",key);
     this.SelectedChapter = String(key);
     console.log(this.SelectedChapter);
     this.Show = true;
@@ -187,6 +193,7 @@ methods: {
     {
       this.ShowInfo = this.TechnologyShowInfo;
     }
+    sessionStorage.setItem("Subject",Subject);
     this.Refresh += 1;
     this.Show = false;
   },
@@ -244,6 +251,7 @@ methods: {
     this.ShowSearch = false;
     this.ShowContent = true;
     this.ShowMenu = false;
+    this.SearchInput = null;
   }
 },
 }
@@ -254,15 +262,21 @@ methods: {
 header{
 background-color: #F19C79;
 }
-  .navbar {
+.navbar {
   background-color: #F19C79; 
-  height: 10vh; 
+  
+  @media (min-width: 768px){
+    height: 10vh;
+  }
+  @media (max-width: 768px){
+    height: auto;
+  }
   .navbar-brand {
     img{
-      @media (max-width: 576px){
+      @media (max-width: 768px){
         max-width: 50vw;
       }
-      @media (min-width: 576px){
+      @media (min-width: 768px){
         max-width: 20vw;
       }
     }
@@ -331,6 +345,4 @@ transition: transform 0.3s ease; /* 平滑過渡效果 */
     transition: transform 0.3s ease; /* 平滑過渡效果 */
   }
 }
-
-
 </style>

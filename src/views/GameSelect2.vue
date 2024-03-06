@@ -1,7 +1,26 @@
 <!-- PC 11/22 -->
 <!-- This document wait for add js and vue Feature -->
 
-
+<ul class="navbar-nav d-flex">
+  <li class="nav-item ">
+      <!-- <a class="nav-link" @click="ChangeSubject('Math')"><img src="@/assets/button/math.png"/></a> -->
+      <!-- <button class="btn btn-primary btn-sm m-3"><img src="@/assets/button/math.png"></button> -->
+      <!-- <button class="btn btn-primary m-3" @click="ChangeSubject('Math')">數學</button> -->
+      <!-- <a class="nav-link" @click="ChangeSubject('Math')" style="font-size: 1.5rem;">數學</a> -->
+  </li>
+  <li class="nav-item">
+      <!-- <a class="nav-link" @click="ChangeSubject('Chinese')"><img src="@/assets/button/chinese.png"></a> -->
+      <!-- <button class="btn btn-primary btn-sm m-3"><img src="@/assets/button/chinese.png"></button> -->
+      <!-- <button class="btn btn-primary m-3" @click="ChangeSubject('Chinese')" >國文</button> -->
+      <!-- <a class="nav-link" @click="ChangeSubject('Chinese')" style="font-size: 1.5rem;">國文</a> -->
+  </li>
+  <li class="nav-item ">
+      <!-- <a class="nav-link" @click="ChangeSubject('Technology')"><img src="@/assets/button/technology.png"></a> -->
+      <!-- <button class="btn btn-primary btn-sm m-3"><img src="@/assets/button/technology.png"></button> -->
+      <!-- <button class="btn btn-primary m-3" @click="ChangeSubject('Technology')" >多元科技</button> -->
+      <!-- <a class="nav-link" @click="ChangeSubject('Technology')" style="font-size: 1.5rem;">科技</a> -->
+  </li>
+  </ul>
 <template>
     <header>
       <!-- <nav class="navbar navbar-expand-lg navbar-light bg-light">

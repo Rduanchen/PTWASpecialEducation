@@ -21,11 +21,11 @@
             </div>
         </div>
     </div>
-    <p>Control Panel</p>
+    <!-- <p>Control Panel</p>
     <button v-on:click="playrighteffect">playrighteffect</button>
     <button v-on:click="playwrongeffect">playwrongeffect</button>
     <button v-on:click="addrecodr">addrecodr</button>
-    <button v-on:click="nextquestion">nextquestion</button>
+    <button v-on:click="nextquestion">nextquestion</button> -->
 
 </template>
 <script>
