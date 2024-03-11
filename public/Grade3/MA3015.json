@@ -1,8 +1,11 @@
 {
     "id": "MA3015",
     "introvideo": "src",
-    "TotalLevel": 1,
+    "TotalLevel": 3,
     "GameType": "SortGame",
+    "GameConfig":{
+        "auto-rand":true
+    },
     "Questions": [
         {   
             "Question": {
@@ -12,6 +15,26 @@
             },
             "Answer": [
                 "How","are","you","?"
+            ]
+        },
+        {
+            "Question": {
+                "text":"請排序",
+                "randomswitch":true,
+                "options":["I","am","fine","."]
+            },
+            "Answer": [
+                "I","am","fine","."
+            ]
+        },
+        {
+            "Question": {
+                "text":"請排序",
+                "randomswitch":true,
+                "options":["What","is","your","name","?"]
+            },
+            "Answer": [
+                "What","is","your","name","?"
             ]
         }
     ]

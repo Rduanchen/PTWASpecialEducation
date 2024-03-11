@@ -63,7 +63,7 @@ export default {
                 this.$emit('add-record',[this.answer, data,"錯誤"])
                 this.$refs.VirtualNumPad.delete_num();
             }
-            // this.$emit('check-answer',response,);
+            
         }
     },
     created() {

@@ -174,7 +174,7 @@
                   </div>
                 </div>
               </button>
-              <button class="btn btn-primary text-nowrap img-hover-zoom">
+              <button class="btn btn-primary text-nowrap img-hover-zoom"  data-bs-toggle="modal" data-bs-target="#Calculator">
                 <div class="d-flex align-items-center">
                   <div class="">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calculator" viewBox="0 0 16 16">
@@ -210,7 +210,36 @@
         
         <img :src="EffectSrc" v-if="EffectWindow" id="Effects">
           <!--Modal -->
-            <div class="fade modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+
+
+          <!-- Button trigger modal -->
+          <!-- <button class="btn btn-primary text-nowrap img-hover-zoom" data-bs-toggle="modal" data-bs-target="#Calculator">計算</button> -->
+
+          <!-- Modal -->
+          <div class="fade modal" id="Calculator" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl" style="max-height: 90vh;">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <div class="modal-title fs-5 mx-auto" id="exampleModalLabel">
+                    <button class="btn btn-primary mx-3" @click="CalculatorSwitch=false">計算紙</button>
+                    <button class="btn btn-primary mx-3" @click="CalculatorSwitch=true">直式計算版</button>
+                  </div>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body justify-content-center">
+                  <DrawCanvas v-if="CalculatorSwitch==false" style="height: 70vh;"></DrawCanvas>
+                  <Calculator v-else></Calculator>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉!</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="fade modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl">
               <div class="modal-content">
                 <div class="modal-header">
@@ -226,6 +255,9 @@
               </div>
             </div>
           </div>
+
+          
+
       </div>
     </div>    
   </section>
@@ -236,6 +268,8 @@ import fetchJson from '@/utilitys/fetch-json.js';
 import * as Arr2CSV from '@/utilitys/array2csv.js';
 import loading from '@/components/loading.vue';
 import GameStartandOver from '@/components/GameStartandOver.vue';
+import Calculator from '@/components/calculator.vue';
+import DrawCanvas from '@/components/canvas.vue';
 // import TrueFalseGame from '@/views/GameTemplate/TrueFalseGame.vue';
 import axios from 'axios';
 import {defineAsyncComponent} from 'vue';
@@ -265,6 +299,7 @@ export default {
       intervalId: null,
       EffectWindow: false,
       EffectSrc:'',
+      CalculatorSwitch: false
       // SentData2ChildComponent: {},
     };
   },
@@ -432,6 +467,8 @@ export default {
       }
     },
   components: {
+      Calculator,
+      DrawCanvas,
       GameStartandOver,
       loading,
       TrueFalseGame: defineAsyncComponent(() => import('@/views/GameTemplate/TrueFalseGame.vue')),

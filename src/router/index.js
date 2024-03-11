@@ -104,6 +104,16 @@ const router = createRouter({
       path:"/GameStartandOver",
       name:"GameStartandOver",
       component:()=>import("@/component/GameStartandOver.vue")
+    },
+    {
+      path:"/canvasdraw",
+      name:"canvasdraw",
+      component:()=>import("@/components/canvasdraw.vue")
+    },
+    {
+      path:"/canva",
+      name:"canva",
+      component:()=>import("@/components/canvas.vue")
     }
   ]
 });

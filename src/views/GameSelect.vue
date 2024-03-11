@@ -45,7 +45,7 @@
                 </div>
               </div>
 
-              <!-- NF img 的屬性需要修正 fs-->
+              <!-- 遊戲卡片區域 -->
               <div class="col-8 container ItemFrame mt-4" v-if="Show" :key="Refresh">
                 <div class="Charpter mb-4 px-0" v-for="items in this.ShowInfo[SelectedChapter].Section" v-if="this.ShowInfo">
                 <div>
@@ -55,7 +55,7 @@
                         <div v-for="item in items.Games" class="col-12 col-md-6 col-lg-4 d-flex align-self-stretch">
                           <div class="card GameCard my-2">
                             <div class="card-body">
-                              <img src="@/assets/images/pics/cover_info.jpeg" class="card-img-top" alt="...">
+                              <img :src="item.Img" class="card-img-top" alt="...">
                               <router-link :to="{ name: 'Game', params: { id: item.id, Grade: this.ShowGrade, Subject: this.Subject ,GameName: item.Name} }">
                                 <p class="h5 card-title mt-2">{{ item.Name }}</p>
                               </router-link>
@@ -83,7 +83,7 @@
       <div v-for="item in SearchResult" class="col-12 col-md-6 col-lg-4 d-flex align-self-stretch .justify-content-md-center mb-3">
         <div class="card GameCard col-3" style="width: 18rem; height: 20rem;">
           <div class="card-body">
-            <img src="@/assets/images/pics/cover_info.jpeg" class="card-img-top" alt="...">
+            <img :src="item.Img" class="card-img-top" alt="...">
             <router-link :to="{ name: 'Game', params: { id: item.id, Grade: this.ShowGrade, Subject: this.Subject ,GameName: item.Name} }">
               <p class="h5 card-title mt-2">{{ item.Name }}</p>
             </router-link>
@@ -159,13 +159,21 @@ created() {
           this.ShowInfo = this.MathShowInfo;
       }
       this.ShowMenu = false;
-      this.ShowContent = true; 
+      this.ShowContent = true;
+    }
+    if (sessionStorage.getItem("Chapter")!=null){
+      this.SelectedChapter = sessionStorage.getItem("Chapter");
+      for(var i in this.ShowInfo[this.SelectedChapter].Section){
+        for(var z in this.ShowInfo[this.SelectedChapter].Section[i].Games){
+          this.ShowInfo[this.SelectedChapter].Section[i].Games[z].Img = new URL(`../assets/`+this.ShowInfo[this.SelectedChapter].Section[i].Games[z].Img, import.meta.url).href;
+          console.log(this.ShowInfo[this.SelectedChapter].Section[i].Games[z].Img);
+        }
+      }
+      console.log(this.ShowInfo);
+      this.Show = true;
     }
   })();
-  if (sessionStorage.getItem("Chapter")!=null){
-    this.SelectedChapter = sessionStorage.getItem("Chapter");
-    this.Show = true;
-  }
+
 },
 
 methods: {
@@ -173,6 +181,12 @@ methods: {
     sessionStorage.setItem("Chapter",key);
     this.SelectedChapter = String(key);
     console.log(this.SelectedChapter);
+    for(var i in this.ShowInfo[key].Section){
+      for(var z in this.ShowInfo[key].Section[i].Games){
+        this.ShowInfo[key].Section[i].Games[z].Img = new URL(`../assets/`+this.ShowInfo[key].Section[i].Games[z].Img, import.meta.url).href;
+        console.log(this.ShowInfo[key].Section[i].Games[z].Img);
+      }
+    }
     this.Show = true;
   },
   ChangeSubject(Subject){
@@ -207,10 +221,14 @@ methods: {
       for(var z in this.MathShowInfo[i].Section){
         for(var x in this.MathShowInfo[i].Section[z].Games){
           if(this.MathShowInfo[i].Section[z].Games[x].Name.includes(keyword)){
-            result.push(this.MathShowInfo[i].Section[z].Games[x]);
+            let item = this.MathShowInfo[i].Section[z].Games[x];
+            item.Img = new URL(`../assets/`+item.Img, import.meta.url).href;
+            result.push(item);
           }
           if(this.MathShowInfo[i].Section[z].Games[x].id.includes(keyword)){
-            result.push(this.MathShowInfo[i].Section[z].Games[x]);
+            let item = this.MathShowInfo[i].Section[z].Games[x];
+            item.Img = new URL(`../assets/`+item.Img, import.meta.url).href;
+            result.push(item);
           }
         }
       }
@@ -219,10 +237,14 @@ methods: {
       for(var z in this.ChineseShowInfo[i].Section){
         for(var x in this.ChineseShowInfo[i].Section[z].Games){
           if(this.ChineseShowInfo[i].Section[z].Games[x].Name.includes(keyword)){
-            result.push(this.ChineseShowInfo[i].Section[z].Games[x]);
+            let item = this.MathShowInfo[i].Section[z].Games[x];
+            item.Img = new URL(`../assets/`+item.Img, import.meta.url).href;
+            result.push(item);
           }
           if(this.ChineseShowInfo[i].Section[z].Games[x].id.includes(keyword)){
-            result.push(this.ChineseShowInfo[i].Section[z].Games[x]);
+            let item = this.MathShowInfo[i].Section[z].Games[x];
+            item.Img = new URL(`../assets/`+item.Img, import.meta.url).href;
+            result.push(item);
           }
         }
       }
@@ -231,10 +253,14 @@ methods: {
       for(var z in this.TechnologyShowInfo[i].Section){
         for(var x in this.TechnologyShowInfo[i].Section[z].Games){
           if(this.TechnologyShowInfo[i].Section[z].Games[x].Name.includes(keyword)){
-            result.push(this.TechnologyShowInfo[i].Section[z].Games[x]);
+            let item = this.MathShowInfo[i].Section[z].Games[x];
+            item.Img = new URL(`../assets/`+item.Img, import.meta.url).href;
+            result.push(item);
           }
           if(this.TechnologyShowInfo[i].Section[z].Games[x].id.includes(keyword)){
-            result.push(this.TechnologyShowInfo[i].Section[z].Games[x]);
+            let item = this.MathShowInfo[i].Section[z].Games[x];
+            item.Img = new URL(`../assets/`+item.Img, import.meta.url).href;
+            result.push(item);
           }
         }
       }

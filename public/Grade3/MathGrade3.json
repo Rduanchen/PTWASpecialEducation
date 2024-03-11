@@ -9,61 +9,61 @@
                         "id": "MA3011",
                         "Name": "將相同的數字對應圖片連在一起",
                         "Description": "找出相同數字對應的圖片並連接起來",
-                        "Img": " "
+                        "Img": "images/pics/cover_info.jpeg"
                     },
                     "MA3012": {
                         "id": "MA3012",
                         "Name": "累加、累減找找看",
                         "Description": "找出數字在哪裡",
-                        "Img": " "
+                        "Img": "images/pics/cover_info.jpeg"
                     },
                     "MA3013": {
                         "id": "MA3013",
                         "Name": "數字排序",
                         "Description": "將數字按照大小順序排列",
-                        "Img": " "
+                        "Img": "images/pics/cover_info.jpeg"
                     },
                     "MA3014": {
                         "id": "MA3014",
                         "Name": "數字填空",
                         "Description": "根據提示填入正確的數字",
-                        "Img": " "
+                        "Img": "images/pics/cover_info.jpeg"
                     },
                     "MA3015": {
                         "id": "MA3015",
                         "Name": "數字選擇",
                         "Description": "從給定的選項中選擇正確的數字",
-                        "Img": " "
+                        "Img": "images/pics/cover_info.jpeg"
                     },
                     "MA3016": {
                         "id": "MA3016",
                         "Name": "數字連線",
                         "Description": "連接相同數字的線段",
-                        "Img": " "
+                        "Img": "images/pics/cover_info.jpeg"
                     },
                     "MA3017": {
                         "id": "MA3017",
                         "Name": "數字拼圖",
                         "Description": "將數字拼湊成完整的圖案",
-                        "Img": " "
+                        "Img": "images/pics/cover_info.jpeg"
                     },
                     "MA3018": {
                         "id": "MA3018",
                         "Name": "數字記憶",
                         "Description": "記憶數字的順序",
-                        "Img": " "
+                        "Img": "cover_info.jpeg"
                     },
                     "MA3019": {
                         "id": "MA3019",
                         "Name": "數字遊戲",
                         "Description": "玩遊戲學習數字",
-                        "Img": " "
+                        "Img": "cover_info.jpeg"
                     },
                     "MA3020": {
                         "id": "MA3020",
                         "Name": "數字測驗",
                         "Description": "測試對數字的認識程度",
-                        "Img": " "
+                        "Img": "cover_info.jpeg"
                     }
                 }
             },
