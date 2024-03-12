@@ -3,7 +3,7 @@
     "introvideo": "src",
     "TotalLevel": 1,
     "GameType": "AutoNumberingGame",
-    "ConfigParameters":{
+    "Config":{
         "background":true,
         "GiveHint":true,
         "InsideLevel":true,
@@ -13,10 +13,9 @@
         {   
             "Question": {
                 "Text": "數數看上面有幾個物品",
-                "Root": "Source",
                 "ObjImgList": ["1", "2", "3", "4", "5", "6"],
                 "Range":[4,10],
-                "Level": 6
+                "Level": 3
             },
             "Answer": [
             ]

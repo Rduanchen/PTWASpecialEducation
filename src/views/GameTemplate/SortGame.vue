@@ -1,6 +1,6 @@
 <template>
 <div class="container">
-    <h1>{{ QuestionWord }}</h1>
+    <h1>{{ this.GameData.Question.text }}</h1>
     <hr>
     <draggable :list="options" group="Sentense">
         <template #item="{ element }">
@@ -38,35 +38,35 @@ export default {
         return {
             QuestionWord: '',
             options:[],
-            // question: null,
+            show: false,
+            question: null,
             // answer: null
         }
     },
     created(){
-        // this.question=this.GameData.Question;
-        // this.answer=this.GameData.Answer;
-        // console.log(this.question)
-        // console.log(this.answer)
-        this.QuestionWord=this.GameData.Question.text
-        this.RandomtheList();
-        let randed = this.Checkrand();
-        while(randed==false){
-            this.RandomtheList();
-            randed = this.Checkrand();
-        }
-        for(var i in this.GameData.Question.options){
-            console.log("Do")
-            this.options.push(this.GameData.Question.options[i])
-        }
+        this.UpdateQuestion();
+        setInterval(this.IntervalCheckUpdate, 500);
     },
     methods: {
+        UpdateQuestion(){
+            this.answer = this.GameData.Answer;
+            this.question = this.GameData.Question.options;
+            this.RandomtheList();
+
+            this.options = [];
+            for(var i in this.question){
+                this.options.push(this.question[i])
+            }
+            console.log(this.question, this.options, this.answer)
+        },
         RandomtheList(){
-            this.GameData.Question.options.sort(() => Math.random() - 0.5);
+            this.question.sort(() => Math.random() - 0.5);
         },
         Checkrand(){
             var AnswerCheck=0
             for(var i in this.answer){
                 if(this.answer[i]!=this.GameData.Question.options[i]){
+                    //如果不等於的時候
                     AnswerCheck++
                 }
             }
@@ -79,6 +79,11 @@ export default {
                 return true
             }
         },
+        IntervalCheckUpdate(){
+            if (this.question != this.GameData.Question.options){
+                this.UpdateQuestion();
+            }
+        },
         CheckAnswer(){
             var AnswerCheck=true
             for(var i in this.answer){
@@ -88,16 +93,18 @@ export default {
             }
             if(AnswerCheck==true){
                 console.log("SortGame ChenckAnswer: Right")
+                this.show = false;
                 this.$emit('play-effect', 'CorrectSound')
-                this.$emit('add-record',[this.answer, this.options,"正確"])
-                this.$emit('next-question');
-                return true
+                this.$emit('add-record',[this.GameData.Answer, this.options,"正確"])
+                this.$emit('next-question');        
+                setTimeout(this.UpdateQuestion, 100);
+                this.UpdateQuestion();
             }
             else{
                 console.log("SortGame ChenckAnswer: Wrong")
                 this.$emit('play-effect', 'WrongSound',)
                 this.$emit('add-record',[this.answer, this.options,"錯誤"])
-                return false
+                this.UpdateQuestion();
             }
         }
     }

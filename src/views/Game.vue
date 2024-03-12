@@ -433,7 +433,7 @@ export default {
                   break;
               case "FireWorkAnimation":
                   this.EffectWindow = true;
-                  this.EffectSrc = new URL(`../assets/Effects/Firework.gif`, import.meta.url).href;
+                  // this.EffectSrc = new URL(`../assets/Effects/Firework.gif`, import.meta.url).href;
                   var sound = new Audio();
                   sound.src = new URL(`../assets/Effects/harry.mp3`, import.meta.url).href
                   sound.oncanplaythrough = function(){
@@ -442,6 +442,13 @@ export default {
                   setInterval(() => {
                     this.EffectWindow = false;
                   }, 3000);
+                  break;
+              case "HarraySound":
+                  var sound = new Audio();
+                  sound.src = new URL(`../assets/Effects/harry.mp3`, import.meta.url).href
+                  sound.oncanplaythrough = function(){
+                    sound.play();
+                  }
                   break;
           }
       },

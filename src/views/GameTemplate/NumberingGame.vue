@@ -1,8 +1,8 @@
 <template>
     <div>
         <div class="container">
-            <img :src="imageUrl">
-            <p class="h3">{{ this.question.Text }}</p>
+            <img :src="imageUrl" style="width: 70vw;">
+            <p class="h3">{{ this.GameData.Question.Text }}</p>
             <p class="h5">請點擊下方的按鈕選擇答案</p>
             <div id="error_msg">{{ errorMsg }}</div>
             <div class="d-flex flex-row  flex-wrap">
@@ -42,34 +42,36 @@ export default {
         }
     },
     props: {
-        imgsrc:{
-            type: String,
-            required: true
-        },
-        question: {
+        GameData: {
             type: Object,
             required: true
         },
-        answer: {
-            type: Number,
+        GameConfig:{
+            type: Object,
+            required: true
+        },
+        id:{
+            type: String,
             required: true
         }
     },
     mounted(){
-        this.imageUrl=new URL(`../../assets/GamePic/${this.imgsrc}`, import.meta.url).href;
-        for(var i=this.question.Range[0];i<=this.question.Range[1];i++){
+        this.imageUrl=new URL(`../../assets/Games/`+this.id+`/${this.GameData.img}`, import.meta.url).href;
+        // this.imageUrl=new URL(`../../assets/Games/`+this.id+`/${this.GameData.img}`, import.meta.url).href;
+        for(var i=this.GameData.Question.Range[0];i<=this.GameData.Question.Range[1];i++){
             this.btn.push(i);
         }
     },
     methods:{
         judgeAnswer(answer){
-            if(answer == this.answer){
-                this.$emit('check-answer',true);
-                console.log('check answer : True');
+            if(answer == this.GameData.Answer){
+                this.$emit('play-effect', 'CorrectSound')
+                this.$emit('add-record',[this.GameData.Answer, answer,"正確"])
+                this.$emit('next-question');
             }
             else{
-                this.$emit('check-answer',true);
-                console.log('check answer : False');
+                this.$emit('play-effect', 'WrongSound',)
+                this.$emit('add-record',[this.GameData.Answer,answer,"錯誤"])
             }
         }
     }

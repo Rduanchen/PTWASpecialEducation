@@ -67,7 +67,7 @@ export default {
         for(var i in this.GameData.Question){
             this.question.push(this.GameData.Question[i]);
         }
-        this.imageUrl=new URL(`../../assets/GamePic/${this.GameData.img}`, import.meta.url).href
+        this.imageUrl=new URL(`../../assets/Games/`+this.id+`/${this.GameData.img}`, import.meta.url).href
         console.log(this.imageUrl);
     }
 }

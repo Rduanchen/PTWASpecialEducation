@@ -3,7 +3,7 @@
 <div class="justify-content-center">
     <div class="card mb-2">
         <div class="card-body">
-            {{ question.Text }}
+            {{ this.GameData.Question.Text }}
         </div>
     </div>
     <canvas id="cvs" class="center" width="800" height="600" style="border: 1px solid #000" v-on:click="judge_position($event)"></canvas>
@@ -29,33 +29,34 @@ export default {
         }
     },
     props: {
-        imgsrc:{
-            type: String,
-            required: true
+        GameData: {
+          type: Object,
+          required: true
         },
-        question: {
+        GameConfig:{
             type: Object,
             required: true
         },
-        answer: {
-            type: Array,
+        id:{
+            type: String,
             required: true
-        },
+        }
         //Other Game Methods
     },
     created() {
-        for(var i=0; i<this.question["ObjNum"]; i++){
+        // this.question=this.GameData.Question;
+        for(var i=0; i<this.GameData.Question["ObjNum"]; i++){
             this.answered.push(0);
         }
-        for(var i in this.question.ObjName){
-            this.btn[i]=this.question.ObjName[i];
+        for(var i in this.GameData.Question.ObjName){
+            this.btn[i]=this.GameData.Question.ObjName[i];
         }
     },
     mounted(){
         var cvs=document.getElementById("cvs");
         const ctx=cvs.getContext('2d');
         var img=new Image();
-        img.src=this.imageUrl=new URL(`../../assets/GamePic/${this.imgsrc}`, import.meta.url).href
+        img.src=this.imageUrl=new URL(`../../assets/Games/`+this.id+`/${this.GameData.img}`, import.meta.url).href
         img.addEventListener("load", function() {
             ctx.drawImage(this,0,0,cvs.width,cvs.height);
         }, false);
@@ -63,8 +64,8 @@ export default {
         var posX = $('#cvs').offset().left;
         var posY = $('#cvs').offset().top;
         console.log("page offset:",posX,posY);
-        this.ObjPosition=this.question["ObjLocation"];
-        this.ObjPositionRange=this.answer;
+        this.ObjPosition=this.GameData.Question["ObjLocation"];
+        this.ObjPositionRange=this.GameData.Answer;
     },
     methods:{
         outCircle(x,y){
@@ -110,6 +111,8 @@ export default {
             //draw circle
             // record_time_data(num);
             // playAudio(num);//Play Right Answer Sound
+            this.$emit('play-effect', 'CorrectSound')
+            this.$emit('add-record',[num,"被找到","正確"])
             this.outCircle(this.ObjPosition[num][0],this.ObjPosition[num][1]);
             $("#bt-"+num).css("background-color","gray")
             this.detect_win(num);
@@ -128,7 +131,9 @@ export default {
         },
         win(){
             console.log("FindTheItemGame CheckAnswer :Wrong")
-            this.$emit('check-answer',true);
+            this.$emit('play-effect', 'HarraySound')
+            this.$emit('add-record',["全對","","正確"])
+            this.$emit('next-question',true);
         }
         
     }

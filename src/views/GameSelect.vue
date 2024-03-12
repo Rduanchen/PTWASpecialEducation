@@ -169,7 +169,7 @@ created() {
           console.log(this.ShowInfo[this.SelectedChapter].Section[i].Games[z].Img);
         }
       }
-      console.log(this.ShowInfo);
+      
       this.Show = true;
     }
   })();
@@ -178,19 +178,12 @@ created() {
 
 methods: {
   SelectChapter(key){
+    this.Show = false;
     sessionStorage.setItem("Chapter",key);
     this.SelectedChapter = String(key);
-    console.log(this.SelectedChapter);
-    for(var i in this.ShowInfo[key].Section){
-      for(var z in this.ShowInfo[key].Section[i].Games){
-        this.ShowInfo[key].Section[i].Games[z].Img = new URL(`../assets/`+this.ShowInfo[key].Section[i].Games[z].Img, import.meta.url).href;
-        console.log(this.ShowInfo[key].Section[i].Games[z].Img);
-      }
-    }
     this.Show = true;
   },
   ChangeSubject(Subject){
-    console.log("change");
     this.ShowMenu = false;
     this.ShowContent = true;
     this.Subject = Subject;
@@ -201,7 +194,7 @@ methods: {
     else if (Subject == "Chinese")
     {
       this.ShowInfo = this.ChineseShowInfo;
-      console.log("Chinens data")
+      
     }
     else if (Subject == "Technology")
     {
@@ -221,13 +214,19 @@ methods: {
       for(var z in this.MathShowInfo[i].Section){
         for(var x in this.MathShowInfo[i].Section[z].Games){
           if(this.MathShowInfo[i].Section[z].Games[x].Name.includes(keyword)){
-            let item = this.MathShowInfo[i].Section[z].Games[x];
-            item.Img = new URL(`../assets/`+item.Img, import.meta.url).href;
+            if (sessionStorage.getItem("Subject")!="Math")
+            {
+              let item = this.MathShowInfo[i].Section[z].Games[x];
+              item.Img = new URL(`../assets/`+item.Img, import.meta.url).href;
+            }
             result.push(item);
           }
           if(this.MathShowInfo[i].Section[z].Games[x].id.includes(keyword)){
-            let item = this.MathShowInfo[i].Section[z].Games[x];
-            item.Img = new URL(`../assets/`+item.Img, import.meta.url).href;
+            if (sessionStorage.getItem("Subject")!="Math")
+            {
+              let item = this.MathShowInfo[i].Section[z].Games[x];
+              item.Img = new URL(`../assets/`+item.Img, import.meta.url).href;
+            }
             result.push(item);
           }
         }
@@ -237,13 +236,19 @@ methods: {
       for(var z in this.ChineseShowInfo[i].Section){
         for(var x in this.ChineseShowInfo[i].Section[z].Games){
           if(this.ChineseShowInfo[i].Section[z].Games[x].Name.includes(keyword)){
-            let item = this.MathShowInfo[i].Section[z].Games[x];
-            item.Img = new URL(`../assets/`+item.Img, import.meta.url).href;
+            if (sessionStorage.getItem("Subject")!="Chinese")
+            {
+              let item = this.ChineseShowInfo[i].Section[z].Games[x];
+              item.Img = new URL(`../assets/`+item.Img, import.meta.url).href;
+            }
             result.push(item);
           }
           if(this.ChineseShowInfo[i].Section[z].Games[x].id.includes(keyword)){
-            let item = this.MathShowInfo[i].Section[z].Games[x];
-            item.Img = new URL(`../assets/`+item.Img, import.meta.url).href;
+            if (sessionStorage.getItem("Subject")!="Chinese")
+            {
+              let item = this.ChineseShowInfo[i].Section[z].Games[x];
+              item.Img = new URL(`../assets/`+item.Img, import.meta.url).href;
+            }
             result.push(item);
           }
         }
@@ -253,13 +258,20 @@ methods: {
       for(var z in this.TechnologyShowInfo[i].Section){
         for(var x in this.TechnologyShowInfo[i].Section[z].Games){
           if(this.TechnologyShowInfo[i].Section[z].Games[x].Name.includes(keyword)){
-            let item = this.MathShowInfo[i].Section[z].Games[x];
-            item.Img = new URL(`../assets/`+item.Img, import.meta.url).href;
+            if (sessionStorage.getItem("Subject")!="Technology")
+            {
+              let item = this.TechnologyShowInfo[i].Section[z].Games[x];
+              item.Img = new URL(`../assets/`+item.Img, import.meta.url).href;
+            
+            }
             result.push(item);
           }
           if(this.TechnologyShowInfo[i].Section[z].Games[x].id.includes(keyword)){
-            let item = this.MathShowInfo[i].Section[z].Games[x];
-            item.Img = new URL(`../assets/`+item.Img, import.meta.url).href;
+            if (sessionStorage.getItem("Subject")!="Technology")
+            {
+              let item = this.TechnologyShowInfo[i].Section[z].Games[x];
+              item.Img = new URL(`../assets/`+item.Img, import.meta.url).href;
+            }
             result.push(item);
           }
         }
@@ -274,7 +286,7 @@ methods: {
     }
   },
   Return2Menu(){
-    this.ShowSearch = false;
+    this.ShowSearch =false;
     this.ShowContent = true;
     this.ShowMenu = false;
     this.SearchInput = null;

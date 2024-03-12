@@ -19,7 +19,7 @@
         },
         {
             "Question": {
-                "text":"請排序",
+                "text":"請排序2",
                 "randomswitch":true,
                 "options":["I","am","fine","."]
             },
@@ -29,7 +29,7 @@
         },
         {
             "Question": {
-                "text":"請排序",
+                "text":"請排序3",
                 "randomswitch":true,
                 "options":["What","is","your","name","?"]
             },
