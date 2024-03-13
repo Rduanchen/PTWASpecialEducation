@@ -1,8 +1,11 @@
 <template>
+    <!-- {{ this.DotLocation }} -->
     <div class="canvas-container">
         <canvas id="responsive-bg" class="position-absolute"></canvas>
-        <!-- <canvas ref="line_keeper" id="line_keeper" class="position-absolute"></canvas> -->
+        <canvas ref="line_keeper" id="line_keeper" class="position-absolute"></canvas>
     </div>
+
+    
 </template>
 
 <script>
@@ -32,7 +35,6 @@ export default {
             ontouch_group:0,
             DotLocation:[],
             OnclickLocation:[], // [RowID,Index]
-            DotLocation:[],
 
             //Check Answer
 
@@ -77,6 +79,16 @@ export default {
             this.RWD_Gap_Width = RWD_Info.Gap_width;
             this.DrawImgOnCanvas(this.QuestionDataStructure,context1);
         });
+        this.canvas = this.$refs.line_keeper;
+        this.context = this.canvas.getContext('2d');
+        this.canvas.width= window.innerWidth;
+        this.canvas.height= window.innerHeight;
+        this.canvas.addEventListener('mousedown', this.handleMouseDown);
+        this.canvas.addEventListener('mousemove', this.handleMouseMove);
+        this.canvas.addEventListener('mouseup', this.handleMouseUp);
+        this.canvas.addEventListener('touchstart', this.handleTouchStart);
+        this.canvas.addEventListener('touchmove', this.handleTouchMove);
+        this.canvas.addEventListener('touchend', this.handleTouchEnd);
     },
     methods: {
         CountRWDWidth(question){
@@ -132,17 +144,18 @@ export default {
         },
         DrawImgOnCanvas(question,context1,){
             let Column_Amount=question.length;
+            var onchangegroup = false;
+            let Column_ID = 1
+            let Group = 1
             for (let col = 0; col < question.length; col++) { //Column
                 //紀錄錨點資訊
-                let Row_ID = 1
-                let Column_ID = 1
-                let Group = 1
+                // let Dot_Row_ID = 1
                 const Max_Img_Size = this.CountMaxImgSize(this.QuestionDataStructure[col].length);
                 let RWD_Colum_Gap=this.CountRWDYGap(question[col])
                 
                 console.log(RWD_Colum_Gap);
 
-                for (let row = 0; row < question[col].length; row++) { //Row
+                for (let Dot_Row_ID = 0; Dot_Row_ID < question[col].length; Dot_Row_ID++) { //Row
                     let Img = new Image();
                     // let Image_Url=new URL(`../../${question[col][row]}`, import.meta.url).href
                     let Image_Url = icon //FIXME: 這裡要改成vue動態匯入
@@ -153,7 +166,7 @@ export default {
                     // Img.width = Img_Size.New_Width;
 
                     let x = this.Min_border + Max_Img_Size.Max_Width*col + this.RWD_Gap_Width*col
-                    let y = this.Min_border + RWD_Colum_Gap + Max_Img_Size.Max_Height*row
+                    let y = this.Min_border + RWD_Colum_Gap + Max_Img_Size.Max_Height*Dot_Row_ID
                     // let bordr=100
 
                     Img.onload = () => {
@@ -163,44 +176,208 @@ export default {
                         if (col == 0) {
                             // add on right
                             context1.arc((x+Img_Size.New_Width+this.Min_border), (y+(Img_Size.New_Height/2)), this.DotRadius, 0, Math.PI * 2, true);
-                            // this.DotLocation.push([[Row_ID,Column_ID,Group],[x+Img_Width+this.Min_border, y+Img_Height/2]]);
+                            this.DotLocation.push([[Dot_Row_ID,col,Group],[x+Img_Size.New_Width+this.Min_border, y+Img_Size.New_Height/2]]);
+                            
+                            console.log(Dot_Row_ID,col,Group);
+
                             context1.fillStyle = 'black';
                             context1.fill();
                             
-                            // this.DotLocation.push([x+Img_Width+this.Min_border-this.TouchSensitive, y+Img_Height/2-this.TouchSensitive);
+                            // this.DotLocation.push([x+Img_Size.New_Width+this.Min_border-this.TouchSensitive, y+Img_Size.New_Height/2-this.TouchSensitive]);
                         }
                         else if (col == Column_Amount-1) {
                             // add on left
-                            
                             context1.arc(x-this.Min_border,(y+(Img_Size.New_Height/2)), this.DotRadius, 0, Math.PI * 2, true);
-                            // this.DotLocation.push([[Row_ID,Column_ID,Group],[x-this.Min_border, y+Img_Height/2]]);
+                            this.DotLocation.push([[Dot_Row_ID,col,Group],[x-this.Min_border, y+Img_Size.New_Height/2]]);
                             context1.fillStyle = 'black';
                             context1.fill();
                             
-                            // this.DotLocation.push([x+Img_Width+this.Min_border-this.TouchSensitive, y+Img_Height/2-this.TouchSensitive);
+                            // this.DotLocation.push([x+Img_Size.New_Width+this.Min_border-this.TouchSensitive, y+Img_Size.New_Height/2-this.TouchSensitive]);
                         }
                         else{
+                            // onchangegroup = true;
                             // add on both side
+                            console.log("Add Both Side");
                             context1.arc(x-this.Min_border,(y+(Img_Size.New_Height/2)), this.DotRadius, 0, Math.PI * 2, true);
-                            
-                            Group++;
-
                             context1.arc((x+Img_Size.New_Width+this.Min_border), (y+(Img_Size.New_Height/2)), this.DotRadius, 0, Math.PI * 2, true);
-                            // this.DotLocation.push([[Row_ID,Column_ID,Group],[x+Img_Width+this.Min_border, y+Img_Height/2]]);
+                            //Right
+                            this.DotLocation.push([[Dot_Row_ID,col+1,Group+1],[x+Img_Size.New_Width+this.Min_border, y+Img_Size.New_Height/2]]);
+                            //Left
+                            this.DotLocation.push([[Dot_Row_ID,col,Group],[x-this.Min_border, y+Img_Size.New_Height/2]]);
+                            // console.log(Dot_Row_ID,Column_ID,Group);
 
-                            
-                            // this.DotLocation.push([[Row_ID,Column_ID,Group],[x-this.Min_border, y+Img_Height/2]]);
-                            
                             context1.fillStyle = 'black';
                             context1.fill();
                             
-                            // this.DotLocation.push([x+Img_Width+this.Min_border-this.TouchSensitive, y+Img_Height/2-this.TouchSensitive);
+                            // this.DotLocation.push([x+Img_Size.New_Width+this.Min_border-this.TouchSensitive, y+Img_Size.New_Height/2-this.TouchSensitive]);
+                            
                         }
                         context1.closePath();
                     }
+                    // Row_ID++;
+                }
+                if(col != Column_Amount-1 && col != 0){
+                    console.log("Change Group");
+                    Group+=1;
+                    onchangegroup = false;
                 }
             }
-                
+        },
+        getEventPos(evt) {
+            const rect = this.canvas.getBoundingClientRect();
+            return {
+                x: evt.clientX - rect.left,
+                y: evt.clientY - rect.top
+            };
+        },
+        handleMouseDown(e) {
+            var rep =this.JudgeRange(e.clientX,e.clientY);
+            console.log(rep);
+            this.row=rep.RowID;
+            this.ontouch_group=rep.Group;
+            if(rep.Locate){
+                if (!this.isDrawing) {
+                    console.log("Start Drawing");
+                    this.isDrawing = true;
+                    const startPos = this.getEventPos(e);
+                    this.paths.push({ startX: startPos.x, startY: startPos.y });
+                    this.OnclickLocation=[rep.RowID,rep.Index];
+                } 
+            }
+        },
+        handleMouseMove(e) {
+            if (this.isDrawing) {
+                const currentPos = this.getEventPos(e);
+                this.paths[this.paths.length - 1].currentX = currentPos.x;
+                this.paths[this.paths.length - 1].currentY = currentPos.y;
+                this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                this.drawPaths();
+            }
+        },
+        handleMouseUp(e) {
+            var rep =this.JudgeRange(e.clientX,e.clientY);
+            // var CA =this.CheckAnswer(this.OnclickLocation[0],this.OnclickLocation[1],rep.RowID,rep.Index)
+            let CA=true; //temp
+            if(rep.Locate && this.ontouch_group==rep.Group && this.row!=rep.RowID && CA){
+                if (this.isDrawing) {
+                    this.isDrawing = false;
+                    const endPos = this.getEventPos(e);
+                    this.paths[this.paths.length - 1].endX = endPos.x;
+                    this.paths[this.paths.length - 1].endY = endPos.y;
+                    this.drawPaths();
+                }
+                this.ontouch_group=0;
+            }
+            else{
+                this.isDrawing = false;
+                this.clearLastPath();
+            }
+        },
+        handleTouchStart(e) {
+            var rep =this.JudgeRange(e.touches[0].clientX,e.touches[0].clientY);
+            this.row=rep.RowID;
+            this.ontouch_group=rep.Group;
+            if(rep.Locate){
+                e.preventDefault();
+                this.isDrawing = true;
+                const startPos = this.getEventPos(e.touches[0]);
+                this.paths.push({ startX: startPos.x, startY: startPos.y });
+                this.OnclickLocation=[rep.RowID,rep.Index];
+            }
+        },
+        handleTouchMove(e) {
+            if (this.isDrawing) {
+                e.preventDefault();
+                const currentPos = this.getEventPos(e.touches[0]);
+                this.paths[this.paths.length - 1].currentX = currentPos.x;
+                this.paths[this.paths.length - 1].currentY = currentPos.y;
+                this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                this.drawPaths();
+            }
+        },
+        handleTouchEnd(e) {
+            var rep =this.JudgeRange(e.changedTouches[0].clientX,e.changedTouches[0].clientY);
+            // var CA =this.CheckAnswer(this.OnclickLocation[0],this.OnclickLocation[1],rep.RowID,rep.Index)
+            let CA=true; //temp
+            if(rep.Locate && this.ontouch_group==rep.Group && this.row!=rep.RowID && CA){
+                if (this.isDrawing) {
+                    e.preventDefault();
+                    this.isDrawing = false;
+                    const endPos = this.getEventPos(e.changedTouches[0]);
+                    this.paths[this.paths.length - 1].endX = endPos.x;
+                    this.paths[this.paths.length - 1].endY = endPos.y;
+                    this.drawPaths();
+                    this.ontouch_group=0;
+                }
+            }
+            else{
+                this.isDrawing = false;
+                this.clearLastPath();
+            }
+        },
+        drawPaths() {
+            this.paths.forEach(path => {
+                this.context.beginPath();
+                this.context.moveTo(path.startX, path.startY);
+                this.context.lineTo(path.currentX, path.currentY);
+                this.context.stroke();
+                this.context.closePath();
+            });
+        },
+        clearLastPath() {
+            this.paths.pop();
+            this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            this.drawPaths();
+        },
+        JudgeRange(x,y){
+            for(var i=0;i<this.DotLocation.length;i++){
+                // 利用兩線段的距離公式來判斷是否在點的範圍內
+                length =((this.DotLocation[i][1][0] - x )**2+(this.DotLocation[i][1][1] - y )**2)**0.5;
+                if(length<=(this.DotRadius)){
+                    console.log(this.DotLocation[i][0][0],this.DotLocation[i][0][1],this.DotLocation[i][0][2],i);
+                    return {Locate:true , Group:this.DotLocation[i][0][2], RowID:this.DotLocation[i][0][0], Index:this.DotLocation[i][0][1]};
+                }
+            }
+            return {Locate:false , Group:undefined};
+        },
+        CheckAnswer(o_row,o_index,row,index){
+            var find_ans=false;
+            for(var i in this.ans){
+                if(this.ans[i][0][0]==o_row && this.ans[i][0][1]==o_index && this.ans[i][1][0]==row && this.ans[i][1][1]==index){
+                    find_ans=true;
+                    break;
+                }
+                else if(this.ans[i][1][0]==o_row && this.ans[i][1][1]==o_index && this.ans[i][0][0]==row && this.ans[i][0][1]==index){
+                    find_ans=true;
+                    break;
+                }
+            }
+            if(find_ans){
+                console.log("Link Template Return Correct");
+                this.Runtimes=this.Runtimes+1;
+                if(this.Runtimes==this.TotalAmount){
+                    this.GameOver();
+                    this.$emit('play-effect', 'CorrectSound',)
+                    // this.$emit('add-record',[[[row,index],[]],[row,index],"正確"])
+                    this.$emit('add-record',["","","正確"])
+
+                }
+                return true;
+            }
+            else{
+                console.log("Link Template Return Wrong");
+                this.$emit('play-effect', 'WrongSound',)
+                this.$emit('add-record',["","","錯誤"])
+                return false;
+            }
+
+        },
+        GameOver(){
+            console.log("Component 'Link' post GameOver,All Answer Right")
+            // this.$emit('check-answer',true);
+            this.$emit('play-effect', 'CorrectSound',)
+            this.$emit('add-record',["","","全對"])
+            this.$emit('next-question');
         }
     }
 }
@@ -222,5 +399,6 @@ export default {
         margin-top: 20px; /* 按鈕與 canvas 區塊之間的距離 */
         /* 其他按鈕樣式 */
     }
+    
 </style>
     

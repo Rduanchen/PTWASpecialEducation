@@ -98,7 +98,13 @@ export default {
         //bind error text
         this.error_text = document.getElementById("error_msg");
         //load description image FIXME:This is a temporary solution, will be removed in the future
-        this.loadDescriptionImage();
+        var start = true;
+        if (start === true) {
+            this.clearCanvas();
+            this.randomPicturePosition();
+            start = false;
+        }
+        // this.loadDescriptionImage();
     },
     methods: {
         getRandPicture() {
@@ -237,28 +243,6 @@ export default {
                 setTimeout(this.clearCanvas, 1500);
                 setTimeout(this.randomPicturePosition, 1500);
             }
-        },
-        loadDescriptionImage() {
-            /**
-             * Load the description image
-             * If the image was clicked, the game will start
-             */
-            var start = true;
-            const img = new Image();
-            img.src = new URL(`../../assets/GamePic/${this.GameData.Question.Root}/description.png`, import.meta.url).href;
-            img.onload = () => {
-                const scale = this.canvas.width / img.width;
-                const height = img.height * scale;
-                this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-                this.context.drawImage(img, 0, 0, this.canvas.width, height);
-                this.canvas.addEventListener('click', () => {
-                    if (start === true) {
-                        this.clearCanvas();
-                        this.randomPicturePosition();
-                        start = false;
-                    }
-                });
-            };
         },
     },
 };

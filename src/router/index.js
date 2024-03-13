@@ -114,6 +114,11 @@ const router = createRouter({
       path:"/canva",
       name:"canva",
       component:()=>import("@/components/canvas.vue")
+    },
+    {
+      path:"/Speak",
+      name:"Speak",
+      component:()=>import("@/components/speechdemo.vue")
     }
   ]
 });

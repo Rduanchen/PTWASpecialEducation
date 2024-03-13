@@ -1,4 +1,5 @@
 <template>
+    {{ this.DotLocation }}
     <div class="canvas-container">
         <canvas id="myCanvas" class="position-absolute"></canvas>
         <canvas ref="myCanvas2" id="canvas2" class="position-absolute"></canvas>
@@ -9,6 +10,21 @@
     import icon from '@/assets/GamePic/Cat.png';
 import FindTheItemGame from '../views/GameTemplate/FindTheItemGame.vue';
     export default {
+        props: {
+            GameData: {
+                type: Object,
+                required: true
+            },
+            GameConfig:{
+                type: Object,
+                required: true
+            },
+            id:{
+                type: String,
+                required: true
+            }
+        },
+        emits: ['play-effect','add-record','next-question'],
         data(){
             return{
                 border: 30,
@@ -55,6 +71,7 @@ import FindTheItemGame from '../views/GameTemplate/FindTheItemGame.vue';
             // this.DrawReaizesImgOnCanvas(context1,icon,3);
             var img = new Image();
             img.src = icon;
+            // img.src = new URL(`../../assets/GamePic/Cat.png`, import.meta.url).href;
             img.onload= () => {
                 this.DrawImgOnRow(context1,img,this.QuestionDataStructure);
             }
@@ -118,7 +135,6 @@ import FindTheItemGame from '../views/GameTemplate/FindTheItemGame.vue';
     
                 // 設定新的圖片來源
                 resizedImg.src = img.src;
-    
                 console.log("Resized Image's Height:"+resizedImg.height);
                 return resizedImg;
             },

@@ -178,6 +178,13 @@ created() {
 
 methods: {
   SelectChapter(key){
+    if(sessionStorage.getItem("Chapter")==null){
+      for (var i in this.ShowInfo[key].Section){
+        for (var z in this.ShowInfo[key].Section[i].Games){
+          this.ShowInfo[key].Section[i].Games[z].Img = new URL(`../assets/`+this.ShowInfo[key].Section[i].Games[z].Img, import.meta.url).href;
+        }
+      }
+    }
     this.Show = false;
     sessionStorage.setItem("Chapter",key);
     this.SelectedChapter = String(key);
