@@ -39,6 +39,7 @@
               <component
                 v-if="GameType!='SelfDefine'"
                 v-bind:is="this.GameType" 
+                ref="GameComponent"
                 :id="this.GameID" 
                 :GameData="this.GameData.Questions[this.Nowlevel-1]"   
                 :GameConfig="this.GameConfig"  
@@ -137,7 +138,7 @@
                   </div>
                 </div>
               </button>
-              <button class="btn btn-primary text-nowrap img-hover-zoom" v-if="GameStatus=='Progressing'" >
+              <button class="btn btn-primary text-nowrap img-hover-zoom" v-if="GameStatus=='Progressing' && this.Hint['Type']!='Method'"  data-bs-toggle="modal" data-bs-target="#hint" @click="ProvideHint()">
                 <div class="d-flex align-items-center">
                   <div class="">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-square-fill" viewBox="0 0 16 16">
@@ -238,7 +239,7 @@
             </div>
           </div>
 
-
+          <!--FIXME teach -->
           <div class="fade modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl">
               <div class="modal-content">
@@ -256,8 +257,39 @@
             </div>
           </div>
 
-          
-
+          <!-- Hint app -->
+          <div class="fade modal" id="hint" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+              <div class="modal-content" style="height: 90vh;">
+                <!-- <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">這是提示</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div> -->
+                <div class="modal-body d-flex justify-content-center" >
+                  <!-- <p>Hello</p>
+                  {{ this.Hint['Type'] }} -->
+                  <div class="content Type-None" v-if="this.Hint['Type']=='None'">
+                    <p class="h1">喔喔，沒有提供相關的資源</p>
+                    <img src="@/assets/images/game_images/elephant.gif" class="">
+                  </div>
+                  <div class="content Type-Level" v-if="this.Hint['Type']=='Level'">
+                    <p class="h1">這是關卡提示</p>
+                    <video id="Hint-video" :src="this.Hint['Data']['FilePath']" controls="controls" class="img-fluid" v-if="this.Hint.Data.SourceType=='video'"></video>
+                    <img :src="this.Hint['Data']['FilePath']" class="img-fluid" v-if="this.Hint.Data.SourceType=='image'">
+                  </div>
+                  <div class="content Type-Single" v-if="this.Hint['Type']=='Single'">
+                    <p class="h1">這是單一提示</p>
+                    <video id="Hint-video" :src="this.Hint['Data']['FilePath']" controls="controls" class="img-fluid" v-if="this.Hint.Data.SourceType=='video'"></video>
+                    <img :src="this.Hint['Data']['FilePath']" class="img-fluid" v-if="this.Hint.Data.SourceType=='image'">
+                  </div>
+                  <!-- //FIXME video 自動暫停 -->
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">我知道了!</button>
+                </div>
+              </div>
+            </div>
+          </div>
       </div>
     </div>    
   </section>
@@ -299,7 +331,14 @@ export default {
       intervalId: null,
       EffectWindow: false,
       EffectSrc:'',
-      CalculatorSwitch: false
+      CalculatorSwitch: false,
+      Hint:{
+        Type: "None",
+        Data: {
+          FilePath: "",
+          SourceType: "",
+        },
+      }
       // SentData2ChildComponent: {},
     };
   },
@@ -308,11 +347,13 @@ export default {
       this.Subject = this.$route.params.Subject;
       this.Grade = this.$route.params.Grade;
       this.Name = this.$route.params.GameName;
+      
       axios.get(`../../Grade${this.Grade}/${this.GameID}.json`)
       .then((res) => {
         this.GameData = res.data;
         this.GameType = this.GameData.GameType;
         this.GameConfig = this.GameData.GameConfig;
+        this.InitHint();  
       })
   },
   methods: {
@@ -469,6 +510,66 @@ export default {
           EffectSrc: this.EffectSrc,
         }
       },
+      //hint app
+      InitHint() {
+        // 紀錄提示種類，有則設定hint_type為提示種類，沒有則設定hint_type為None
+        console.log(this.GameData.Hint)
+        let hint_exist = false;
+        let RuleType
+        let hint_type
+        try{
+          console.log("Hint type: "+this.GameData.Hint.ShowAs);
+          this.Hint["Type"] = this.GameData.Hint.ShowAs;
+        }
+        catch{
+          this.Hint["Type"] = "None";
+          console.log("No hint in this game");
+          console.warn("No hint in this game");
+        }
+      },
+      ProvideHint(){
+        let hint_type = this.Hint["Type"];
+        switch (hint_type)
+        {
+          case "Level":
+            try{
+              let temp = this.GameData.Hint.Data[this.Nowlevel-1].FilePath;
+              temp = this.GameData.Hint.Data[this.Nowlevel-1].SourceType;
+              this.Hint["Data"] = this.GameData.Hint.Data[this.Nowlevel-1]
+              this.Hint["Data"]['FilePath'] = new URL(`../assets/Games/`+this.GameID+`/${this.GameData.Hint.Data[this.Nowlevel-1].FilePath}`, import.meta.url).href;
+            }
+            catch{
+              console.log("Missing data in Hint, type: Level");
+              console.warn("Missing data in Hint, type: Level");
+              this.Hint["Type"] = "None";
+            }
+            break;
+          case "Single":
+            try{
+              let temp = this.GameData.Hint.Data.FilePath;
+              temp = this.GameData.Hint.Data.SourceType;
+              this.Hint["Data"] = this.GameData.Hint.Data;
+              this.Hint["Data"]['FilePath'] = new URL(`../assets/Games/`+this.GameID+`/${this.GameData.Hint.Data.FilePath}`, import.meta.url).href;
+            }
+            catch{
+              console.log("Missing data in Hint, type: Single");
+              console.warn("Missing data in Hint, type: Single");
+              this.Hint["Type"] = "None";
+            }
+            break;
+          case "None":
+            this.Hint["Type"] = "None";
+            break;
+          case "Method":
+            this.$refs.GameComponent.CallHint(this.Nowlevel,this.GameData.Hint);
+            this.Hint["Type"] = "Method";
+            break;
+          default:
+            console.log("No hint in this game");
+            console.warn("No hint in this game");
+            this.Hint["Type"] = "None";
+        }
+      },
       PreviousPage() {
         this.$router.go(-1);
       }
@@ -577,6 +678,21 @@ transform: scale(1.07); /* 放大至原大小的 110% */
 .Game_Component{
   width: 75vw !important;
   height: 70vh !important;
+}
+.content{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  img{
+    max-width: 100%;
+    height: auto;
+  }
+  video{
+    max-width: 100%;
+    height: auto;
+  }
 }
 </style>
 

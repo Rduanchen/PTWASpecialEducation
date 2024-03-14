@@ -1,5 +1,5 @@
 <template>
-    {{ this.DotLocation }}
+    <!-- {{ this.DotLocation }} -->
     <div class="canvas-container">
         <canvas id="myCanvas" class="position-absolute"></canvas>
         <canvas ref="myCanvas2" id="canvas2" class="position-absolute"></canvas>

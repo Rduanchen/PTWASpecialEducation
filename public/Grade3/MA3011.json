@@ -6,6 +6,18 @@
     "GameConfig": {
         "Testmsg": "Test your knowledge"
     },
+    "Hint":{
+        "ShowAs" : "Method",
+        "Rule" : {
+            "RuleType": "WrongTimes",
+            "Value":  2
+        },
+        "Data" :
+            {
+                "SourceType" : "video",
+                "FilePath" : "hint1.mp4"
+            }
+    },
     "Questions": [
         {
             "Question": "Text1",

@@ -3,9 +3,7 @@
     <div class="canvas-container">
         <canvas id="responsive-bg" class="position-absolute"></canvas>
         <canvas ref="line_keeper" id="line_keeper" class="position-absolute"></canvas>
-    </div>
-
-    
+    </div>    
 </template>
 
 <script>
@@ -42,6 +40,8 @@ export default {
             QuestionDataStructure:[
                 ['assets/GamePic/Cat.png','assets/GamePic/Cat.png','assets/GamePic/Cat.png'],
                 ['assets/GamePic/Cat.png','assets/GamePic/Cat.png','assets/GamePic/Cat.png','assets/GamePic/Cat.png','assets/GamePic/Cat.png'],
+                ['assets/GamePic/Cat.png','assets/GamePic/Cat.png'],
+                ['assets/GamePic/Cat.png','assets/GamePic/Cat.png'],
                 ['assets/GamePic/Cat.png','assets/GamePic/Cat.png']
             ],
             ans:[
@@ -54,10 +54,7 @@ export default {
     mounted() {
         const canvas1 = $('#responsive-bg')[0];
         const context1 = canvas1.getContext('2d');
-        
-        
         // Set Canvas size to full screen
-        
         canvas1.width = window.innerWidth;
         canvas1.height = window.innerHeight;
         context1.clearRect(0, 0, canvas1.width, canvas1.height);
@@ -69,7 +66,6 @@ export default {
         this.DrawImgOnCanvas(this.QuestionDataStructure,context1);
             
         window.addEventListener('resize', () => {
-
             context1.clearRect(0, 0, canvas1.width, canvas1.height);
             canvas1.width = window.innerWidth;
             canvas1.height = window.innerHeight;
@@ -142,84 +138,50 @@ export default {
             return (window.innerHeight-this.Min_border*2-full_space)/(question.length+1)
             // return 0
         },
-        DrawImgOnCanvas(question,context1,){
-            let Column_Amount=question.length;
+        async DrawImgOnCanvas(question, context1) {
+            let Column_Amount = question.length;
             var onchangegroup = false;
-            let Column_ID = 1
-            let Group = 1
-            for (let col = 0; col < question.length; col++) { //Column
-                //紀錄錨點資訊
-                // let Dot_Row_ID = 1
+            let Column_ID = 0;
+            this.Group = 1;
+            for (let col = 0; col < question.length; col++) {
                 const Max_Img_Size = this.CountMaxImgSize(this.QuestionDataStructure[col].length);
-                let RWD_Colum_Gap=this.CountRWDYGap(question[col])
-                
-                console.log(RWD_Colum_Gap);
-
-                for (let Dot_Row_ID = 0; Dot_Row_ID < question[col].length; Dot_Row_ID++) { //Row
+                let RWD_Colum_Gap = this.CountRWDYGap(question[col]);
+                for (let Dot_Row_ID = 0; Dot_Row_ID < question[col].length; Dot_Row_ID++) {
                     let Img = new Image();
-                    // let Image_Url=new URL(`../../${question[col][row]}`, import.meta.url).href
-                    let Image_Url = icon //FIXME: 這裡要改成vue動態匯入
+                    let Image_Url = icon;
                     Img.src = Image_Url;
-
-                    let Img_Size = this.ResizeRWDImg(Max_Img_Size,Img);
-                    // Img.height = Img_Size.New_Height;
-                    // Img.width = Img_Size.New_Width;
-
-                    let x = this.Min_border + Max_Img_Size.Max_Width*col + this.RWD_Gap_Width*col
-                    let y = this.Min_border + RWD_Colum_Gap + Max_Img_Size.Max_Height*Dot_Row_ID
-                    // let bordr=100
-
-                    Img.onload = () => {
-                        console.log(this.Min_border);
-                        context1.drawImage(Img, x, y, Img_Size.New_Width, Img_Size.New_Height);
-                        context1.beginPath();
-                        if (col == 0) {
-                            // add on right
-                            context1.arc((x+Img_Size.New_Width+this.Min_border), (y+(Img_Size.New_Height/2)), this.DotRadius, 0, Math.PI * 2, true);
-                            this.DotLocation.push([[Dot_Row_ID,col,Group],[x+Img_Size.New_Width+this.Min_border, y+Img_Size.New_Height/2]]);
-                            
-                            console.log(Dot_Row_ID,col,Group);
-
-                            context1.fillStyle = 'black';
-                            context1.fill();
-                            
-                            // this.DotLocation.push([x+Img_Size.New_Width+this.Min_border-this.TouchSensitive, y+Img_Size.New_Height/2-this.TouchSensitive]);
-                        }
-                        else if (col == Column_Amount-1) {
-                            // add on left
-                            context1.arc(x-this.Min_border,(y+(Img_Size.New_Height/2)), this.DotRadius, 0, Math.PI * 2, true);
-                            this.DotLocation.push([[Dot_Row_ID,col,Group],[x-this.Min_border, y+Img_Size.New_Height/2]]);
-                            context1.fillStyle = 'black';
-                            context1.fill();
-                            
-                            // this.DotLocation.push([x+Img_Size.New_Width+this.Min_border-this.TouchSensitive, y+Img_Size.New_Height/2-this.TouchSensitive]);
-                        }
-                        else{
-                            // onchangegroup = true;
-                            // add on both side
-                            console.log("Add Both Side");
-                            context1.arc(x-this.Min_border,(y+(Img_Size.New_Height/2)), this.DotRadius, 0, Math.PI * 2, true);
-                            context1.arc((x+Img_Size.New_Width+this.Min_border), (y+(Img_Size.New_Height/2)), this.DotRadius, 0, Math.PI * 2, true);
-                            //Right
-                            this.DotLocation.push([[Dot_Row_ID,col+1,Group+1],[x+Img_Size.New_Width+this.Min_border, y+Img_Size.New_Height/2]]);
-                            //Left
-                            this.DotLocation.push([[Dot_Row_ID,col,Group],[x-this.Min_border, y+Img_Size.New_Height/2]]);
-                            // console.log(Dot_Row_ID,Column_ID,Group);
-
-                            context1.fillStyle = 'black';
-                            context1.fill();
-                            
-                            // this.DotLocation.push([x+Img_Size.New_Width+this.Min_border-this.TouchSensitive, y+Img_Size.New_Height/2-this.TouchSensitive]);
-                            
-                        }
-                        context1.closePath();
+                    let Img_Size = this.ResizeRWDImg(Max_Img_Size, Img);
+                    let x = this.Min_border + Max_Img_Size.Max_Width * col + this.RWD_Gap_Width * col;
+                    let y = this.Min_border + RWD_Colum_Gap + Max_Img_Size.Max_Height * Dot_Row_ID;
+                    await new Promise((resolve) => (Img.onload = resolve));
+                    context1.drawImage(Img, x, y, Img_Size.New_Width, Img_Size.New_Height);
+                    context1.beginPath();
+                    if (col == 0) {
+                        context1.arc(x + Img_Size.New_Width + this.Min_border, y + Img_Size.New_Height / 2, this.DotRadius, 0, Math.PI * 2, true);
+                        this.DotLocation.push([[Dot_Row_ID, Column_ID, this.Group], [x + Img_Size.New_Width + this.Min_border,y + Img_Size.New_Height / 2]]);
+                        context1.fillStyle = "black";
+                        context1.fill();
+                    } else if (col == Column_Amount - 1) {
+                        context1.arc(x - this.Min_border, y + Img_Size.New_Height / 2, this.DotRadius, 0, Math.PI * 2, true);
+                        this.DotLocation.push([[Dot_Row_ID, Column_ID, this.Group], [x - this.Min_border, y + Img_Size.New_Height / 2]]);
+                        context1.fillStyle = "black";
+                        context1.fill();
+                    } else {
+                        //Right
+                        context1.arc(x + Img_Size.New_Width + this.Min_border, y + Img_Size.New_Height / 2, this.DotRadius, 0, Math.PI * 2, true);
+                        this.DotLocation.push([[Dot_Row_ID, Column_ID + 1, this.Group + 1], [x + Img_Size.New_Width + this.Min_border,y + Img_Size.New_Height / 2]]);
+                        //Left
+                        context1.arc(x - this.Min_border, y + Img_Size.New_Height / 2, this.DotRadius, 0, Math.PI * 2, true);
+                        this.DotLocation.push([[Dot_Row_ID, Column_ID, this.Group], [x - this.Min_border, y + Img_Size.New_Height / 2]]);
+                        context1.fillStyle = "black";
+                        context1.fill();
                     }
-                    // Row_ID++;
+                    context1.closePath();
                 }
-                if(col != Column_Amount-1 && col != 0){
-                    console.log("Change Group");
-                    Group+=1;
-                    onchangegroup = false;
+                Column_ID += 1;
+                if (col != 0) {
+                    this.Group++;
+                    Column_ID += 1;
                 }
             }
         },
@@ -392,6 +354,7 @@ export default {
     }
     canvas {
         position: absolute; /* 絕對定位來疊加 */
+        border: 1px solid black;
         top: 0;
         left: 0;
     }
