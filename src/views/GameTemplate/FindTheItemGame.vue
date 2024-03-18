@@ -1,11 +1,7 @@
 <template>
 <div class="container">
-<div class="justify-content-center">
-    <div class="card mb-2">
-        <div class="card-body">
-            {{ this.GameData.Question.Text }}
-        </div>
-    </div>
+<!-- <div class="justify-content-center">
+    <p class="h1">{{ this.GameData.Question.Text }}</p>
     <canvas id="cvs" class="center" width="800" height="600" style="border: 1px solid #000" v-on:click="judge_position($event)"></canvas>
     <p class="h4">尚未被找到的:</p>
     <div class="d-flex flex-row  flex-wrap">
@@ -13,7 +9,20 @@
         {{ button }}
       </button>
     </div>
+</div> -->
+<p class="h1">{{ this.GameData.Question.Text }}</p>
+<div class="d-flex flex-row justify-content-between">
+    <canvas id="cvs" class="center" width="800" height="600" style="border: 1px solid #000" v-on:click="judge_position($event)"></canvas>
+    <div class="objlistbar">
+        <p class="h4">尚未被找到的:</p>
+        <div class="d-flex flex-column  flex-wrap">
+            <button v-for="(button,index) in btn" class="btn btn-primary m-1 flex-grow-1" :class="{'active-button': answered[index]==0} ">
+                {{ button }}
+            </button>
+        </div>
+    </div>
 </div>
+
 </div>
 </template>
 <script>

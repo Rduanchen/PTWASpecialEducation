@@ -4,12 +4,13 @@
             <div class="col-md-8">
                 <div class="card mx-auto">
                     <div class="card-body">
-                        <img class="card-img-top" :src="imageUrl" alt="Card image cap">
+                        <img class="card-img-top GameImg" :src="imageUrl" alt="Card image cap">
                     </div>
                 </div>
             </div>
             <div class="col-md-4 align-self-center">
                 <div class="card row mx-auto mb-3">
+                    <p class="h3">{{ this.GameConfig.GlobalTitle }}</p>
                     <div class="card-body">
                         {{ GameData.Question }}
                     </div>
@@ -86,6 +87,10 @@ export default {
 }
 button {
     width: 150px;
+}
+.GameImg{
+    height: 60vh;
+    width: auto;
 }
 
 </style>

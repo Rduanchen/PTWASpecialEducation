@@ -1,46 +1,39 @@
 {
     "id": "MA3012",
-    "introvideo": "src",
-    "TotalLevel": 5,
+    "introvideo": "",
+    "TotalLevel": 4,
     "GameType": "SelectGame",
     "GameConfig":{
-
+        "GlobalTitle": "請選擇正確的角度"
     },
     "Questions": [
         {
-            "Question": ["Question1","Question2","Question3","Question4","Question5"],
-            "Question_Text": "Chose the right answer",
-            "Answer":  "Question1",
-            "img":"cover_info.jpeg",
-            "img_alt": "This is alt"
+            "Question": ["鈍角","銳角","直角"],
+            "Question_Text": "以下的角度是什麼角呢???",
+            "Answer":  "鈍角",
+            "img":"level1.png",
+            "img_alt": "一個角度"
         },
         {
-            "Question": ["Question1","Question2","Question3","Question4","Question5"],
-            "Question_Text": "Chose the right answer",
-            "Answer":  "Question2",
-            "img":"cover_info.jpeg",
-            "img_alt": "This is alt"
+            "Question": ["鈍角","銳角","直角"],
+            "Question_Text": "以下的角度是什麼角呢???",
+            "Answer":  "銳角",
+            "img":"level2.png",
+            "img_alt": "一個角度"
         },
         {
-            "Question": ["Question1","Question2","Question3","Question4","Question5"],
-            "Question_Text": "Chose the right answer",
-            "Answer":  "Question3",
-            "img":"cover_info.jpeg",
-            "img_alt": "This is alt"
+            "Question": ["鈍角","銳角","直角"],
+            "Question_Text": "以下的角度是什麼角呢???",
+            "Answer":  "鈍角",
+            "img":"level3.png",
+            "img_alt": "一個角度"
         },
         {
-            "Question": ["Question1","Question2","Question3","Question4","Question5"],
-            "Question_Text": "Chose the right answer",
-            "Answer":  "Question4",
-            "img":"cover_info.jpeg",
-            "img_alt": "This is alt"
-        },
-        {
-            "Question": ["Question1","Question2","Question3","Question4","Question5"],
-            "Question_Text": "Chose the right answer",
-            "Answer":  "Question5",
-            "img":"cover_info.jpeg",
-            "img_alt": "This is alt"
+            "Question": ["鈍角","銳角","直角"],
+            "Question_Text": "以下的角度是什麼角呢???",
+            "Answer":  "銳角",
+            "img":"level4.png",
+            "img_alt": "一個角度"
         }
     ]
 }

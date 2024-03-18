@@ -9,11 +9,12 @@
     "Questions": [
         {   
             "Question": {
-                "text": "請數數看題目中有多少支棒棒糖",
+                "text": "請數數看題目中有多少支甜甜圈",
                 "Range": [5, 10]
             },
             "Answer": 8,
-            "img": "NumberningGameSample.png"
+            "img": "NumberningGameSample.png",
+            "alt": "一張含有甜甜圈的圖片"
         }
     ]
 }

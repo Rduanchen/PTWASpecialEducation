@@ -3,14 +3,18 @@
         <br>
         <br>
         <div class="container">
-            <canvas ref="canvas" width="700" height="400"></canvas>
-            <p class="h3">{{ this.GameData.Question.Text }}</p>
-            <p class="h5">請點擊下方的按鈕選擇答案</p>
-            <div id="error_msg">{{ errorMsg }}</div>
-            <div class="d-flex flex-row  flex-wrap">
-                <button v-for="(items,index) in btn" class="btn btn-primary m-1 flex-grow-1" @click="judgeAnswer(items)">
-                    {{ items }}
-                </button>
+            <div class="d-flex justify-content-between flex-row">
+                <canvas ref="canvas" width="700" height="400"></canvas>
+                <div class="optionbar d-flex flex-column justify-content-center align-self-center" style="width: 100%;">
+                    <p class="h3">{{ this.GameData.Question.Text }}</p>
+                    <p class="h5">{{ this.GameConfig.OptionBarText }}</p>
+                    <div id="error_msg">{{ errorMsg }}</div>
+                    <div class="d-flex flex-column justify-content-center align-self-center d-gap gap-2 p-3" style="width: 100%;">
+                        <button v-for="(items,index) in btn" class="btn btn-primary" @click="judgeAnswer(items)">
+                            {{ items }}
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

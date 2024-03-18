@@ -10,6 +10,24 @@
 import icon from '@/assets/GamePic/Cat.png';
 export default {
     name: 'Link',
+    props: {
+        GameData: {
+            type: Object,
+            required: true
+        },
+        id: {
+            type: String,
+            required: true
+        },
+        GameConfig: {
+            type: Object,
+            required: true
+        },
+        GameContainerInfo: {
+            type: Object,
+            required: true
+        }
+    },
     data(){
         return{
             // RWD Setting
@@ -50,6 +68,7 @@ export default {
         }
     },
     mounted() {
+        // console.log(GameContainerInfo)
         const canvas1 = $('#responsive-bg')[0];
         const context1 = canvas1.getContext('2d');
         // Set Canvas size to full screen
@@ -71,6 +90,7 @@ export default {
             this.RWD_Gap_Width = RWD_Info.Gap_width;
             this.DrawImgOnCanvas(this.QuestionDataStructure,context1);
         });
+        
         this.Runtimes=0;
         this.TotalAmount=3;
         this.canvas = this.$refs.line_keeper;

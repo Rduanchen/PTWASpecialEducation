@@ -35,22 +35,25 @@
           </div>
           <div class="row Game_Component">
               <!-- Dynamic import component -->
-            <div class="games" v-if="GameStatus=='Progressing'">
+            <div class="games" v-if="GameStatus=='Progressing'" ref="GameContainer" id="GameContainer">
               <component
                 v-if="GameType!='SelfDefine'"
                 v-bind:is="this.GameType" 
                 ref="GameComponent"
+                :key="this.Nowlevel"
                 :id="this.GameID" 
                 :GameData="this.GameData.Questions[this.Nowlevel-1]"   
                 :GameConfig="this.GameConfig"  
+              
                 @add-record="GameDataRecord"  
                 @play-effect="EffectPlayer"  
                 @next-question="NextQuestion">
+                
               </component>
                                
               <component
                   v-if="GameType=='SelfDefine'"
-
+                  :key="this.Nowlevel"
                   :is="GameData.GameType"
                   :id="GameID"
                   :GameData="GameData[Nowlevel-1]" 
@@ -248,7 +251,13 @@
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body justify-content-center">
-                  <img src="@/assets/images/game_images/elephant.gif">
+                  <div id="novideo" v-if="introvideo==false">
+                    <p class="h1">ㄨㄚˊ，找不到教學影片~~~</p>
+                    <img src="@/assets/images/game_images/elephant.gif">
+                  </div>
+                  <div id="havevideo" v-else>
+                    <video id="introvideo" :src="VideoSrc" controls="controls" class="img-fluid" style="height: 70vh;"></video>
+                  </div>
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">我知道了!</button>
@@ -272,7 +281,7 @@
                     <p class="h1">喔喔，沒有提供相關的資源</p>
                     <img src="@/assets/images/game_images/elephant.gif" class="">
                   </div>
-                  <div class="content Type-Level" v-if="this.Hint['Type']=='Level'">
+                  <div class="content Type-Level" v-if="this.Hint['Type']=='Level'" :key="this.TotalLevel">
                     <p class="h1">這是關卡提示</p>
                     <video id="Hint-video" :src="this.Hint['Data']['FilePath']" controls="controls" class="img-fluid" v-if="this.Hint.Data.SourceType=='video'"></video>
                     <img :src="this.Hint['Data']['FilePath']" class="img-fluid" v-if="this.Hint.Data.SourceType=='image'">
@@ -310,6 +319,8 @@ import {defineAsyncComponent} from 'vue';
 export default {
   data() {
     return {
+      introvideo: false,
+      VideoSrc:'',
       GameType: "loading",
       GameStatus: "NotStart", //遊戲狀態
       download_data: [[]], //下載的資料，格式為二維陣列。
@@ -338,7 +349,10 @@ export default {
           FilePath: "",
           SourceType: "",
         },
-      }
+      },
+      GameContainerInfo: {
+      
+      },
       // SentData2ChildComponent: {},
     };
   },
@@ -354,9 +368,32 @@ export default {
         this.GameType = this.GameData.GameType;
         this.GameConfig = this.GameData.GameConfig;
         this.InitHint();  
+        this.InitIntroVideo();
       })
   },
+  mounted() {
+    
+  },
   methods: {
+      InitIntroVideo() {
+        try {
+          this.VideoSrc = new URL(`../assets/Games/`+this.GameID+`/${this.GameData.introvideo}`, import.meta.url).href;
+          this.introvideo = true;
+        } catch (error) {
+          this.introvideo = false;
+          console.log("No Intro Video");
+          console.warn("No Intro Video:", error);
+        }
+        let patten = /\.mp4$/i;
+        if (patten.test(this.VideoSrc)) {
+          this.introvideo = true;
+        }
+        else{
+          this.introvideo = false;
+          console.warn("The intro video is not a mp4 file");
+        }
+
+      },
       ChangeGameStatus(status) {
         //改變遊戲狀態
         this.GameStatus = status;
@@ -579,6 +616,7 @@ export default {
       DrawCanvas,
       GameStartandOver,
       loading,
+      LinkGame: defineAsyncComponent(() => import('@/views/GameTemplate/LinkGame.vue')),
       TrueFalseGame: defineAsyncComponent(() => import('@/views/GameTemplate/TrueFalseGame.vue')),
       SelectGame: defineAsyncComponent(() => import('@/views/GameTemplate/SelectGame.vue')),
       NumberInputGame: defineAsyncComponent(() => import('@/views/GameTemplate/NumberInputGame.vue')),

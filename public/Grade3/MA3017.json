@@ -7,7 +7,8 @@
         "background":true,
         "GiveHint":true,
         "InsideLevel":true,
-        "ImgType":"png"
+        "ImgType":"png",
+        "OptionBarText":"請點擊下方的按鈕選擇答案"
     },
     "Questions": [
         {   

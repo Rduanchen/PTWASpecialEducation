@@ -45,14 +45,18 @@ export default {
     },
     created(){
         this.UpdateQuestion();
-        setInterval(this.IntervalCheckUpdate, 500);
+        // setInterval(this.IntervalCheckUpdate, 500);
     },
     methods: {
         UpdateQuestion(){
             this.answer = this.GameData.Answer;
             this.question = this.GameData.Question.options;
             this.RandomtheList();
-
+            let randed = this.Checkrand();
+            while(randed==false){
+                this.RandomtheList();
+                randed = this.Checkrand();
+            }
             this.options = [];
             for(var i in this.question){
                 this.options.push(this.question[i])
@@ -63,25 +67,19 @@ export default {
             this.question.sort(() => Math.random() - 0.5);
         },
         Checkrand(){
-            var AnswerCheck=0
-            for(var i in this.answer){
-                if(this.answer[i]!=this.GameData.Question.options[i]){
-                    //如果不等於的時候
-                    AnswerCheck++
-                }
+            let list1="";
+            let list2="";
+            for(var i in this.question){
+                list1+=this.question[i];
             }
-            console.log(AnswerCheck)
-            if(AnswerCheck==0){
-            //沒有打亂
-                return false
+            for(var i in this.answer){
+                list2+=this.answer[i];
+            }
+            if (list1==list2){
+                return false                
             }
             else{
                 return true
-            }
-        },
-        IntervalCheckUpdate(){
-            if (this.question != this.GameData.Question.options){
-                this.UpdateQuestion();
             }
         },
         CheckAnswer(){

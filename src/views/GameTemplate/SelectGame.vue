@@ -1,19 +1,20 @@
 <template>
     <div class="container h-75 align-items-center justify-content-center">
-        <h1>{{ this.GameData.Question_Text }}</h1>
+        <p class="h1" style="font-weight: bold;">{{ this.GameConfig.GlobalTitle }}</p>
         <br>
         <div class="row h-75 justify-content-center">
             <!-- 圖片的列 -->
             <div class="col-md-8 align-self-center">
                 <div class="card mx-auto">
-                    <div class="card-body">
-                        <img class="card-img-top" :src="imageUrl" :alt="this.GameData.img_alt">
+                    <div class="card-body d-flex justify-content-center">
+                        <img class=" GameImg" :src="imageUrl" :alt="this.GameData.img_alt">
                     </div>
                 </div>
             </div>
 
             <!-- 按鈕的列 -->
-            <div class="col-md-4 align-self-center">
+            <div class="col-md-4 d-flex flex-column align-content-center justify-content-center">
+                <p class="h2">{{ this.GameData.Question_Text }}</p>
                 <div v-for="i in question" class="mb-2">
                     <button type="button" class="btn btn-primary btn-block w-75" v-on:click="CheckAnswer(i)">{{ i }}</button>
                 </div>
@@ -78,5 +79,9 @@ export default {
 }
 button {
     width: 150px;
+}
+.GameImg{
+    width: auto;
+    height: 50vh;
 }
 </style>

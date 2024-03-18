@@ -3,8 +3,8 @@
     <div class="row">
         <div class="col-8">
             <div class="card">
-                <div class="card-body">
-                    <img class="card-img-top" :src="imageUrl" :alt="GameData.img_alt">
+                <div class="card-body d-flex justify-content-center">
+                    <img class="card-img-top GameImg" :src="imageUrl" :alt="GameData.img_alt">
                 </div>
             </div>
         </div>
@@ -80,4 +80,9 @@ export default {
 
 <style scoped>
 /* Your component styles go here */
+.GameImg{
+    overflow: hidden;
+    height: 60vh;
+    width: auto;
+}
 </style>

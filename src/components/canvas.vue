@@ -1,7 +1,7 @@
 <template>
     <div class="container d-flex flex-column justify-content-center" style="height: 100vh;">
       <div class="row d-flex flex-row align-content-stretch">
-        <div class="col-10" style="border: solid;">
+        <div class="col-10">
           <canvas ref="canvas" width="600" height="500" class="border border-dark"
                   @mousedown="handleMouseDown"
                   @mousemove="handleMouseMove"
@@ -13,7 +13,7 @@
           </canvas>
         </div>
         <div class="col-2">
-            <div class="color-panel d-grid gap-3" style="border:solid;">
+            <div class="color-panel d-grid gap-3">
                 <div class="width d-flex flex-column justify-content-between">
                     <button class="btn btn-info mb-1" disabled>文字大小</button>
                     <div class="linesize">
@@ -24,14 +24,14 @@
                 </div>
                 <div class="color d-flex flex-column justify-content-center d-grid gap-1">
                     <button class="btn btn-info" disabled>顏色選盤</button>
-                    <button class="btn btn-dark rounded-circl" @click="setcolor('#000000')">黑色</button>
-                    <button class="btn btn-success rounded-circl" @click="setcolor('#198754')">綠色</button>
-                    <button class="btn btn-danger rounded-circl" @click="setcolor('#DC3545')">紅色</button>
-                    <button class="btn btn-primary" @click="setcolor('#0D6EFD')">藍色</button>
-                    <button class="btn btn-warning" @click="setcolor('#FFC107')">黃色</button>    
+                    <button class="btn btn-dark rounded-circl B-black" @click.prevent="setcolor('#000000')" @touchend="this.brushColor='#000000'">黑色</button>
+                    <button class="btn btn-success rounded-circl" @click="setcolor('#198754')" @touchend="this.brushColor='#198754'">綠色</button>
+                    <button class="btn btn-danger rounded-circl" @click="setcolor('#DC3545')" @touchstart="this.brushColor='#DC3545'">紅色</button>
+                    <button class="btn btn-primary" @click="setcolor('#0D6EFD')" @touchend="this.brushColor='#0D6EFD'">藍色</button>
+                    <button class="btn btn-warning" @click="setcolor('#FFC107')" @touchend="this.brushColor='#FFC107'">黃色</button>    
                 </div>
                 
-                <button class="btn btn-danger" @click="clearCanvas">清空</button>
+                <button class="btn btn-danger" @click="clearCanvas" @touchend="clearCanvas">清空</button>
             </div>
             
         </div>
@@ -126,6 +126,8 @@
                 const x = (event.touches[0].clientX - rect.left - this.offsetX) / this.scale
                 const y = (event.touches[0].clientY - rect.top - this.offsetY) / this.scale
                 this.ctx.lineTo(x, y)
+                this.ctx.lineWidth = this.brushSize
+                this.ctx.strokeStyle = this.brushColor
                 this.ctx.stroke()
                 this.lastX = x
                 this.lastY = y
