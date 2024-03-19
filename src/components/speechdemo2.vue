@@ -1,59 +1,50 @@
 <template>
-    <div>
-      <input type="text" v-model="inputText" />
-      <button @click="readText">Read Text</button>
-    </div>
-    <div v-for="item in this.voice">
-      <p>{{item.name}}</p>
-    </div>
-  </template>
-  
-  <script>
-  export default {
+
+  <button @click="speak">Speak</button>
+  <div >
+    <p v-for="item in this.voices">{{item.name}}</p>
+  </div>
+</template>
+
+<script>
+export default {
     name: 'SpeechDemo',
     data() {
       return {
-        inputText: '',
+        inputText: '哈囉你好嗎?',
         voices: [],
         selectedVoice: null,
       };
     },
-    methods: {
-      readText() {
-        const synth = window.speechSynthesis;
-        const utterThis = new SpeechSynthesisUtterance(this.inputText);
-        const chosenVoiceName = "Microsoft HsiaoYu Online (Natural) - Chinese (Taiwanese Mandarin)";
-        this.selectedVoice = this.voices.find(voice => voice.name === chosenVoiceName);
-        if (this.selectedVoice) {
-          utterThis.voice = this.selectedVoice;
-          utterThis.lang = 'zh-TW';
-          synth.speak(utterThis);
-        } else {
-          console.warn('Selected voice not found');
+    created() {
+      let synth = window.speechSynthesis;
+      let voicetype = "Google 國語（臺灣）";
+      // let voicetype="Microsoft HsiaoChen Online (Natural) - Chinese (Taiwan)";
+      console.log(navigator.userAgent);
+      
+      synth.onvoiceschanged = () => {
+        this.voices = synth.getVoices();
+        this.selectedVoice = this.voices[0];
+        console.log(this.voices);
+        // let voicetype = "Google 國語（臺灣）";
+        for (let i = 0; i < this.voices.length; i++) {
+          if (this.voices[i].name === voicetype) {
+            this.selectedVoice = this.voices[i];
+            break;
+          }
         }
+      };
+    },
+    methods: {
+      speak() {
+        let synth = window.speechSynthesis;
+        let utterThis = new SpeechSynthesisUtterance(this.inputText);
+        utterThis.voice = this.selectedVoice;
+        utterThis.lang = "zh";
+        utterThis.rate = 1;
+        utterThis.pitch = 1;
+        synth.speak(utterThis);
       },
     },
-    created() {
-      // setInterval(() => {
-      //   this.voices = window.speechSynthesis.getVoices();
-      // }, 1000);
-      async function getVoices() {
-        return new Promise((resolve) => {
-          const synth = window.speechSynthesis;
-          const id = setInterval(() => {
-            const voices = synth.getVoices();
-            if (voices.length) {
-              clearInterval(id);
-              resolve(voices);
-            }
-          }, 100);
-        });
-      }
-      window.speechSynthesis.addEventListener('voiceschanged', this.populateVoiceList);
-    },
-    beforeUnmount() {
-      window.speechSynthesis.removeEventListener('voiceschanged', this.populateVoiceList);
-    },
-    
-  };
-  </script>
+  }
+</script>

@@ -135,9 +135,6 @@ textarea {
   height: 20rem;
 }
 
-input[type="select"] {
-
-}
 
 .voiceinator button {
   background: #ffc600;

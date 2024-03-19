@@ -50,16 +50,17 @@
                 <div class="Charpter mb-4 px-0" v-for="items in this.ShowInfo[SelectedChapter].Section" v-if="this.ShowInfo">
                 <div>
                     <h5 class="card-title mb-3">{{ items.Title }}</h5>
-                    <div class="row GameCardGroup" style="overflow-x: auto;">
+                    <div class="row GameCardGroup p-1" style="overflow-x: auto;">
                       <div class="row">
                         <div v-for="item in items.Games" class="col-12 col-md-6 col-lg-4 d-flex align-self-stretch">
                           <div class="card GameCard my-2">
                             <div class="card-body">
-                              <img :src="item.Img" class="card-img-top" alt="...">
+                              <img :src="item.Img" class="card-img-top GamePreviewImg" alt="...">
                               <router-link :to="{ name: 'Game', params: { id: item.id, Grade: this.ShowGrade, Subject: this.Subject ,GameName: item.Name} }">
                                 <p class="h5 card-title mt-2">{{ item.Name }}</p>
                               </router-link>
                               <p class="card-text">{{ item.Description }}</p>
+                              <a @click="MakeReadText(item.Name, item.Description)" class="btn btn-primary"><i class="bi bi-volume-up-fill"></i></a>
                             </div>
                           </div>
                         </div>
@@ -88,6 +89,8 @@
               <p class="h5 card-title mt-2">{{ item.Name }}</p>
             </router-link>
             <p class="card-text">{{ item.Description }}</p>
+            <!-- <button class @click="ReadText(item.Description)" class="btn btn-primary">朗讀</button> -->
+            
           </div>
         </div>
       </div>
@@ -126,6 +129,8 @@ data() {
     Show:false,
     Refresh: 0,
     //定義科目種類
+    voices: [],
+    selectedVoice: null,
   };
 },
 created() {
@@ -172,11 +177,53 @@ created() {
       
       this.Show = true;
     }
+    this.InitReadProccess();
   })();
-
+ 
 },
 
 methods: {
+  MakeReadText(Title,Description){
+    let text =  `標題:${Title}。說明:${Description}。`;
+    this.ReadText(text);
+  },
+  findlang(voice){
+    for (let i = 0; i < this.voices.length; i++) {
+      if (this.voices[i].name === voice) {
+        return this.voices[i];
+      }
+    }
+    return null;
+  },
+  InitReadProccess(){
+    let synth = window.speechSynthesis;
+    let voicetype = "Microsoft Yating - Chinese (Traditional, Taiwan)";
+    let voicetype_order =[
+      "Microsoft Yating - Chinese (Traditional, Taiwan)",
+      "Google 國語（臺灣）",
+    ]
+    synth.onvoiceschanged = () => {
+      this.voices = synth.getVoices();
+      this.selectedVoice = this.voices[0];
+      console.log(this.voices);
+      this.selectedVoice = this.findlang(voicetype);
+      console.log(this.selectedVoice);
+      while (this.selectedVoice==null){
+        delete this.voices[0];
+        this.selectedVoice = this.findlang(voicetype);
+      }
+    };
+  },
+  ReadText(text) {
+    let synth = window.speechSynthesis; //FIXME
+    let utterThis = new SpeechSynthesisUtterance(text);
+    synth.cancel();
+    utterThis.voice = this.selectedVoice;
+    utterThis.lang = "zh";
+    utterThis.rate = 1;
+    utterThis.pitch = 1;
+    synth.speak(utterThis);
+  },
   SelectChapter(key){
     if(sessionStorage.getItem("Chapter")==null){
       for (var i in this.ShowInfo[key].Section){
@@ -389,5 +436,9 @@ transition: transform 0.3s ease; /* 平滑過渡效果 */
   img{
     transition: transform 0.3s ease; /* 平滑過渡效果 */
   }
+}
+.GamePreviewImg{
+  width: 100%;
+  height: 40%;
 }
 </style>

@@ -28,7 +28,7 @@
               <button type="button" class="btn btn-primary flex-fill text-nowrap" disabled>關卡</button>
               <div v-for="(i, key) in GameData.Questions" :key="key" class="grid-item flex-fill d-flex justify-content-between">
                 <!-- <button type="button" class="btn btn-primary w-auto" @click="changelevel(key+1)">{{ key+1 }}</button> -->
-                <button type="button" class="btn btn-primary flex-fill" @click="changelevel(key+1)" >{{ key+1 }}</button>
+                <button type="button" class="btn btn-primary flex-fill"  @click="changelevel(key+1)" >{{ key+1 }}</button>
               </div>
               <button type="button" class="btn btn-primary flex-fill text-nowrap" disabled v-if="GameStatus=='Progressing'">時間 : {{ time }}</button>
             </div>
@@ -78,12 +78,11 @@
                   @timer-start="startTimer"
                   @timer-pause="pauseTimer"
                   @timer-reset="resetTimer"
-                  
                   >
               </component> 
             </div>
             <div class="intro" v-else>
-              <GameStartandOver :Status="GameStatus" :GameName="Name" @start-game="StartGame" @download-record="ToCSV" @restart="reloadPage" @previous-page="PreviousPage"></GameStartandOver>
+              <GameStartandOver v-if="Dataloaded" :Status="GameStatus" :intro="GameData.IntroText" :GameName="Name" :key="this.Dataloaded" @start-game="StartGame" @download-record="ToCSV" @restart="reloadPage" @previous-page="PreviousPage"></GameStartandOver>
               <!-- FIXME intro 還沒有加進來 -->
             </div>
           </div>
@@ -141,18 +140,6 @@
                   </div>
                 </div>
               </button>
-              <button class="btn btn-primary text-nowrap img-hover-zoom" v-if="GameStatus=='Progressing' && this.Hint['Type']!='Method'"  data-bs-toggle="modal" data-bs-target="#hint" @click="ProvideHint()">
-                <div class="d-flex align-items-center">
-                  <div class="">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-square-fill" viewBox="0 0 16 16">
-                      <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm8.93 4.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM8 5.5a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
-                    </svg>
-                  </div>
-                  <div class="mx-auto">
-                    提示
-                  </div>
-                </div>
-              </button>
               <button class="btn btn-primary text-nowrap img-hover-zoom" @click="ToCSV(this.download_data)" v-if="GameStatus=='Done'">
                 <div class="d-flex align-items-center">
                   <div class="">
@@ -192,6 +179,7 @@
                 </div>
               </button>
           </div>
+          <hintbutton :WrongTimes="this.WrongTimes" v-if="GameStatus=='Progressing' && this.Hint['Type']!='Method'"></hintbutton>
             
               <!-- Temp check box
               For Switch Game Status
@@ -311,6 +299,7 @@ import loading from '@/components/loading.vue';
 import GameStartandOver from '@/components/GameStartandOver.vue';
 import Calculator from '@/components/calculator.vue';
 import DrawCanvas from '@/components/canvas.vue';
+import hintbutton from '@/components/hintbutton.vue';
 // import TrueFalseGame from '@/views/GameTemplate/TrueFalseGame.vue';
 import axios from 'axios';
 import {defineAsyncComponent} from 'vue';
@@ -319,6 +308,7 @@ import {defineAsyncComponent} from 'vue';
 export default {
   data() {
     return {
+      Dataloaded: false,
       introvideo: false,
       VideoSrc:'',
       GameType: "loading",
@@ -350,26 +340,24 @@ export default {
           SourceType: "",
         },
       },
-      GameContainerInfo: {
-      
-      },
+      WrongTimes: 0,
       // SentData2ChildComponent: {},
     };
   },
   created() {
-      this.GameID = this.$route.params.id;
-      this.Subject = this.$route.params.Subject;
-      this.Grade = this.$route.params.Grade;
-      this.Name = this.$route.params.GameName;
-      
-      axios.get(`../../Grade${this.Grade}/${this.GameID}.json`)
-      .then((res) => {
-        this.GameData = res.data;
-        this.GameType = this.GameData.GameType;
-        this.GameConfig = this.GameData.GameConfig;
-        this.InitHint();  
-        this.InitIntroVideo();
-      })
+    this.GameID = this.$route.params.id;
+    this.Subject = this.$route.params.Subject;
+    this.Grade = this.$route.params.Grade;
+    this.Name = this.$route.params.GameName;
+    axios.get(`../../Grade${this.Grade}/${this.GameID}.json`)
+    .then((res) => {
+      this.GameData = res.data;
+      this.GameType = this.GameData.GameType;
+      this.GameConfig = this.GameData.GameConfig;
+      this.InitHint();  
+      this.InitIntroVideo();
+      this.Dataloaded = true;
+    })    
   },
   mounted() {
     
@@ -419,7 +407,7 @@ export default {
         location.reload();
       },
       changelevel(change2level) {
-        
+        this.WrongTimes=0;
         if (change2level > this.GameConfig.TotalLevel || change2level < 1) {
           console.log("The level is out of range")
         }
@@ -428,10 +416,10 @@ export default {
           this.pauseTimer();
           //FIXME 傳資料進入CSV
           this.resetTimer();
-        }
-        
+        }    
       },
       NextQuestion() {
+        this.WrongTimes=0;
         if (this.Nowlevel < this.GameData.TotalLevel) {
           this.Nowlevel++;
         }
@@ -445,6 +433,7 @@ export default {
         this.startTimer();
       },
       PreviousQuestion() {
+        this.WrongTimes=0;
         if (this.Nowlevel > 1) {
           this.Nowlevel--;
         } 
@@ -503,6 +492,7 @@ export default {
                   }
                   break;
               case "WrongSound":
+                  this.WrongTimes++;
                   var sound = new Audio();
                   sound.src = new URL(`../assets/Effects/WrongAnswer.mp3`, import.meta.url).href
                   sound.oncanplaythrough = function(){
@@ -612,6 +602,7 @@ export default {
       }
     },
   components: {
+      hintbutton,
       Calculator,
       DrawCanvas,
       GameStartandOver,
@@ -732,5 +723,9 @@ transform: scale(1.07); /* 放大至原大小的 110% */
     height: auto;
   }
 }
+
+// .btn-primary:active {
+//   background-color: #198754 !important;
+// }
 </style>
 

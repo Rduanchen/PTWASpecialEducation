@@ -18,7 +18,12 @@ const router = createRouter({
     {
       path:"/Game/:Subject/:Grade/:id/:GameName",
       name:"Game",
-      component:()=>import("@/views/Game.vue")
+      component:()=>import("@/views/Game.vue"),
+    },
+    {
+      path:"/hintbutton",
+      name:"hintbutton",
+      component:()=>import("@/components/hintbutton.vue")
     },
     {
       path :"/GameTemplate",
@@ -103,7 +108,7 @@ const router = createRouter({
     {
       path:"/GameStartandOver",
       name:"GameStartandOver",
-      component:()=>import("@/component/GameStartandOver.vue")
+      component:()=>import("@/components/GameStartandOver.vue")
     },
     {
       path:"/canvasdraw",
@@ -118,7 +123,7 @@ const router = createRouter({
     {
       path:"/Speak",
       name:"Speak",
-      component:()=>import("@/components/speechdemo.vue")
+      component:()=>import("@/components/speechdemo2.vue")
     }
   ]
 });
