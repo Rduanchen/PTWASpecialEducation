@@ -13,7 +13,6 @@
                         </button>
                     </div>
                 </div>
-                
             </div>
         </div>
     </div>
@@ -37,6 +36,7 @@
  * 
  */
 import Desribepng from '@/assets/GamePic/Source/description.png';
+import { GamesGetAssetsFile } from '@/utilitys/get_assets.js';
 export default {
     Name: 'NumberingGame',
     data(){
@@ -61,8 +61,7 @@ export default {
         }
     },
     mounted(){
-        this.imageUrl=new URL(`../../assets/Games/`+this.id+`/${this.GameData.img}`, import.meta.url).href;
-        // this.imageUrl=new URL(`../../assets/Games/`+this.id+`/${this.GameData.img}`, import.meta.url).href;
+        this.imageUrl=GamesGetAssetsFile(this.id,this.GameData.img)
         for(var i=this.GameData.Question.Range[0];i<=this.GameData.Question.Range[1];i++){
             this.btn.push(i);
         }
@@ -84,7 +83,7 @@ export default {
 </script>
 <style>
 .GameImg{
-    height: 60vh;
-    width: auto;
+    height: auto;
+    width: 60vw;
 }
 </style>

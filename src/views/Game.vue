@@ -179,7 +179,7 @@
                 </div>
               </button>
           </div>
-          <hintbutton :WrongTimes="this.WrongTimes" v-if="GameStatus=='Progressing' && this.Hint['Type']!='Method'"></hintbutton>
+          <hintbutton :WrongTimes="this.WrongTimes" v-if="GameStatus=='Progressing' && this.Hint['Type']!='Method'" @provide-hint="ProvideHint()"></hintbutton>
             
               <!-- Temp check box
               For Switch Game Status
@@ -236,7 +236,7 @@
               <div class="modal-content">
                 <div class="modal-header">
                   <h1 class="modal-title fs-5" id="exampleModalLabel">不會玩嗎?請看教學影片:</h1>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="PauseIntroVideo()"></button>
                 </div>
                 <div class="modal-body justify-content-center">
                   <div id="novideo" v-if="introvideo==false">
@@ -248,7 +248,7 @@
                   </div>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">我知道了!</button>
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="PauseIntroVideo()">我知道了!</button>
                 </div>
               </div>
             </div>
@@ -282,7 +282,7 @@
                   <!-- //FIXME video 自動暫停 -->
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">我知道了!</button>
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="PauseHintVideo()">我知道了!</button>
                 </div>
               </div>
             </div>
@@ -300,7 +300,7 @@ import GameStartandOver from '@/components/GameStartandOver.vue';
 import Calculator from '@/components/calculator.vue';
 import DrawCanvas from '@/components/canvas.vue';
 import hintbutton from '@/components/hintbutton.vue';
-// import TrueFalseGame from '@/views/GameTemplate/TrueFalseGame.vue';
+import * as ImportUrl from '@/utilitys/get_assets.js';
 import axios from 'axios';
 import {defineAsyncComponent} from 'vue';
 
@@ -363,9 +363,16 @@ export default {
     
   },
   methods: {
+      PauseIntroVideo() {
+        try{
+          let video = document.getElementById("introvideo");
+          video.pause();
+        }catch{}
+      },
       InitIntroVideo() {
         try {
-          this.VideoSrc = new URL(`../assets/Games/`+this.GameID+`/${this.GameData.introvideo}`, import.meta.url).href;
+          // this.VideoSrc = new URL(`../assets/Games/`+this.GameID+`/${this.GameData.introvideo}`, import.meta.url).href;
+          this.VideoSrc = ImportUrl.GamesGetAssetsFile(this.GameID,this.GameData.introvideo);
           this.introvideo = true;
         } catch (error) {
           this.introvideo = false;
@@ -486,7 +493,8 @@ export default {
           switch (type) {
               case "CorrectSound":
                   var sound = new Audio()
-                  sound.src = new URL(`../assets/Effects/CorrectAnswer.mp3`, import.meta.url).href
+                  sound.src = ImportUrl.GetSystemAssetsFile("CorrectAnswer.mp3","effects");
+                  console.log(sound.src);
                   sound.oncanplaythrough = function(){
                     sound.play();
                   }
@@ -494,7 +502,7 @@ export default {
               case "WrongSound":
                   this.WrongTimes++;
                   var sound = new Audio();
-                  sound.src = new URL(`../assets/Effects/WrongAnswer.mp3`, import.meta.url).href
+                  sound.src = ImportUrl.GetSystemAssetsFile("WrongAnswer.mp3","effects");
                   sound.oncanplaythrough = function(){
                     sound.play();
                   }
@@ -503,7 +511,7 @@ export default {
                   this.EffectWindow = true;
                   // this.EffectSrc = new URL(`../assets/Effects/Firework.gif`, import.meta.url).href;
                   var sound = new Audio();
-                  sound.src = new URL(`../assets/Effects/harry.mp3`, import.meta.url).href
+                  sound.src = ImportUrl.GetSystemAssetsFile("harray.mp3","effects");
                   sound.oncanplaythrough = function(){
                     sound.play();
                   }
@@ -513,7 +521,7 @@ export default {
                   break;
               case "HarraySound":
                   var sound = new Audio();
-                  sound.src = new URL(`../assets/Effects/harry.mp3`, import.meta.url).href
+                  sound.src = ImportUrl.GetSystemAssetsFile("harray.mp3","effects");
                   sound.oncanplaythrough = function(){
                     sound.play();
                   }
@@ -538,6 +546,7 @@ export default {
         }
       },
       //hint app
+
       InitHint() {
         // 紀錄提示種類，有則設定hint_type為提示種類，沒有則設定hint_type為None
         console.log(this.GameData.Hint)
@@ -555,6 +564,7 @@ export default {
         }
       },
       ProvideHint(){
+      
         let hint_type = this.Hint["Type"];
         switch (hint_type)
         {
@@ -562,8 +572,10 @@ export default {
             try{
               let temp = this.GameData.Hint.Data[this.Nowlevel-1].FilePath;
               temp = this.GameData.Hint.Data[this.Nowlevel-1].SourceType;
-              this.Hint["Data"] = this.GameData.Hint.Data[this.Nowlevel-1]
-              this.Hint["Data"]['FilePath'] = new URL(`../assets/Games/`+this.GameID+`/${this.GameData.Hint.Data[this.Nowlevel-1].FilePath}`, import.meta.url).href;
+              this.Hint.Data.FilePath = ImportUrl.GamesGetAssetsFile(this.GameID,this.GameData.Hint.Data[this.Nowlevel-1].FilePath);
+              this.Hint.Data.SourceType = this.GameData.Hint.Data[this.Nowlevel-1].SourceType;
+              // this.Hint["Data"] = this.GameData.Hint.Data[this.Nowlevel-1];
+              // this.Hint["Data"]['FilePath'] = ImportUrl.GamesGetAssetsFile(this.GameID,this.GameData.Hint.Data[this.Nowlevel-1].FilePath);
             }
             catch{
               console.log("Missing data in Hint, type: Level");
@@ -575,8 +587,8 @@ export default {
             try{
               let temp = this.GameData.Hint.Data.FilePath;
               temp = this.GameData.Hint.Data.SourceType;
-              this.Hint["Data"] = this.GameData.Hint.Data;
-              this.Hint["Data"]['FilePath'] = new URL(`../assets/Games/`+this.GameID+`/${this.GameData.Hint.Data.FilePath}`, import.meta.url).href;
+              this.Hint.Data.FilePath = ImportUrl.GamesGetAssetsFile(this.GameID,this.GameData.Hint.Data.FilePath);
+              this.Hint.Data.SourceType = this.GameData.Hint.Data.SourceType;
             }
             catch{
               console.log("Missing data in Hint, type: Single");
@@ -596,6 +608,12 @@ export default {
             console.warn("No hint in this game");
             this.Hint["Type"] = "None";
         }
+      },
+      PauseHintVideo() {
+        try{
+          let video = document.getElementById("Hint-video");
+          video.pause();
+        }catch{}
       },
       PreviousPage() {
         this.$router.go(-1);

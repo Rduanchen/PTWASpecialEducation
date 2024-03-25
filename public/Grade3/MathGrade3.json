@@ -9,49 +9,49 @@
                         "id": "MA3011",
                         "Name": "認識時鐘",
                         "Description": "找找看現在幾點呢?",
-                        "Img": "Games/MA3011/MA3011.png"
+                        "Img": "MA3011.png"
                     },
                     "MA3012": {
                         "id": "MA3012",
                         "Name": "認識鈍角、銳角、直角",
                         "Description": "想想看圖片中的角度是幾度呢?",
-                        "Img": "Games/MA3012/MA3012.png"
+                        "Img": "MA3012.png"
                     },
                     "MA3013": {
                         "id": "MA3013",
                         "Name": "面積",
                         "Description": "看看方格板上面的積木幾平方公分呢?",
-                        "Img": "Games/MA3013/MA3013.png"
+                        "Img": "MA3013.png"
                     },
                     "MA3014": {
                         "id": "MA3014",
                         "Name": "數字填空",
                         "Description": "根據提示填入正確的數字",
-                        "Img": "images/pics/cover_info.jpeg"
+                        "Img": ""
                     },
                     "MA3015": {
                         "id": "MA3015",
                         "Name": "比大小",
                         "Description": "用拖曳的方式來排出數字的大小",
-                        "Img": "Games/MA3015/MA3015.png"
+                        "Img": "MA3015.png"
                     },
                     "MA3016": {
                         "id": "MA3016",
                         "Name": "找找看",
                         "Description": "找出躲藏在圖片中的數字吧",
-                        "Img": "Games/MA3016/MA3016.png"
+                        "Img": "MA3016.png"
                     },
                     "MA3017": {
                         "id": "MA3017",
                         "Name": "數數看",
                         "Description": "數出圖片中有幾個物品吧",
-                        "Img": "Games/MA3017/MA3017.png"
+                        "Img": "MA3017.png"
                     },
                     "MA3018": {
                         "id": "MA3018",
                         "Name": "數數看",
                         "Description": "數出圖片中有幾個物品吧",
-                        "Img": "Games/MA3017/MA3017.png"
+                        "Img": "MA3018.png"
                     },
                     "MA3019": {
                         "id": "MA3019",

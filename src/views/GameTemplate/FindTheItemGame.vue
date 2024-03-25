@@ -26,6 +26,7 @@
 </div>
 </template>
 <script>
+import { GamesGetAssetsFile } from '@/utilitys/get_assets.js';
 export default {
     name: 'FindTheItem',
     data(){
@@ -65,7 +66,7 @@ export default {
         var cvs=document.getElementById("cvs");
         const ctx=cvs.getContext('2d');
         var img=new Image();
-        img.src=this.imageUrl=new URL(`../../assets/Games/`+this.id+`/${this.GameData.img}`, import.meta.url).href
+        img.src=GamesGetAssetsFile(this.GameData.img);
         img.addEventListener("load", function() {
             ctx.drawImage(this,0,0,cvs.width,cvs.height);
         }, false);

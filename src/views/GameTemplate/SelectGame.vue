@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import fetchJson from '@/utilitys/fetch-json.js';
+import { GamesGetAssetsFile } from '@/utilitys/get_assets.js';
 export default {
     name: 'SelectGame',
     data(){
@@ -68,7 +68,7 @@ export default {
         for(var i in this.GameData.Question){
             this.question.push(this.GameData.Question[i]);
         }
-        this.imageUrl=new URL(`../../assets/Games/`+this.id+`/${this.GameData.img}`, import.meta.url).href
+        this.imageUrl=GamesGetAssetsFile(this.id,this.GameData.img)
         console.log(this.imageUrl);
     }
 }

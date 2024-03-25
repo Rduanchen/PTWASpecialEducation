@@ -22,7 +22,7 @@
 
 <script>
 import VirtualNumPad from '@/components/VirtualNumPad.vue'; 
-import * as CA from '@/utilitys/CheckAnswer.js';
+import { GamesGetAssetsFile } from '@/utilitys/get_assets.js';
 export default {
     name: 'NumberInputGame',
     data() {
@@ -50,7 +50,13 @@ export default {
             this.CheckAnswer(data);
         },
         CheckAnswer(data){
-            var response=CA.CheckTrueFalseAnswer(data,this.GameData.Answer)
+            var response=false;
+            if(data == this.GameData.Answer){
+                response=true;
+            }
+            else{
+                response=false;
+            }
             console.log(response);
             if(response){
                 this.$emit('play-effect', 'CorrectSound',)
@@ -63,14 +69,10 @@ export default {
                 this.$emit('add-record',[this.answer, data,"錯誤"])
                 this.$refs.VirtualNumPad.delete_num();
             }
-            
         }
     },
     created() {
-        this.imageUrl=new URL(`../../assets/Games/`+this.id+`/${this.GameData.img}`, import.meta.url).href
-        // console.log(this.imgsrc);
-        // console.log(import.meta.url);
-        // console.log(this.imageUrl);
+        this.imageUrl=GamesGetAssetsFile(this.id,this.GameData.img)
     },
     components: {
         VirtualNumPad

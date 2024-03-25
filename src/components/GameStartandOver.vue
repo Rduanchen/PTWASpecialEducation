@@ -7,7 +7,7 @@
             <h4 v-else-if="IntroType=='PlainText'">{{ShowContent}}</h4>
             <h4 v-else>無介紹文字</h4>
         </div>
-        <button class="btn btn-primary" v-on:click="StartGame">開始遊戲</button>
+        <button class="btn btn-primary" v-on:click="StartGame();MakeReadText('','',stop=true)">開始遊戲</button>
         <button class="btn btn-primary" v-on:click="MakeReadText(GameName,ShowContent)">朗讀</button>
     </div>
     <div v-else-if="Status=='Done'" class="d-flex flex-column justify-content-center m-5" id="Done">
@@ -21,7 +21,7 @@
 </div>
 </template>
 <script>
-import { ReadText } from '../utilitys/readtext';
+import * as RD from '@/utilitys/readtext.js';
 
 export default {
     name: 'GameStartandOver',
@@ -49,6 +49,7 @@ export default {
         }
     },
     mounted(){
+        RD.InitReadProccess();
         try{
             this.ShowContent = this.intro.Content;
             this.TextCheck = true;
@@ -63,47 +64,9 @@ export default {
 
     },
     methods:{
-        MakeReadText(Title,Description){
+        MakeReadText(Title,Description,stop=false){
             let text =  `標題:${Title}。說明:${Description}。`;
-            this.ReadText(text);
-        },
-        findlang(voice){
-            for (let i = 0; i < this.voices.length; i++) {
-                if (this.voices[i].name === voice) {
-                    return this.voices[i];
-                }
-            }
-            return null;
-        },
-        InitReadProccess(){
-            let synth = window.speechSynthesis;
-            let voicetype = "Microsoft Zhiwei - Chinese (Traditional, Taiwan)";
-            // let voicetype_order =[
-            //     "Microsoft Yating - Chinese (Traditional, Taiwan)",
-            //     "Microsoft Zhiwei - Chinese (Traditional, Taiwan)",
-            //     "Google 國語（臺灣）",
-            // ]
-            synth.onvoiceschanged = () => {
-                this.voices = synth.getVoices();
-                this.selectedVoice = this.voices[0];
-                console.log(this.voices);
-                this.selectedVoice = this.findlang(voicetype);
-                console.log(this.selectedVoice);
-                while (this.selectedVoice==null){
-                    // delete this.voices[0];
-                    this.selectedVoice = this.findlang(voicetype);
-                }
-            };
-        },
-        ReadText(text) {
-            let synth = window.speechSynthesis; //FIXME
-            let utterThis = new SpeechSynthesisUtterance(text);
-            synth.cancel();
-            utterThis.voice = this.selectedVoice;
-            utterThis.lang = "zh";
-            utterThis.rate = 1;
-            utterThis.pitch = 1;
-            synth.speak(utterThis);
+            RD.ReadText(text,stop);
         },
         StartGame(){
             this.$emit('start-game');

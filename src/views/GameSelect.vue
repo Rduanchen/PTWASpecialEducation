@@ -20,9 +20,9 @@
   <section v-if="ShowMenu">
     <div class="d-flex flex-column align-items-center d-grid gap-5 justify-content-center Subject_container"  style="width: 100%; height: 90vh;">
       <p class="h1">請選科目</p>
-      <a  v-on:click="ChangeSubject('Math')"><img src="@/assets/button/math.png" style="width: 40vh;" /></a>
-      <a  v-on:click="ChangeSubject('Chinese')"><img src="@/assets/button/chinese.png" style="width: 40vh;" /></a>
-      <a  v-on:click="ChangeSubject('Technology')"><img src="@/assets/button/technology.png" style="width: 40vh;"/></a>
+      <a  v-on:click="ChangeSubject('Math');MakeReadText('' ,'',stop=true)"><img src="@/assets/button/math.png" style="width: 40vh;" /></a>
+      <a  v-on:click="ChangeSubject('Chinese');MakeReadText('' ,'',stop=true)"><img src="@/assets/button/chinese.png" style="width: 40vh;" /></a>
+      <a  v-on:click="ChangeSubject('Technology');MakeReadText('' ,'',stop=true)"><img src="@/assets/button/technology.png" style="width: 40vh;"/></a>
     </div>
   </section>
 
@@ -39,7 +39,7 @@
                   <div class="card-body" :key="Refresh">
                       <h5 class="card-title mt-2">請選擇科目</h5>
                       <div class="list-group mt-2" v-for="(items,key) in this.ShowInfo" v-if="this.ShowInfo">
-                        <a class="list-group-item list-group-item-action" v-on:click="SelectChapter(key)">{{ items.Title }}</a>
+                        <a class="list-group-item list-group-item-action" v-on:click="SelectChapter(key); MakeReadText('' ,'',stop=true)">{{ items.Title }}</a>
                       </div>
                   </div>
                 </div>
@@ -56,8 +56,8 @@
                           <div class="card GameCard my-2">
                             <div class="card-body">
                               <img :src="item.Img" class="card-img-top GamePreviewImg" alt="...">
-                              <router-link :to="{ name: 'Game', params: { id: item.id, Grade: this.ShowGrade, Subject: this.Subject ,GameName: item.Name} }">
-                                <p class="h5 card-title mt-2">{{ item.Name }}</p>
+                              <router-link :to="{ name: 'Game', params: { id: item.id, Grade: this.ShowGrade, Subject: this.Subject ,GameName: item.Name} }" @click="MakeReadText('' ,'',stop=true)">
+                                <p class="h6 card-title mt-2">{{ item.Name }}</p>
                               </router-link>
                               <p class="card-text">{{ item.Description }}</p>
                               <a @click="MakeReadText(item.Name, item.Description)" class="btn btn-primary"><i class="bi bi-volume-up-fill"></i></a>
@@ -72,40 +72,36 @@
           </div>
       </div> 
   </section>
-  <section class="Search_result d-flex container d-gap gap-3" v-if="ShowSearch">
-
+  <section class="Search_result d-flex container d-gap gap-3" v-if="ShowSearch!=false">
     <div v-if="SearchResult==null" class="d-flex flex-column d-grid gap-2 align-items-center justify-content-center" style="width: 100vw; height: 90vh;">
       <p class="h1">沒有搜尋結果</p>
       <button class="btn btn-primary btn-lg" v-on:click="Return2Menu()" style="height: 3em; width: 10rem">返回目錄</button>
     </div>
-
     <div v-if="SearchResult!=null" style="width: 100vw; height: 90vh;" class="row mt-5 justify-content-md-center">
       <p class="h1 mb-3">搜尋結果:</p>
       <div v-for="item in SearchResult" class="col-12 col-md-6 col-lg-4 d-flex align-self-stretch .justify-content-md-center mb-3">
         <div class="card GameCard col-3" style="width: 18rem; height: 20rem;">
           <div class="card-body">
             <img :src="item.Img" class="card-img-top" alt="...">
-            <router-link :to="{ name: 'Game', params: { id: item.id, Grade: this.ShowGrade, Subject: this.Subject ,GameName: item.Name} }">
+            <router-link :to="{ name: 'Game', params: { id: item.id, Grade: this.ShowGrade, Subject: this.Subject ,GameName: item.Name} }" @click="MakeReadText('' ,'',stop=true)">
               <p class="h5 card-title mt-2">{{ item.Name }}</p>
             </router-link>
             <p class="card-text">{{ item.Description }}</p>
             <!-- <button class @click="ReadText(item.Description)" class="btn btn-primary">朗讀</button> -->
-            
           </div>
         </div>
       </div>
       <div class="row justify-content-center">
-        <button class="btn btn-primary btn-block m-5" v-on:click="Return2Menu()" style="height: 3em; width: 20rem">返回目錄</button>
+        <button class="btn btn-primary btn-block m-5" v-on:click="Return2Menu();MakeReadText('' ,'',stop=true)" style="height: 3em; width: 20rem">返回目錄</button>
       </div>
-      
     </div>
-    
   </section>
-  
 </template>
 
 <script>
 import fetchJson from '@/utilitys/fetch-json.js';
+import * as RD from '@/utilitys/readtext.js';
+import { GamesGetAssetsFile } from '@/utilitys/get_assets.js';
 export default {
 data() {
   return {
@@ -144,8 +140,10 @@ created() {
     res = await fetchJson("./Grade"+this.ShowGrade+"/TechnologyGrade"+this.ShowGrade+".json");
     this.TechnologyShowInfo = res.data;
     console.log(this.MathShowInfo,this.ChineseShowInfo,this.TechnologyShowInfo);
-    // this.ShowInfo = this.MathShowInfo;預設科目 FIXME
-    let S = sessionStorage.getItem("Subject");
+    this.MathShowInfo = await this.ConvertDatasImgURL(this.MathShowInfo);
+    this.ChineseShowInfo = await this.ConvertDatasImgURL(this.ChineseShowInfo);
+    this.TechnologyShowInfo = await this.ConvertDatasImgURL(this.TechnologyShowInfo);
+    let S = this.GetSubjectSession();
     if(S!=null){
       switch(S){
         case "Math":
@@ -166,72 +164,40 @@ created() {
       this.ShowMenu = false;
       this.ShowContent = true;
     }
-    if (sessionStorage.getItem("Chapter")!=null){
-      this.SelectedChapter = sessionStorage.getItem("Chapter");
-      for(var i in this.ShowInfo[this.SelectedChapter].Section){
-        for(var z in this.ShowInfo[this.SelectedChapter].Section[i].Games){
-          this.ShowInfo[this.SelectedChapter].Section[i].Games[z].Img = new URL(`../assets/`+this.ShowInfo[this.SelectedChapter].Section[i].Games[z].Img, import.meta.url).href;
-          console.log(this.ShowInfo[this.SelectedChapter].Section[i].Games[z].Img);
-        }
-      }
-      
+    let C = this.GetChapterSession();
+    if(C!=null){
+      this.SelectedChapter = C;
       this.Show = true;
     }
-    this.InitReadProccess();
+    RD.InitReadProccess();
   })();
  
 },
 
 methods: {
-  MakeReadText(Title,Description){
-    let text =  `標題:${Title}。說明:${Description}。`;
-    this.ReadText(text);
+  GetChapterSession(){
+    return sessionStorage.getItem("Chapter");
   },
-  findlang(voice){
-    for (let i = 0; i < this.voices.length; i++) {
-      if (this.voices[i].name === voice) {
-        return this.voices[i];
-      }
-    }
-    return null;
+  GetSubjectSession(){
+    return sessionStorage.getItem("Subject");
   },
-  InitReadProccess(){
-    let synth = window.speechSynthesis;
-    let voicetype = "Microsoft Yating - Chinese (Traditional, Taiwan)";
-    let voicetype_order =[
-      "Microsoft Yating - Chinese (Traditional, Taiwan)",
-      "Google 國語（臺灣）",
-    ]
-    synth.onvoiceschanged = () => {
-      this.voices = synth.getVoices();
-      this.selectedVoice = this.voices[0];
-      console.log(this.voices);
-      this.selectedVoice = this.findlang(voicetype);
-      console.log(this.selectedVoice);
-      while (this.selectedVoice==null){
-        delete this.voices[0];
-        this.selectedVoice = this.findlang(voicetype);
-      }
-    };
-  },
-  ReadText(text) {
-    let synth = window.speechSynthesis; //FIXME
-    let utterThis = new SpeechSynthesisUtterance(text);
-    synth.cancel();
-    utterThis.voice = this.selectedVoice;
-    utterThis.lang = "zh";
-    utterThis.rate = 1;
-    utterThis.pitch = 1;
-    synth.speak(utterThis);
-  },
-  SelectChapter(key){
-    if(sessionStorage.getItem("Chapter")==null){
-      for (var i in this.ShowInfo[key].Section){
-        for (var z in this.ShowInfo[key].Section[i].Games){
-          this.ShowInfo[key].Section[i].Games[z].Img = new URL(`../assets/`+this.ShowInfo[key].Section[i].Games[z].Img, import.meta.url).href;
+  ConvertDatasImgURL(datas){
+    for (var i in datas){
+      for (var z in datas[i].Section){
+        for (var x in datas[i].Section[z].Games){
+          datas[i].Section[z].Games[x].Img = GamesGetAssetsFile(datas[i].Section[z].Games[x].id, datas[i].Section[z].Games[x].Img);
         }
       }
     }
+    return datas;
+  },
+  MakeReadText(Title,Description,stop=false){
+    let text =  `標題:${Title}。說明:${Description}。`;
+    // this.ReadText(text);
+    RD.ReadText(text,stop);
+    console.log(text);
+  },
+  SelectChapter(key){
     this.Show = false;
     sessionStorage.setItem("Chapter",key);
     this.SelectedChapter = String(key);
@@ -255,8 +221,35 @@ methods: {
       this.ShowInfo = this.TechnologyShowInfo;
     }
     sessionStorage.setItem("Subject",Subject);
+    sessionStorage.removeItem("Chapter");
     this.Refresh += 1;
     this.Show = false;
+  },
+  FF(Flist,tar){
+    let finded_id = [];
+    let find = [];
+    for(var i in Flist){
+      for(var z in Flist[i].Section){
+        for(var x in Flist[i].Section[z].Games){
+          if(Flist[i].Section[z].Games[x].id==tar){
+            if(!(finded_id.includes(Flist[i].Section[z].Games[x].id))){
+              finded_id.push(Flist[i].Section[z].Games[x].id);
+              let temp = Flist[i].Section[z].Games[x];
+              find.push(temp);
+            }
+          }
+          if(Flist[i].Section[z].Games[x].Name.includes(tar)){
+            if(!(finded_id.includes(Flist[i].Section[z].Games[x].id))){
+              finded_id.push(Flist[i].Section[z].Games[x].id);
+              let temp = Flist[i].Section[z].Games[x];
+              find.push(temp);
+            }
+          }
+        }
+      }
+    }
+    console.log(find);
+    return find;
   },
   SearchGame(){
     let keyword = this.SearchInput;
@@ -264,80 +257,10 @@ methods: {
     this.ShowSearch = true;
     this.ShowContent = false;
     this.ShowMenu = false;
-    for(var i in this.MathShowInfo){
-      for(var z in this.MathShowInfo[i].Section){
-        for(var x in this.MathShowInfo[i].Section[z].Games){
-          if(this.MathShowInfo[i].Section[z].Games[x].Name.includes(keyword)){
-            if (sessionStorage.getItem("Subject")!="Math")
-            {
-              let item = this.MathShowInfo[i].Section[z].Games[x];
-              item.Img = new URL(`../assets/`+item.Img, import.meta.url).href;
-            }
-            result.push(item);
-          }
-          if(this.MathShowInfo[i].Section[z].Games[x].id.includes(keyword)){
-            if (sessionStorage.getItem("Subject")!="Math")
-            {
-              let item = this.MathShowInfo[i].Section[z].Games[x];
-              item.Img = new URL(`../assets/`+item.Img, import.meta.url).href;
-            }
-            result.push(item);
-          }
-        }
-      }
-    }
-    for(var i in this.ChineseShowInfo){
-      for(var z in this.ChineseShowInfo[i].Section){
-        for(var x in this.ChineseShowInfo[i].Section[z].Games){
-          if(this.ChineseShowInfo[i].Section[z].Games[x].Name.includes(keyword)){
-            if (sessionStorage.getItem("Subject")!="Chinese")
-            {
-              let item = this.ChineseShowInfo[i].Section[z].Games[x];
-              item.Img = new URL(`../assets/`+item.Img, import.meta.url).href;
-            }
-            result.push(item);
-          }
-          if(this.ChineseShowInfo[i].Section[z].Games[x].id.includes(keyword)){
-            if (sessionStorage.getItem("Subject")!="Chinese")
-            {
-              let item = this.ChineseShowInfo[i].Section[z].Games[x];
-              item.Img = new URL(`../assets/`+item.Img, import.meta.url).href;
-            }
-            result.push(item);
-          }
-        }
-      }
-    }
-    for(var i in this.TechnologyShowInfo){
-      for(var z in this.TechnologyShowInfo[i].Section){
-        for(var x in this.TechnologyShowInfo[i].Section[z].Games){
-          if(this.TechnologyShowInfo[i].Section[z].Games[x].Name.includes(keyword)){
-            if (sessionStorage.getItem("Subject")!="Technology")
-            {
-              let item = this.TechnologyShowInfo[i].Section[z].Games[x];
-              item.Img = new URL(`../assets/`+item.Img, import.meta.url).href;
-            
-            }
-            result.push(item);
-          }
-          if(this.TechnologyShowInfo[i].Section[z].Games[x].id.includes(keyword)){
-            if (sessionStorage.getItem("Subject")!="Technology")
-            {
-              let item = this.TechnologyShowInfo[i].Section[z].Games[x];
-              item.Img = new URL(`../assets/`+item.Img, import.meta.url).href;
-            }
-            result.push(item);
-          }
-        }
-      }
-    }
-    if(result.length==0){
-      this.SearchResult=null;
-    }
-    else{
-      this.SearchResult=result;
-      console.log(this.SearchResult);
-    }
+    this.SearchResult = [];
+    this.SearchResult=this.FF(this.MathShowInfo,keyword);
+    console.log(this.SearchResult);
+    
   },
   Return2Menu(){
     this.ShowSearch =false;
@@ -352,7 +275,7 @@ methods: {
 <style lang="scss" scoped>
 
 header{
-background-color: #F19C79;
+  background-color: #F19C79;
 }
 .navbar {
   background-color: #F19C79; 

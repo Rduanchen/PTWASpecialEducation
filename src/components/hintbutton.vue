@@ -5,7 +5,7 @@
             <div class="progress-bar bg-danger" role="progressbar" :class="{ p100:this.WrongTimes >= 2, p50:this.WrongTimes == 1, p0: this.WrongTimes ==0}" :aria-valuenow="percentage" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
     </div>
-    <button class="btn btn-primary text-nowrap img-hover-zoom" data-bs-toggle="modal" data-bs-target="#hint" @click="ProvideHint()" v-if="showhint">
+    <button class="btn btn-primary text-nowrap img-hover-zoom" data-bs-toggle="modal" data-bs-target="#hint" @click="gethint()" v-if="showhint">
         <div class="d-flex align-items-center">
             <div class="">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-square-fill" viewBox="0 0 16 16">
@@ -38,6 +38,15 @@ export default {
         WrongTimes: 'updated_hint_status',
     },
     methods: {
+        PauseIntroVideo() {
+            try{
+            let video = document.getElementById("introvideo");
+            video.pause();
+            }catch{}
+        },
+        gethint() {
+            this.$emit('provide-hint');
+        },
         updated_hint_status() {
             if (this.WrongTimes >= this.maxWrongTimes) {
                 this.showhint = true;

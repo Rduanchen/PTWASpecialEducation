@@ -112,7 +112,6 @@ export default {
     },
     methods: {
         CheckAnswer(){
-
             // This code will walk through all the groups and check if the answer is right
             // Only when all the groups are right, the game will return true.
             if(this.Group1.length==this.GameData.Answer[0]["Items"].length && this.Group2.length==this.GameData.Answer[1]["Items"].length){

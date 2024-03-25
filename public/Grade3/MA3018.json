@@ -3,7 +3,7 @@
     "introvideo": "src",
     "TotalLevel": 1,
     "GameType": "NumberingGame",
-    "ConfigParameters":{
+    "GameConfig":{
         
     },
     "Questions": [

@@ -30,7 +30,8 @@
 
 </template>
 <script>
-import fetchJson from '@/utilitys/fetch-json.js';
+import { GamesGetAssetsFile } from '@/utilitys/get_assets.js';
+// import {hi} from "@/utilitys/jstest.js";
 export default {
     name: 'TrueFalseGame',
     data(){
@@ -71,15 +72,9 @@ export default {
 
     },
     created() {
-        console.log(typeof(this.id));
-        console.log(this.GameData.img);
-        // this.imageUrl = require(`../../assets/${this.id}/${this.GameData.img}`);
-        this.imageUrl=new URL(`../../assets/Games/`+this.id+`/${this.GameData.img}`, import.meta.url).href
-        console.log(this.imageUrl);
-        
+        this.imageUrl=GamesGetAssetsFile(this.id,this.GameData.img)
     }
 }
-
 </script>
 <style scoped>
 .card {

@@ -1,6 +1,6 @@
 {
     "id": "MA3011",
-    "introvideo": "",
+    "introvideo": "hint1.mp4",
     "IntroText": {
         "Type": "PlainText",
         "Content": "小明剛剛學會看時鐘，但是他在寫作業的時候忘記了部分的答案，請聰明的你/妳幫助小明檢查答案"
@@ -11,7 +11,7 @@
         "GlobalTitle": "請問以下的時間正確嗎?"
     },
     "Hint":{
-        "ShowAs" : "None",
+        "ShowAs" : "Single",
         "Rule" : {
             "RuleType": "WrongTimes",
             "Value":  2

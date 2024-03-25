@@ -2,7 +2,7 @@
     <div class="container d-flex flex-column justify-content-center" style="height: 100vh;">
       <div class="row d-flex flex-row align-content-stretch">
         <div class="col-10">
-          <canvas ref="canvas" width="600" height="500" class="border border-dark"
+          <canvas ref="canvas" class="border border-dark"
                   @mousedown="handleMouseDown"
                   @mousemove="handleMouseMove"
                   @mouseup="handleMouseUp"
@@ -41,7 +41,7 @@
   
   <script>
   import 'bootstrap/dist/css/bootstrap.css'
-  
+
   export default {
     name: 'CanvasDrawing',
     data() {
@@ -59,8 +59,8 @@
       }
     },
     mounted() {
-      this.ctx = this.$refs.canvas.getContext('2d')
-      this.initCanvas()
+        this.ctx = this.$refs.canvas.getContext('2d');
+        this.initCanvas()
     },
     methods: {
         setcolor(color){
@@ -155,7 +155,7 @@
         },
     },
 }
-  </script>
+</script>
   
   <style lang="scss" scoped>
   canvas {
@@ -167,4 +167,4 @@
     flex-direction: column;
     justify-content: center;
   }
-  </style>
+</style>
