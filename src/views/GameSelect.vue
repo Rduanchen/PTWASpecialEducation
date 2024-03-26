@@ -27,9 +27,9 @@
   </section>
 
   <section class="GameSelectSection " style="overflow-y: hidden;" v-if="ShowContent">
-      <div class="container">
+      <div class="container-fluid mx-3">
           <div class="row">
-              <div class="col-3 SideBar mt-4 gap-2">
+              <div class="col-2 SideBar mt-4 gap-2">
                   <div class="row">
                     <p class="h4">現在科目</p>
                     <button class="btn btn-primary" disabled>{{ Subjects[Subject] }}</button>
@@ -37,7 +37,7 @@
                   <br>
                   <div class="card">
                   <div class="card-body" :key="Refresh">
-                      <h5 class="card-title mt-2">請選擇科目</h5>
+                      <h5 class="card-title mt-2">請選擇章節</h5>
                       <div class="list-group mt-2" v-for="(items,key) in this.ShowInfo" v-if="this.ShowInfo">
                         <a class="list-group-item list-group-item-action" v-on:click="SelectChapter(key); MakeReadText('' ,'',stop=true)">{{ items.Title }}</a>
                       </div>
@@ -46,21 +46,18 @@
               </div>
 
               <!-- 遊戲卡片區域 -->
-              <div class="col-8 container ItemFrame mt-4" v-if="Show" :key="Refresh">
+              <div class="col-9 container ItemFrame mt-4" v-if="Show" :key="Refresh">
                 <div class="Charpter mb-4 px-0" v-for="items in this.ShowInfo[SelectedChapter].Section" v-if="this.ShowInfo">
                 <div>
-                    <h5 class="card-title mb-3">{{ items.Title }}</h5>
-                    <div class="row GameCardGroup p-1" style="overflow-x: auto;">
+                    <h5 class="card-title mb-4">{{ items.Title }}</h5>
+                    <div class="row GameCardGroup p-1">
                       <div class="row">
-                        <div v-for="item in items.Games" class="col-12 col-md-6 col-lg-4 d-flex align-self-stretch">
-                          <div class="card GameCard my-2">
+                        <div v-for="item in items.Games" class="col-12 col-md-6 col-lg-4 d-flex align-self-stretch justify-content-md-center mb-3">
+                          <div class="card GameCard my-2 flex-grow-1" style="width: 18rem;">
                             <div class="card-body">
                               <img :src="item.Img" class="card-img-top GamePreviewImg" alt="...">
-                              <router-link :to="{ name: 'Game', params: { id: item.id, Grade: this.ShowGrade, Subject: this.Subject ,GameName: item.Name} }" @click="MakeReadText('' ,'',stop=true)">
-                                <p class="h6 card-title mt-2">{{ item.Name }}</p>
-                              </router-link>
-                              <p class="card-text">{{ item.Description }}</p>
-                              <a @click="MakeReadText(item.Name, item.Description)" class="btn btn-primary"><i class="bi bi-volume-up-fill"></i></a>
+                              <a class="h5 card-title mt-2 "><router-link :to="{ name: 'Game', params: { id: item.id, Grade: this.ShowGrade, Subject: this.Subject ,GameName: item.Name} }" @click="MakeReadText('' ,'',stop=true)" class="">{{ item.Name }}</router-link><a @click="MakeReadText(item.Name, item.Description)" class="btn btn-primary mx-2"><i class="bi bi-volume-up-fill"></i></a></a>
+                              <p class="card-text text-truncate">{{ item.Description }}</p>
                             </div>
                           </div>
                         </div>
@@ -79,20 +76,17 @@
     </div>
     <div v-if="SearchResult!=null" style="width: 100vw; height: 90vh;" class="row mt-5 justify-content-md-center">
       <p class="h1 mb-3">搜尋結果:</p>
-      <div v-for="item in SearchResult" class="col-12 col-md-6 col-lg-4 d-flex align-self-stretch .justify-content-md-center mb-3">
-        <div class="card GameCard col-3" style="width: 18rem; height: 20rem;">
+      <div v-for="item in SearchResult" class="col-12 col-md-6 col-lg-4 d-flex align-self-stretch justify-content-md-center mb-3">
+        <div class="card GameCard col-3" style="width: 18rem;">
           <div class="card-body">
             <img :src="item.Img" class="card-img-top" alt="...">
-            <router-link :to="{ name: 'Game', params: { id: item.id, Grade: this.ShowGrade, Subject: this.Subject ,GameName: item.Name} }" @click="MakeReadText('' ,'',stop=true)">
-              <p class="h5 card-title mt-2">{{ item.Name }}</p>
-            </router-link>
+            <a class="h5 card-title mt-2"><router-link :to="{ name: 'Game', params: { id: item.id, Grade: this.ShowGrade, Subject: this.Subject ,GameName: item.Name} }" @click="MakeReadText('' ,'',stop=true)">{{ item.Name }}</router-link><a @click="MakeReadText(item.Name, item.Description)" class="btn btn-primary mx-2"><i class="bi bi-volume-up-fill"></i></a></a>
             <p class="card-text">{{ item.Description }}</p>
-            <!-- <button class @click="ReadText(item.Description)" class="btn btn-primary">朗讀</button> -->
           </div>
         </div>
       </div>
       <div class="row justify-content-center">
-        <button class="btn btn-primary btn-block m-5" v-on:click="Return2Menu();MakeReadText('' ,'',stop=true)" style="height: 3em; width: 20rem">返回目錄</button>
+        <button class="btn btn-primary btn-block m-5" v-on:click="Return2Menu()" style="height: 3em; width: 20rem">返回目錄</button>
       </div>
     </div>
   </section>
@@ -231,7 +225,7 @@ methods: {
     for(var i in Flist){
       for(var z in Flist[i].Section){
         for(var x in Flist[i].Section[z].Games){
-          if(Flist[i].Section[z].Games[x].id==tar){
+          if(Flist[i].Section[z].Games[x].id.includes(tar)){
             if(!(finded_id.includes(Flist[i].Section[z].Games[x].id))){
               finded_id.push(Flist[i].Section[z].Games[x].id);
               let temp = Flist[i].Section[z].Games[x];
@@ -263,11 +257,9 @@ methods: {
     
   },
   Return2Menu(){
-    this.ShowSearch =false;
-    this.ShowContent = true;
-    this.ShowMenu = false;
-    this.SearchInput = null;
-  }
+    location.reload();
+    this.MakeReadText('' ,'',stop=true);
+  },
 },
 }
 </script>
@@ -308,24 +300,30 @@ header{
 .ItemFrame {
   height: 83dvh;
   overflow-y: scroll;
-  // -ms-overflow-style: none; /* IE/Edge */
-  &::-webkit-scrollbar {
-    display: none;
+  @media (pointer: fine) { 
+    -ms-overflow-style: none; /* IE/Edge */
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 }
 .SideBar {
   height: 83dvh;
   overflow-y: scroll;
-  // -ms-overflow-style: none; /* IE/Edge */
-  &::-webkit-scrollbar {
-    display: none;
+  @media (pointer: fine) { 
+    -ms-overflow-style: none; /* IE/Edge */
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 }
 .GameCardGroup{
-// -ms-overflow-style: none; /* IE/Edge */
-&::-webkit-scrollbar {
-  display: none;
-}
+  @media (pointer: fine) { 
+    -ms-overflow-style: none; /* IE/Edge */
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
 }
 section{
   height: 90vh;
@@ -341,7 +339,8 @@ a {
 }
 
 .GameCard {
-transition: transform 0.3s ease; /* 平滑過渡效果 */
+  transition: transform 0.3s ease; /* 平滑過渡效果 */
+  height: auto;
 }
 
 .GameCard:hover {
@@ -362,6 +361,6 @@ transition: transform 0.3s ease; /* 平滑過渡效果 */
 }
 .GamePreviewImg{
   width: 100%;
-  height: 40%;
+  height: 70%;
 }
 </style>

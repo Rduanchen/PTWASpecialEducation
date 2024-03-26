@@ -23,10 +23,6 @@ export default {
             type: Object,
             required: true
         },
-        GameContainerInfo: {
-            type: Object,
-            required: true
-        }
     },
     data(){
         return{
@@ -75,7 +71,6 @@ export default {
         canvas1.width = window.innerWidth;
         canvas1.height = window.innerHeight;
         context1.clearRect(0, 0, canvas1.width, canvas1.height);
-        
         let RWD_Info = this.CountRWDWidth(this.QuestionDataStructure);
         this.RWD_Img_Width = RWD_Info.Img_width;
         this.RWD_Gap_Width = RWD_Info.Gap_width;
@@ -92,7 +87,7 @@ export default {
         });
         
         this.Runtimes=0;
-        this.TotalAmount=3;
+        this.TotalAmount=3; //FIXME
         this.canvas = this.$refs.line_keeper;
         this.context = this.canvas.getContext('2d');
         this.canvas.width= window.innerWidth;

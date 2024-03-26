@@ -37,6 +37,7 @@
               <!-- Dynamic import component -->
             <div class="games" v-if="GameStatus=='Progressing'" ref="GameContainer" id="GameContainer">
               <component
+                class="GameComponent111"
                 v-if="GameType!='SelfDefine'"
                 v-bind:is="this.GameType" 
                 ref="GameComponent"
@@ -356,11 +357,15 @@ export default {
       this.GameConfig = this.GameData.GameConfig;
       this.InitHint();  
       this.InitIntroVideo();
+      
       this.Dataloaded = true;
     })    
   },
   mounted() {
-    
+    this.test();
+  },
+  beforeMount(){
+    this.test();
   },
   methods: {
       PauseIntroVideo() {
@@ -617,6 +622,12 @@ export default {
       },
       PreviousPage() {
         this.$router.go(-1);
+      },
+      test() {
+        var a = document.getElementsByClassName("GameComponent111")
+        console.log(a);
+        console.log(a.offsetHeight);
+        console.log(a.clientHeight);
       }
     },
   components: {
@@ -725,6 +736,8 @@ transform: scale(1.07); /* 放大至原大小的 110% */
 .Game_Component{
   width: 75vw !important;
   height: 70vh !important;
+  overflow-y: auto;
+  overflow-x: auto;
 }
 .content{
   display: flex;

@@ -2,7 +2,7 @@
     <div class="container d-flex flex-column justify-content-center" style="height: 100vh;">
       <div class="row d-flex flex-row align-content-stretch">
         <div class="col-10">
-          <canvas ref="canvas" class="border border-dark"
+          <canvas ref="canvas" width="600" height="480" class="border border-dark"
                   @mousedown="handleMouseDown"
                   @mousemove="handleMouseMove"
                   @mouseup="handleMouseUp"

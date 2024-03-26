@@ -12,16 +12,13 @@ export function InitReadProccess() {
     voices = synth.getVoices();
     selectedVoice = voices[0];
     selectedVoice = findlang(voicetype_order[0]);
-    console.log(selectedVoice);
     if (selectedVoice == null) {
       selectedVoice = findlang(voicetype_order[1]);
-      console.log(selectedVoice);
     }
   };
 }
 export function findlang(lang){
   for (let i = 0; i < voices.length; i++) {
-    console.log(voices[i].name);
     try{
       if (voices[i].name == lang) {
         return voices[i];

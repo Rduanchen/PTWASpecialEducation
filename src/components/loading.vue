@@ -11,7 +11,6 @@
             <h2>頁面加載中....</h2>
         </div>
     </div>
-
 </template>
 <script>
 export default {
