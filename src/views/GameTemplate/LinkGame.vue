@@ -65,7 +65,7 @@ export default {
     },
     mounted() {
         // console.log(GameContainerInfo)
-        const canvas1 = $('#responsive-bg')[0];
+        const canvas1 = document.getElementById('responsive-bg');
         const context1 = canvas1.getContext('2d');
         // Set Canvas size to full screen
         canvas1.width = window.innerWidth;
@@ -87,7 +87,7 @@ export default {
         });
         
         this.Runtimes=0;
-        this.TotalAmount=3; //FIXME
+        this.TotalAmount=3; //FIXME : 這裡要改成正確答案的數量(動態props)
         this.canvas = this.$refs.line_keeper;
         this.context = this.canvas.getContext('2d');
         this.canvas.width= window.innerWidth;

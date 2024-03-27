@@ -569,7 +569,6 @@ export default {
         }
       },
       ProvideHint(){
-      
         let hint_type = this.Hint["Type"];
         switch (hint_type)
         {
@@ -735,7 +734,7 @@ transform: scale(1.07); /* 放大至原大小的 110% */
 
 .Game_Component{
   width: 75vw !important;
-  height: 70vh !important;
+  // height: 70vh !important;
   overflow-y: auto;
   overflow-x: auto;
 }

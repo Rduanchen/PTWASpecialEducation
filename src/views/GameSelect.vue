@@ -4,17 +4,15 @@
         <a class="navbar-brand mt-2 mb-2 " href="#" alt="Home">
             <img src="@/assets/images/nav_bar/logo.png" />
         </a>
-        <!-- <div class="collapse navbar-collapse d-flex justify-content-around" id="navbarSupportedContent"> -->
-            <form class="mx-auto">
-              <button class="btn btn-primary m-1" @click="ChangeSubject('Math')">{{ Subjects['Math'] }}</button>
-              <button class="btn btn-primary m-1" @click="ChangeSubject('Chinese')" >{{ Subjects['Chinese'] }}</button>
-              <button class="btn btn-primary m-1" @click="ChangeSubject('Technology')" >{{ Subjects['Technology'] }}</button>
-            </form>
-            <form class="d-flex mx-auto" role="search">
-                <input class="form-control me-2" type="search" placeholder="輸入ID或者標題" aria-label="Search" v-model="SearchInput">
-                <button class="btn btn-primary text-nowrap" type="submit" v-on:click="SearchGame()">搜尋</button>
-            </form>
-        <!-- </div> -->
+        <form class="mx-auto">
+          <button class="btn btn-primary m-1" @click="ChangeSubject('Math')">{{ Subjects['Math'] }}</button>
+          <button class="btn btn-primary m-1" @click="ChangeSubject('Chinese')" >{{ Subjects['Chinese'] }}</button>
+          <button class="btn btn-primary m-1" @click="ChangeSubject('Technology')" >{{ Subjects['Technology'] }}</button>
+        </form>
+        <form class="d-flex mx-auto" role="search">
+            <input class="form-control me-2" type="search" placeholder="輸入ID或者標題" aria-label="Search" v-model="SearchInput">
+            <button class="btn btn-primary text-nowrap" type="submit" v-on:click="SearchGame()">搜尋</button>
+        </form>
       </nav>
   </header>
   <section v-if="ShowMenu">
@@ -265,7 +263,6 @@ methods: {
 </script>
 
 <style lang="scss" scoped>
-
 header{
   background-color: #F19C79;
 }
