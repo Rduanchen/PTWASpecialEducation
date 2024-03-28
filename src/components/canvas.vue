@@ -1,8 +1,8 @@
 <template>
     <div class="container d-flex flex-column justify-content-center" style="height: 100vh;">
-      <div class="row d-flex flex-row align-content-stretch">
-        <div class="col-10">
-          <canvas ref="canvas" width="600" height="480" class="border border-dark"
+      <div class="row d-flex flex-row align-content-stretch h-100">
+        <div class="col-10" ref="con">
+          <canvas ref="canvas" class="border border-dark"
                   @mousedown="handleMouseDown"
                   @mousemove="handleMouseMove"
                   @mouseup="handleMouseUp"
@@ -60,9 +60,26 @@
     },
     mounted() {
         this.ctx = this.$refs.canvas.getContext('2d');
-        this.initCanvas()
+        this.initCanvas();
+        
+        const observer = new ResizeObserver(entries => {
+            for (let entry of entries) {
+            const rect = entry.contentRect;
+            this.$refs.canvas.width = rect.width-10;
+            this.$refs.canvas.height = rect.height-10;
+            }
+        });
+        observer.observe(this.$refs.con);
+    },
+    updated(){
+        const rect = this.$refs.con.getBoundingClientRect();
+        this.$refs.canvas.width = rect.width - 30;
+        this.$refs.canvas.height = rect.height - 30;
     },
     methods: {
+        test(){
+            let rect = this.$refs.con.getBoundingClientRect();
+        },
         setcolor(color){
             this.brushColor = color;
         },

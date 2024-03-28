@@ -6,7 +6,7 @@
         <div class="row justify-content-between d-flex flex-row align-items-stretch justify-content-center">
             <div class="col-6 align-content-between">
                 <p class="h2">{{ this.GameData.Question[0].InitBox }}</p>
-                <draggable :list="this.Items" item-key="id" :sort="false" group="SelectItem" style="width: 100%;" class="card d-flex flex-row justify-content-center flex-wrap col-12 col-md-6 col-lg-4">
+                <draggable :list="this.Items" item-key="id" :sort="false" group="SelectItem" style="width: 100%;min-height: 75%;" class="card d-flex flex-row justify-content-center flex-wrap col-12 col-md-6 col-lg-4">
                     <template #item="{ element }">
                         <cardwithbutton :imageURL="element['img']" :Text="element['text']" :altText="element['alt']" class="mx-auto my-2"></cardwithbutton>
                     </template>

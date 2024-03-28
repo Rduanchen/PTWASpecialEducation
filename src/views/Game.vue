@@ -166,7 +166,7 @@
                   </div>
                 </div>
               </button>
-              <button class="btn btn-primary text-nowrap img-hover-zoom"  data-bs-toggle="modal" data-bs-target="#Calculator">
+              <button class="btn btn-primary text-nowrap img-hover-zoom"  data-bs-toggle="modal" data-bs-target="#Calculator" @click="CalculatorSwitch=false">
                 <div class="d-flex align-items-center">
                   <div class="">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calculator" viewBox="0 0 16 16">
@@ -216,16 +216,16 @@
                 <div class="modal-header">
                   <div class="modal-title fs-5 mx-auto" id="exampleModalLabel">
                     <button class="btn btn-primary mx-3" @click="CalculatorSwitch=false">計算紙</button>
-                    <button class="btn btn-primary mx-3" @click="CalculatorSwitch=true">直式計算版</button>
+                    <button class="btn btn-primary mx-3" @click="CalculatorSwitch=true" :key="CalculatorSwitch">直式計算版</button>
                   </div>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body justify-content-center">
+                <div class="modal-body justify-content-center" v-if="CalculatorSwitch!=null">
                   <DrawCanvas v-if="CalculatorSwitch==false" style="height: 70vh;"></DrawCanvas>
-                  <Calculator v-else></Calculator>
+                  <Calculator v-if="CalculatorSwitch==true"></Calculator>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉!</button>
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="CalculatorSwitch==null">關閉!</button>
                 </div>
               </div>
             </div>
@@ -333,7 +333,7 @@ export default {
       intervalId: null,
       EffectWindow: false,
       EffectSrc:'',
-      CalculatorSwitch: false,
+      CalculatorSwitch: null,
       Hint:{
         Type: "None",
         Data: {

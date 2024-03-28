@@ -20,6 +20,16 @@ const router = createRouter({
       name:"Game",
       component:()=>import("@/views/Game.vue"),
     },
+    {
+      path:"/Link",
+      name:"Link",
+      component:()=>import("@/components/link.vue"),
+    },
+    {
+      path:"/Draw",
+      name:"Draw",
+      component:()=>import("@/components/freehandrawing.vue"),
+    }
     ]
 });
 router.beforeEach((to, from, next) => {
