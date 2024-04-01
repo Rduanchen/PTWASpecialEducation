@@ -1,13 +1,16 @@
 <template>
     <!-- {{ this.DotLocation }} -->
-    <div class="canvas-container">
-        <canvas id="responsive-bg" class="position-absolute"></canvas>
-        <canvas ref="line_keeper" id="line_keeper" class="position-absolute"></canvas>
-    </div>    
+    <p class="h1">{{ GameData.Question.text }}</p>
+    <div class="canvas-container" ref="CanvasContainer">
+        <canvas id="responsive-bg" class="position-absolute " style="border: solid"></canvas>
+        <canvas ref="line_keeper" id="line_keeper" class="position-absolute" style="border: solid"></canvas>
+    </div>  
+    
 </template>
 
 <script>
 import icon from '@/assets/GamePic/Cat.png';
+import { GamesGetAssetsFile } from '@/utilitys/get_assets.js';
 export default {
     name: 'Link',
     props: {
@@ -22,10 +25,15 @@ export default {
         GameConfig: {
             type: Object,
             required: true
-        },
+        }
     },
     data(){
         return{
+            
+            WH: null,
+            Canvasoffset: {},
+            previousinfo: {},
+
             // RWD Setting
             Min_border: 10,
             Min_RowGap :30,
@@ -49,49 +57,120 @@ export default {
             OnclickLocation:[], // [RowID,Index]
 
             //Check Answer
-
             //Fake Data
-            QuestionDataStructure:[
-                ['assets/GamePic/Cat.png','assets/GamePic/Cat.png','assets/GamePic/Cat.png'],
-                ['assets/GamePic/Cat.png','assets/GamePic/Cat.png','assets/GamePic/Cat.png','assets/GamePic/Cat.png','assets/GamePic/Cat.png'],
-                ['assets/GamePic/Cat.png','assets/GamePic/Cat.png']
-            ],
+            QuestionDataStructure:null,
             ans:[
                 [[0,0],[1,0]],
                 [[0,1],[1,2]],
                 [[0,2],[1,1]]
-            ]
+            ],
+            answered: []
         }
     },
     mounted() {
-        // console.log(GameContainerInfo)
-        const canvas1 = document.getElementById('responsive-bg');
+        // this.QuestionDataStructure = this.GameData.Question.RowData;
+        this.QuestionDataStructure = this.GameData.Question.RowData;
+        this.ans = this.GameData.Answer;
+        let CanvasContainer = this.$refs.CanvasContainer
+        this.Canvasoffset = {
+            top: CanvasContainer.offsetTop,
+            left: CanvasContainer.offsetLeft
+        }
+
+        let CanvasCSS = document.getElementsByTagName('canvas')[0];
+        CanvasCSS.style.top = this.Canvasoffset.top + 'px';
+        CanvasCSS.style.left = this.Canvasoffset.left + 'px';
+        
+        let linekeeper = this.$refs.line_keeper;
+        let linekeeperCSS = document.getElementById('line_keeper');
+        linekeeperCSS.style.top = this.Canvasoffset.top + 'px';
+        linekeeperCSS.style.left = this.Canvasoffset.left + 'px';
+
+
+        let WH = CanvasContainer.getBoundingClientRect();
+        this.WH=WH;
+        this.previousinfo = WH;
+
+        const canvas1 = $('#responsive-bg')[0];
         const context1 = canvas1.getContext('2d');
-        // Set Canvas size to full screen
-        canvas1.width = window.innerWidth;
-        canvas1.height = window.innerHeight;
+        canvas1.width = WH.width;
+        canvas1.height = WH.height;
+
         context1.clearRect(0, 0, canvas1.width, canvas1.height);
+        
+        
         let RWD_Info = this.CountRWDWidth(this.QuestionDataStructure);
         this.RWD_Img_Width = RWD_Info.Img_width;
         this.RWD_Gap_Width = RWD_Info.Gap_width;
         this.DrawImgOnCanvas(this.QuestionDataStructure,context1);
             
-        window.addEventListener('resize', () => {
-            context1.clearRect(0, 0, canvas1.width, canvas1.height);
-            canvas1.width = window.innerWidth;
-            canvas1.height = window.innerHeight;
-            let RWD_Info = this.CountRWDWidth(this.QuestionDataStructure);
-            this.RWD_Img_Width = RWD_Info.Img_width;
-            this.RWD_Gap_Width = RWD_Info.Gap_width;
-            this.DrawImgOnCanvas(this.QuestionDataStructure,context1);
-        });
-        
-        this.Runtimes=0;
-        this.TotalAmount=3; //FIXME : 這裡要改成正確答案的數量(動態props)
         this.canvas = this.$refs.line_keeper;
         this.context = this.canvas.getContext('2d');
-        this.canvas.width= window.innerWidth;
-        this.canvas.height= window.innerHeight;
+        this.canvas.width = WH.width;
+        this.canvas.height = WH.height;
+        
+        window.addEventListener('resize', () => {
+            let CanvasContainer = this.$refs.CanvasContainer
+        this.Canvasoffset = {
+            top: CanvasContainer.offsetTop,
+            left: CanvasContainer.offsetLeft
+        }
+
+        let CanvasCSS = document.getElementsByTagName('canvas')[0];
+        CanvasCSS.style.top = this.Canvasoffset.top + 'px';
+        CanvasCSS.style.left = this.Canvasoffset.left + 'px';
+        
+        let linekeeper = this.$refs.line_keeper;
+        let linekeeperCSS = document.getElementById('line_keeper');
+        linekeeperCSS.style.top = this.Canvasoffset.top + 'px';
+        linekeeperCSS.style.left = this.Canvasoffset.left + 'px';
+
+
+        let WH = CanvasContainer.getBoundingClientRect();
+        this.WH=WH;
+        this.previousinfo = WH;
+
+        const canvas1 = $('#responsive-bg')[0];
+        const context1 = canvas1.getContext('2d');
+        canvas1.width = WH.width;
+        canvas1.height = WH.height;
+
+        context1.clearRect(0, 0, canvas1.width, canvas1.height);
+        
+        
+        let RWD_Info = this.CountRWDWidth(this.QuestionDataStructure);
+        this.RWD_Img_Width = RWD_Info.Img_width;
+        this.RWD_Gap_Width = RWD_Info.Gap_width;
+        this.DrawImgOnCanvas(this.QuestionDataStructure,context1);
+            
+        this.canvas = this.$refs.line_keeper;
+        this.context = this.canvas.getContext('2d');
+        this.canvas.width = WH.width;
+        this.canvas.height = WH.height;
+            this.MapTransfer();
+        });
+        // window.addEventListener('fullscreenchange', () => {
+        //     setTimeout(()=>{
+        //     context1.clearRect(0, 0, canvas1.width, canvas1.height);
+        //     let WH = this.$refs.CanvasContainer.getBoundingClientRect();
+        //     this.WH = WH;
+        //     console.log(WH);
+        //     canvas1.width = WH.width;
+        //     canvas1.height = WH.height;
+        //     this.canvas.width = WH.width;
+        //     this.canvas.height = WH.height;
+        //     let RWD_Info = this.CountRWDWidth(this.QuestionDataStructure);
+        //     this.RWD_Img_Width = RWD_Info.Img_width;
+        //     this.RWD_Gap_Width = RWD_Info.Gap_width;
+        //     this.DrawImgOnCanvas(this.QuestionDataStructure,context1);
+        //     this.MapTransfer();
+        //     },1000)
+        // });
+        
+        
+        this.Runtimes=0;
+        this.TotalAmount=this.ans.length;
+        
         this.canvas.addEventListener('mousedown', this.handleMouseDown);
         this.canvas.addEventListener('mousemove', this.handleMouseMove);
         this.canvas.addEventListener('mouseup', this.handleMouseUp);
@@ -104,7 +183,7 @@ export default {
             //利用比例計算出每個圖片的大小
             //如果太多列導致圖片太小則以圖片最小值為主
             let RowAmount=question.length;
-            let column = parseInt((window.innerWidth-this.Min_border*2)/(RowAmount*2+(RowAmount-1)*3)) // 扣掉邊界後，根據比例計算出圖片、間隔的大小(2:3)
+            let column = parseInt((this.WH.width-this.Min_border*2)/(RowAmount*2+(RowAmount-1)*3)) // 扣掉邊界後，根據比例計算出圖片、間隔的大小(2:3)
             return {
                 Img_width : column*2,
                 Gap_width : column*3
@@ -113,7 +192,7 @@ export default {
         CountMaxImgSize(ImageRowAmount){
             //參數為每一欄圖片的數量 
             //計算出每個圖片的最大大小
-            let Height= (window.innerHeight-this.Min_border*2)/ImageRowAmount;
+            let Height= (this.WH.height-this.Min_border*2)/ImageRowAmount;
             let Width = this.RWD_Img_Width;
             return{
                 Max_Height: Height,
@@ -143,14 +222,77 @@ export default {
             for(var i in question){
                 let img = new Image();
                 // img.src = question[i];
-                img.src = icon //FIXME: 這裡要改成vue動態匯入
+                // img.src = icon //FIXME: 這裡要改成vue動態匯入
+                img.src = GamesGetAssetsFile(this.id,question[i]);
                 let Img_Size = this.ResizeRWDImg(Max_Img_Size,img);
                 full_space += Img_Size.New_Height;
             }
-            return (window.innerHeight-this.Min_border*2-full_space)/(question.length+1)
+            return (this.WH.height-this.Min_border*2-full_space)/(question.length+1)
             // return 0
         },
+        async ImageQuery(question) {
+            let Images = [];
+
+            // 定義載入圖片的 Promise 函式
+            function loadImage(src) {
+                    return new Promise((resolve, reject) => {
+                        let img = new Image();
+                        img.onload = () => resolve(img);
+                        img.onerror = reject;
+                        img.src = src;
+                    });
+                }
+
+                // 逐一處理二維陣列中的圖片路徑
+                for (let i = 0; i < question.length; i++) {
+                    let temp = [];
+
+                    // 逐一載入圖片
+                    for (let j = 0; j < question[i].length; j++) {
+                        try {
+                            let img = await loadImage(GamesGetAssetsFile(this.id, question[i][j]));
+                            temp.push(img);
+                        } catch (error) {
+                            console.error('圖片載入失敗：', error);
+                        }
+                    }
+
+                    Images.push(temp);
+                }
+                return Images;
+        },
+        FindDotXY(col,row){
+            for(var i in this.DotLocation){
+                if(this.DotLocation[i][0][0]==row && this.DotLocation[i][0][1]==col){
+                    return {
+                        x:this.DotLocation[i][1][0],
+                        y:this.DotLocation[i][1][1]
+                    }    
+                }
+            }
+        },
+        MapTransfer(){
+            let paths=[]
+            for(var i in this.answered){
+                let start = this.FindDotXY(this.answered[i][0][0],this.answered[i][0][1]);
+                let end = this.FindDotXY(this.answered[i][1][0],this.answered[i][1][1]);
+                paths.push({startX:start.x,startY:start.y,currentX:end.x,currentY:end.y});
+            }
+            this.paths=paths;
+            // let Wscale = this.WH.width/this.previousinfo.width;
+            // let Hscale = this.WH.height/this.previousinfo.height;
+            // for(var i in this.paths){
+            //     this.paths[i].startX = this.paths[i].startX*Wscale;
+            //     this.paths[i].startY = this.paths[i].startY*Hscale;
+            //     this.paths[i].currentX = this.paths[i].currentX*Wscale;
+            //     this.paths[i].currentY = this.paths[i].currentY*Hscale;
+            // }
+            // this.previousinfo = this.WH;
+            this.drawPaths();
+        },  
         async DrawImgOnCanvas(question, context1) {
+            let images = await this.ImageQuery(question);
+            console.log(images);
             let Column_Amount = question.length;
             var onchangegroup = false;
             let Column_ID = 0;
@@ -160,13 +302,11 @@ export default {
                 const Max_Img_Size = this.CountMaxImgSize(this.QuestionDataStructure[col].length);
                 let RWD_Colum_Gap = this.CountRWDYGap(question[col]);
                 for (let Dot_Row_ID = 0; Dot_Row_ID < question[col].length; Dot_Row_ID++) {
-                    let Img = new Image();
-                    let Image_Url = icon;
-                    Img.src = Image_Url;
+                    let Img = images[col][Dot_Row_ID];
                     let Img_Size = this.ResizeRWDImg(Max_Img_Size, Img);
                     let x = this.Min_border + Max_Img_Size.Max_Width * col + this.RWD_Gap_Width * col;
                     let y = this.Min_border + RWD_Colum_Gap + Max_Img_Size.Max_Height * Dot_Row_ID;
-                    await new Promise((resolve) => (Img.onload = resolve));
+                    
                     context1.drawImage(Img, x, y, Img_Size.New_Width, Img_Size.New_Height);
                     context1.beginPath();
                     if (col == 0) {
@@ -206,16 +346,16 @@ export default {
             };
         },
         handleMouseDown(e) {
-            var rep =this.JudgeRange(e.clientX,e.clientY);
+            const startPos = this.getEventPos(e);
+            var rep =this.JudgeRange(startPos.x,startPos.y);
             this.column=rep.ColumnID;
             this.ontouch_group=rep.Group;
             if(rep.Locate){
                 if (!this.isDrawing) {
                     this.isDrawing = true;
-                    const startPos = this.getEventPos(e);
                     this.paths.push({ startX: startPos.x, startY: startPos.y });
                     this.OnclickLocation=[rep.ColumnID,rep.RowID];
-                } 
+                }
             }
         },
         handleMouseMove(e) {
@@ -228,31 +368,43 @@ export default {
             }
         },
         handleMouseUp(e) {
-            var rep =this.JudgeRange(e.clientX,e.clientY);
-            var CA =this.CheckAnswer(this.OnclickLocation[0],this.OnclickLocation[1],rep.ColumnID,rep.RowID)
-            if(rep.Locate && this.ontouch_group == rep.Group && this.column != rep.ColumnID && CA){
-                if (this.isDrawing) {
-                    this.isDrawing = false;
-                    const endPos = this.getEventPos(e);
-                    this.paths[this.paths.length - 1].endX = endPos.x;
-                    this.paths[this.paths.length - 1].endY = endPos.y;
-                    this.drawPaths();
+            console.log(this.isDrawing);
+            const endPos = this.getEventPos(e);
+            var rep =this.JudgeRange(endPos.x,endPos.y);
+            var CAd =this.JudgeAnswered(this.OnclickLocation[0],this.OnclickLocation[1],rep.ColumnID,rep.RowID)
+            if(!CAd){
+                var CA =this.CheckAnswer(this.OnclickLocation[0],this.OnclickLocation[1],rep.ColumnID,rep.RowID)
+                if(rep.Locate && this.ontouch_group == rep.Group && this.column != rep.ColumnID && CA){
+                    if (this.isDrawing) {
+                        this.isDrawing = false;
+                        this.paths[this.paths.length - 1].endX = endPos.x;
+                        this.paths[this.paths.length - 1].endY = endPos.y;
+                        this.drawPaths();
+                    }
+                    this.ontouch_group=0;
                 }
-                this.ontouch_group=0;
+                else{
+                    if (this.isDrawing) {
+                        this.clearLastPath();
+                    }
+                    this.isDrawing = false;
+                }
             }
             else{
                 this.isDrawing = false;
-                this.clearLastPath();
+                if (this.isDrawing) {
+                    this.clearLastPath();
+                }
             }
         },
         handleTouchStart(e) {
-            var rep =this.JudgeRange(e.touches[0].clientX,e.touches[0].clientY);
+            const startPos = this.getEventPos(e.touches[0]);
+            var rep =this.JudgeRange(startPos.x,startPos.y);
             this.column=rep.ColumnID;
             this.ontouch_group=rep.Group;
             if(rep.Locate){
                 e.preventDefault();
                 this.isDrawing = true;
-                const startPos = this.getEventPos(e.touches[0]);
                 this.paths.push({ startX: startPos.x, startY: startPos.y });
                 this.OnclickLocation=[rep.ColumnID,rep.RowID];
             }
@@ -268,22 +420,35 @@ export default {
             }
         },
         handleTouchEnd(e) {
-            var rep =this.JudgeRange(e.changedTouches[0].clientX,e.changedTouches[0].clientY);
-            var CA =this.CheckAnswer(this.OnclickLocation[0],this.OnclickLocation[1],rep.ColumnID,rep.RowID)
-            if(rep.Locate && this.ontouch_group==rep.Group && this.column != rep.ColumnID && CA){
-                if (this.isDrawing) {
-                    e.preventDefault();
+            console.log(this.isDrawing);
+            const endPos = this.getEventPos(e.changedTouches[0]);
+            var rep =this.JudgeRange(endPos.x,endPos.y);
+            var CAd =this.JudgeAnswered(this.OnclickLocation[0],this.OnclickLocation[1],rep.ColumnID,rep.RowID)
+            if(!CAd){
+                var CA =this.CheckAnswer(this.OnclickLocation[0],this.OnclickLocation[1],rep.ColumnID,rep.RowID)
+                if(rep.Locate && this.ontouch_group==rep.Group && this.column != rep.ColumnID && CA && !CAd){
+                    if (this.isDrawing) {
+                        e.preventDefault();
+                        this.isDrawing = false;
+                        
+                        this.paths[this.paths.length - 1].endX = endPos.x;
+                        this.paths[this.paths.length - 1].endY = endPos.y;
+                        this.drawPaths();
+                        this.ontouch_group=0;
+                    }
+                }
+                else{
                     this.isDrawing = false;
-                    const endPos = this.getEventPos(e.changedTouches[0]);
-                    this.paths[this.paths.length - 1].endX = endPos.x;
-                    this.paths[this.paths.length - 1].endY = endPos.y;
-                    this.drawPaths();
-                    this.ontouch_group=0;
+                    if (this.isDrawing) {
+                        this.clearLastPath();
+                    }
                 }
             }
             else{
                 this.isDrawing = false;
-                this.clearLastPath();
+                if (this.isDrawing) {
+                    this.clearLastPath();
+                }
             }
         },
         drawPaths() {
@@ -311,6 +476,17 @@ export default {
             }
             return {Locate:false , Group:undefined};
         },
+        JudgeAnswered(o_coulum,o_row,column,row){
+            for(var i in this.answered){
+                if(this.answered[i][0][0]==o_coulum && this.answered[i][0][1]==o_row && this.answered[i][1][0]==column && this.answered[i][1][1]==row){
+                    return true;
+                }
+                else if(this.answered[i][0][0]==column && this.answered[i][0][1]==row && this.answered[i][1][0]==o_coulum && this.answered[i][1][1]==o_row){
+                    return true;
+                }
+            }
+            return false;
+        },
         CheckAnswer(o_coulum,o_row,column,row){
             // ans = [[o_coulum,o_row],[column,row]]
             let find_ans=false;
@@ -318,13 +494,14 @@ export default {
             for(var i in this.ans){
                 if((this.ans[i][0][0]==o_coulum && this.ans[i][0][1]==o_row) && (this.ans[i][1][0]==column && this.ans[i][1][1]==row)){
                     find_ans=true;
+                    this.answered.push(this.ans[i])
                     count =i;
                 }
                 else if(this.ans[i][0][0]==column && this.ans[i][0][1]==row && this.ans[i][1][0]==o_coulum && this.ans[i][1][1]==o_row){
                     find_ans=true;
+                    this.answered.push(this.ans[i])
                     count =i;
-                }
-                
+                }  
             }
             if(find_ans){
                 console.log("Link Template Return Correct");
@@ -357,24 +534,23 @@ export default {
 }
 </script>    
 <style scoped>
+    /* FIXME */
     /* Your component styles go here */
+    /* canvas {
+        position: absolute; 
+        top: 0;
+        left: 0;
+    } */
+    .canvas-container {
+        height: 70vh;
+    }
+</style>
+<!-- 
     .canvas-container {
         display: flex; /* 使用 Flexbox 布局 */
         flex-direction: column; /* 子元素垂直排列 */
         align-items: center; /* 子元素水平居中 */
         position: relative; /* 相對定位，作為子元素的定位參考 */
     }
-    canvas {
-         position: absolute; 
-        /*
-        border: 1px solid black;
-        top: 0;
-        left: 0; */
-    }
-    #myButton {
-        margin-top: 20px; /* 按鈕與 canvas 區塊之間的距離 */
-        /* 其他按鈕樣式 */
-    }
-    
-</style>
-    
+
+ -->

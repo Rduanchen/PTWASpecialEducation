@@ -361,12 +361,6 @@ export default {
       this.Dataloaded = true;
     })    
   },
-  mounted() {
-    this.test();
-  },
-  beforeMount(){
-    this.test();
-  },
   methods: {
       PauseIntroVideo() {
         try{
@@ -622,12 +616,6 @@ export default {
       PreviousPage() {
         this.$router.go(-1);
       },
-      test() {
-        var a = document.getElementsByClassName("GameComponent111")
-        console.log(a);
-        console.log(a.offsetHeight);
-        console.log(a.clientHeight);
-      }
     },
   components: {
       hintbutton,
