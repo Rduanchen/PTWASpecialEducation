@@ -66,7 +66,7 @@ export default {
         var cvs=document.getElementById("cvs");
         const ctx=cvs.getContext('2d');
         var img=new Image();
-        img.src=GamesGetAssetsFile(this.GameData.img);
+        img.src=GamesGetAssetsFile(this.id, this.GameData.img);
         img.addEventListener("load", function() {
             ctx.drawImage(this,0,0,cvs.width,cvs.height);
         }, false);
@@ -95,7 +95,7 @@ export default {
         },
         judge_position(event){
             
-            //DEBUG
+            // DEBUG
             // console.log("detect the mouse position...");
             // console.log(event);
             // console.log(event.pageX,event.pageY);

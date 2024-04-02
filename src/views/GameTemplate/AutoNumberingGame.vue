@@ -3,8 +3,10 @@
         <br>
         <br>
         <div class="container">
-            <div class="d-flex justify-content-between flex-row">
-                <canvas ref="canvas" width="700" height="400"></canvas>
+            <div class="d-flex justify-content-between flex-row" id="MainContainer" style="border: solid;">
+                <div class="canvascontainer" style="border: solid;">
+                    <canvas ref="canvas" width="700" height="400"></canvas>    
+                </div>
                 <div class="optionbar d-flex flex-column justify-content-center align-self-center" style="width: 100%;">
                     <p class="h3">{{ this.GameData.Question.Text }}</p>
                     <p class="h5">{{ this.GameConfig.OptionBarText }}</p>
@@ -96,9 +98,15 @@ export default {
         }
     },
     mounted() {
+        let WH = document.getElementById("MainContainer").getBoundingClientRect();
+        8;
         //Create canvas object
         this.canvas = this.$refs.canvas;
         this.context = this.canvas.getContext('2d');
+        //Set canvas size
+        this.canvas.width = WH.width * 0.7;
+        this.canvas.height = WH.height * 0.7;
+        
         //bind error text
         this.error_text = document.getElementById("error_msg");
         //load description image FIXME:This is a temporary solution, will be removed in the future

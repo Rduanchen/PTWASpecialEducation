@@ -16,4 +16,8 @@ export function GetSystemAssetsFile(url,type) {
    return new URL(`../assets/System/`+SystemAssetsDirs[type]+`/${url}`, import.meta.url).href
 }
 
+export function GetTheamsAssetsFile(TheamName) {
+   return new URL(`../theams/${TheamName}`, import.meta.url).href
+}
+
 

@@ -55,10 +55,10 @@
               <component
                   v-if="GameType=='SelfDefine'"
                   :key="this.Nowlevel"
-                  :is="GameData.GameType"
-                  :id="GameID"
-                  :GameData="GameData[Nowlevel-1]" 
-                  :GameConfig="GameConfig"
+                  :is="selfdefinetemplate"
+                  :id="this.GameID"
+                  :GameData="this.GameData.Questions[this.Nowlevel-1]" 
+                  :GameConfig="this.GameConfig"
                   :EnviromerntInfo="GetAllInfo()"
                   @get-info="GetAllInfo"
 
@@ -360,6 +360,11 @@ export default {
       
       this.Dataloaded = true;
     })    
+  },
+  computed:{
+    selfdefinetemplate(){
+      return defineAsyncComponent(() => import(`@/views/PrivateTemplate/Grade${this.$route.params.Grade}/${this.$route.params.id}.vue`))
+    }
   },
   methods: {
       PauseIntroVideo() {
@@ -746,4 +751,3 @@ transform: scale(1.07); /* 放大至原大小的 110% */
 //   background-color: #198754 !important;
 // }
 </style>
-
