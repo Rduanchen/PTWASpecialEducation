@@ -19,5 +19,3 @@ export function GetSystemAssetsFile(url,type) {
 export function GetTheamsAssetsFile(TheamName) {
    return new URL(`../theams/${TheamName}`, import.meta.url).href
 }
-
-

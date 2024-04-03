@@ -54,8 +54,9 @@
                           <div class="card GameCard my-2 flex-grow-1" style="width: 18rem;">
                             <div class="card-body">
                               <img :src="item.Img" class="card-img-top GamePreviewImg" alt="...">
-                              <a class="h5 card-title mt-2 "><router-link :to="{ name: 'Game', params: { id: item.id, Grade: this.ShowGrade, Subject: this.Subject ,GameName: item.Name} }" @click="MakeReadText('' ,'',stop=true)" class="">{{ item.Name }}</router-link><a @click="MakeReadText(item.Name, item.Description)" class="btn btn-primary mx-2"><i class="bi bi-volume-up-fill"></i></a></a>
-                              <p class="card-text text-truncate">{{ item.Description }}</p>
+                              <a class="h5 card-title mt-2 ">
+                                <router-link :to="{ name: 'Game', params: { id: item.id, Grade: this.ShowGrade, Subject: this.Subject ,GameName: item.Name} }" @click="MakeReadText('' ,'',stop=true)" class="">{{ item.Name }}</router-link><a @click="MakeReadText(item.Name, item.Description)" class="btn btn-primary mx-2"><i class="bi bi-volume-up-fill"></i></a></a>
+                              <p class="text-truncate">{{ item.Description }}</p>
                             </div>
                           </div>
                         </div>

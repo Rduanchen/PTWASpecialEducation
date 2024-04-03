@@ -5,10 +5,11 @@
         "Type": "PlainText",
         "Content": "小明剛剛學會看時鐘，但是他在寫作業的時候忘記了部分的答案，請聰明的你/妳幫助小明檢查答案"
     },
-    "TotalLevel": 5,
-    "GameType": "TrueFalseGame",
+    "TotalLevel": 1,
+    "GameType": "SelfDefine",
     "GameConfig": {
-        "GlobalTitle": "請問以下的時間正確嗎?"
+        "GlobalTitle": "請問以下的時間正確嗎?",
+        "Theam": "tests.css"
     },
     "Hint":{
         "ShowAs" : "Single",
@@ -26,26 +27,6 @@
             "Question": "1:40",
             "Answer": false,
             "img": "level1.png"
-        },
-        {
-            "Question": "1:25",
-            "Answer": true,
-            "img":"level2.png"
-        },
-        {
-            "Question": "1:20",
-            "Answer": false,
-            "img":"level3.png"
-        },
-        {
-            "Question": "5:40",
-            "Answer": true,
-            "img":"level4.png"
-        },
-        {
-            "Question": "7:00",
-            "Answer": true,
-            "img":"level5.png"
         }
     ]
 }

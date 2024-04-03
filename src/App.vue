@@ -3,7 +3,12 @@ import { RouterView } from 'vue-router'
 </script>
 
 <template>
-  <router-view/>
+  <router-view v-slot="{ Component, route }">
+    <!-- Use a custom transition or fallback to `fade` -->
+    <transition :name="route.meta.transition || 'fade'">
+      <component :is="Component" :key="route.path" />
+    </transition>
+  </router-view>
 </template>
 
 <script>
@@ -27,5 +32,11 @@ export default {
     max-width: 80%;
   }
   
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
 }
 </style>

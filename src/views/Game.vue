@@ -35,9 +35,8 @@
           </div>
           <div class="row Game_Component">
               <!-- Dynamic import component -->
-            <div class="games" v-if="GameStatus=='Progressing'" ref="GameContainer" id="GameContainer">
+            <div v-if="GameStatus=='Progressing'" ref="GameContainer" id="GameContainer">
               <component
-                class="GameComponent111"
                 v-if="GameType!='SelfDefine'"
                 v-bind:is="this.GameType" 
                 ref="GameComponent"
@@ -49,7 +48,6 @@
                 @add-record="GameDataRecord"  
                 @play-effect="EffectPlayer"  
                 @next-question="NextQuestion">
-                
               </component>
                                
               <component
