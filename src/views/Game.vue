@@ -356,7 +356,6 @@ export default {
       this.GameConfig = this.GameData.GameConfig;
       this.InitHint();  
       this.InitIntroVideo();
-      
       this.Dataloaded = true;
     })();
 
@@ -367,7 +366,6 @@ export default {
     //   this.GameConfig = this.GameData.GameConfig;
     //   this.InitHint();  
     //   this.InitIntroVideo();
-      
     //   this.Dataloaded = true;
     // })    
   },
@@ -507,7 +505,7 @@ export default {
           switch (type) {
               case "CorrectSound":
                   var sound = new Audio()
-                  sound.src = ImportUrl.GetSystemAssetsFile("CorrectAnswer.mp3","effects");
+                  sound.src = ImportUrl.GetSystemEffectAssetsFile("CorrectAnswer.mp3");
                   console.log(sound.src);
                   sound.oncanplaythrough = function(){
                     sound.play();
@@ -516,7 +514,7 @@ export default {
               case "WrongSound":
                   this.WrongTimes++;
                   var sound = new Audio();
-                  sound.src = ImportUrl.GetSystemAssetsFile("WrongAnswer.mp3","effects");
+                  sound.src = ImportUrl.GetSystemEffectAssetsFile("WrongAnswer.mp3");
                   sound.oncanplaythrough = function(){
                     sound.play();
                   }
@@ -525,7 +523,7 @@ export default {
                   this.EffectWindow = true;
                   // this.EffectSrc = new URL(`../assets/Effects/Firework.gif`, import.meta.url).href;
                   var sound = new Audio();
-                  sound.src = ImportUrl.GetSystemAssetsFile("harray.mp3","effects");
+                  sound.src = ImportUrl.GetSystemEffectAssetsFile("harray.mp3");
                   sound.oncanplaythrough = function(){
                     sound.play();
                   }
@@ -535,7 +533,7 @@ export default {
                   break;
               case "HarraySound":
                   var sound = new Audio();
-                  sound.src = ImportUrl.GetSystemAssetsFile("harray.mp3","effects");
+                  sound.src = ImportUrl.GetSystemEffectAssetsFile("harray.mp3");
                   sound.oncanplaythrough = function(){
                     sound.play();
                   }
