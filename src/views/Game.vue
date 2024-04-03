@@ -348,16 +348,28 @@ export default {
     this.Subject = this.$route.params.Subject;
     this.Grade = this.$route.params.Grade;
     this.Name = this.$route.params.GameName;
-    axios.get(`../../Grade${this.Grade}/${this.GameID}.json`)
-    .then((res) => {
+    (async () => {
+      var res = await fetchJson(`./Grade${this.Grade}/${this.GameID}.json`);
       this.GameData = res.data;
+      console.log(this.GameData);
       this.GameType = this.GameData.GameType;
       this.GameConfig = this.GameData.GameConfig;
       this.InitHint();  
       this.InitIntroVideo();
       
       this.Dataloaded = true;
-    })    
+    })();
+
+    // axios.get(`../../Grade${this.Grade}/${this.GameID}.json`)
+    // .then((res) => {
+    //   this.GameData = res.data;
+    //   this.GameType = this.GameData.GameType;
+    //   this.GameConfig = this.GameData.GameConfig;
+    //   this.InitHint();  
+    //   this.InitIntroVideo();
+      
+    //   this.Dataloaded = true;
+    // })    
   },
   computed:{
     selfdefinetemplate(){
