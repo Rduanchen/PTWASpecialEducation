@@ -11,7 +11,7 @@
         <div class="collapse navbar-collapse mx-3" id="navbarText" >
           <div class="container sticky-top d-flex justify-content-end" style="--bs-breadcrumb-divider:'>';" >
             <ol class="breadcrumb mb-0 ">
-              <li class="breadcrumb-item"><i class="bi bi-house"></i><a href="#">  主頁</a></li>
+              <li class="breadcrumb-item"><i class="bi bi-house"></i><a href="#"> 主頁</a></li>
               <li class="breadcrumb-item" aria-current="page"><i class="bi bi-book-half"></i>  <router-link :to="{ name: 'GameSelect', params:{ id:this.Grade }}">  {{ this.Grade }}  年級 {{ Subjects[Subject] }}</router-link></li>
               <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-pen"></i><a>  {{this.Name}}</a></li>
             </ol>
@@ -28,15 +28,17 @@
               <button type="button" class="btn btn-primary flex-fill text-nowrap" disabled>關卡</button>
               <div v-for="(i, key) in GameData.Questions" :key="key" class="grid-item flex-fill d-flex justify-content-between">
                 <!-- <button type="button" class="btn btn-primary w-auto" @click="changelevel(key+1)">{{ key+1 }}</button> -->
-                <button type="button" class="btn btn-primary flex-fill"  @click="changelevel(key+1)" >{{ key+1 }}</button>
+                <button type="button" class="btn btn-success flex-fill" :class="{active:(Nowlevel==key+1)}"  @click="changelevel(key+1)" >{{ key+1 }}</button>
               </div>
               <button type="button" class="btn btn-primary flex-fill text-nowrap" disabled v-if="GameStatus=='Progressing'">時間 : {{ time }}</button>
+              <button type="button" class="btn btn-primary flex-fill text-nowrap" disabled v-if="GameStatus=='Progressing'">總計時間 : {{ totaltime }}</button>
             </div>
           </div>
           <div class="row Game_Component">
               <!-- Dynamic import component -->
-            <div v-if="GameStatus=='Progressing'" ref="GameContainer" id="GameContainer">
+            <div class="games" v-if="GameStatus=='Progressing'" ref="GameContainer" id="GameContainer">
               <component
+                class="GameComponent111"
                 v-if="GameType!='SelfDefine'"
                 v-bind:is="this.GameType" 
                 ref="GameComponent"
@@ -48,15 +50,16 @@
                 @add-record="GameDataRecord"  
                 @play-effect="EffectPlayer"  
                 @next-question="NextQuestion">
+                
               </component>
                                
               <component
                   v-if="GameType=='SelfDefine'"
                   :key="this.Nowlevel"
-                  :is="selfdefinetemplate"
-                  :id="this.GameID"
-                  :GameData="this.GameData.Questions[this.Nowlevel-1]" 
-                  :GameConfig="this.GameConfig"
+                  :is="GameData.GameType"
+                  :id="GameID"
+                  :GameData="GameData[Nowlevel-1]" 
+                  :GameConfig="GameConfig"
                   :EnviromerntInfo="GetAllInfo()"
                   @get-info="GetAllInfo"
 
@@ -178,7 +181,7 @@
                 </div>
               </button>
           </div>
-          <hintbutton :WrongTimes="this.WrongTimes" v-if="GameStatus=='Progressing' && this.Hint['Type']!='Method'" @provide-hint="ProvideHint()"></hintbutton>
+          <hintbutton :HintInfo="HintInfo" v-if="GameStatus=='Progressing' && this.Hint['Type']!='Method'" @provide-hint="ProvideHint()"></hintbutton>
             
               <!-- Temp check box
               For Switch Game Status
@@ -199,7 +202,7 @@
             {{ download_data }}
         </div> -->
         
-        <img :src="EffectSrc" v-if="EffectWindow" id="Effects">
+        <!-- <img :src="EffectSrc" v-if="EffectWindow" id="Effects"> -->
           <!--Modal -->
 
 
@@ -328,10 +331,12 @@ export default {
       GameData: {},
       time: 0,
       totaltime: 0,
+      finaltime: 0,
       intervalId: null,
       EffectWindow: false,
       EffectSrc:'',
       CalculatorSwitch: null,
+      
       Hint:{
         Type: "None",
         Data: {
@@ -340,39 +345,33 @@ export default {
         },
       },
       WrongTimes: 0,
+      MaxWrongTimes:2,
       // SentData2ChildComponent: {},
     };
+  },
+  computed: {
+    HintInfo() {
+      return {
+        WrongTimes: this.WrongTimes,
+        MaxWrongTimes: this.MaxWrongTimes,
+      }
+    }
   },
   created() {
     this.GameID = this.$route.params.id;
     this.Subject = this.$route.params.Subject;
     this.Grade = this.$route.params.Grade;
     this.Name = this.$route.params.GameName;
-    (async () => {
-      var res = await fetchJson(`./Grade${this.Grade}/${this.GameID}.json`);
+    axios.get(`../../Grade${this.Grade}/${this.GameID}.json`)
+    .then((res) => {
       this.GameData = res.data;
-      console.log(this.GameData);
       this.GameType = this.GameData.GameType;
       this.GameConfig = this.GameData.GameConfig;
       this.InitHint();  
       this.InitIntroVideo();
+      
       this.Dataloaded = true;
-    })();
-
-    // axios.get(`../../Grade${this.Grade}/${this.GameID}.json`)
-    // .then((res) => {
-    //   this.GameData = res.data;
-    //   this.GameType = this.GameData.GameType;
-    //   this.GameConfig = this.GameData.GameConfig;
-    //   this.InitHint();  
-    //   this.InitIntroVideo();
-    //   this.Dataloaded = true;
-    // })    
-  },
-  computed:{
-    selfdefinetemplate(){
-      return defineAsyncComponent(() => import(`@/views/PrivateTemplate/Grade${this.$route.params.Grade}/${this.$route.params.id}.vue`))
-    }
+    })    
   },
   methods: {
       PauseIntroVideo() {
@@ -414,11 +413,11 @@ export default {
       },
       ToCSV(data=this.download_data,defaultheader=true) {
         if (defaultheader) {
-          let download = Arr2CSV.MadeCsvFile(this.GameID,this.Name,this.Grade,this.Subject,data,this.totaltime);
+          let download = Arr2CSV.MadeCsvFile(this.GameID,this.Name,this.Grade,this.Subject,data,this.finaltime);
           Arr2CSV.DownloadCSV(download,this.Name);
         }
         else{
-          let download = Arr2CSV.MadeCsvFile(this.GameID,this.Name,this.Grade,this.Subject,data,this.totaltime,this.header);
+          let download = Arr2CSV.MadeCsvFile(this.GameID,this.Name,this.Grade,this.Subject,data,this.finaltime,this.header);
           Arr2CSV.DownloadCSV(download,this.Name);
         }
       },
@@ -445,9 +444,9 @@ export default {
         else{
           this.GameStatus = "Done";
           this.EffectPlayer("FireWorkAnimation");
+          this.finaltime = this.totaltime;
         }
         this.pauseTimer();
-        this.totaltime += this.time;
         this.resetTimer();
         this.startTimer();
       },
@@ -455,30 +454,31 @@ export default {
         this.WrongTimes=0;
         if (this.Nowlevel > 1) {
           this.Nowlevel--;
-        } 
+        }
         this.pauseTimer();
         //FIXME 傳資料進入CSV
         this.resetTimer();
         this.startTimer();
       },
+
       startTimer() {
-        console.log("timer is started")
         if (this.intervalId) {
           return;
         }
-        this.intervalId = setInterval(() => {
+        this.intervalId = window.setInterval(() => {
           this.time++;
+          this.totaltime++;
         }, 1000);
       },
       pauseTimer() {
-        clearInterval(this.intervalId);
+        console.log(this.intervalId)
+        window.clearInterval(this.intervalId);
         this.intervalId = null;
       },
       resetTimer() {
         this.pauseTimer();
         this.time = 0;
-      }
-      ,
+      },
       GameDataRecord(data,SelfDefine=false) {
         //紀錄遊戲資料
         // default ["正確答案","學生作答答案","是否正確","作答秒數(關卡)","作答秒數(總時間)"]
@@ -489,7 +489,7 @@ export default {
           console.log("Self Define Game Data Record");
         }
         else{
-          record = [data[0],data[1],data[2],this.time,this.totaltime,this.Nowlevel];
+          record = [data[0],data[1],data[2],this.time,this.totaltime];
           console.log("Default Game Data Record: "+record);
         }
         try {
@@ -533,7 +533,7 @@ export default {
                   break;
               case "HarraySound":
                   var sound = new Audio();
-                  sound.src = ImportUrl.GetSystemEffectAssetsFile("harray.mp3");
+                  sound.src = ImportUrl.GetSystemAssetsFile("harray.mp3","effects");
                   sound.oncanplaythrough = function(){
                     sound.play();
                   }
@@ -574,6 +574,18 @@ export default {
           console.log("No hint in this game");
           console.warn("No hint in this game");
         }
+        try{
+          this.MaxWrongTimes = this.GameData.Hint.Rule.Value;
+          if (this.MaxWrongTimes == undefined ){
+            this.MaxWrongTimes = 2;
+            console.warn("No MaxWrongTimes in Hint Rule, set to default 2");
+          }
+        }
+        catch{
+          this.MaxWrongTimes = 2;
+          console.warn("No Rule in Hint Rule, set to default:{Type:WrongTimes, Value:2}");
+        }
+          
       },
       ProvideHint(){
         let hint_type = this.Hint["Type"];

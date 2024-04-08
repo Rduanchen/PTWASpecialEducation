@@ -52,11 +52,13 @@
                       <div class="row">
                         <div v-for="item in items.Games" class="col-12 col-md-6 col-lg-4 d-flex align-self-stretch justify-content-md-center mb-3">
                           <div class="card GameCard my-2 flex-grow-1" style="width: 18rem;">
-                            <div class="card-body">
-                              <img :src="item.Img" class="card-img-top GamePreviewImg" alt="...">
-                              <a class="h5 card-title mt-2 ">
-                                <router-link :to="{ name: 'Game', params: { id: item.id, Grade: this.ShowGrade, Subject: this.Subject ,GameName: item.Name} }" @click="MakeReadText('' ,'',stop=true)" class="">{{ item.Name }}</router-link><a @click="MakeReadText(item.Name, item.Description)" class="btn btn-primary mx-2"><i class="bi bi-volume-up-fill"></i></a></a>
-                              <p class="text-truncate">{{ item.Description }}</p>
+                            <div class="card-body d-flex flex-column justify-content-between">
+                              <img :src="item.Img" class="card-img-top" alt="...">
+                              <div class="content d-flex flex-column align-content-end justify-content-end">
+                                <a class="h5 card-title mt-2 d-flex flex-row justify-content-between">
+                                  <router-link :to="{ name: 'Game', params: { id: item.id, Grade: this.ShowGrade, Subject: this.Subject ,GameName: item.Name} }" @click="MakeReadText('' ,'',stop=true)" class="align-self-center">{{ item.Name }}</router-link><a @click="MakeReadText(item.Name, item.Description)" class="btn btn-primary mx-2"><i class="bi bi-volume-up-fill"></i></a></a>
+                                <p class="text-truncate">{{ item.Description }}</p>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -76,13 +78,18 @@
     <div v-if="SearchResult!=null" style="width: 100vw; height: 90vh;" class="row mt-5 justify-content-md-center">
       <p class="h1 mb-3">搜尋結果:</p>
       <div v-for="item in SearchResult" class="col-12 col-md-6 col-lg-4 d-flex align-self-stretch justify-content-md-center mb-3">
-        <div class="card GameCard col-3" style="width: 18rem;">
-          <div class="card-body">
-            <img :src="item.Img" class="card-img-top" alt="...">
-            <a class="h5 card-title mt-2"><router-link :to="{ name: 'Game', params: { id: item.id, Grade: this.ShowGrade, Subject: this.Subject ,GameName: item.Name} }" @click="MakeReadText('' ,'',stop=true)">{{ item.Name }}</router-link><a @click="MakeReadText(item.Name, item.Description)" class="btn btn-primary mx-2"><i class="bi bi-volume-up-fill"></i></a></a>
-            <p class="card-text">{{ item.Description }}</p>
+        
+          <div class="card GameCard my-2 flex-grow-1" style="width: 18rem;">
+            <div class="card-body d-flex flex-column justify-content-between">
+              <img :src="item.Img" class="card-img-top" alt="...">
+              <div class="content d-flex flex-column align-content-end justify-content-end">
+                <a class="h5 card-title mt-2 d-flex flex-row justify-content-between">
+                  <router-link :to="{ name: 'Game', params: { id: item.id, Grade: this.ShowGrade, Subject: this.Subject ,GameName: item.Name} }" @click="MakeReadText('' ,'',stop=true)" class="align-self-center">{{ item.Name }}</router-link><a @click="MakeReadText(item.Name, item.Description)" class="btn btn-primary mx-2"><i class="bi bi-volume-up-fill"></i></a></a>
+                <p class="text-truncate">{{ item.Description }}</p>
+              </div>
+            </div>
           </div>
-        </div>
+      
       </div>
       <div class="row justify-content-center">
         <button class="btn btn-primary btn-block m-5" v-on:click="Return2Menu()" style="height: 3em; width: 20rem">返回目錄</button>
@@ -356,9 +363,5 @@ transition: transform 0.3s ease; /* 平滑過渡效果 */
   img{
     transition: transform 0.3s ease; /* 平滑過渡效果 */
   }
-}
-.GamePreviewImg{
-  width: 100%;
-  height: 70%;
 }
 </style>

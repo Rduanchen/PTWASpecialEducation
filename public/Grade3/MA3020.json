@@ -9,7 +9,7 @@
     "GameType": "SelfDefine",
     "GameConfig": {
         "GlobalTitle": "請問以下的時間正確嗎?",
-        "Theam": "tests.css"
+        "Theam": "test.css"
     },
     "Hint":{
         "ShowAs" : "Single",

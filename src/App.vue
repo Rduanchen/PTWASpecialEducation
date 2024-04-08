@@ -4,11 +4,11 @@ import { RouterView } from 'vue-router'
 
 <template>
   <router-view v-slot="{ Component, route }">
-    <!-- Use a custom transition or fallback to `fade` -->
     <transition :name="route.meta.transition || 'fade'">
       <component :is="Component" :key="route.path" />
     </transition>
   </router-view>
+  <!-- <router-view /> -->
 </template>
 
 <script>

@@ -38,8 +38,9 @@ export function MadeCsvFile(id,name,grade,subject,recoders,totaltime,header=["�
     csv_array.push(["遊戲所屬年級",grade])
     csv_array.push(["總耗時時間(秒)",totaltime])
     csv_array.push(["遊玩紀錄"])
+    let count=1;
     for(var i in recoders){
-        csv_array.push(["第"+i+"關"])
+        csv_array.push(["第"+count+"關"])
         csv_array.push(header)
         for(var j in recoders[i]){
             var temp=[]
@@ -49,6 +50,7 @@ export function MadeCsvFile(id,name,grade,subject,recoders,totaltime,header=["�
             }
             csv_array.push(temp)
         }
+        count++;
     }
     return csv_array;
 }

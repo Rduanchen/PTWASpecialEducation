@@ -1,8 +1,8 @@
 <template>
-    <p class="h3">錯誤次數{{WrongTimes}}</p>
+    <p class="h3">錯誤次數{{this.HintInfo.WrongTimes}}</p>
     <div>
         <div class="progress">
-            <div class="progress-bar bg-danger" role="progressbar" :class="{ p100:this.WrongTimes >= 2, p50:this.WrongTimes == 1, p0: this.WrongTimes ==0}" :aria-valuenow="percentage" aria-valuemin="0" aria-valuemax="100"></div>
+            <div class="progress-bar bg-danger" role="progressbar" :style="{ width:this.hint_percentage }" :aria-valuenow="this.percentage" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
     </div>
     <button class="btn btn-primary text-nowrap img-hover-zoom" data-bs-toggle="modal" data-bs-target="#hint" @click="gethint()" v-if="showhint">
@@ -22,44 +22,48 @@
 <script>
 export default {
     name: 'HintButton',
+    emits: ['provide-hint'],
     data() {
         return {
-            maxWrongTimes: 3,
             showhint: false,
-            percentage: "50",
+            percentage: 0,
         };
     },
     props: {
-        WrongTimes: {
-            type: Number,
-        },
+        HintInfo: {
+            type: Object,
+            required: true,
+        }
     },
     watch: {
-        WrongTimes: 'updated_hint_status',
+        HintInfo: {
+            handler: function () {
+                this.updated_hint_status();
+                console.log(this.HintInfo.WrongTimes);
+            },
+            deep: true,
+        }
+    },
+    computed: {
+        hint_percentage() {
+            return `${this.percentage}%`
+        }
     },
     methods: {
         PauseIntroVideo() {
             try{
-            let video = document.getElementById("introvideo");
-            video.pause();
+                let video = document.getElementById("introvideo");
+                video.pause();
             }catch{}
         },
         gethint() {
             this.$emit('provide-hint');
         },
         updated_hint_status() {
-            if (this.WrongTimes >= this.maxWrongTimes) {
+            if (this.HintInfo.WrongTimes >= this.HintInfo.MaxWrongTimes) {
                 this.showhint = true;
             };
-            if (this.WrongTimes == 2){
-                this.percentage = "100";
-            }
-            else if (this.WrongTimes == 1){
-                this.percentage = "50";
-            }
-            else if (this.WrongTimes == 0){
-                this.percentage = "0";
-            }
+            this.percentage = this.HintInfo.WrongTimes * (100 / this.HintInfo.MaxWrongTimes);
         },
     },
     mounted() {

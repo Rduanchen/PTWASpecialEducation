@@ -12,7 +12,7 @@
     </div>
     <div v-else-if="Status=='Done'" class="d-flex flex-column justify-content-center m-5" id="Done">
         <img src="@/assets/Effects/Firework.gif" id="Effects">
-        <div class="d-flex justify-content-center d-grid gap-3">
+        <div class="d-flex justify-content-center d-grid gap-3 mt-3">
             <button class="btn btn-primary flex-grow-1" v-on:click="EndGame_WithoutDownload">結束遊戲</button>
             <button class="btn btn-primary flex-grow-1" v-on:click="EndGame">結束遊戲(下載紀錄)</button>
             <button class="btn btn-primary flex-grow-1" v-on:click="Restart">重新開始</button>
@@ -21,7 +21,7 @@
 </div>
 </template>
 <script>
-import * as RD from '@/utilitys/readtext.js';
+import * as Read from '@/utilitys/readtext.js';
 
 export default {
     name: 'GameStartandOver',
@@ -49,7 +49,7 @@ export default {
         }
     },
     mounted(){
-        RD.InitReadProccess();
+        Read.InitReadProccess();
         try{
             this.ShowContent = this.intro.Content;
             this.TextCheck = true;
@@ -66,7 +66,7 @@ export default {
     methods:{
         MakeReadText(Title,Description,stop=false){
             let text =  `標題:${Title}。說明:${Description}。`;
-            RD.ReadText(text,stop);
+            Read.ReadText(text,stop);
         },
         StartGame(){
             this.$emit('start-game');

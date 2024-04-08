@@ -2,9 +2,9 @@
     <div class="container d-flex align-items-center justify-content-center">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <div class="card mx-auto">
+                <div class="card mx-auto QuestionCard" >
                     <div class="card-body">
-                        <img class="card-img-top GameImg" :src="imageUrl" alt="Card image cap">
+                        <img class="card-img-top" :src="imageUrl" alt="Card image cap">
                     </div>
                 </div>
             </div>
@@ -16,8 +16,8 @@
                     </div>
                 </div>
                 <div class="d-flex justify-content-center mx-auto d-grid gap-4">
-                    <button type="button" class="btn btn-primary" v-on:click="CheckAnswer(true)"><i class="bi bi-circle"></i>    正確</button>
-                    <button type="button" class="btn btn-primary" v-on:click="CheckAnswer(false)"><i class="bi bi-x-lg"></i>    錯誤</button>
+                    <button type="button" class="btn btn-primary" v-on:click="CheckAnswer(true)"><i class="bi bi-circle"></i>正確</button>
+                    <button type="button" class="btn btn-primary" v-on:click="CheckAnswer(false)"><i class="bi bi-x-lg"></i>錯誤</button>
                 </div>
             </div>
         </div>
@@ -83,9 +83,8 @@ export default {
 button {
     width: 150px;
 }
-.GameImg{
-    height: 60vh;
-    width: auto;
+.QuestionCard {
+    width: 80%;
 }
 
 </style>

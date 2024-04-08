@@ -29,6 +29,11 @@ const router = createRouter({
       path:"/Link",
       name:"Link",
       component:()=>import("@/components/link.vue"),
+    },
+    {
+      path:"/countertest",
+      name:"countertest",
+      component:()=>import("@/components/countertest.vue"),
     }
     ]
 });
