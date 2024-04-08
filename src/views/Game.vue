@@ -5,14 +5,13 @@
         <a class="navbar-brand mx-3" href="#" alt="Home">
             <img src="@/assets/images/nav_bar/logo.png"  />
         </a>
-        <button class="navbar-toggler btn btn-primary mx-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText11" aria-controls="navbarText11" aria-expanded="false" aria-label="Toggle navigation">
-          <router-link :to="{ name: 'GameSelect', params:{ id:this.Grade }}">上一頁</router-link>
+        <button class="navbar-toggler btn btn-primary mx-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText11" aria-controls="navbarText11" aria-expanded="false" aria-label="Toggle navigation" @click="PreviousPage">
         </button>
         <div class="collapse navbar-collapse mx-3" id="navbarText" >
           <div class="container sticky-top d-flex justify-content-end" style="--bs-breadcrumb-divider:'>';" >
             <ol class="breadcrumb mb-0 ">
               <li class="breadcrumb-item"><i class="bi bi-house"></i><a href="#"> 主頁</a></li>
-              <li class="breadcrumb-item" aria-current="page"><i class="bi bi-book-half"></i>  <router-link :to="{ name: 'GameSelect', params:{ id:this.Grade }}">  {{ this.Grade }}  年級 {{ Subjects[Subject] }}</router-link></li>
+              <li class="breadcrumb-item" aria-current="page" @click="PreviousPage"><i class="bi bi-book-half"></i> <a>{{ this.Grade }}  年級 {{ Subjects[Subject] }}</a></li>
               <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-pen"></i><a>  {{this.Name}}</a></li>
             </ol>
           </div>
@@ -358,6 +357,7 @@ export default {
     }
   },
   created() {
+    this.FullScreen();
     this.GameID = this.$route.params.id;
     this.Subject = this.$route.params.Subject;
     this.Grade = this.$route.params.Grade;
@@ -372,6 +372,9 @@ export default {
       
       this.Dataloaded = true;
     })    
+  },
+  mounted(){
+    this.FullScreen();
   },
   methods: {
       PauseIntroVideo() {
@@ -422,7 +425,9 @@ export default {
         }
       },
       reloadPage() {
-        location.reload();
+        // location.reload();
+        this.$router.go(0);
+        this.FullScreen();
       },
       changelevel(change2level) {
         this.WrongTimes=0;
@@ -540,6 +545,25 @@ export default {
                   break;
           }
       },
+      FullScreen(){
+          let elem = document.documentElement;
+          if (elem.requestFullscreen) {
+            elem.requestFullscreen();
+          } else if (elem.webkitRequestFullscreen) { /* Safari */
+            elem.webkitRequestFullscreen();
+          } else if (elem.msRequestFullscreen) { /* IE11 */
+            elem.msRequestFullscreen();
+          }
+      },
+      ExitFullScreen(){
+          if (document.exitFullscreen) {
+            document.exitFullscreen();
+          } else if (document.webkitExitFullscreen) { /* Safari */
+            document.webkitExitFullscreen();
+          } else if (document.msExitFullscreen) { /* IE11 */
+            document.msExitFullscreen();
+          }
+      },
       GetAllInfo() {
         return{
           Subject: this.Subject,
@@ -639,6 +663,7 @@ export default {
         }catch{}
       },
       PreviousPage() {
+        this.ExitFullScreen();
         this.$router.go(-1);
       },
     },
