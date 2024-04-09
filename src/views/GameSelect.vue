@@ -27,7 +27,7 @@
   <section class="GameSelectSection " style="overflow-y: hidden;" v-if="ShowContent">
       <div class="container-fluid mx-3">
           <div class="row">
-              <div class="col-2 SideBar mt-4 gap-2">
+              <div class=" col-lg-2 col-md-3 col-5 SideBar mt-4 gap-2">
                   <div class="row">
                     <p class="h4">現在科目</p>
                     <button class="btn btn-primary" disabled>{{ Subjects[Subject] }}</button>
@@ -44,7 +44,7 @@
               </div>
 
               <!-- 遊戲卡片區域 -->
-              <div class="col-9 container ItemFrame mt-4" v-if="Show" :key="Refresh">
+              <div class="col-7 col-md-9 col-lg-10 container ItemFrame mt-4" v-if="Show" :key="Refresh">
                 <div class="Charpter mb-4 px-0" v-for="items in this.ShowInfo[SelectedChapter].Section" v-if="this.ShowInfo">
                 <div>
                     <h5 class="card-title mb-4">{{ items.Title }}</h5>
