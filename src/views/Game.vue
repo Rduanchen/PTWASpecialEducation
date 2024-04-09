@@ -364,7 +364,7 @@ export default {
     this.Name = this.$route.params.GameName;
     (async () => {
       try {
-        let res = await fetchJson(`../../Grade${this.Grade}/${this.GameID}.json`);
+        let res = await fetchJson(`./Grade${this.Grade}/${this.GameID}.json`);
         this.GameData = res.data;
         this.GameType = this.GameData.GameType;
         this.GameConfig = this.GameData.GameConfig;
