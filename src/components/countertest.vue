@@ -21,12 +21,15 @@ export default {
         };
     },
     watch: {
-        NowTime: {
-            handler: function () {
+        // nowTime(this.ti) {
+
+        // }
+        NowTime() {
+            // handler: function () {
                 this.time = this.NowTime;
                 console.log(this.NowTime);
-            },
-            deep: true,
+            // },
+            // deep: true,
         }
     },
     methods: {
@@ -34,7 +37,7 @@ export default {
     },
     mounted() {
         this.timer.Start();
-        // this.NowTime = this.timer.Time;
+        this.NowTime = this.timer.Time;
     },
     methods: {
         Reset(){

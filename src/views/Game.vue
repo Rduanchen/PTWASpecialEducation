@@ -1,97 +1,98 @@
 <template>
-  <header>
-    <nav class="container-fluid navbar navbar-expand-md navbar-light sticky-top justify-content-around justify-content-md-center" style="justify-content: flex-start !important;">
-      <!-- <nav class="container navbar navbar-expand-md sticky-top justify-content-around" style="width: 100%;"> -->
-        <a class="navbar-brand mx-3" href="#" alt="Home">
-            <img src="@/assets/images/nav_bar/logo.png"  />
-        </a>
-        <button class="navbar-toggler btn btn-primary mx-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText11" aria-controls="navbarText11" aria-expanded="false" aria-label="Toggle navigation" @click="PreviousPage">
-        </button>
-        <div class="collapse navbar-collapse mx-3" id="navbarText" >
-          <div class="container sticky-top d-flex justify-content-end" style="--bs-breadcrumb-divider:'>';" >
-            <ol class="breadcrumb mb-0 ">
-              <li class="breadcrumb-item"><i class="bi bi-house"></i><a href="#"> 主頁</a></li>
-              <li class="breadcrumb-item" aria-current="page" @click="PreviousPage"><i class="bi bi-book-half"></i> <a>{{ this.Grade }}  年級 {{ Subjects[Subject] }}</a></li>
-              <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-pen"></i><a>  {{this.Name}}</a></li>
-            </ol>
+  <div id="GameView" ref="GameView">
+    <header>
+      <nav class="container-fluid navbar navbar-expand-md navbar-light sticky-top justify-content-around justify-content-md-center" style="justify-content: flex-start !important;">
+        <!-- <nav class="container navbar navbar-expand-md sticky-top justify-content-around" style="width: 100%;"> -->
+          <a class="navbar-brand mx-3" href="#" alt="Home">
+              <img src="@/assets/images/nav_bar/logo.png"  />
+          </a>
+          <button class="navbar-toggler btn btn-primary mx-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText11" aria-controls="navbarText11" aria-expanded="false" aria-label="Toggle navigation" @click="PreviousPage">
+          </button>
+          <div class="collapse navbar-collapse mx-3" id="navbarText" >
+            <div class="container sticky-top d-flex justify-content-end" style="--bs-breadcrumb-divider:'>';" >
+              <ol class="breadcrumb mb-0 ">
+                <li class="breadcrumb-item"><i class="bi bi-house"></i><a href="#"> 主頁</a></li>
+                <li class="breadcrumb-item" aria-current="page" @click="PreviousPage"><i class="bi bi-book-half"></i> <a>{{ this.Grade }}  年級 {{ Subjects[Subject] }}</a></li>
+                <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-pen"></i><a>  {{this.Name}}</a></li>
+              </ol>
+            </div>
           </div>
-        </div>
-    </nav>
-  </header>
-  <section>
-    <div class="container-fluid">
-      <div class="row mt-3 justify-content-center">
-        <div class="col-9 GameArea">
-          <div class="row levelbutton d-sm-none d-md-block d-none d-sm-block" v-if="GameStatus=='Progressing'">
-            <div class="d-grid gap-2 d-flex justify-content-center mb-3 levebar">
-              <button type="button" class="btn btn-primary flex-fill text-nowrap" disabled>關卡</button>
-              <div v-for="(i, key) in GameData.Questions" :key="key" class="grid-item flex-fill d-flex justify-content-between">
-                <!-- <button type="button" class="btn btn-primary w-auto" @click="changelevel(key+1)">{{ key+1 }}</button> -->
-                <button type="button" class="btn btn-success flex-fill" :class="{active:(Nowlevel==key+1)}"  @click="changelevel(key+1)" >{{ key+1 }}</button>
+      </nav>
+    </header>
+    <section>
+      <div class="">
+        <div class="row justify-content-center">
+          <div class="col-10 GameArea">
+            <div class="row levelbutton d-sm-none d-md-block d-none d-sm-block" v-if="GameStatus=='Progressing'">
+              <div class="d-grid gap-2 d-flex justify-content-center mb-3 levebar">
+                <button type="button" class="btn btn-primary flex-fill text-nowrap" disabled>關卡</button>
+                <div v-for="(i, key) in GameData.Questions" :key="key" class="grid-item flex-fill d-flex justify-content-between">
+                  <!-- <button type="button" class="btn btn-primary w-auto" @click="changelevel(key+1)">{{ key+1 }}</button> -->
+                  <button type="button" class="btn btn-success flex-fill" :class="{active:(Nowlevel==key+1)}"  @click="changelevel(key+1)" >{{ key+1 }}</button>
+                </div>
+                <button type="button" class="btn btn-primary flex-fill text-nowrap" disabled v-if="GameStatus=='Progressing'">時間 : {{ time }}</button>
+                <button type="button" class="btn btn-primary flex-fill text-nowrap" disabled v-if="GameStatus=='Progressing'">總計時間 : {{ totaltime }}</button>
               </div>
-              <button type="button" class="btn btn-primary flex-fill text-nowrap" disabled v-if="GameStatus=='Progressing'">時間 : {{ time }}</button>
-              <button type="button" class="btn btn-primary flex-fill text-nowrap" disabled v-if="GameStatus=='Progressing'">總計時間 : {{ totaltime }}</button>
             </div>
-          </div>
-          <div class="row Game_Component">
-              <!-- Dynamic import component -->
-            <div class="games" v-if="GameStatus=='Progressing'" ref="GameContainer" id="GameContainer">
-              <component
-                class="GameComponent111"
-                v-if="GameType!='SelfDefine'"
-                v-bind:is="this.GameType" 
-                ref="GameComponent"
-                :key="this.Nowlevel"
-                :id="this.GameID" 
-                :GameData="this.GameData.Questions[this.Nowlevel-1]"   
-                :GameConfig="this.GameConfig"  
-              
-                @add-record="GameDataRecord"  
-                @play-effect="EffectPlayer"  
-                @next-question="NextQuestion">
-                
-              </component>
-                               
-              <component
-                  v-if="GameType=='SelfDefine'"
+
+            <div class="row Game_Component">
+                <!-- Dynamic import component -->
+              <div class="games" v-if="GameStatus=='Progressing'" id="GameContainer">
+                <component
+                  class="GameComponent111"
+                  v-if="GameType!='SelfDefine'"
+                  v-bind:is="this.GameType" 
+                  ref="GameComponent"
                   :key="this.Nowlevel"
-                  :is="selfdefinetemplate"
-                  :id="this.GameID"
-                  :GameData="this.GameData.Questions[this.Nowlevel-1]" 
-                  :GameConfig="this.GameConfig"
-                  :EnviromerntInfo="GetAllInfo()"
-                  @get-info="GetAllInfo"
-
-                  @add-record="GameDataRecord"
-                  @download-data="ToCSV"
-                  @config-header="ConfigHeader"
+                  :id="this.GameID" 
+                  :GameData="this.GameData.Questions[this.Nowlevel-1]"   
+                  :GameConfig="this.GameConfig"  
+                
+                  @add-record="GameDataRecord"  
+                  @play-effect="EffectPlayer"  
+                  @next-question="NextQuestion">
                   
-                  @play-effect="EffectPlayer"
-                  
-                  @next-question="NextQuestion"
-                  @previous-question="PreviousQuestion"
-                  @change-level="changelevel"
-
-                  @start-game="StartGame"
-                  @reload-page="reloadPage"
-                  @change-status="ChangeGameStatus"
-
-                  @timer-start="startTimer"
-                  @timer-pause="pauseTimer"
-                  @timer-reset="resetTimer"
-                  >
-              </component> 
-            </div>
-            <div class="intro" v-else>
-              <GameStartandOver v-if="Dataloaded" :Status="GameStatus" :intro="GameData.IntroText" :GameName="Name" :key="this.Dataloaded" @start-game="StartGame" @download-record="ToCSV" @restart="reloadPage" @previous-page="PreviousPage"></GameStartandOver>
-              <!-- FIXME intro 還沒有加進來 -->
+                </component>
+                                 
+                <component
+                    v-if="GameType=='SelfDefine'"
+                    :key="this.Nowlevel"
+                    :is="selfdefinetemplate"
+                    :id="this.GameID"
+                    :GameData="this.GameData.Questions[this.Nowlevel-1]" 
+                    :GameConfig="this.GameConfig"
+                    :EnviromerntInfo="GetAllInfo()"
+                    @get-info="GetAllInfo"
+  
+                    @add-record="GameDataRecord"
+                    @download-data="ToCSV"
+                    @config-header="ConfigHeader"
+                    
+                    @play-effect="EffectPlayer"
+                    
+                    @next-question="NextQuestion"
+                    @previous-question="PreviousQuestion"
+                    @change-level="changelevel"
+  
+                    @start-game="StartGame"
+                    @reload-page="reloadPage"
+                    @change-status="ChangeGameStatus"
+  
+                    @timer-start="startTimer"
+                    @timer-pause="pauseTimer"
+                    @timer-reset="resetTimer"
+                    >
+                </component> 
+              </div>
+              <div class="intro" v-else>
+                <GameStartandOver v-if="Dataloaded" :Status="GameStatus" :intro="GameData.IntroText" :GameName="Name" :key="this.Dataloaded" @start-game="StartGame" @download-record="ToCSV" @restart="reloadPage" @previous-page="PreviousPage"></GameStartandOver>
+                <!-- FIXME intro 還沒有加進來 -->
+              </div>
             </div>
           </div>
-        </div>
-        <div class="col-2 SideBar d-flex flex-column justify-content-center d-sm-none d-md-block d-none d-sm-block">
-          <p class="card-title h3 mt-3 mb-3 text-center">功能區</p>
-          <div class="card">
-            <div class="card-body d-flex flex-column justify-content-center d-grid gap-3 my-1" style="">
+          <div class="col-2 SideBar">
+            <p class="Title">功能區</p>
+            <div class="Buttons">
               <button class="btn btn-primary text-nowrap img-hover-zoom" @click="PreviousQuestion()">
                 <div class="d-flex align-items-center">
                   <div class="">
@@ -179,118 +180,93 @@
                   </div>
                 </div>
               </button>
+              <hintbutton :HintInfo="HintInfo" v-if="GameStatus=='Progressing' && this.Hint['Type']!='Method'" @provide-hint="ProvideHint()"></hintbutton>
+            </div>
           </div>
-          <hintbutton :HintInfo="HintInfo" v-if="GameStatus=='Progressing' && this.Hint['Type']!='Method'" @provide-hint="ProvideHint()"></hintbutton>
-            
-              <!-- Temp check box
-              For Switch Game Status
-              <select v-model="GameStatus">
-                <option value="">請選擇一個選項</option>
-                <option value="NotStart">NotStart</option>
-                <option value="Progressing">Progressing</option>
-                <option value="Done">Done</option>
-              </select> -->
-          </div>
+
+            <!-- Modal -->
+            <div class="fade modal" id="Calculator" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-xl" style="max-height: 90vh;">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <div class="modal-title fs-5 mx-auto" id="exampleModalLabel">
+                      <button class="btn btn-primary mx-3" @click="CalculatorSwitch=false">計算紙</button>
+                      <button class="btn btn-primary mx-3" @click="CalculatorSwitch=true" :key="CalculatorSwitch">直式計算版</button>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body justify-content-center" v-if="CalculatorSwitch!=null">
+                    <DrawCanvas v-if="CalculatorSwitch==false" style="height: 70vh;"></DrawCanvas>
+                    <Calculator v-if="CalculatorSwitch==true"></Calculator>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="CalculatorSwitch==null">關閉!</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+  
+            <!--FIXME teach -->
+            <div class="fade modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">不會玩嗎?請看教學影片:</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="PauseIntroVideo()"></button>
+                  </div>
+                  <div class="modal-body justify-content-center">
+                    <div id="novideo" v-if="introvideo==false">
+                      <p class="h1">ㄨㄚˊ，找不到教學影片~~~</p>
+                      <img src="@/assets/images/game_images/elephant.gif">
+                    </div>
+                    <div id="havevideo" v-else>
+                      <video id="introvideo" :src="VideoSrc" controls="controls" class="img-fluid" style="height: 70vh;"></video>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="PauseIntroVideo()">我知道了!</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+  
+            <!-- Hint app -->
+            <div class="fade modal" id="hint" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-xl">
+                <div class="modal-content" style="height: 90vh;">
+                  <!-- <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">這是提示</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div> -->
+                  <div class="modal-body d-flex justify-content-center" >
+                    <!-- <p>Hello</p>
+                    {{ this.Hint['Type'] }} -->
+                    <div class="content Type-None" v-if="this.Hint['Type']=='None'">
+                      <p class="h1">喔喔，沒有提供相關的資源</p>
+                      <img src="@/assets/images/game_images/elephant.gif" class="">
+                    </div>
+                    <div class="content Type-Level" v-if="this.Hint['Type']=='Level'" :key="this.TotalLevel">
+                      <p class="h1">這是關卡提示</p>
+                      <video id="Hint-video" :src="this.Hint['Data']['FilePath']" controls="controls" class="img-fluid" v-if="this.Hint.Data.SourceType=='video'"></video>
+                      <img :src="this.Hint['Data']['FilePath']" class="img-fluid" v-if="this.Hint.Data.SourceType=='image'">
+                    </div>
+                    <div class="content Type-Single" v-if="this.Hint['Type']=='Single'">
+                      <p class="h1">這是單一提示</p>
+                      <video id="Hint-video" :src="this.Hint['Data']['FilePath']" controls="controls" class="img-fluid" v-if="this.Hint.Data.SourceType=='video'"></video>
+                      <img :src="this.Hint['Data']['FilePath']" class="img-fluid" v-if="this.Hint.Data.SourceType=='image'">
+                    </div>
+                    <!-- //FIXME video 自動暫停 -->
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="PauseHintVideo()">我知道了!</button>
+                  </div>
+                </div>
+              </div>
+            </div>
         </div>
-        <!-- <div class="testcontrolpanel">
-            <button type="button" v-on:click="EffectPlayer('CorrectSound')">CorrectSound</button>
-            <button type="button" v-on:click="EffectPlayer('WrongSound')">WrongSound</button>
-            <button type="button" v-on:click="EffectPlayer('FireWorkAnimation')">FireWorkAnimation</button>
-        </div>
-        <div class="box">
-            {{ download_data }}
-        </div> -->
-        
-        <!-- <img :src="EffectSrc" v-if="EffectWindow" id="Effects"> -->
-          <!--Modal -->
-
-
-
-          <!-- Button trigger modal -->
-          <!-- <button class="btn btn-primary text-nowrap img-hover-zoom" data-bs-toggle="modal" data-bs-target="#Calculator">計算</button> -->
-
-          <!-- Modal -->
-          <div class="fade modal" id="Calculator" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xl" style="max-height: 90vh;">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <div class="modal-title fs-5 mx-auto" id="exampleModalLabel">
-                    <button class="btn btn-primary mx-3" @click="CalculatorSwitch=false">計算紙</button>
-                    <button class="btn btn-primary mx-3" @click="CalculatorSwitch=true" :key="CalculatorSwitch">直式計算版</button>
-                  </div>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body justify-content-center" v-if="CalculatorSwitch!=null">
-                  <DrawCanvas v-if="CalculatorSwitch==false" style="height: 70vh;"></DrawCanvas>
-                  <Calculator v-if="CalculatorSwitch==true"></Calculator>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="CalculatorSwitch==null">關閉!</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!--FIXME teach -->
-          <div class="fade modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xl">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h1 class="modal-title fs-5" id="exampleModalLabel">不會玩嗎?請看教學影片:</h1>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="PauseIntroVideo()"></button>
-                </div>
-                <div class="modal-body justify-content-center">
-                  <div id="novideo" v-if="introvideo==false">
-                    <p class="h1">ㄨㄚˊ，找不到教學影片~~~</p>
-                    <img src="@/assets/images/game_images/elephant.gif">
-                  </div>
-                  <div id="havevideo" v-else>
-                    <video id="introvideo" :src="VideoSrc" controls="controls" class="img-fluid" style="height: 70vh;"></video>
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="PauseIntroVideo()">我知道了!</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Hint app -->
-          <div class="fade modal" id="hint" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xl">
-              <div class="modal-content" style="height: 90vh;">
-                <!-- <div class="modal-header">
-                  <h1 class="modal-title fs-5" id="exampleModalLabel">這是提示</h1>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div> -->
-                <div class="modal-body d-flex justify-content-center" >
-                  <!-- <p>Hello</p>
-                  {{ this.Hint['Type'] }} -->
-                  <div class="content Type-None" v-if="this.Hint['Type']=='None'">
-                    <p class="h1">喔喔，沒有提供相關的資源</p>
-                    <img src="@/assets/images/game_images/elephant.gif" class="">
-                  </div>
-                  <div class="content Type-Level" v-if="this.Hint['Type']=='Level'" :key="this.TotalLevel">
-                    <p class="h1">這是關卡提示</p>
-                    <video id="Hint-video" :src="this.Hint['Data']['FilePath']" controls="controls" class="img-fluid" v-if="this.Hint.Data.SourceType=='video'"></video>
-                    <img :src="this.Hint['Data']['FilePath']" class="img-fluid" v-if="this.Hint.Data.SourceType=='image'">
-                  </div>
-                  <div class="content Type-Single" v-if="this.Hint['Type']=='Single'">
-                    <p class="h1">這是單一提示</p>
-                    <video id="Hint-video" :src="this.Hint['Data']['FilePath']" controls="controls" class="img-fluid" v-if="this.Hint.Data.SourceType=='video'"></video>
-                    <img :src="this.Hint['Data']['FilePath']" class="img-fluid" v-if="this.Hint.Data.SourceType=='image'">
-                  </div>
-                  <!-- //FIXME video 自動暫停 -->
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="PauseHintVideo()">我知道了!</button>
-                </div>
-              </div>
-            </div>
-          </div>
-      </div>
-    </div>    
-  </section>
+      </div>    
+    </section>
+  </div>
 </template>
 
 <script>
@@ -304,7 +280,7 @@ import hintbutton from '@/components/hintbutton.vue';
 import * as ImportUrl from '@/utilitys/get_assets.js';
 import axios from 'axios';
 import {defineAsyncComponent} from 'vue';
-
+import { useFullscreen } from '@vueuse/core'
 
 export default {
   data() {
@@ -360,7 +336,6 @@ export default {
     }
   },
   created() {
-    this.FullScreen();
     this.GameID = this.$route.params.id;
     this.Subject = this.$route.params.Subject;
     this.Grade = this.$route.params.Grade;
@@ -388,7 +363,7 @@ export default {
     //   this.InitIntroVideo();
       
     //   this.Dataloaded = true;
-    // })    
+    // })
   },
   mounted(){
     this.FullScreen();
@@ -407,7 +382,7 @@ export default {
           this.introvideo = true;
         } catch (error) {
           this.introvideo = false;
-          console.log("No Intro Video");
+          // console.log("No Intro Video");
           console.warn("No Intro Video:", error);
         }
         let patten = /\.mp4$/i;
@@ -442,9 +417,12 @@ export default {
         }
       },
       reloadPage() {
-        // location.reload();
-        this.$router.go(0);
-        this.FullScreen();
+        this.GameStatus= "NotStart"
+        this.Nowlevel = 1;
+        this.WrongTimes=0;
+        this.pauseTimer();
+        this.resetTimer();
+        this.download_data = [[]];
       },
       changelevel(change2level) {
         this.WrongTimes=0;
@@ -493,7 +471,6 @@ export default {
         }, 1000);
       },
       pauseTimer() {
-        console.log(this.intervalId)
         window.clearInterval(this.intervalId);
         this.intervalId = null;
       },
@@ -523,12 +500,12 @@ export default {
       },
       EffectPlayer(type) {
         //播放音效
-        console.log("Play Effect, type: "+type);
+        // console.log("Play Effect, type: "+type);
           switch (type) {
               case "CorrectSound":
                   var sound = new Audio()
                   sound.src = ImportUrl.GetSystemEffectAssetsFile("CorrectAnswer.mp3");
-                  console.log(sound.src);
+                  // console.log(sound.src);
                   sound.oncanplaythrough = function(){
                     sound.play();
                   }
@@ -563,14 +540,19 @@ export default {
           }
       },
       FullScreen(){
+        try{
           let elem = document.documentElement;
           if (elem.requestFullscreen) {
-            elem.requestFullscreen();
+            elem.requestFullscreen()
           } else if (elem.webkitRequestFullscreen) { /* Safari */
             elem.webkitRequestFullscreen();
           } else if (elem.msRequestFullscreen) { /* IE11 */
             elem.msRequestFullscreen();
           }
+        }catch(error){
+
+        }
+          // window.removeEventListener('mousemove', this.FullScreen);
       },
       ExitFullScreen(){
           if (document.exitFullscreen) {
@@ -602,7 +584,7 @@ export default {
 
       InitHint() {
         // 紀錄提示種類，有則設定hint_type為提示種類，沒有則設定hint_type為None
-        console.log(this.GameData.Hint)
+        // console.log(this.GameData.Hint)
         let hint_exist = false;
         let RuleType
         let hint_type
@@ -612,7 +594,7 @@ export default {
         }
         catch{
           this.Hint["Type"] = "None";
-          console.log("No hint in this game");
+          // console.log("No hint in this game");
           console.warn("No hint in this game");
         }
         try{
@@ -642,7 +624,7 @@ export default {
               // this.Hint["Data"]['FilePath'] = ImportUrl.GamesGetAssetsFile(this.GameID,this.GameData.Hint.Data[this.Nowlevel-1].FilePath);
             }
             catch{
-              console.log("Missing data in Hint, type: Level");
+              // console.log("Missing data in Hint, type: Level");
               console.warn("Missing data in Hint, type: Level");
               this.Hint["Type"] = "None";
             }
@@ -655,7 +637,7 @@ export default {
               this.Hint.Data.SourceType = this.GameData.Hint.Data.SourceType;
             }
             catch{
-              console.log("Missing data in Hint, type: Single");
+              // console.log("Missing data in Hint, type: Single");
               console.warn("Missing data in Hint, type: Single");
               this.Hint["Type"] = "None";
             }
@@ -668,7 +650,7 @@ export default {
             this.Hint["Type"] = "Method";
             break;
           default:
-            console.log("No hint in this game");
+            // console.log("No hint in this game");
             console.warn("No hint in this game");
             this.Hint["Type"] = "None";
         }
@@ -699,13 +681,14 @@ export default {
       FindTheItemGame: defineAsyncComponent(() => import('@/views/GameTemplate/FindTheItemGame.vue')),
       AutoNumberingGame: defineAsyncComponent(() => import('@/views/GameTemplate/AutoNumberingGame.vue')),
       NumberingGame: defineAsyncComponent(() => import('@/views/GameTemplate/NumberingGame.vue')),
+      CompareGame: defineAsyncComponent(() => import('@/views/GameTemplate/CompareGame.vue'))
   }
 }
 </script>
 <style scoped lang="scss">
 header{
-background-color: #F19C79;
-height: 10vh;
+  background-color: #F19C79;
+  height: 10vh;
 }
 
 .navbar {
@@ -763,10 +746,7 @@ transform: scale(1.07); /* 放大至原大小的 110% */
   }
 }
 .GameArea {
-  background-color: #fff;
-  border-radius: 10px;
-  // border: #000 1px solid;
-  height: 85vh;
+  margin-top: 2vh;
 }
 #Effects {
   position: absolute;
@@ -776,10 +756,26 @@ transform: scale(1.07); /* 放大至原大小的 110% */
   height: 100vh;
 }
 .SideBar{
-  border-radius: 10px;
-  height: 85vh;
+  border-left: solid 3px #aaa;
+  background-color: #FFEDDA;
+  height: 88vh;
+  width: 15vw;
+  justify-content: start;
+  align-items: start;
+  display: flex;
+  flex-direction: column;
+  padding: 3vh 2vw;
+  .Buttons{
+    display: grid;
+    gap: 3vh;
+  }
+  .Title{
+    font-size: 2rem;
+    text-align: start;
+  }
   button{
     font-size: 2vw;
+    border-radius: 20px;
   }
   svg{
     width: 2vw;
@@ -788,11 +784,17 @@ transform: scale(1.07); /* 放大至原大小的 110% */
 }
 
 .Game_Component{
-  width: 75vw !important;
-  // height: 70vh !important;
-  overflow-y: auto;
+  width: 84vw !important;
+  height: 79vh;
+  // overflow-y: scroll;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  align-self: center;
+  // overflow-y: auto;
   overflow-x: auto;
 }
+
 .content{
   display: flex;
   flex-direction: column;

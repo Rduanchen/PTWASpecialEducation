@@ -59,7 +59,7 @@ export default {
         }
         catch(e){
             console.warn(this.NameofThisComponent + "No intro text found");
-            console.log(e);
+            // console.log(e);
         }
 
     },

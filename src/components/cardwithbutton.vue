@@ -1,8 +1,11 @@
 <template>
 <div>
     <div class="card">
-    <img :src="imageURL" class="card-img-top" :alt="altText">
-    <div class="card-body">
+    <div v-if="this.imageURL != 'undefine'">
+        <img :src="imageURL" class="card-img-top" :alt="altText">
+    </div>
+    
+    <div class="card-body" v-if="this.Text != 'undefine'">
         <p class="card-text">{{ Text }}</p>
     </div>
     </div>

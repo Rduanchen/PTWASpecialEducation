@@ -2,14 +2,14 @@
 <div class="container">
     <h1>{{ this.GameData.Question.text }}</h1>
     <hr>
-    <draggable :list="options" group="Sentense">
+    <draggable :list="options" :key="options[0]" group="Sentense">
         <template #item="{ element }">
         <button type="button" class="btn btn-primary m-1 my-btn">{{ element }}</button>
         </template>
     </draggable>
     <br>
     <hr>
-    <button type="button" class="btn btn-primary btn-lg btn-block" @click="CheckAnswer()">Submit</button>
+    <button type="button" class="btn btn-primary btn-lg btn-block" @click="CheckAnswer()">送出答案</button>
 </div>
 </template>
 
@@ -46,6 +46,9 @@ export default {
     created(){
         this.UpdateQuestion();
         // setInterval(this.IntervalCheckUpdate, 500);
+    },
+    mounted(){
+
     },
     methods: {
         UpdateQuestion(){
@@ -114,6 +117,13 @@ export default {
 }
 .my-btn {
   font-size: 2rem; /* 這裡可以調整文字大小 */
+}
+.container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* align-items: center; */
+    align-self: center;
 }
 
 </style>

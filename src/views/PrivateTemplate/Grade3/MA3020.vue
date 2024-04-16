@@ -42,7 +42,9 @@ export default {
     },
     mounted() {
         try{
-            import(GetTheamsAssetsFile(this.GameConfig.Theam))
+            if(this.GameConfig.Theam){
+                import(GetTheamsAssetsFile(this.GameConfig.Theam))
+            }
         }
         catch{
             console.log('Using Default Theam')
@@ -52,5 +54,8 @@ export default {
 </script>
 
 <style scoped>
+#Hello {
+    color: pink;
+}
 
 </style>
