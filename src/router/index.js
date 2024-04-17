@@ -34,11 +34,6 @@ const router = createRouter({
       path:"/countertest",
       name:"countertest",
       component:()=>import("@/components/countertest.vue"),
-    },
-    {
-      path:"/CompareGame",
-      name:"CompareGame",
-      component:()=>import("@/views/GameTemplate/CompareGame.vue"),
     }
     ]
 });

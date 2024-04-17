@@ -16,7 +16,7 @@
         <div v-for="(item, index) in GameData.Datas" :key="index" class="QuestionContainer">
             <section class="QuestionRow">
                 <div class="card CompareCard" style="width: 18rem;">
-                    <img src="..." class="card-img-top" :alt="item[0].alt">
+                    <img src="" class="card-img-top" :alt="item[0].alt">
                     <div class="card-body">
                         <p class="card-text">{{ item[0].text }}</p>
                     </div>
@@ -27,7 +27,7 @@
                     </template>
                 </draggable>
                 <div class="card" style="width: 18rem;">
-                    <img src="..." class="card-img-top" :alt="item[1].alt">
+                    <img src="" class="card-img-top" :alt="item[1].alt">
                     <div class="card-body">
                         <p class="card-text">{{ item[1].text }}</p>
                     </div>
@@ -143,7 +143,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .Title{
     margin-left: 2rem;
 }

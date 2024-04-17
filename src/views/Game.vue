@@ -281,6 +281,7 @@ import * as ImportUrl from '@/utilitys/get_assets.js';
 import axios from 'axios';
 import {defineAsyncComponent} from 'vue';
 import { useFullscreen } from '@vueuse/core'
+import CompareGame from './GameTemplate/CompareGame.vue';
 
 export default {
   data() {
@@ -673,6 +674,7 @@ export default {
       GameStartandOver,
       loading,
       LinkGame: defineAsyncComponent(() => import('@/views/GameTemplate/LinkGame.vue')),
+      CompareGame: defineAsyncComponent(() => import('@/views/GameTemplate/CompareGame.vue')),
       TrueFalseGame: defineAsyncComponent(() => import('@/views/GameTemplate/TrueFalseGame.vue')),
       SelectGame: defineAsyncComponent(() => import('@/views/GameTemplate/SelectGame.vue')),
       NumberInputGame: defineAsyncComponent(() => import('@/views/GameTemplate/NumberInputGame.vue')),
@@ -681,7 +683,7 @@ export default {
       FindTheItemGame: defineAsyncComponent(() => import('@/views/GameTemplate/FindTheItemGame.vue')),
       AutoNumberingGame: defineAsyncComponent(() => import('@/views/GameTemplate/AutoNumberingGame.vue')),
       NumberingGame: defineAsyncComponent(() => import('@/views/GameTemplate/NumberingGame.vue')),
-      CompareGame: defineAsyncComponent(() => import('@/views/GameTemplate/CompareGame.vue'))
+      
   }
 }
 </script>

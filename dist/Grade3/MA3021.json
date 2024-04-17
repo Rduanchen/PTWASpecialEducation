@@ -1,0 +1,23 @@
+{
+    "id":"MA3021",
+    "introvideo": "src",
+    "TotalLevel": 5,
+    "GameType" : "NumberInputGame",
+    "IntroText": {
+        "Type": "PlainText",
+        "Content": "數學不好的哥哥打算買運動相關的用品，請聰明的你幫哥哥算出總共要花多少錢"
+    },
+    "GameConfig":{
+
+    },
+    "Hint" : {
+        "ShowAs" : "None"
+    },
+    "Questions":[
+        {
+            "Question": "哥哥買了一雙1289元的運動鞋，和一件1455元的棒球衣，一共花了多少元？",
+            "Answer": "2744",
+            "img" : ""
+        }
+    ]
+}

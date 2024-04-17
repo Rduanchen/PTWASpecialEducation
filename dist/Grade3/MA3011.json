@@ -13,8 +13,7 @@
     "Hint":{
         "ShowAs" : "Single",
         "Rule" : {
-            "RuleType": "WrongTimes",
-            "Value":  2
+            "RuleType": "WrongTimes"
         },
         "Data" :{
             "SourceType" : "video",
