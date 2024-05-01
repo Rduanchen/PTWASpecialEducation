@@ -10,7 +10,6 @@
       </div>
     </div>
     <OptionButton :optionsActive="optionsActive" @optionsEvent="optionsEvent"></OptionButton>
-    
   </div>
 </template>
 

@@ -39,6 +39,11 @@ const router = createRouter({
       path:"/CompareGame",
       name:"CompareGame",
       component:()=>import("@/views/GameTemplate/CompareGame.vue"),
+    },
+    {
+      path:"/calculatorV2",
+      name:"calculatorV2",
+      component:()=>import("@/components/calculatorV2.vue"),
     }
     ]
 });

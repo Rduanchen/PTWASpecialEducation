@@ -1,15 +1,22 @@
 <template>
-<div class="container d-flex justify-content-center align-content-center">
-    <div v-if="Status=='NotStart'" class="d-flex flex-column justify-content-center m-5 d-grid gap-0">
+<div class="container">
+    <div v-if="Status=='NotStart'" class="Start">
         <h1>{{ GameName }}</h1>
-        <div v-if="TextCheck">
+        <div v-if="TextCheck" class="card">
             <h4 v-if="IntroType=='Html'" v-html="ShowContent"></h4>
             <h4 v-else-if="IntroType=='PlainText'">{{ShowContent}}</h4>
             <h4 v-else>無介紹文字</h4>
         </div>
-        <button class="btn btn-primary" v-on:click="StartGame();MakeReadText('','',stop=true)">開始遊戲</button>
-        <button class="btn btn-primary" v-on:click="MakeReadText(GameName,ShowContent)">朗讀</button>
+        <div class="buttons">
+            <button class="btn btn-primary" v-on:click="StartGame();MakeReadText('','',stop=true)">開始遊戲</button>
+            <button class="btn btn-primary" v-on:click="MakeReadText(GameName,ShowContent)">朗讀</button>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">教學影片</button>
+        </div>
+        
     </div>
+
+
+
     <div v-else-if="Status=='Done'" class="d-flex flex-column justify-content-center m-5" id="Done">
         <img src="@/assets/Effects/Firework.gif" id="Effects">
         <div class="d-flex justify-content-center d-grid gap-3 mt-3">
@@ -85,15 +92,43 @@ export default {
 }
 </script>
 <style scoped>
-.container{
-    height: 75vh;
-    width: auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
 #Effects{
     width: auto;
     height: 50vh;
+}
+.container{
+    height: 75vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+    .Start{
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        gap: 1.2rem;
+        max-width: 40vw;
+        .card{
+            width: 100%;
+            padding: 1rem 1rem;
+            background-color: #f0f0f0;
+            h4{
+                line-height: 3rem;
+            }
+            
+        }
+        .buttons{            
+            width: 100%;
+            display: grid;
+            gap: 1rem;
+            grid-auto-flow: column;
+            button{
+                height: 4rem;
+                font-size: x-large;
+                border-radius: 1rem;
+            }
+        }
+    }
 }
 </style>

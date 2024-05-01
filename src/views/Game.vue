@@ -2,7 +2,6 @@
   <div id="GameView" ref="GameView">
     <header>
       <nav class="container-fluid navbar navbar-expand-md navbar-light sticky-top justify-content-around justify-content-md-center" style="justify-content: flex-start !important;">
-        <!-- <nav class="container navbar navbar-expand-md sticky-top justify-content-around" style="width: 100%;"> -->
           <a class="navbar-brand mx-3" href="#" alt="Home">
               <img src="@/assets/images/nav_bar/logo.png"  />
           </a>
@@ -86,14 +85,13 @@
               </div>
               <div class="intro" v-else>
                 <GameStartandOver v-if="Dataloaded" :Status="GameStatus" :intro="GameData.IntroText" :GameName="Name" :key="this.Dataloaded" @start-game="StartGame" @download-record="ToCSV" @restart="reloadPage" @previous-page="PreviousPage"></GameStartandOver>
-                <!-- FIXME intro 還沒有加進來 -->
               </div>
             </div>
           </div>
           <div class="col-2 SideBar">
             <p class="Title">功能區</p>
             <div class="Buttons">
-              <button class="btn btn-primary text-nowrap img-hover-zoom" @click="PreviousQuestion()">
+              <button class="btn btn-primary text-nowrap img-hover-zoom" @click="PreviousQuestion()" v-if="GameStatus=='Progressing'">
                 <div class="d-flex align-items-center">
                   <div class="">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up" viewBox="0 0 16 16">
@@ -105,7 +103,7 @@
                   </div>
                 </div>
               </button>
-              <button class="btn btn-primary text-nowrap img-hover-zoom" @click="NextQuestion()">
+              <button class="btn btn-primary text-nowrap img-hover-zoom" @click="NextQuestion()" v-if="GameStatus=='Progressing'">
                 <div class="d-flex align-items-center">
                   <div class="">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down" viewBox="0 0 16 16">
@@ -422,6 +420,9 @@ export default {
         this.WrongTimes=0;
         this.pauseTimer();
         this.resetTimer();
+        this.time=0;
+        this.totaltime=0;
+        this.finaltime= 0;++
         this.download_data = [[]];
       },
       changelevel(change2level) {
