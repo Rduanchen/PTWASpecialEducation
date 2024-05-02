@@ -1,33 +1,27 @@
 <template>
 <div class="container">
-    <div class="row">
-        <div class="col-8">
-            <div class="card">
-                <div class="card-body d-flex justify-content-center">
-                    <img class="card-img-top GameImg" :src="imageUrl" :alt="GameData.img_alt">
-                </div>
-            </div>
-        </div>
-        <div class="col-4 align-self-center justify-content-center">
-            <div class="card">
-                <div class="card-body">
-                    <p class="h2">{{ this.GameData.Question }}</p>
-                </div>
-            </div>
-            <VirtualNumPad v-on:submit="GetSubmitData" ref="VirtualNumPad"></VirtualNumPad>
-        </div>
+    <div class="ImageCard">
+        <img class="card-img-top GameImg" v-if="SlotComponentSwitch==false" :src="imageUrl" :alt="GameData.img_alt">
+        <component v-if="SlotComponentSwitch==true" :is="this.comp"></component>
+    </div>
+    <div class="AnswerArea">    
+        <p>{{ this.GameData.Question }}</p>
+        <VirtualNumPad v-on:submit="GetSubmitData" ref="VirtualNumPad"></VirtualNumPad>
     </div>
 </div>
 </template>
 
 <script>
-import VirtualNumPad from '@/components/VirtualNumPad.vue'; 
+import VirtualNumPad from '@/components/VirtualNumPad.vue';
 import { GamesGetAssetsFile } from '@/utilitys/get_assets.js';
+import { defineAsyncComponent } from 'vue';
 export default {
     name: 'NumberInputGame',
     data() {
         return {
-            imageUrl : ''
+            imageUrl : '',
+            SlotComponentSwitch: false,
+            SlotComponent: "",
         };
     },
     props: {
@@ -71,20 +65,87 @@ export default {
             }
         }
     },
+    mounted(){
+        const img = document.querySelector('.GameImg');
+        try{
+            // Image ration
+            const aspectRatio = this.GameData.img_width / this.GameData.img_height;
+            if (aspectRatio > 1) {
+                // Landscape
+                img.style.width = '100%';
+                img.style.height = 'auto';
+
+            } else {
+                // Portrait
+                img.style.width = 'auto';
+                img.style.height = '100%';
+                const ImageCard = document.querySelector('.ImageCard');
+                ImageCard.style.width = '50%';
+                const AnswerArea = document.querySelector('.AnswerArea');
+                AnswerArea.style.width = '30%';
+            }
+        } catch (error) {
+            console.warn('NumberInputGame: Image No Found');
+        }
+    },
     created() {
         this.imageUrl=GamesGetAssetsFile(this.id,this.GameData.img)
+        console.log(this.GameConfig.SlotComponentSwitch);
+        if(this.GameConfig.SlotComponentSwitch == true){
+            this.SlotComponentSwitch = true;
+            if (this.GameData.ComponentName){
+                this.SlotComponent = this.GameData.ComponentName;
+            }
+            else{
+                this.SlotComponentSwitch = false;
+            }
+        }
+        else{
+            this.SlotComponentSwitch = false;
+        }
     },
     components: {
-        VirtualNumPad
+        VirtualNumPad,
+        Slot1: defineAsyncComponent(() => import("@/components/dragableslotdemo.vue")),
+        Slot2: defineAsyncComponent(() => import("@/components/dragableslotdemo2.vue"))
     }
 };
-</script>
 
+
+</script>
 <style scoped>
 /* Your component styles go here */
 .GameImg{
-    overflow: hidden;
-    height: 60vh;
-    width: auto;
+    img{
+        max-width: 100%; 
+        height: auto;
+        flex: 1 1 auto;
+    }  
+}
+.container{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    .ImgCard{
+        align-self: center;
+    }
+    .ImageCard{
+        width: 70%;
+        margin: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .AnswerArea{
+        width: 30%;
+        margin: 1rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        p{
+            font-size: 1.5em;
+        }
+    }
 }
 </style>

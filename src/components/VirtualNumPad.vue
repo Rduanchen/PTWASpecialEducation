@@ -26,7 +26,7 @@
             <div class="row">
                 <div class="col-4 mb-2"><button class="btn btn-danger w-100 responsive-width text-nowrap" id="backspace" v-on:click="delete_num()">清除</button></div>
                 <div class="col-4 mb-2"><button class="btn btn-secondary w-100" id="num0" v-on:click="input('0')">0</button></div>
-                <div class="col-4 mb-2"><button class="btn btn-success w-100 responsive-width" id="submit" v-on:click="submit()">送出</button></div>
+                <div class="col-4 mb-2"><button class="btn btn-success w-100 responsive-width text-nowrap" id="submit" v-on:click="submit()">送出</button></div>
             </div>
     </div>
 </div>
@@ -41,7 +41,7 @@ export default {
         }
     },
     methods:{
-        input(num){48
+        input(num){
             this.Num+=num;
         },
         delete_num(){
@@ -61,6 +61,7 @@ export default {
     text-align: right;    /* 文字對齊到右邊 */
 }
 .responsive-width {
-    font-size: 90%;
+    /* font-size: 90%; */
+    text-align: center;
 }
 </style>

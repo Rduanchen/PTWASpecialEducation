@@ -41,9 +41,9 @@ const router = createRouter({
       component:()=>import("@/views/GameTemplate/CompareGame.vue"),
     },
     {
-      path:"/calculatorV2",
-      name:"calculatorV2",
-      component:()=>import("@/components/calculatorV2.vue"),
+      path:"/FillinBlank",
+      name:"FillinBlank",
+      component:()=>import("@/views/GameTemplate/FillinBlank.vue"),
     }
     ]
 });

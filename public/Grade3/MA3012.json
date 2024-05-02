@@ -7,33 +7,41 @@
         "GlobalTitle": "請選擇正確的角度"
     },
     "Questions": [
-        {
+        [{
             "Question": ["鈍角","銳角","直角"],
-            "Question_Text": "以下的角度是什麼角呢???",
+            "Question_Text": "左圖的角度是什麼角呢???",
             "Answer":  "鈍角",
             "img":"level1.png",
             "img_alt": "一個角度"
         },
         {
             "Question": ["鈍角","銳角","直角"],
-            "Question_Text": "以下的角度是什麼角呢???",
+            "Question_Text": "左圖的角度是什麼角呢???",
+            "Answer":  "鈍角",
+            "img":"level1.png",
+            "img_alt": "一個角度"
+        }
+        ],
+        [{
+            "Question": ["鈍角","銳角","直角"],
+            "Question_Text": "左圖的角度的角度是什麼角呢???",
             "Answer":  "銳角",
             "img":"level2.png",
             "img_alt": "一個角度"
-        },
-        {
+        }],
+        [{
             "Question": ["鈍角","銳角","直角"],
-            "Question_Text": "以下的角度是什麼角呢???",
+            "Question_Text": "左圖的角度的角度是什麼角呢???",
             "Answer":  "鈍角",
             "img":"level3.png",
             "img_alt": "一個角度"
-        },
-        {
+        }],
+        [{
             "Question": ["鈍角","銳角","直角"],
-            "Question_Text": "以下的角度是什麼角呢???",
+            "Question_Text": "左圖的角度的角度是什麼角呢???",
             "Answer":  "銳角",
             "img":"level4.png",
             "img_alt": "一個角度"
-        }
+        }]
     ]
 }

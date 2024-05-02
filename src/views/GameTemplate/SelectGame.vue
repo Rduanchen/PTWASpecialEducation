@@ -1,22 +1,24 @@
 <template>
-    <div class="container h-75 align-items-center justify-content-center">
-        <p class="h1" style="font-weight: bold;">{{ this.GameConfig.GlobalTitle }}</p>
-        <br>
-        <div class="row h-75 justify-content-center">
-            <!-- 圖片的列 -->
-            <div class="col-md-8 align-self-center">
-                <div class="card mx-auto">
-                    <div class="card-body d-flex justify-content-center">
-                        <img class=" GameImg" :src="imageUrl" :alt="this.GameData.img_alt">
+    <div class="container">
+        <div class="index">
+            <p class="h1" style="font-weight: bold;">{{ this.GameConfig.GlobalTitle }}</p>
+            <br>
+            <div class="Info">
+                <!-- 圖片的列 -->
+                <div class="">
+                    <div class="card mx-auto">
+                        <div class="card-body d-flex justify-content-center">
+                            <img class=" GameImg" :src="imageUrl" :alt="this.GameData.img_alt">
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- 按鈕的列 -->
-            <div class="col-md-4 d-flex flex-column align-content-center justify-content-center">
-                <p class="h2">{{ this.GameData.Question_Text }}</p>
-                <div v-for="i in question" class="mb-2">
-                    <button type="button" class="btn btn-primary btn-block w-75" v-on:click="CheckAnswer(i)">{{ i }}</button>
+                <!-- 按鈕的列 -->
+                <div class="selection">
+                    <p class="h2">{{ this.GameData.Question_Text }}</p>
+                    <div v-for="i in question" class="mb-2">
+                        <!-- <button type="button" class="btn btn-primary btn-block w-75" v-on:click="CheckAnswer(i)">{{ i }}</button> -->
+                        <button type="button" v-on:click="CheckAnswer(i)">{{ i }}</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -83,5 +85,47 @@ button {
 .GameImg{
     width: auto;
     height: 50vh;
+}
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    .index{
+        display: flex;
+        flex-direction: column;
+        .Info{
+            display: flex;
+            flex-direction: row;
+            justify-content: start;
+            gap: 6em;
+            img{
+                max-height: 50vh;
+                width: auto;
+            }
+        }
+        .selection{
+            height: 100%;
+            align-self: center;
+            display: grid;
+            gap: 1em;
+        }
+    }
+    .ImgArea{
+        width: 80%;
+    }
+}
+button {
+    height: 2em;
+    font-size: 2em;
+    width: 100%;
+    border-radius: 12px;
+    background-color: #33b249;
+}
+button:hover {
+    background-color: #5adbb5;
+}
+button:active {
+    background-color: #33b249;
 }
 </style>
