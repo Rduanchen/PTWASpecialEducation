@@ -1,6 +1,8 @@
 <template>
 <div class="container">
+    
     <div class="row NumberContainer">
+        <p>數字輸入鍵盤</p>
         <div class="NumRow">
             <button type="button" class="btn btn-primary" v-on:click="input('+')">+</button>
             <button type="button" class="btn btn-primary" v-on:click="input('1')">1</button>
@@ -14,7 +16,7 @@
             <button type="button" class="btn btn-primary" v-on:click="input('6')">6</button>
         </div>
         <div class="NumRow">
-            <button type="button" class="btn btn-primary" v-on:click="input('×')">×</button>
+            <button type="button" class="btn btn-primary" v-on:click="input('x')">x</button>
             <button type="button" class="btn btn-primary" v-on:click="input('7')">7</button>
             <button type="button" class="btn btn-primary" v-on:click="input('8')">8</button>
             <button type="button" class="btn btn-primary" v-on:click="input('9')">9</button>
@@ -54,13 +56,19 @@ export default {
 
 <style scoped>
 .container{
-    width: 100%;
+    p{
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin: 0.5rem 0;
+        text-align: center;
+    }
     button{
         width: 4rem;
         height: 3rem;
     }
 }
 .NumberContainer{
+
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -69,8 +77,9 @@ export default {
     .NumRow{
         margin: 0.5rem 0;
         display: flex;
+        gap: 0.5rem;
         flex-direction: row;
-        justify-content: space-evenly;
+        justify-content: center;
         align-items: center;
     }
 }

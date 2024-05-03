@@ -1,24 +1,28 @@
 <template>
-<div class="container">
+<div class="Container">
     <div class="index">
         <p class="MainQuestion">{{ this.GameData.Question_Text }}</p>
-        <img src="" alt="index" class="index">
-        <div class="QuestionArea">
+        <div class="SlotArea">
+            <img class="SlotItem" v-if="WithImage" :src="ImgSrc">
+            <component class="SlotItem" v-if="this.GameConfig.SlotModuelSwitch" v-for="slot in GameData.SlotModuel" :is="slot.Name" :Data="slot.Data"></component>
+        </div>
+        <div class="QuestionArea card">
+            <p class="SubQuestion">{{ this.GameData.SubQuestionTitle }}</p>
+            <hr>
             <div v-for="(item, index1) in GameData.Question" :key="index1" class="QuestionRow">
                 <div class="Question" v-for="(question,index2) in GameData.Question[index1]">
-                    <div v-if="question[0] == '$'">
-                        <input type="text" class="input" @focus="focusInput(index1,index2)"  v-model="Value[index1][index2]">
-                    </div>
-                    <div v-else>
-                        <p>{{ question }}</p>
-                    </div>
+                    <input v-if="question == '$input'" type="text" class="input form-control" @focus="focusInput(index1,index2)"  v-model="Value[index1][index2]">                        
+                    <div class="gap" v-else-if="question == '$gap'"></div>
+                    <p v-else>{{ question }}</p>
                 </div>
-
             </div>
+        </div>
+        <div class="functionbar">
+            <button class="btn btn-primary" @click="CheckAnswer">確認答案</button>
         </div>
     </div>
     <div class="Slot">
-        <div v-for="slot in GameData.SlotModuel">
+        <div v-for="slot in GameData.AssistiveComponent">
             <component :is="slot" @virtualpadinput-Input="VNInput" @virtualpadinput-delete="VNDelete" @virtualpadinput-pop="VNPop"></component>
         </div>
     </div>
@@ -26,24 +30,31 @@
 </template>
 <script>
 import { defineAsyncComponent } from 'vue';
+import { GamesGetAssetsFile } from '@/utilitys/get_assets.js';
 export default {
     name: 'FillinBlank',
     data(){
         return {
             InputId: 0,
-            GameData: {
-                "Question_Text": "Sample Question",
-                "Img" : "src",
-                "SlotModuel":["Numpad"],
-                "Question" : [
-                    ["3時5分","$input$","25分"],
-                    ["=", "$input$", "時", "$input$" ,"分"],
-                    ["下午","$input$","時","$input$","分"]
-                ],
-                "Answer": ["+","5","3"]
-            },
+            ImgSrc: "",
+            WithImage: false,
+            // id: "MA3023",
             Value: [],
-            focuslocation: []
+            focuslocation: null
+        }
+    },
+    props: {
+        GameData: {
+            type: Object,
+            required: true
+        },
+        GameConfig:{
+            type: Object,
+            required: true
+        },
+        id:{
+            type: String,
+            required: true
         }
     },
     methods:{
@@ -51,14 +62,50 @@ export default {
             this.focuslocation = [id1,id2];
         },
         VNInput(data){
-            this.Value[this.focuslocation[0]][this.focuslocation[1]] += data;
+            if(this.focusInput != null ) {
+                this.Value[this.focuslocation[0]][this.focuslocation[1]] += data;
+            }
         },
         VNDelete(){
-            this.Value[this.focuslocation[0]][this.focuslocation[1]] = "";
+            if(this.focusInput != null ) {
+                this.Value[this.focuslocation[0]][this.focuslocation[1]] = "";
+            }
         },
         VNPop(){
-            this.Value[this.focuslocation[0]][this.focuslocation[1]] = this.Value[this.focuslocation[0]][this.focuslocation[1]].slice(0,-1);
-            console.log(this.Value[this.focuslocation[0]][this.focuslocation[1]]);
+            if(this.focusInput != null ){
+                this.Value[this.focuslocation[0]][this.focuslocation[1]] = this.Value[this.focuslocation[0]][this.focuslocation[1]].slice(0,-1);
+                console.log(this.Value[this.focuslocation[0]][this.focuslocation[1]]);
+            }
+        },
+        CheckAnswer(){
+            let count = 0;
+            let result = true;
+            let ReMesseage = '';
+            let ReAnswer = '';
+            for(var i in this.GameData.Question){
+                for(var j in this.GameData.Question[i]){
+                    if(this.GameData.Question[i][j] == "$input"){
+                        if(this.Value[i][j] != this.GameData.Answer[count]){
+                            result = false;
+                            ReMesseage += "第"+(i+1)+"格:"+this.Value[i][j]+"\n";
+                        }
+                        ReAnswer += "第"+(i+1)+"格:"+this.Value[i][j] + "\n";
+                        count++;
+                    }
+                }
+            }
+            if(result){
+                console.log('Correct');
+                this.$emit('play-effect', 'CorrectSound');
+                this.$emit('add-record',[ReAnswer, ReMesseage,"正確"]);
+                this.$emit('next-question');
+                
+            }
+            else{
+                console.log('Wrong');
+                this.$emit('play-effect', 'WrongSound');
+                this.$emit('add-record',[ReAnswer, ReMesseage,"錯誤"]);
+            }
         }
     },
     created(){
@@ -71,11 +118,19 @@ export default {
         }
     },
     mounted(){
-
+        if(this.GameConfig.WithImage){
+            this.WithImage = true;
+            this.ImgSrc = GamesGetAssetsFile(this.id, this.GameData.Img);
+            const patten = /undefined/ ;
+            if(patten.test(this.ImgSrc)){
+                this.WithImage = false;
+            }
+        }
     },
     components:{
         Numpad: defineAsyncComponent(()=>import('@/components/VirtualNumPadInput.vue')),
-        Calculator: defineAsyncComponent(()=>import('@/components/calculator.vue'))
+        Calculator: defineAsyncComponent(()=>import('@/components/calculator.vue')),
+        Clock: defineAsyncComponent(()=>import('@/components/clock.vue'))
     }
 }
 </script>
@@ -83,19 +138,74 @@ export default {
 <style scoped>
 .QuestionRow{
     display: flex;
-    /* justify-content: center; */
-    align-items: center;
+    flex-direction: row;
+    gap : 1rem;
+    align-items:first baseline;
+    input{
+        width: 9rem;
+        text-align: center;
+    }
+    p{
+        font-size: 1.5rem;
+    }
+    .Question{
+        .gap{            
+            width: 1rem;
+        }
+    }
 }
-.container{
+.Container{
     display: flex;
+    width: 100%;
     justify-content: center;
     align-items: center;
     flex-direction: row;
+    gap: 2rem;
     .index{
-        width: 70%;
+        max-width: 60%;
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        .MainQuestion{
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        .SubQuestion{
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        font-weight: bold;
+        .QuestionArea{
+            padding: 1rem;
+            width: 100%;
+        }
+        .functionbar{
+            margin: 0.5rem;
+            button{
+                height: 3rem;
+            }
+        }
     }
     .Slot{
-        width: 30%;
+        max-width: 40%;
     }
 }
+.SlotArea{
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    .SlotItem{
+        flex-shrink: 1;
+        flex-grow: 1;
+    }
+    max-width: 100%;
+    img{
+        width: auto;
+        max-height: 100%;
+    }
+}
+
 </style>

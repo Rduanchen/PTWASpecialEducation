@@ -44,6 +44,11 @@ const router = createRouter({
       path:"/FillinBlank",
       name:"FillinBlank",
       component:()=>import("@/views/GameTemplate/FillinBlank.vue"),
+    },
+    {
+      path: '/clock' ,
+      name: 'clock',
+      component: () => import('@/components/clock.vue'),
     }
     ]
 });

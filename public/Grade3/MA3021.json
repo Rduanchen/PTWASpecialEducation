@@ -17,7 +17,7 @@
         {
             "Question": "哥哥買了一雙1289元的運動鞋，和一件1455元的棒球衣，一共花了多少元？",
             "Answer": "2744",
-            "ComponentName": "dragableslotdemo",
+            "ComponentName": "Slot2",
             "img" : ""
         }
     ]

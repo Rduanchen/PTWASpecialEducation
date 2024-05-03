@@ -698,7 +698,8 @@ export default {
       FindTheItemGame: defineAsyncComponent(() => import('@/views/GameTemplate/FindTheItemGame.vue')),
       AutoNumberingGame: defineAsyncComponent(() => import('@/views/GameTemplate/AutoNumberingGame.vue')),
       NumberingGame: defineAsyncComponent(() => import('@/views/GameTemplate/NumberingGame.vue')),
-      CompareGame: defineAsyncComponent(() => import('@/views/GameTemplate/CompareGame.vue'))
+      CompareGame: defineAsyncComponent(() => import('@/views/GameTemplate/CompareGame.vue')),
+      FillinBlank: defineAsyncComponent(() => import('@/views/GameTemplate/FillinBlank.vue'))
   }
 }
 </script>

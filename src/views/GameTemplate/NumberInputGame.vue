@@ -1,8 +1,8 @@
 <template>
 <div class="container">
     <div class="ImageCard">
-        <img class="card-img-top GameImg" v-if="SlotComponentSwitch==false" :src="imageUrl" :alt="GameData.img_alt">
-        <component v-if="SlotComponentSwitch==true" :is="this.comp"></component>
+        <img class="card-img-top GameImg" id="Img" v-if="SlotComponentSwitch==false" :src="imageUrl" :alt="GameData.img_alt">
+        <component v-if="SlotComponentSwitch==true" :is="this.SlotComponent"></component>
     </div>
     <div class="AnswerArea">    
         <p>{{ this.GameData.Question }}</p>
@@ -66,10 +66,10 @@ export default {
         }
     },
     mounted(){
-        const img = document.querySelector('.GameImg');
+        const img = document.getElementById('Img');
         try{
             // Image ration
-            const aspectRatio = this.GameData.img_width / this.GameData.img_height;
+            const aspectRatio = img.naturalWidth / img.naturalHeight;
             if (aspectRatio > 1) {
                 // Landscape
                 img.style.width = '100%';
@@ -90,38 +90,34 @@ export default {
     },
     created() {
         this.imageUrl=GamesGetAssetsFile(this.id,this.GameData.img)
-        console.log(this.GameConfig.SlotComponentSwitch);
-        if(this.GameConfig.SlotComponentSwitch == true){
-            this.SlotComponentSwitch = true;
-            if (this.GameData.ComponentName){
-                this.SlotComponent = this.GameData.ComponentName;
+        try{
+            if(this.GameConfig.SlotComponentSwitch == true){
+                this.SlotComponentSwitch = true;
+                if (this.GameData.ComponentName){
+                    this.SlotComponent = this.GameData.ComponentName;
+                }
+                else{
+                    this.SlotComponentSwitch = false;
+                }
             }
             else{
                 this.SlotComponentSwitch = false;
             }
-        }
-        else{
-            this.SlotComponentSwitch = false;
+        } catch (error) {
+            console.warn('NumberInputGame: SlotComponent No Found');
         }
     },
     components: {
         VirtualNumPad,
-        Slot1: defineAsyncComponent(() => import("@/components/dragableslotdemo.vue")),
-        Slot2: defineAsyncComponent(() => import("@/components/dragableslotdemo2.vue"))
+        // Verifyed Component Here
+        Slot1: defineAsyncComponent(() => import("@/components/dragableslotdemo.vue")), //FIXME : This is only a demo
+        Slot2: defineAsyncComponent(() => import("@/components/dragableslotdemo2.vue")) //FIXME : This is only a demo
     }
 };
 
 
 </script>
 <style scoped>
-/* Your component styles go here */
-.GameImg{
-    img{
-        max-width: 100%; 
-        height: auto;
-        flex: 1 1 auto;
-    }  
-}
 .container{
     display: flex;
     flex-direction: row;
@@ -130,14 +126,14 @@ export default {
         align-self: center;
     }
     .ImageCard{
-        width: 70%;
+        width: 60%;
         margin: 1rem;
         display: flex;
         align-items: center;
         justify-content: center;
     }
     .AnswerArea{
-        width: 30%;
+        width: 40%;
         margin: 1rem;
         display: flex;
         flex-direction: column;

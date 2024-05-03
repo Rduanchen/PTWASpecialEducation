@@ -10,7 +10,7 @@
           
           <div class="Carry">
               <div class="Carrys" v-for="(items,index) in Carry">
-                  <draggable :list="Carry[index]" group="Number" item-key="name" class="CarryContainer" @change="GetIndex(index)" @add="CarryCheckInput">
+                  <draggable :list="Carry[index]" group="Number" item-key="name" class="CarryContainer" @change="GetIndex(index)" @add="CarryCheckInput" :sort="false">
                       <template #item="{ element }">
                           <button type="button" class="btn btn-primary m-1 my-btn">{{ element }}</button>
                       </template>
@@ -20,7 +20,7 @@
           <hr>
           <div class="NumberArea">
               <div class="NumberRow" v-for="(items,index) in Num_list">
-                  <draggable :list="Sy_list[index]" group="Symbol" item-key="name" @change="sym_control(index)" class="SymbolContainer">
+                  <draggable :list="Sy_list[index]" :sort="false" group="Symbol" item-key="name" @change="sym_control(index)" class="SymbolContainer">
                       <template #item="{ element }">
                           <button type="button" class="btn btn-primary m-1 my-btn">{{ element }}</button>
                       </template>
@@ -28,7 +28,7 @@
                   <div class="space" v-if="item == null"></div>
                   <div class="NumbersContainer">
                       <div class="Number" v-for="item in items">
-                          <draggable :list="item" group="Number" item-key="name" class="NumberConainer"  @change="GetIndex(index)" @add="NumberCheckInput">
+                          <draggable :list="item" :sort="false" group="Number" item-key="name" class="NumberConainer"  @change="GetIndex(index)" @add="NumberCheckInput">
                               <template #item="{ element }">
                               <button type="button" class="btn btn-primary m-1 my-btn">{{ element }}</button>
                               </template>
@@ -40,7 +40,7 @@
           <hr>
           <div class="Answer">
               <div class="AnswerContainer" v-for="(item,index) in Ans">
-                  <draggable :list="item" group="Number" item-key="name" class="NumberConainer" @change="GetIndex(index)" @add="AnsCheckInput">
+                  <draggable :list="item" :sort="false" group="Number" item-key="name" class="NumberConainer" @change="GetIndex(index)" @add="AnsCheckInput">
                       <template #item="{ element }">
                           <button type="button" class="btn btn-primary m-1 my-btn" >{{ element }}</button>
                       </template>
@@ -56,7 +56,7 @@
       <div class="card Selection">
           <div class="row">
               <div class="NumberPart">
-                  <h1>數字</h1>
+                  <h2>數字</h2>
                   <hr>
                       <draggable
                       class="NumberContainer"
@@ -73,7 +73,7 @@
   
               </div>
               <div class="SymbolPart">
-              <h1>符號</h1>
+              <h2>符號</h2>
               <hr>
               <draggable
                   class="SymbolContainer"
@@ -87,6 +87,23 @@
                       <button type="button" class="btn btn-primary m-1">{{ element }}</button>
                   </template>
               </draggable>
+              </div>
+              <div class="setting">
+                    <h2>設定</h2>
+                    <hr>
+                    單位:
+                    <div class="unit">
+                        <button type="button" class="btn btn-primary m-1" @click="UseUnit('Number')">一般</button>
+                        <button type="button" class="btn btn-primary m-1" @click="UseUnit('Volume')">容積</button>
+                        <button type="button" class="btn btn-primary m-1" @click="UseUnit('Time')">時間</button>
+                        <button type="button" class="btn btn-primary m-1" @click="UseUnit('Weight')">重量</button>
+                        <button type="button" class="btn btn-primary m-1" @click="UseUnit('Length')">長度</button>
+                    </div>
+                    位數:
+                    <div class="UnitNumber d-flex">
+                        <button type="button" class="btn btn-danger m-1 w-50" @click="SetUnit(-1)">-</button>
+                        <button type="button" class="btn btn-primary m-1 w-50" @click="SetUnit(1)">+</button>
+                    </div>
               </div>
           </div>
           </div>
@@ -109,10 +126,11 @@
               Index:null,
               Index2: null,
               // Num_list: [[],[],[]],
-              Sy_list: [[],[],[]],
+              Sy_list: [],
               Ans:[],
               Carry:[],
               Title:[],
+              NowUnit:2,
               FakeData:{
                   Unit : 3,
                   UseUnit: "Volume",
@@ -149,8 +167,9 @@
               this.Carry.push([]);
               this.Ans.push([]);
           }
-          for(var x = 0; x<2 ; x++){
+          for(var x = 0; x<this.NowUnit ; x++){
               let temp = [];
+              this.Sy_list.push([]);
               for(var i = 0; i<this.FakeData.Unit; i++){
                   temp.push([]);
               }
@@ -159,94 +178,116 @@
           console.log(this.Ans);
       },
       methods: {
-          log: function(evt) {
-              console.log(evt);
-              this.Num=["0","1","2","3","4","5","6","7","8","9"];
-          },
-          addrow: function(evt) {
-              /**
-               * 增加新的一行(Add new row)
-               */
-              this.Num_list.push([]);
-              this.Sy_list.push([]);
-              },
-              removerow: function(evt) {
-              /**
-               * 移除最後一行(Remove last row)
-               */
-              if(this.Num_list.length>1){
-                  this.Num_list.pop();
-                  this.Sy_list.pop();
-              }
-          },
-          GetIndex: function(index){
-              this.Index = index;
-          },
-          NumberCheckInput: function(){
-              console.log(this.Index);
-              for(var i in this.Num_list[this.Index]){
-                   if(this.Num_list[this.Index][i].length>1){
-                       let temp = this.Num_list[this.Index][i][1];
-                       this.Num_list[this.Index][i] = [temp];
-                   }
-              }
-          },
-          CarryCheckInput: function(newVal){
-              this.Carry[this.Index] = [`${newVal.oldIndex}`];    
-          },
-          AnsCheckInput: function(newVal){
-              this.Ans[this.Index] = [`${newVal.oldIndex}`];    
-          },
-          AddRow:function(){
-              let temp = [];
-              for(var i = 0; i<this.FakeData.Unit; i++){
-                  temp.push([]);
-              }
-              this.Num_list.push(temp);
-  
-              if(this.Num_list.length*((10**this.FakeData.Unit)-1) > (10**(this.Ans.length))){
-                  this.Ans.push([]);
-                  this.Carry.push([]);
-              }
-              // if(this.Num_list.length*9 < 100){
-              //     console.log(true);
-              // }
-              // else{
-              //     this.Carry.push([]);
-              //     this.Ans.push([]);
-              // }
-          },
-          clear: function(evt) {
-              this.Num_list = [];
-              this.Sy_list = [];
-              this.Carry = [];
-              this.Ans = [];
-              this.Title = [];
-              for(var i = 0; i<this.FakeData.Unit; i++){
-                  this.Title.push(this.FakeData.Units[this.FakeData.UseUnit].Title[i]);
-              }
-              for(var i = 0; i<=this.FakeData.Unit; i++){
-                  this.Carry.push([]);
-                  this.Ans.push([]);
-              }
-              for(var x = 0; x<2 ; x++){
-                  let temp = [];
-                  for(var i = 0; i<this.FakeData.Unit; i++){
-                      temp.push([]);
-                  }
-                  this.Num_list.push(temp);
-              }
+        SetUnit: function(num){
+            if(!( this.FakeData.Unit==8 && num == 1 ) && !(this.FakeData.Unit==2 && num==-1)){
+                this.FakeData.Unit = this.FakeData.Unit + num;
+                console.log(this.FakeData.Unit);
+                this.Title = [];
+                this.Num_list = [];
+                this.Sy_list = [];
+                this.Carry = [];
+                this.Ans = [];
+
+                for(var i = 0; i<this.FakeData.Unit; i++){
+                    this.Title.push(this.FakeData.Units[this.FakeData.UseUnit].Title[i]);
+                }
+                for(var i = 0; i<=this.FakeData.Unit; i++){
+                    this.Carry.push([]);
+                    this.Ans.push([]);
+                }
+                for(var x = 0; x<this.NowUnit ; x++){
+                    let temp = [];
+                    this.Sy_list.push([]);
+                    for(var i = 0; i<this.FakeData.Unit; i++){
+                        temp.push([]);
+                    }
+                    this.Num_list.push(temp);
+                }
+            }
+        },
+        UseUnit: function(unit){
+            this.FakeData.UseUnit = unit;
+            this.Title = [];
+            for(var i = 0; i<this.FakeData.Unit; i++){
+                this.Title.push(this.FakeData.Units[this.FakeData.UseUnit].Title[i]);
+            }
+        },
+        log: function(evt) {
+            console.log(evt);
+            this.Num=["0","1","2","3","4","5","6","7","8","9"];
+        },
+        removerow: function(evt) {
+            /**
+             * 移除最後一行(Remove last row)
+             */
+            if(this.Num_list.length>1){
+                this.Num_list.pop();
+                this.Sy_list.pop();
+            }
+        },
+        GetIndex: function(index){
+            this.Index = index;
+        },
+        NumberCheckInput: function(){
+            console.log(this.Index);
+            for(var i in this.Num_list[this.Index]){
+                if(this.Num_list[this.Index][i].length>1){
+                    let temp = this.Num_list[this.Index][i][1];
+                    this.Num_list[this.Index][i] = [temp];
+                }
+            }
+        },
+        CarryCheckInput: function(newVal){
+            this.Carry[this.Index] = [`${newVal.oldIndex}`];    
+        },
+        AnsCheckInput: function(newVal){
+            this.Ans[this.Index] = [`${newVal.oldIndex}`];    
+        },
+        AddRow:function(){
+            let temp = [];
+            this.NowUnit ++;
+            this.Sy_list.push([]);
+            for(var i = 0; i<this.FakeData.Unit; i++){
+                temp.push([]);
+            }
+            this.Num_list.push(temp);
+            if(this.Num_list.length*((10**this.FakeData.Unit)-1) > (10**(this.Ans.length))){
+                this.Ans.push([]);
+                this.Carry.push([]);
+            }
+        },
+        clear: function(evt) {
+            this.Num_list = [];
+            this.Sy_list = [];
+            this.Carry = [];
+            this.Ans = [];
+            this.Title = [];
+            for(var i = 0; i<this.FakeData.Unit; i++){
+                this.Title.push(this.FakeData.Units[this.FakeData.UseUnit].Title[i]);
+            }
+            for(var i = 0; i<=this.FakeData.Unit; i++){
+                this.Carry.push([]);
+                this.Ans.push([]);
+            }
+            for(var x = 0; x<2 ; x++){
+                let temp = [];
+                for(var i = 0; i<this.FakeData.Unit; i++){
+                    temp.push([]);
+                }
+                this.Num_list.push(temp);
+            }
           },
           sym_control: function() {
           /**
            * 控制符號的數量，每一行只能有一個符號(Control the number of symbol, each row can only have one symbol)
            */
-          this.Sy_list[0]=[];
-          for(var i in this.Sy_list){
-              if(this.Sy_list[i].length>1){
-              this.Sy_list[i].pop()
-              }
-          }
+            this.Sy_list[0]=[];
+            for(var i in this.Sy_list){
+                if(this.Sy_list[i].length>1){
+                this.Sy_list[i].pop()
+                }
+            }
+
           },
           Calculat: function(){
           /**
@@ -289,7 +330,7 @@
           }
           }
       }
-      };
+};
   </script>
   <style scoped lang="scss">
   .NumberRow{
@@ -340,6 +381,9 @@
       }
   }
   .Selection{
+        position: sticky;
+        top:0;
+        max-height: 100vh;
       display: flex;
       flex-direction: row;
       justify-content: center;
@@ -404,6 +448,7 @@
       background-color: #f0f0f0;
   }
   .Container{
+        max-height: 75vh;
       display: flex;
       flex-direction: row;
       justify-content: center;
@@ -413,6 +458,8 @@
       font-size: large;
       width: 100%;
       .CaluculatorBody{
+        max-height: 100vh;
+        overflow: scroll;
           width: 70%;
           padding: 1rem;
       }
