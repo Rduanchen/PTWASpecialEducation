@@ -699,7 +699,8 @@ export default {
       AutoNumberingGame: defineAsyncComponent(() => import('@/views/GameTemplate/AutoNumberingGame.vue')),
       NumberingGame: defineAsyncComponent(() => import('@/views/GameTemplate/NumberingGame.vue')),
       CompareGame: defineAsyncComponent(() => import('@/views/GameTemplate/CompareGame.vue')),
-      FillinBlank: defineAsyncComponent(() => import('@/views/GameTemplate/FillinBlank.vue'))
+      FillinBlank: defineAsyncComponent(() => import('@/views/GameTemplate/FillinBlank.vue')),
+      CalculatorGame: defineAsyncComponent(() => import('@/views/GameTemplate/CalculatorGame.vue'))
   }
 }
 </script>

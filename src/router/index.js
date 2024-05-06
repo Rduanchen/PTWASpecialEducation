@@ -49,6 +49,11 @@ const router = createRouter({
       path: '/clock' ,
       name: 'clock',
       component: () => import('@/components/clock.vue'),
+    },
+    {
+      path: '/Calculator',
+      name: 'Calculator',
+      component: () => import('@/views/GameTemplate/CalculatorGame.vue'),
     }
     ]
 });

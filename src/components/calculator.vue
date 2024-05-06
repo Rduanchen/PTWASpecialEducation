@@ -25,7 +25,7 @@
                           <button type="button" class="btn btn-primary m-1 my-btn">{{ element }}</button>
                       </template>
                   </draggable>
-                  <div class="space" v-if="item == null"></div>
+                  <div class="space" v-if="items == null"></div>
                   <div class="NumbersContainer">
                       <div class="Number" v-for="item in items">
                           <draggable :list="item" :sort="false" group="Number" item-key="name" class="NumberConainer"  @change="GetIndex(index)" @add="NumberCheckInput">
