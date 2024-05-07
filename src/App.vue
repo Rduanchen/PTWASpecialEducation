@@ -17,7 +17,11 @@ export default {
   name: 'App',
 };
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
+@font-face {
+  font-family: 'YuanQuan';
+  src: url('@/assets/fonts/YuanQuan/BpmfGenSenRounded-M.ttf') format('truetype');
+}
 .navbar {
   background-color: #57B9D9; 
   height: 10vh; 

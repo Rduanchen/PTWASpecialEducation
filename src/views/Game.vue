@@ -2,7 +2,6 @@
   <div id="GameView" ref="GameView">
     <header>
       <nav class="container-fluid navbar navbar-expand-md navbar-light sticky-top justify-content-around justify-content-md-center" style="justify-content: flex-start !important;">
-        <!-- <nav class="container navbar navbar-expand-md sticky-top justify-content-around" style="width: 100%;"> -->
           <a class="navbar-brand mx-3" href="#" alt="Home">
               <img src="@/assets/images/nav_bar/logo.png"  />
           </a>
@@ -86,14 +85,13 @@
               </div>
               <div class="intro" v-else>
                 <GameStartandOver v-if="Dataloaded" :Status="GameStatus" :intro="GameData.IntroText" :GameName="Name" :key="this.Dataloaded" @start-game="StartGame" @download-record="ToCSV" @restart="reloadPage" @previous-page="PreviousPage"></GameStartandOver>
-                <!-- FIXME intro 還沒有加進來 -->
               </div>
             </div>
           </div>
           <div class="col-2 SideBar">
             <p class="Title">功能區</p>
             <div class="Buttons">
-              <button class="btn btn-primary text-nowrap img-hover-zoom" @click="PreviousQuestion()">
+              <button class="btn btn-primary text-nowrap img-hover-zoom" @click="PreviousQuestion()" v-if="GameStatus=='Progressing'">
                 <div class="d-flex align-items-center">
                   <div class="">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up" viewBox="0 0 16 16">
@@ -105,7 +103,7 @@
                   </div>
                 </div>
               </button>
-              <button class="btn btn-primary text-nowrap img-hover-zoom" @click="NextQuestion()">
+              <button class="btn btn-primary text-nowrap img-hover-zoom" @click="NextQuestion()" v-if="GameStatus=='Progressing'">
                 <div class="d-flex align-items-center">
                   <div class="">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down" viewBox="0 0 16 16">
@@ -312,6 +310,8 @@ export default {
       EffectWindow: false,
       EffectSrc:'',
       CalculatorSwitch: null,
+      QuestionsSequence: [],
+      AllQuestions: [],
       
       Hint:{
         Type: "None",
@@ -349,22 +349,36 @@ export default {
         this.GameConfig = this.GameData.GameConfig;
         this.InitHint();  
         this.InitIntroVideo();
-        
         this.Dataloaded = true;
+
+        //Radom Select Questions via level
+        let question = [];
+        var temp = [];
+        var checkcorrect = true;
+        for (var i in this.GameData.Questions) {
+          if (this.GameData.Questions[i].length != undefined) {
+            var num = this.GameData.Questions[i].length;
+            console.log("Num",num);
+            var rand = Math.floor( Math.random() * ( ( num - 0 ) + 0 ) );
+            console.log("Rand",rand);
+            question.push(this.GameData.Questions[i][rand]);
+          }
+          else{
+            checkcorrect = false;
+            break;
+          }
+        }
+        if (checkcorrect) {
+          console.log(question);
+          this.GameData.Questions = question;
+        }
+        else{
+          console.warn("Radom Select Questions via level Fail, this could be the question is not a array (Format Error)");
+        }
       } catch (error) {
         console.error("Fetch Game Data Error: ", error);
       }
     })();
-    // axios.get(`../../Grade${this.Grade}/${this.GameID}.json`)
-    // .then((res) => {
-    //   this.GameData = res.data;
-    //   this.GameType = this.GameData.GameType;
-    //   this.GameConfig = this.GameData.GameConfig;
-    //   this.InitHint();  
-    //   this.InitIntroVideo();
-      
-    //   this.Dataloaded = true;
-    // })
   },
   mounted(){
     this.FullScreen();
@@ -423,6 +437,9 @@ export default {
         this.WrongTimes=0;
         this.pauseTimer();
         this.resetTimer();
+        this.time=0;
+        this.totaltime=0;
+        this.finaltime= 0;
         this.download_data = [[]];
       },
       changelevel(change2level) {
@@ -683,7 +700,13 @@ export default {
       FindTheItemGame: defineAsyncComponent(() => import('@/views/GameTemplate/FindTheItemGame.vue')),
       AutoNumberingGame: defineAsyncComponent(() => import('@/views/GameTemplate/AutoNumberingGame.vue')),
       NumberingGame: defineAsyncComponent(() => import('@/views/GameTemplate/NumberingGame.vue')),
+<<<<<<< HEAD
       
+=======
+      CompareGame: defineAsyncComponent(() => import('@/views/GameTemplate/CompareGame.vue')),
+      FillinBlank: defineAsyncComponent(() => import('@/views/GameTemplate/FillinBlank.vue')),
+      CalculatorGame: defineAsyncComponent(() => import('@/views/GameTemplate/CalculatorGame.vue'))
+>>>>>>> develop
   }
 }
 </script>

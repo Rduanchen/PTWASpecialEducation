@@ -34,6 +34,29 @@ const router = createRouter({
       path:"/countertest",
       name:"countertest",
       component:()=>import("@/components/countertest.vue"),
+<<<<<<< HEAD
+=======
+    },
+    {
+      path:"/CompareGame",
+      name:"CompareGame",
+      component:()=>import("@/views/GameTemplate/CompareGame.vue"),
+    },
+    {
+      path:"/FillinBlank",
+      name:"FillinBlank",
+      component:()=>import("@/views/GameTemplate/FillinBlank.vue"),
+    },
+    {
+      path: '/clock' ,
+      name: 'clock',
+      component: () => import('@/components/clock.vue'),
+    },
+    {
+      path: '/Calculator',
+      name: 'Calculator',
+      component: () => import('@/views/GameTemplate/CalculatorGame.vue'),
+>>>>>>> develop
     }
     ]
 });

@@ -9,86 +9,76 @@
     },
     "GameConfig": {
         "CustomeSymbol": true,
-        "SystemSymbol": "BigSmall"
+        "SystemSymbol": "BigSmall",
+        "WithImage": false,
+        "CheckAnswerMode": "OnFill"
     },
     
     "Questions": [
         {
+            "QuestionText": "比大小",
+            "Description": "比大小，選出最大的數字",
+            "OptionBarTitle": "選擇下列任一個符號",
             "Datas": [
                 [
                     {
                         "text": "1",
-                        "img": "1.jpg",
-                        "alt": "1"
+                        "img": "1.png",
+                        "alt": ""
                     },
                     {
                         "text": "2",
-                        "img": "2.jpg",
-                        "alt": "2"
+                        "img": "1.png",
+                        "alt": ""
                     }
                 ],
                 [
                     {
-                        "text": "3",
-                        "img": "3.jpg",
-                        "alt": "3"
+                        "text": "1",
+                        "img": "1.png",
+                        "alt": ""
                     },
                     {
-                        "text": "4",
-                        "img": "4.jpg",
-                        "alt": "4"
+                        "text": "2",
+                        "img": "1.png",
+                        "alt": ""
                     }
                 ],
                 [
                     {
-                        "text": "3",
-                        "img": "3.jpg",
-                        "alt": "3"
+                        "text": "1",
+                        "img": "1.png",
+                        "alt": ""
                     },
                     {
-                        "text": "4",
-                        "img": "4.jpg",
-                        "alt": "4"
+                        "text": "2",
+                        "img": "1.png",
+                        "alt": ""
                     }
-                ],
-                [
+                ],[
                     {
-                        "text": "3",
-                        "img": "3.jpg",
-                        "alt": "3"
+                        "text": "1",
+                        "img": "1.png",
+                        "alt": ""
                     },
                     {
-                        "text": "4",
-                        "img": "4.jpg",
-                        "alt": "4"
-                    }
-                ],
-                [
-                    {
-                        "text": "3",
-                        "img": "3.jpg",
-                        "alt": "3"
-                    },
-                    {
-                        "text": "4",
-                        "img": "4.jpg",
-                        "alt": "4"
-                    }
-                ],
-                [
-                    {
-                        "text": "3",
-                        "img": "3.jpg",
-                        "alt": "3"
-                    },
-                    {
-                        "text": "4",
-                        "img": "4.jpg",
-                        "alt": "4"
+                        "text": "2",
+                        "img": "1.png",
+                        "alt": ""
                     }
                 ]
             ],
-            "Answer": ["Big", "Big", "Big", "Big", "Big", "Big"]
+            "Answer": ["Big","Big","Small","Big"],
+            "Symbol": [
+                {
+                    "tag": "Big",
+                    "Text": ">"
+                },
+                {
+                    "tag": "Small",
+                    "Text": "<"
+                }
+            ]
         }
     ]
 }
