@@ -5,7 +5,7 @@
     "GameType" : "CalculatorGame",
     "IntroText": {
         "Type": "PlainText",
-        "Content": "數學不好的哥哥打算買運動相關的用品，請聰明的你幫哥哥算出總共要花多少錢"
+        "Content": "弟弟的數學並不好，現在你要充當他的超級英雄，協助他計算題目，請注意，弟弟特別不懂借位，所以請幫他把借位的數字也補上"
     },
     "GameConfig":{
         "FunctionPermission":{
@@ -19,7 +19,7 @@
     "Questions": [
         [
             {
-                "Question":"請計算以下數字",
+                "Question":"哥哥過年的時候，拿到了壓歲錢5000元，買了一個3999的玩具之後，請問還剩多少錢呢",
                 "QuestionArea":{
                     "Title": "運動用品",
                     "Description": "運動用品",                    
@@ -38,23 +38,23 @@
 
                 "Verification": {
                     "Symbol": true,
-                    "Number": false,
-                    "Answer": false,
+                    "Number": true,
+                    "Answer": true,
                     "Carry": false
                 },
-                "UseUnit": "Length",
+                "UseUnit": "Number",
                 "Unit": 4,
                 "PreFix": [
-                    "1234",
-                    "5666"
+                    "5000",
+                    "3999"
                 ],
                 "Answer": {
-                    "Symbol": ["x"],
+                    "Symbol": ["-"],
                     "Number_list": [
-                        "1234"
+                        "5000",
+                        "3999"
                     ],
-                    "Answer": "1234",
-                    "Carry": [[""],[""],[""],[""],["9"]]
+                    "Answer": "1001"
                 }
             }
         ],[

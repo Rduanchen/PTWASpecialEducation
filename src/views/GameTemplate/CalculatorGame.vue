@@ -1,8 +1,6 @@
 <template>
-    {{ this.Carryline }}
-    {{ this.Carry }}
 <div>
-<div class="Container container">
+<!-- <div class="Container container">
     <div class="card QuestionArea" v-if="this.GameData.QuestionArea">
         <p class="Title">{{ this.GameData.QuestionArea.Title }}</p>
         <hr v-if="this.GameData.QuestionArea.Title">
@@ -16,54 +14,62 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
+
 <div class="Container container">
+    
     <div class="card CaluculatorBody">
         <p>{{ this.GameData.Question }}</p>
-        <div class="unit">
-            <div class="units" v-for="item in Title">
-                <button type="button" class="btn btn-primary" v-if="item != null">{{ item }}</button>
-                <div class="space" v-if="item == null"></div>
-            </div>
-        </div>
-        <div class="Carry">
-            <div class="Carrys" v-for="(items,index) in Carry">
-                <draggable :list="Carry[index]" group="Number" item-key="name" class="CarryContainer" @change="GetIndex(index)" @add="CarryCheckInput" :sort="false">
-                    <template #item="{ element }">
-                        <button type="button" class="btn btn-primary m-1 my-btn" :class="{ ButtonLine: this.Carryline[index][0] }" @click="CarryTurnToLine(index)">{{ element }}</button>
-                    </template>
-                </draggable>
-            </div>
-        </div>
-        <hr>
-        <div class="NumberArea">
-            <div class="NumberRow" v-for="(items,index) in Num_list">
-                <draggable :list="Sy_list[index]" :sort="false" group="Symbol" item-key="name" @change="sym_control(index)" class="SymbolContainer" v-if="index != 0">
-                    <template #item="{ element }">
-                        <button type="button" class="btn btn-primary m-1 my-btn">{{ element }}</button>
-                    </template>
-                </draggable>
-                <div class="space" v-if="items == null"></div>
-                <div class="NumbersContainer">
-                    <div class="Number" v-for="(item ,index2) in items">
-                        <draggable :list="item" :sort="false" group="Number" item-key="name" class="NumberConainer"  @change="GetIndex(index)" @add="NumberCheckInput">
-                            <template #item="{ element }">
-                                <button type="button" class="btn btn-primary m-1 my-btn" :class="{ ButtonLine: this.ButtonLine[index][index2][0] }" @click="TurnToLine(index,index2)">{{ element }}</button>
-                            </template>
-                        </draggable>
-                    </div>
-                    
+        <div class="Calculator">
+            <div class="unit">
+                <div class="units" v-for="item in Title">
+                    <button type="button" class="btn btn-primary" v-if="item != null">{{ item }}</button>
+                    <div class="space" v-if="item == null"></div>
                 </div>
             </div>
-        </div>
-        <hr>
-        <div class="Answer">
-            <div class="AnswerContainer" v-for="(item,index) in Ans">
-                <draggable :list="item" :sort="false" group="Number" item-key="name" class="NumberConainer" @change="GetIndex(index)" @add="AnsCheckInput">
-                    <template #item="{ element }">
-                        <button type="button" class="btn btn-primary m-1 my-btn" >{{ element }}</button>
-                    </template>
-                </draggable>
+            <div class="Carry">
+                <div class="Carrys" v-for="(items,index) in Carry">
+                    <draggable :list="Carry[index]" group="Number" item-key="name" class="CarryContainer" @change="GetIndex(index)" @add="CarryCheckInput" :sort="false">
+                        <template #item="{ element }">
+                            <button type="button" class="btn btn-primary m-1 my-btn" :class="{ ButtonLine: this.Carryline[index][0] }" @click="CarryTurnToLine(index)">{{ element }}</button>
+                        </template>
+                    </draggable>
+                </div>
+            </div>
+            <hr>
+            <div class="NumberArea">
+                <div class="NumberRow" v-for="(items,index) in Num_list">
+                    <draggable :list="Sy_list[index]" :sort="false" group="Symbol" item-key="name" @change="sym_control(index)" class="SymbolContainer" v-if="index != 0">
+                        <template #item="{ element }">
+                            <button type="button" class="btn btn-primary m-1 my-btn">{{ element }}</button>
+                        </template>
+                    </draggable>
+                    <div class="space"></div>
+                    <div class="space" v-if="items == null"></div>
+                    
+                    <div class="NumbersContainer">
+                        <div class="Number" v-for="(item ,index2) in items">
+                            <!-- <div class="space" v-if="item[0] == null">
+                                <button class="btn btn-primary m-1 my-btn">.</button>
+                            </div> -->
+                            <draggable  :list="item" :sort="false" group="Number" item-key="name" class="NumberConainer"  @change="GetIndex(index)" @add="NumberCheckInput">
+                                <template #item="{ element }">
+                                    <button type="button" class="btn btn-primary m-1 my-btn" :class="{ ButtonLine: this.ButtonLine[index][index2][0] }" @click="TurnToLine(index,index2)">{{ element }}</button>
+                                </template>
+                            </draggable>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="Answer">
+                <div class="AnswerContainer" v-for="(item,index) in Ans">
+                    <draggable :list="item" :sort="false" group="Number" item-key="name" class="NumberConainer" @change="GetIndex(index)" @add="AnsCheckInput">
+                        <template #item="{ element }">
+                            <button type="button" class="btn btn-primary m-1 my-btn" >{{ element }}</button>
+                        </template>
+                    </draggable>
+                </div>
             </div>
         </div>
         <div class="buttons">
@@ -108,7 +114,7 @@
                 </template>
             </draggable>
             </div>
-            <div class="setting" v-if="this.GameConfig.FunctionPermission.CorrectUseUnit != false && this.GameConfig.FunctionPermission.CorrectUnit != false">
+            <div class="setting" v-if="this.GameConfig.FunctionPermission.CorrectUseUnit == true || this.GameConfig.FunctionPermission.CorrectUnit == true">
                     <h2>設定</h2>
                     <hr>
                     <div v-if="this.GameConfig.FunctionPermission.CorrectUseUnit">
@@ -161,7 +167,7 @@ export default {
     },
     data() {
         return {
-            Num:["0","1","2","3","4","5","6","7","8","9"],
+            Num:["0","1","2","3","4","5","6","7","8","9","10"],
             Symbol:["+","-","x","÷"],
             Num_list: [],
             ButtonLine:[],
@@ -191,7 +197,7 @@ export default {
                         Total:4
                     },
                     Length:{
-                        Title:["毫米",null,"公分",null,"公尺",null,"公里"],
+                        Title:["毫米","公分",null,"公尺",null,null,"公里"],
                         Total:4
                     },
                     Volume:{
@@ -207,6 +213,7 @@ export default {
         this.FakeData.Unit = this.GameData.Unit;
         for(var i = 0; i<this.FakeData.Unit; i++){
             this.Title.push(this.FakeData.Units[this.GameData.UseUnit].Title[i]);
+            
         }
         for(var i = 0; i<=this.FakeData.Unit; i++){
             this.Carry.push([]);
@@ -263,6 +270,12 @@ export default {
                     }
                     this.Num_list.push(temp);
                     this.ButtonLine.push(tep);
+                }
+                for(var i in this.GameData.PreFix){
+                    for(var x = this.GameData.PreFix[i].length-1; x>=0; x--){
+                        let temp = this.GameData.Unit - this.GameData.PreFix[i].length 
+                        this.Num_list[i][x+temp] = [this.GameData.PreFix[i][x]];
+                    }
                 }
             }
         },
@@ -338,6 +351,12 @@ export default {
                 }
                 this.Num_list.push(temp);
             }
+            for(var i in this.GameData.PreFix){
+                for(var x = this.GameData.PreFix[i].length-1; x>=0; x--){
+                    let temp = this.GameData.Unit - this.GameData.PreFix[i].length 
+                    this.Num_list[i][x+temp] = [this.GameData.PreFix[i][x]];
+                }
+            }
         },
         sym_control: function() {
         /**
@@ -370,18 +389,18 @@ export default {
             }
         },
         CheckAnswer: function(){
-            let check = true;
-            if(this.GameData.Verification.Symbol){
-                for(var i = 1; i<this.Num_list.length; i++){
-                    if( this.Sy_list[i] == this.GameData.Answer.Symbol[i-1]){
-                        check = true;
-                    }
-                    else{
-                        check = false;
-                        break;
-                    }
-                }
-            }
+            let Gamecheck = true;
+            // if(this.GameData.Verification.Symbol){
+            //     for(var i = 1; i<this.Num_list.length; i++){
+            //         if( this.Sy_list[i] == this.GameData.Answer.Symbol[i-1]){
+            //             check = true;
+            //         }
+            //         else{
+            //             check = false;
+            //             break;
+            //         }
+            //     }
+            // }
             let NumberAppeared = false;
             if( this.GameData.Verification.Number){
                 for(var i = 0; i<this.Num_list.length; i++){
@@ -394,40 +413,63 @@ export default {
                     }
                     console.log(temp);
                     console.log(this.GameData.Answer.Number_list[i]);
-                    console.log("Resultwww: "+check);
+                    console.log(temp == this.GameData.Answer.Number_list[i]);
+                    console.log(this.GameData.Answer.Number_list[i]);
                     if (this.GameData.Answer.Number_list[i] != undefined && this.temp != ""){
                         if(temp == this.GameData.Answer.Number_list[i]){
-                            check = true;
+                            Gamecheck = true;
                         }
                         else{
-                            check = false;
+                            Gamecheck = false;
                             break;
                         }
                     }
                     else{
-                        check = false;
+                        Gamecheck = false;
                         console.warn("Calculation Game: Answer No Found, Please Check the Answer List is Correct")
                     }
                 }
+                console.log("Number Result: "+Gamecheck);
             }
             NumberAppeared = false;
             if (this.GameData.Verification.Answer){
                 let temp = "";
                 for(var i in this.Ans){
-                    if (this.Ans[i] != "" && NumberAppeared == false){
+                    console.log(this.Ans[i]);
+                    console.log(this.Ans[i][0] == null);
+                    if (NumberAppeared == true && this.Ans[i][0] == null){
+                        console.log("Answer is Empty");
+                        Gamecheck = false;
+                        console.log("CAnswer Result: "+Gamecheck);
+                        break;
+                    }
+                    if (this.Ans[i][0] != null){
                         temp = temp + this.Ans[i];
                         NumberAppeared = true;
                     }
                 }
+
+
+                console.log(temp);
+                console.log(this.GameData.Answer.Answer);
+
                 if(temp === this.GameData.Answer.Answer){
-                    check = true;
+                    console.log("Answer Result: "+Gamecheck);
                 }
                 else{
-                    check = false;
+                    Gamecheck = false;
+                    console.log("Answer Result: "+Gamecheck);
                 }
             }
-            console.log("Result: "+check);
+            // console.log("Result: "+check);
+            if(Gamecheck){
+                this.$emit('play-effect', 'CorrectSound',)
+            }
+            else{
+                this.$emit('play-effect', 'WrongSound',)
+            }
         }
+
     }
 };
 </script>
@@ -488,8 +530,14 @@ export default {
     background-color: #0d6efd;
 }
 .space{
+    height: 60px;
     width: 50px;
-    margin: 1vh 6px;
+    margin: 1vh 0.5vw;
+    // display: flex;
+    // justify-content: center;
+    // button{
+    //     width: 75%;
+    // }
 }
 .Number{
     display: flex;
@@ -501,6 +549,9 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: end;
+    button{
+        color: #D9D9D9;
+    }
     .NumbersContainer{
         display: flex;
         flex-direction: row;
@@ -554,6 +605,9 @@ export default {
         border-radius: 10px;
         background-color: #caf0f8;
     }
+    button{
+        color: #C5D5F5;
+    }
     margin-bottom: 1vh;
 }
 .Answer{
@@ -567,6 +621,9 @@ export default {
             justify-content: end;
             height: 60px;
             width: 50px;
+            button{
+                color: #DBCEAF !important;
+            }
         }
         .NumberConainer{
             background-color: #90e0ef;
@@ -597,6 +654,9 @@ export default {
         overflow-y: auto;
         width: 70%;
         padding: 1rem;
+        .Calculator{
+            align-self: flex-end;
+        }
     }
     .Selection{
         width: 30%;
