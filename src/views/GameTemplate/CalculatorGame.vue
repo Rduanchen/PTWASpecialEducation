@@ -1,5 +1,5 @@
 <template>
-<div>{{ Sy_list }}
+<div>
 <!-- <div class="Container container">
     <div class="card QuestionArea" v-if="this.GameData.QuestionArea">
         <p class="Title">{{ this.GameData.QuestionArea.Title }}</p>
