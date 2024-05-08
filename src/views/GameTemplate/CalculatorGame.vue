@@ -1,5 +1,5 @@
 <template>
-<div>
+<div>{{ Sy_list }}
 <!-- <div class="Container container">
     <div class="card QuestionArea" v-if="this.GameData.QuestionArea">
         <p class="Title">{{ this.GameData.QuestionArea.Title }}</p>
@@ -223,7 +223,6 @@ export default {
         this.FakeData.Unit = this.GameData.Unit;
         for(var i = 0; i<this.FakeData.Unit; i++){
             this.Title.push(this.FakeData.Units[this.GameData.UseUnit].Title[i]);
-            
         }
         for(var i = 0; i<=this.FakeData.Unit; i++){
             this.Carry.push([]);
@@ -242,6 +241,11 @@ export default {
             }
             this.Num_list.push(temp);
             this.ButtonLine.push(tep);
+        }
+        for(var i in this.GameData.SymbolPreFix ){
+            for(var x = 1; x<this.Sy_list.length; x++){
+                this.Sy_list[x] = [this.GameData.SymbolPreFix[i]];
+            }
         }
         for(var i in this.GameData.PreFix){
             for(var x = this.GameData.PreFix[i].length-1; x>=0; x--){

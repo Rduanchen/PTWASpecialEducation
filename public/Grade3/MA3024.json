@@ -44,6 +44,7 @@
                 },
                 "UseUnit": "Number",
                 "Unit": 4,
+                "SymbolPreFix": ["+"],
                 "PreFix": [
                     "478",
                     "214"
@@ -81,8 +82,9 @@
                     "Answer": true,
                     "Carry": false
                 },
-                "UseUnit": "Length",
+                "UseUnit": "Number",
                 "Unit": 4,
+                "SymbolPreFix": ["-"],
                 "PreFix": [
                     "56",
                     "38"
@@ -121,8 +123,9 @@
                     "Answer": true,
                     "Carry": false
                 },
-                "UseUnit": "Length",
+                "UseUnit": "Number",
                 "Unit": 4,
+                "SymbolPreFix": [],
                 "PreFix": [
                 ],
                 "Answer": {
