@@ -1,0 +1,1 @@
+import{_ as e}from"./_plugin-vue_export-helper-c27b6911.js";import{o,c as t,a}from"./index-b5bc5a4d.js";const s={name:"DraggableSlotDemo",data(){return{}},methods:{},mounted(){}},r=a("p",null,"Slot",-1),n=[r];function c(d,l,_,m,p,i){return o(),t("div",null,n)}const h=e(s,[["render",c]]);export{h as default};
