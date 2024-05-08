@@ -17,7 +17,6 @@
 </div> -->
 
 <div class="Container container">
-    
     <div class="card CaluculatorBody">
         <p>{{ this.GameData.Question }}</p>
         <div class="Calculator">
@@ -32,6 +31,15 @@
                     <draggable :list="Carry[index]" group="Number" item-key="name" class="CarryContainer" @change="GetIndex(index)" @add="CarryCheckInput" :sort="false">
                         <template #item="{ element }">
                             <button type="button" class="btn btn-primary m-1 my-btn" :class="{ ButtonLine: this.Carryline[index][0] }" @click="CarryTurnToLine(index)">{{ element }}</button>
+                        </template>
+                    </draggable>
+                </div>
+            </div>
+            <div class="Carry">
+                <div class="Carrys" v-for="(items,index) in Carry2">
+                    <draggable :list="Carry2[index]" group="Number" item-key="name" class="CarryContainer" @change="GetIndex(index)" @add="Carry2CheckInput" :sort="false">
+                        <template #item="{ element }">
+                            <button type="button" class="btn btn-primary m-1 my-btn" :class="{ ButtonLine: this.Carry2line[index][0] }" @click="Carry2TurnToLine(index)">{{ element }}</button>
                         </template>
                     </draggable>
                 </div>
@@ -168,7 +176,7 @@ export default {
     data() {
         return {
             Num:["0","1","2","3","4","5","6","7","8","9","10"],
-            Symbol:["+","-","x","÷"],
+            Symbol:["+","-"],
             Num_list: [],
             ButtonLine:[],
             Index:null,
@@ -176,7 +184,9 @@ export default {
             Sy_list: [],
             Ans:[],
             Carry:[],
+            Carry2:[],
             Carryline:[],
+            Carry2line:[],
             Title:[],
             NowUnit:2,
             ImgUrl:"",
@@ -217,7 +227,9 @@ export default {
         }
         for(var i = 0; i<=this.FakeData.Unit; i++){
             this.Carry.push([]);
+            this.Carry2.push([]);
             this.Carryline.push([false]);
+            this.Carry2line.push([false]);
             this.Ans.push([]);
         }
         for(var x = 0; x<this.NowUnit ; x++){
@@ -250,6 +262,7 @@ export default {
                 this.Sy_list = [];
                 this.Carry = [];
                 this.Carryline = [];
+                this.Carry2line = [];
                 this.Ans = [];
 
                 for(var i = 0; i<this.FakeData.Unit; i++){
@@ -257,7 +270,9 @@ export default {
                 }
                 for(var i = 0; i<=this.FakeData.Unit; i++){
                     this.Carry.push([]);
+                    this.Carry2.push([]);
                     this.Carryline.push([false]);
+                    this.Carry2line.push([false]);
                     this.Ans.push([]);
                 }
                 for(var x = 0; x<this.NowUnit ; x++){
@@ -315,6 +330,9 @@ export default {
         CarryCheckInput: function(newVal){
             this.Carry[this.Index] = [`${newVal.oldIndex}`];    
         },
+        Carry2CheckInput: function(newVal){
+            this.Carry2[this.Index] = [`${newVal.oldIndex}`];
+        },
         AnsCheckInput: function(newVal){
             this.Ans[this.Index] = [`${newVal.oldIndex}`];    
         },
@@ -329,12 +347,14 @@ export default {
             if(this.Num_list.length*((10**this.FakeData.Unit)-1) > (10**(this.Ans.length))){
                 this.Ans.push([]);
                 this.Carry.push([]);
+                this.Carry2.push([]);
             }
         },
         clear: function(evt) {
             this.Num_list = [];
             this.Sy_list = [];
             this.Carry = [];
+            this.Carry2 = [];
             this.Ans = [];
             this.Title = [];
             for(var i = 0; i<this.FakeData.Unit; i++){
@@ -342,6 +362,7 @@ export default {
             }
             for(var i = 0; i<=this.FakeData.Unit; i++){
                 this.Carry.push([]);
+                this.Carry2.push([]);
                 this.Ans.push([]);
             }
             for(var x = 0; x<2 ; x++){
@@ -386,6 +407,14 @@ export default {
             }
             else{
                 this.Carryline[index][0] = false;
+            }
+        },
+        Carry2TurnToLine: function(index){
+            if(this.Carry2line[index][0] == false){
+                this.Carry2line[index][0] = true;
+            }
+            else{
+                this.Carry2line[index][0] = false;
             }
         },
         CheckAnswer: function(){
@@ -464,6 +493,8 @@ export default {
             // console.log("Result: "+check);
             if(Gamecheck){
                 this.$emit('play-effect', 'CorrectSound',)
+
+                this.$emit('next-question')
             }
             else{
                 this.$emit('play-effect', 'WrongSound',)
@@ -559,11 +590,9 @@ export default {
     }
 }
 .CaluculatorBody{
-    // width: 20%;
     p{
-        font-size: 2em;
+        font-size: 1.5em;
     }
-
 }
 .Selection{
     // width: 80%;
