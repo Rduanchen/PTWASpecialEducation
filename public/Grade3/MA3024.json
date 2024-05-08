@@ -1,7 +1,7 @@
 {
     "id":"MA3024",
     "introvideo": "src",
-    "TotalLevel": 1,
+    "TotalLevel": 2,
     "GameType" : "CalculatorGame",
     "IntroText": {
         "Type": "PlainText",
@@ -59,7 +59,7 @@
             }
         ],[
             {
-                "Question":"請計算以下數字",
+                "Question":"曉華到了文具店，買了一本198 元的筆記本，以及一隻47元的筆，請問她總共要付多少錢?",
                 "QuestionArea":{
                     "Title": "運動用品",
                     "Description": "運動用品",                    
@@ -84,15 +84,15 @@
                 "UseUnit": "Length",
                 "Unit": 4,
                 "PreFix": [
-                    "1234",
-                    "5666"
+
                 ],
                 "Answer": {
-                    "Symbol": ["x"],
+                    "Symbol": ["+"],
                     "Number_list": [
-                        "1234"
+                        "198",
+                        "47"
                     ],
-                    "Answer": "1234",
+                    "Answer": "245",
                     "Carry": [[""],[""],[""],[""],["9"]]
                 }
             }
