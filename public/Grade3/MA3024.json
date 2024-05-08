@@ -1,7 +1,7 @@
 {
     "id":"MA3024",
     "introvideo": "src",
-    "TotalLevel": 2,
+    "TotalLevel": 3,
     "GameType" : "CalculatorGame",
     "IntroText": {
         "Type": "PlainText",
@@ -19,7 +19,7 @@
     "Questions": [
         [
             {
-                "Question":"哥哥過年的時候，拿到了壓歲錢5000元，買了一個3999的玩具之後，請問還剩多少錢呢",
+                "Question":"478 + 214",
                 "QuestionArea":{
                     "Title": "運動用品",
                     "Description": "運動用品",                    
@@ -45,21 +45,21 @@
                 "UseUnit": "Number",
                 "Unit": 4,
                 "PreFix": [
-                    "5000",
-                    "3999"
+                    "478",
+                    "214"
                 ],
                 "Answer": {
-                    "Symbol": ["-"],
+                    "Symbol": ["+"],
                     "Number_list": [
-                        "5000",
-                        "3999"
+                        "478",
+                        "214"
                     ],
-                    "Answer": "1001"
+                    "Answer": "692"
                 }
             }
         ],[
             {
-                "Question":"曉華到了文具店，買了一本198 元的筆記本，以及一隻47元的筆，請問她總共要付多少錢?",
+                "Question":"56 - 38",
                 "QuestionArea":{
                     "Title": "運動用品",
                     "Description": "運動用品",                    
@@ -77,22 +77,61 @@
                 },
                 "Verification": {
                     "Symbol": true,
-                    "Number": false,
-                    "Answer": false,
+                    "Number": true,
+                    "Answer": true,
                     "Carry": false
                 },
                 "UseUnit": "Length",
                 "Unit": 4,
                 "PreFix": [
-
+                    "56",
+                    "38"
+                ],
+                "Answer": {
+                    "Symbol": ["-"],
+                    "Number_list": [
+                        "56",
+                        "38"
+                    ],
+                    "Answer": "18",
+                    "Carry": [[""],[""],[""],[""],["9"]]
+                }
+            }
+        ],[
+            {
+                "Question":"498 + 79",
+                "QuestionArea":{
+                    "Title": "運動用品",
+                    "Description": "運動用品",                    
+                    "Image" :"1.png",
+                    "SlotComponent": [
+                        {
+                            "Name": "clock",
+                            "Data":{
+                                "sec": 0,
+                                "min": 0,
+                                "hour": 12
+                            }
+                        }
+                    ]
+                },
+                "Verification": {
+                    "Symbol": true,
+                    "Number": true,
+                    "Answer": true,
+                    "Carry": false
+                },
+                "UseUnit": "Length",
+                "Unit": 4,
+                "PreFix": [
                 ],
                 "Answer": {
                     "Symbol": ["+"],
                     "Number_list": [
-                        "198",
-                        "47"
+                        "498",
+                        "79"
                     ],
-                    "Answer": "245",
+                    "Answer": "577",
                     "Carry": [[""],[""],[""],[""],["9"]]
                 }
             }
