@@ -18,13 +18,6 @@
     </section>
     <div class="QuestionArea">
         <div v-for="(item, index) in GameData.Datas" :key="index" class="QuestionContainer">
-<<<<<<< HEAD
-            <section class="QuestionRow">
-                <div class="card CompareCard" style="width: 18rem;">
-                    <img src="" class="card-img-top" :alt="item[0].alt">
-                    <div class="card-body">
-                        <p class="card-text">{{ item[0].text }}</p>
-=======
             <section class="QuestionRow" :class="{ 'QuestionRow-Wrong': this.Answered[index]==false, 'QuestionRow-Right': this.Answered[index]==true }">
                 <div class="card CompareCard">
                     <div v-if="this.GameConfig.WithImage != false && this.GameConfig.WithImage != undefined">
@@ -38,7 +31,6 @@
                         <div class="card-body">
                             <p class="card-text text-center">{{ item[0].text }}</p>
                         </div>
->>>>>>> develop
                     </div>
                 </div>
                 <draggable :list="Answers[index]" group="Symbols" :sort="false" item-key="name" class="CompareSymbol" @change="Add(index)" @add="CheckDrop">
@@ -46,12 +38,6 @@
                         <cardwithbutton :imageURL="element.img" :Text="element.Text" :altText="element.alt" class="clickable"></cardwithbutton>
                     </template>
                 </draggable>
-<<<<<<< HEAD
-                <div class="card" style="width: 18rem;">
-                    <img src="" class="card-img-top" :alt="item[1].alt">
-                    <div class="card-body">
-                        <p class="card-text">{{ item[1].text }}</p>
-=======
                 <div class="card">
                     <div v-if="this.GameConfig.WithImage != false && this.GameConfig.WithImage != undefined ">
                         <img :src="this.ImageDatas[index][0]" class="card-img-top" :alt="item[0].alt">
@@ -63,7 +49,6 @@
                         <div class="card-body">
                             <p class="card-text text-center">{{ item[0].text }}</p>
                         </div>
->>>>>>> develop
                     </div>
                 </div>
             </section>
@@ -218,25 +203,10 @@ export default {
 };
 </script>
 
-<<<<<<< HEAD
-<style scoped lang="scss">
-.Title{
-    margin-left: 2rem;
-}
-.CompareSymbol{
-    min-width: 10%;
-    display: flex;
-    align-self: stretch;
-    border: solid;
-    border-radius: 20px;
-    border-color: #555;
-    padding: 1rem;
-=======
 <style scoped>
 .Head{
     width: 100%;
     padding-left: 2rem;
->>>>>>> develop
 }
 .OutterContainer{
     margin-top: 2rem;

@@ -34,8 +34,6 @@ const router = createRouter({
       path:"/countertest",
       name:"countertest",
       component:()=>import("@/components/countertest.vue"),
-<<<<<<< HEAD
-=======
     },
     {
       path:"/CompareGame",
@@ -56,7 +54,6 @@ const router = createRouter({
       path: '/Calculator',
       name: 'Calculator',
       component: () => import('@/views/GameTemplate/CalculatorGame.vue'),
->>>>>>> develop
     }
     ]
 });
