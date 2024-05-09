@@ -5,10 +5,10 @@
             <br>
             <div class="Info">
                 <!-- 圖片的列 -->
-                <div class="">
+                <div class="" v-if="this.GameData.SlotComponents">
                     <div class="card mx-auto">
                         <div class="card-body d-flex justify-content-center">
-                            <img class=" GameImg" :src="imageUrl" :alt="this.GameData.img_alt">
+                            <component class="w-100 h-100 GameImg" :is="this.SlotComponent" :id="this.id" :Data="this.SlotData"></component>
                         </div>
                     </div>
                 </div>
@@ -27,12 +27,15 @@
 
 <script>
 import { GamesGetAssetsFile } from '@/utilitys/get_assets.js';
+import { defineAsyncComponent } from 'vue';
 export default {
     name: 'SelectGame',
     data(){
         return {
             imageUrl:'',
             question: [],
+            SlotComponent: null,
+            comp: null,
         }
     },
     props: {
@@ -71,7 +74,17 @@ export default {
             this.question.push(this.GameData.Question[i]);
         }
         this.imageUrl=GamesGetAssetsFile(this.id,this.GameData.img)
+        this.comp
+
+        if(this.GameData.SlotComponents != undefined){
+            let SlotComponentData = this.GameData.SlotComponents[0]
+            this.SlotData = SlotComponentData.Data;
+            this.SlotComponent = SlotComponentData.Name;
+        }
         console.log(this.imageUrl);
+    },
+    components: {
+        ImageContainer : defineAsyncComponent(() => import('@/components/ImageContainer.vue')),  
     }
 }
 </script>
@@ -84,7 +97,7 @@ button {
 }
 .GameImg{
     width: auto;
-    height: 50vh;
+    max-height: 50vh !important; 
 }
 .container {
     display: flex;

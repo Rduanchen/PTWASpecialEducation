@@ -58,7 +58,6 @@
 </div>
 
 </template>
-
 <script>
 import cardwithbutton from '@/components/cardwithbutton.vue'
 import { GamesGetAssetsFile } from '@/utilitys/get_assets.js';

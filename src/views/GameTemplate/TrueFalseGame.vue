@@ -4,7 +4,8 @@
             <div class="col-md-8">
                 <div class="card mx-auto QuestionCard" >
                     <div class="card-body">
-                        <img class="card-img-top" :src="imageUrl" alt="Card image cap">
+                        <img :src="imageUrl" alt="Game Image" class="img-fluid" style="max-height: 50vh;">
+                        <!-- <component :is="this.SlotComponent" :Data="this.SlotData" :id="this.id"></component> -->
                     </div>
                 </div>
             </div>
@@ -31,12 +32,14 @@
 </template>
 <script>
 import { GamesGetAssetsFile } from '@/utilitys/get_assets.js';
-// import {hi} from "@/utilitys/jstest.js";
+import { defineAsyncComponent } from 'vue';
 export default {
     name: 'TrueFalseGame',
     data(){
         return {
-            imageUrl:""
+            imageUrl:"",
+            SlotComponent: "",
+            SlotData: null
         }
     },
     emits: ['play-effect','add-record','next-question'],
@@ -73,6 +76,11 @@ export default {
     },
     created() {
         this.imageUrl=GamesGetAssetsFile(this.id,this.GameData.img)
+        this.SlotComponent = this.GameData.SlotComponents[0].Name;
+        this.SlotData = this.GameData.SlotComponents[0].Data;
+    },
+    components: {
+        ImageContainer: defineAsyncComponent(() => import('@/components/ImageContainer.vue'))
     }
 }
 </script>
