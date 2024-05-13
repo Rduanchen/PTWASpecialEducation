@@ -54,6 +54,11 @@ const router = createRouter({
       path: '/Calculator',
       name: 'Calculator',
       component: () => import('@/views/GameTemplate/CalculatorGame.vue'),
+    },
+    {
+      path: '/FindItemGameMaker',
+      name: 'FindItemGameMaker',
+      component: () => import('@/components/FindItemGameMaker.vue'),
     }
     ]
 });

@@ -1,87 +1,97 @@
 <template>
-    <div>
-        <canvas id="cvs" class="center" width="800" height="600" style="border: 1px solid #000" v-on:click="judge_position($event)"></canvas>
+    <div class="">
+
+    
+        <div>
+            <canvas id="cvs" class="center" width="600" height="400" style="border: 1px solid #000" v-on:click="judge_position($event)"></canvas>
+        </div>
+        <input type="file" id="fileInput">
+        <div>
+            <input type="text" v-model="inputNumber">
+            <button @click="Start">開始計算</button>
+        
+        </div>
+        <div class="" v-if="(this.counter2-1) == parseInt(inputNumber)"><p style="color: red; font-size: 2rem;"> 紀錄完成</p></div>
+        <div class="" >
+            <div>
+                <button v-for="(item,index) in btn" :class="{ actbtn: this.drawed[index+1] }">{{ item }}</button>
+            </div>
+            <hr>
+            <div>
+                <p>正在紀錄</p>
+                <p>請做: {{ command[counter-1] }}</p>
+                {{ drawingprototype }}
+            </div>
+            <hr>
+            <div class="">
+                <p>紀錄</p>
+                {{ location }}
+            </div>
+        </div>
     </div>
   </template>
-  
   <script>
   import gamepic from '@/assets/GamePic/FindItemGameSample1.jpg'
   export default {
     name: 'FindTheItem',
     data(){
         return {
-            ObjPosition: [
-                      [42,56],
-                      [625,115],
-                      [336,68],//
-                      [764,539],//
-                      [590,320],//
-                      [690,84],//5
-                      [229,170],//
-                      [88,204],//
-                      [62,484],//
-                      [699,361],
-                      [37,386]
-                  ],
-            ObjPositionRange: [
-                  [[22,30],[65,74]],//0
-                  [[604,96],[646,130]],//1
-                  [[315,48],[357,82]],//2
-                  [[743,504],[57,128]],//3
-                  [[491,564],[785,570]],//4
-                  [[681,68],[705,102]],//5
-                  [[65,170],[106,220]],//6
-                  [[486,531],[387,492]],//7
-                  [[48,471],[75,500]],//8
-                  [[687,340],[711,377]],//9
-                  [[12,375],[56,406]]//10
-              ],
-            answered:[]
+            location: [],
+            inputNumber: '',
+            btn: null,
+            drawed: [],
+            counter: 1,
+            counter2:1,
+            command: ["點出物件中間點", "物件左上角", "物件右下角"],
+            prototype : {
+                Name:"",
+                Location:[  ],
+                LeftTop:[ ],
+                RightBottom:[  ]
+            },
+            drawingprototype: {
+                Name:"",
+                Location:[  ],
+                LeftTop:[ ],
+                RightBottom:[ ]
+            },
         }
-    },
-    props: {
-        imgsrc:{
-            type: String,
-            required: true
-        },
-        question: {
-            type: Object,
-            required: true
-        },
-        answer: {
-            type: Array,
-            required: true
-        },
-        offset:{
-            type: Array,
-            required: true
-        }        //Other Game Methods
     },
     created() {
-        // console.log(this.offset)
-        // console.log("Component page offset:",this.offset[0],this.offset[1]);
-        for(var i in this.question["ObjNum"]){
-            this.answered.push(0);
-        }
+        
     },
     mounted(){
-        var cvs=document.getElementById("cvs");
-        const ctx=cvs.getContext('2d');
-        var img=new Image();
-        img.src=gamepic;
-        // img.src=this.imageUrl=new URL('../../assets/GamePic/FindItemGameSample1.jpg', import.meta.url).href
-        img.addEventListener("load", function() {
-            ctx.drawImage(this,0,0,cvs.width,cvs.height);
-        }, false);
-  
-        var posX = $('#cvs').offset().left;
-        var posY = $('#cvs').offset().top;
-        console.log("page offset:",posX,posY);
-        // this.ObjPosition=this.question["ObjLocation"];
-        // this.ObjPositionRange=this.answer;
-        alert(this.ObjPositionRange)
+        document.getElementById('fileInput').addEventListener('change', function(event) {
+            
+            const file = event.target.files[0]; // 獲取用戶選擇的檔案
+            if (file) {
+                
+                const reader = new FileReader(); // 創建一個 FileReader
+                reader.onload = function(e) {
+                    const img = new Image(); // 創建一個 Image
+                    img.onload = function() {
+                        console.log("Hello");
+                        var cvs=document.getElementById("cvs");
+                        const ctx=cvs.getContext('2d');
+                        ctx.drawImage(img,0,0,cvs.width,cvs.height);
+                    };
+                    img.src = e.target.result; // 設置圖片來源為讀取結果
+                };
+                reader.readAsDataURL(file); // 讀取檔案內容為 Data URL
+            }
+    });
     },
     methods:{
+        Start(){
+            let temp  = parseInt(this.inputNumber);
+            this.btn = [];
+            this.drawed = [];
+            this.location= [];
+            for(var i=1; i<=temp; i++){
+                this.btn.push(i);
+                this.drawed.push(false);
+            }
+        },
         outCircle(x,y){
             console.log("draw circle on number")
             var canvas = document.getElementById("cvs");
@@ -98,57 +108,41 @@
             ctx.stroke();
         },
         judge_position(event){
-            
-            console.log("detect the mouse position...");
-            console.log(event);
             console.log(event.pageX,event.pageY);
-            var posX = $('#cvs').offset().left;
-            var posY = $('#cvs').offset().top;
-            // console.log(event.pageX+posX,event.pageY+posY);
-            // console.log(this.ObjPositionRange[0][0][0],this.ObjPositionRange[0][0][1]);
-            for(var i=0;i<11;i++){
-                if((event.pageX>=(this.ObjPositionRange[i][0][0]+posX))&&(event.pageX<=(this.ObjPositionRange[i][0][1]+posX))){
-                    console.log("x is right")
-                    if((event.pageY>=(this.ObjPositionRange[i][1][0]+posY))&&(event.pageY<=(this.ObjPositionRange[i][1][1]+posY))){
-                        console.log("y is right")
-                        this.RightAns(i);
-                    }  
-                }
-                //judge does the mouse click on the right position.
-            }   
-        },
-        RightAns(num){
-            console.log(num," was clicked!")
-            var x=this.ObjPosition[num][0];
-            var y=this.ObjPosition[num][1];
-            //draw circle
-            // record_time_data(num);
-            // playAudio(num);//Play Right Answer Sound
-            this.outCircle(this.ObjPosition[num][0],this.ObjPosition[num][1]);
-            $("#bt-"+num).css("background-color","gray")
-            this.detect_win(num);
-        },
-        detect_win(i){
-            this.answered[i]=1;
-            var unanswer=0;
-            for(i in this.answered){
-                if(this.answered[i]==0){
-                    unanswer+=1
-                }
+            if(this.counter == 1){
+                this.drawingprototype.Location = [event.pageX,event.pageY];
+                this.counter++;
             }
-            if(unanswer==0){
-                this.win();
+            else if (this.counter == 2){
+                this.drawingprototype.LeftTop = [event.pageX,event.pageY];
+                this.counter++;
+            }
+            else if (this.counter == 3){
+                this.drawingprototype.RightBottom = [event.pageX,event.pageY];
+                // this.drawed[this.counter-1] = true;
+                this.counter = 1;
+                this.counter2 ++;
+                this.location.push(this.drawingprototype);
+                this.drawingprototype = {
+                    Name:"",
+                    Location:[  ],
+                    LeftTop:[ ],
+                    RightBottom:[  ]
+                }
+                this.drawed[this.counter2-1] = true;
             }
         },
-        win(){
-            console.log("you win!")
-        }
         
     }
   }
   </script>
   
   <style scoped>
-  
+  button{
+    background-color: #cb9fcf;
+  }
+  .actbtn{
+    background-color: rgb(108, 117, 88) !important;
+  }
   </style>
   

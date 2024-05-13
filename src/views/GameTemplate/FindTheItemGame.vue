@@ -1,28 +1,17 @@
 <template>
 <div class="container">
-<!-- <div class="justify-content-center">
-    <p class="h1">{{ this.GameData.Question.Text }}</p>
-    <canvas id="cvs" class="center" width="800" height="600" style="border: 1px solid #000" v-on:click="judge_position($event)"></canvas>
-    <p class="h4">尚未被找到的:</p>
-    <div class="d-flex flex-row  flex-wrap">
-      <button v-for="(button,index) in btn" class="btn btn-primary m-1 flex-grow-1" :class="{'active-button': answered[index]==0} ">
-        {{ button }}
-      </button>
-    </div>
-</div> -->
 <p class="h1">{{ this.GameData.Question.Text }}</p>
-<div class="d-flex flex-row justify-content-between">
-    <canvas id="cvs" class="center" width="800" height="600" style="border: 1px solid #000" v-on:click="judge_position($event)"></canvas>
-    <div class="objlistbar">
-        <p class="h4">尚未被找到的:</p>
-        <div class="d-flex flex-column  flex-wrap">
-            <button v-for="(button,index) in btn" class="btn btn-primary m-1 flex-grow-1" :class="{'active-button': answered[index]==0} ">
+<div class="Game">
+    <canvas id="cvs" class="center" width="600" height="400" style="border: 1px solid #000" v-on:click="judge_position($event)"></canvas>
+    <div class="ObjList">
+        <p class="h4">尚未被找到:</p>
+        <div class="Objects">
+            <button v-for="(button,index) in btn" class="btn btn-primary" :class="{'active-button': answered[index]==0} ">
                 {{ button }}
             </button>
         </div>
     </div>
 </div>
-
 </div>
 </template>
 <script>
@@ -93,16 +82,15 @@ export default {
             ctx.strokeStyle = strokeColor;
             ctx.stroke();
         },
-        judge_position(event){
-            
+        judge_position(event){            
             // DEBUG
-            // console.log("detect the mouse position...");
-            // console.log(event);
-            // console.log(event.pageX,event.pageY);
+            console.log("detect the mouse position...");
+            console.log(event);
+            console.log(event.pageX,event.pageY);
             var posX = $('#cvs').offset().left;
             var posY = $('#cvs').offset().top;
-            // console.log(event.pageX+posX,event.pageY+posY);//DEBUG
-            // console.log(this.ObjPositionRange[0][0][0],this.ObjPositionRange[0][0][1]);//DEBUG
+            console.log(event.pageX+posX,event.pageY+posY);//DEBUG
+            console.log(this.ObjPositionRange[0][0][0],this.ObjPositionRange[0][0][1]);//DEBUG
             for(var i=0;i<11;i++){
                 if((event.pageX>=(this.ObjPositionRange[i][0][0]+posX))&&(event.pageX<=(this.ObjPositionRange[i][0][1]+posX))){
                     // console.log("x is right")//DEBUG
@@ -154,5 +142,54 @@ export default {
 .active-button {
   background-color: blue;
   color: white;
+}
+.Game{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    .ObjList{
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1em;
+        border: solid 1px;
+        justify-content: center;
+        align-items: center;
+        p{
+            align-self: start;
+        }
+        .Objects{
+            border: solid;
+            display: flex;
+            justify-content: center;
+        }
+        @media screen and (min-width: 992px) {
+            .Objects {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+            .btn {
+                width: 27%;
+                height: 3rem;
+            }
+        }
+        @media screen and (max-width: 992px) {
+            .Objects {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                gap: 1rem;
+            }
+            .btn {
+                width: 100%;
+                height: 3rem;
+            }
+            
+        }
+    }
 }
 </style>

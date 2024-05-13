@@ -6,6 +6,7 @@
               <img src="@/assets/images/nav_bar/logo.png"  />
           </a>
           <button class="navbar-toggler btn btn-primary mx-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText11" aria-controls="navbarText11" aria-expanded="false" aria-label="Toggle navigation" @click="PreviousPage">
+            上一頁
           </button>
           <div class="collapse navbar-collapse mx-3" id="navbarText" >
             <div class="container sticky-top d-flex justify-content-end" style="--bs-breadcrumb-divider:'>';" >
@@ -20,7 +21,7 @@
     </header>
     <section>
       <div class="">
-        <div class="row justify-content-center">
+        <div class="Container">
           <div class="col-10 GameArea">
             <div class="row levelbutton d-sm-none d-md-block d-none d-sm-block" v-if="GameStatus=='Progressing'">
               <div class="d-grid gap-2 d-flex justify-content-center mb-3 levebar">
@@ -709,12 +710,10 @@ export default {
 <style scoped lang="scss">
 header{
   background-color: #F19C79;
-  height: 10vh;
+  height: 10vh !important;
 }
-
 .navbar {
   background-color: #F19C79;
-  height: 10vh;
   .navbar-brand {
     img{
       @media (max-width: 576px){
@@ -766,9 +765,58 @@ transform: scale(1.07); /* 放大至原大小的 110% */
     display: none;
   }
 }
-.GameArea {
-  margin-top: 2vh;
+
+
+.Container{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-self: center;
+  width: 100vw;
+  height: 90vh !important;
+  .GameArea {
+    margin-top: 2vh;
+    width: 85%;
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+  .SideBar{
+    border-left: solid 3px #aaa;
+    background-color: #FFEDDA;
+    height: 100%;
+    width: 15%;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    padding-top: 1rem;
+    .Buttons{
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      justify-content: stretch;
+      align-items: center;
+      // border: solid;
+      button{
+        width: 90%;
+        font-size: x-large;
+        border-radius: 12px;
+        height: 4rem;
+      }
+    }
+    .Title{
+      font-size: 2rem;
+      text-align: start;
+    }
+    svg{
+      width: 2vw;
+      height: 2vw;
+    }
+  }
 }
+
 #Effects {
   position: absolute;
   top: 0;
@@ -776,43 +824,15 @@ transform: scale(1.07); /* 放大至原大小的 110% */
   width: autos;
   height: 100vh;
 }
-.SideBar{
-  border-left: solid 3px #aaa;
-  background-color: #FFEDDA;
-  height: 88vh;
-  width: 15vw;
-  justify-content: start;
-  align-items: start;
-  display: flex;
-  flex-direction: column;
-  padding: 3vh 2vw;
-  .Buttons{
-    display: grid;
-    gap: 3vh;
-  }
-  .Title{
-    font-size: 2rem;
-    text-align: start;
-  }
-  button{
-    font-size: 2vw;
-    border-radius: 20px;
-  }
-  svg{
-    width: 2vw;
-    height: 2vw;
-  }
-}
+
 
 .Game_Component{
   width: 84vw !important;
   height: 79vh;
-  // overflow-y: scroll;
   display: flex;
   flex-direction: row;
   align-items: center;
   align-self: center;
-  // overflow-y: auto;
   overflow-x: auto;
 }
 
@@ -832,7 +852,4 @@ transform: scale(1.07); /* 放大至原大小的 110% */
   }
 }
 
-// .btn-primary:active {
-//   background-color: #198754 !important;
-// }
 </style>

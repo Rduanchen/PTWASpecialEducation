@@ -1,10 +1,11 @@
 <template>
 <div class="container">
-    <div class="ImageCard">
+    <!-- v-if -->
+    <div class="ImageCard" v-if="this.GameData.SlotComponents != undefined">
         <component class="component" :id="this.id" :Data="this.SlotData" :is="this.SlotComponent"></component>
-    </div>
-    <div class="AnswerArea">    
-        <p>{{ this.GameData.Question }}</p>
+    </div> 
+    <div class="AnswerArea">
+        <p> {{ this.GameData.Question }} </p>
         <VirtualNumPad v-on:submit="GetSubmitData" ref="VirtualNumPad"></VirtualNumPad>
     </div>
 </div>
