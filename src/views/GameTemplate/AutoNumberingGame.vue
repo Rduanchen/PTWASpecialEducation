@@ -3,16 +3,16 @@
         <br>
         <br>
         <div class="container">
-            <div class="d-flex justify-content-between flex-row" id="MainContainer" style="border: solid;">
-                <div class="canvascontainer" style="border: solid;">
+            <p class="h1">{{ this.GameData.Question.Text }}</p>
+            <div class="d-flex justify-content-between flex-row" id="MainContainer">
+                <div class="canvascontainer">
                     <canvas ref="canvas" width="700" height="400"></canvas>    
                 </div>
                 <div class="optionbar d-flex flex-column justify-content-center align-self-center" style="width: 100%;">
-                    <p class="h3">{{ this.GameData.Question.Text }}</p>
                     <p class="h5">{{ this.GameConfig.OptionBarText }}</p>
                     <div id="error_msg">{{ errorMsg }}</div>
-                    <div class="d-flex flex-column justify-content-center align-self-center d-gap gap-2 p-3" style="width: 100%;">
-                        <button v-for="(items,index) in btn" class="btn btn-primary" @click="judgeAnswer(items)">
+                    <div class="Buttons" style="width: 100%;">
+                        <button v-for="(items,index) in btn" class="Button" @click="judgeAnswer(items)">
                             {{ items }}
                         </button>
                     </div>
@@ -20,6 +20,7 @@
             </div>
         </div>
     </div>
+
 </template>
 
 <script>
@@ -87,7 +88,7 @@ export default {
         }
     },
     created() {
-        
+
         // this.picture_type="sth"//FIXME
         this.QuestionRange = this.GameData.Question.Range;
         for (var i in this.GameData.Question.ObjImgList) {
@@ -99,14 +100,13 @@ export default {
     },
     mounted() {
         let WH = document.getElementById("MainContainer").getBoundingClientRect();
-        8;
         //Create canvas object
         this.canvas = this.$refs.canvas;
         this.context = this.canvas.getContext('2d');
         //Set canvas size
-        this.canvas.width = WH.width * 0.7;
-        this.canvas.height = WH.height * 0.7;
-        
+        this.canvas.width = WH.width * 0.6;
+        this.canvas.height = WH.height;
+        console.log(this.canvas.width, this.canvas.height);
         //bind error text
         this.error_text = document.getElementById("error_msg");
         //load description image FIXME:This is a temporary solution, will be removed in the future
@@ -262,3 +262,28 @@ export default {
     },
 };
 </script>
+<style scoped>
+.canvascontainer{
+    canvas{
+        border: solid 1px #aaa;
+        border-radius: 12px;
+    }
+}
+.Buttons{
+    .Button{
+        width: 20%;
+        height: 3rem;
+        margin: 0.5rem;
+        background-color: #ffbe0b;
+        border: none;
+        border-radius: 12px;
+    }
+}
+.container{
+    width: 100%;
+    height: 100%;
+    .optionbar{
+        margin-left: 1rem;
+    }
+}
+</style>

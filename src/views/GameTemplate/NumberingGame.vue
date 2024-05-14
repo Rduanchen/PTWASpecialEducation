@@ -1,17 +1,17 @@
 <template>
     <div>
+        <p class="h3">{{ this.GameData.Question.text }}</p>
         <div class="container">
-            <div class="d-flex flex-row justify-content-center">
-                <img :src="imageUrl" :alt="this.GameData.alt" class="GameImg">
-                <div class="optionbar d-flex flex-column justify-content-center">
-                    <p class="h3">{{ this.GameData.Question.Text }}</p>
-                    <p class="h5">請點擊下方的按鈕選擇答案</p>
-                    <div id="error_msg">{{ errorMsg }}</div>
-                    <div class="d-flex flex-column">
-                        <button v-for="(items,index) in btn" class="btn btn-primary m-1 flex-grow-1"  @click="judgeAnswer(items)">
-                            {{ items }}
-                        </button>
-                    </div>
+            <div class="component1">
+                <component :is="this.slotcomponent.Name" :Data="this.slotcomponent.Data" :id="this.id"></component>
+            </div>
+            <div class="optionbar">
+                <p class="h5">{{ this.GameData.Question.SubQuestion }}</p>
+                <div id="error_msg">{{ errorMsg }}</div>
+                <div class="Buttons">
+                    <button v-for="(items,index) in btn"  @click="judgeAnswer(items)">
+                        {{ items }}
+                    </button>
                 </div>
             </div>
         </div>
@@ -37,6 +37,7 @@
  */
 import Desribepng from '@/assets/GamePic/Source/description.png';
 import { GamesGetAssetsFile } from '@/utilitys/get_assets.js';
+import { defineAsyncComponent } from 'vue';
 export default {
     Name: 'NumberingGame',
     data(){
@@ -44,6 +45,9 @@ export default {
             imageUrl : '',
             btn:[],
             errorMsg: '',
+            slotcomponent: {
+
+            }
         }
     },
     props: {
@@ -59,6 +63,10 @@ export default {
             type: String,
             required: true
         }
+    },
+    created(){
+        this.slotcomponent.Name = this.GameData.SlotComponents[0].Name;
+        this.slotcomponent.Data = this.GameData.SlotComponents[0].Data;
     },
     mounted(){
         this.imageUrl=GamesGetAssetsFile(this.id,this.GameData.img)
@@ -78,12 +86,46 @@ export default {
                 this.$emit('add-record',[this.GameData.Answer,answer,"錯誤"])
             }
         }
+    },
+    components: {
+        ImageContainer: defineAsyncComponent(() => import('@/components/ImageContainer.vue'))
     }
 }
 </script>
 <style>
 .GameImg{
     height: auto;
-    width: 60vw;
+}
+p{
+    margin-left: 1rem;
+}
+.container{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    .component1{
+        width: 60%;
+        height: 100%;
+        component{
+            width: 100%;
+            height: 100%;
+        }
+    }
+    .optionbar{
+        width: 40%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        .Buttons{
+            button{
+                min-width: 5rem;
+                margin: 10pt;
+                height: 3rem;
+                border-radius: 12px;
+                background-color: #bdb2ff;
+                border: none;
+            }
+        }
+    }
 }
 </style>

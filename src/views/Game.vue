@@ -574,13 +574,19 @@ export default {
           // window.removeEventListener('mousemove', this.FullScreen);
       },
       ExitFullScreen(){
+        try{
           if (document.exitFullscreen) {
+            
             document.exitFullscreen();
           } else if (document.webkitExitFullscreen) { /* Safari */
             document.webkitExitFullscreen();
           } else if (document.msExitFullscreen) { /* IE11 */
             document.msExitFullscreen();
           }
+        }
+        catch(error){
+          console.warn("Exit Full Screen Error: ",error);
+        }
       },
       GetAllInfo() {
         return{

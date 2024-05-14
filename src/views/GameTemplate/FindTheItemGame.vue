@@ -6,7 +6,7 @@
     <div class="ObjList">
         <p class="h4">尚未被找到:</p>
         <div class="Objects">
-            <button v-for="(button,index) in btn" class="btn btn-primary" :class="{'active-button': answered[index]==0} ">
+            <button v-for="(button,index) in btn" class="Object" :class="{ activebutton: answered[index]==1} ">
                 {{ button }}
             </button>
         </div>
@@ -56,6 +56,7 @@ export default {
         const ctx=cvs.getContext('2d');
         var img=new Image();
         img.src=GamesGetAssetsFile(this.id, this.GameData.img);
+        console.log(img.src);
         img.addEventListener("load", function() {
             ctx.drawImage(this,0,0,cvs.width,cvs.height);
         }, false);
@@ -112,7 +113,7 @@ export default {
             this.$emit('play-effect', 'CorrectSound')
             this.$emit('add-record',[num,"被找到","正確"])
             this.outCircle(this.ObjPosition[num][0],this.ObjPosition[num][1]);
-            $("#bt-"+num).css("background-color","gray")
+            $("#bt-"+num).css("background-color","red")
             this.detect_win(num);
         },
         detect_win(i){
@@ -139,10 +140,9 @@ export default {
 </script>
 
 <style scoped>
-.active-button {
-  background-color: blue;
-  color: white;
-}
+
+
+
 .Game{
     display: flex;
     flex-direction: row;
@@ -154,16 +154,23 @@ export default {
         flex-direction: column;
         gap: 1rem;
         padding: 1em;
-        border: solid 1px;
         justify-content: center;
         align-items: center;
         p{
             align-self: start;
         }
         .Objects{
-            border: solid;
             display: flex;
             justify-content: center;
+            .Object{
+                background-color: #ffb703;
+                border-radius: 12px;
+                border: none;
+            }
+            .activebutton {
+                background-color: #606c38 !important;
+                color: white;
+            }
         }
         @media screen and (min-width: 992px) {
             .Objects {
@@ -172,7 +179,7 @@ export default {
                 flex-wrap: wrap;
                 gap: 1rem;
             }
-            .btn {
+            .Object {
                 width: 27%;
                 height: 3rem;
             }
@@ -184,7 +191,7 @@ export default {
                 justify-content: center;
                 gap: 1rem;
             }
-            .btn {
+            .Object {
                 width: 100%;
                 height: 3rem;
             }

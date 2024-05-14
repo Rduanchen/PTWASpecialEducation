@@ -24,27 +24,62 @@
         {
             "Question": "1:40",
             "Answer": false,
-            "img": "level1.png"
+            "img": "level1.png",
+            "SlotComponents" : [{
+                "Name": "ImageContainer",
+                "Data": {
+                    "Src": "level1.png",
+                    "Alt": ""
+                }
+            }]
         },
         {
             "Question": "1:25",
             "Answer": true,
-            "img":"level2.png"
+            "SlotComponents" :[ {
+                "Name": "ImageContainer",
+                "Data": {
+                    "Src": "level2.png",
+                    "Alt": " ddd"
+                }
+            }],
+            "img": "level2.png"
         },
         {
             "Question": "1:20",
             "Answer": false,
-            "img":"level3.png"
+            "img": "level3.png",
+            "SlotComponents" : [{
+                "Name": "ImageContainer",
+                "Data": {
+                    "Src": "level3.png",
+                    "Alt": "ddd "
+                }
+            }]
         },
         {
             "Question": "5:40",
             "Answer": true,
-            "img":"level4.png"
+            "img": "level4.png",
+            "SlotComponents" : [{
+                "Name": "ImageContainer",
+                "Data": {
+                    "Src": "level4.png",
+                    "Alt": " dd"
+                }
+            }]
         },
         {
             "Question": "7:00",
             "Answer": true,
-            "img":"level5.png"
+            "img": "level5.png",
+            "SlotComponents" : [{
+                "Name": "ImageContainer",
+                "Data": {
+                    "Src": "level5.png",
+                    "Alt": " dd"
+                }
+            }]
         }
     ]
 }

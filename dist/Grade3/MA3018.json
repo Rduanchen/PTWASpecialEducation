@@ -10,9 +10,19 @@
         {   
             "Question": {
                 "text": "請數數看題目中有多少支甜甜圈",
+                "SubQuestion": "請點擊下方的按鈕選擇答案",
                 "Range": [5, 10]
             },
             "Answer": 8,
+            "SlotComponents" : [
+                {
+                    "Name": "ImageContainer",
+                    "Data": {
+                        "Src": "NumberningGameSample.png",
+                        "Alt": "一張含有甜甜圈的圖片"
+                    }
+                }
+            ],
             "img": "NumberningGameSample.png",
             "alt": "一張含有甜甜圈的圖片"
         }

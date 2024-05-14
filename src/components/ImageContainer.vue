@@ -1,9 +1,8 @@
 <template>
 <div class="Container" id="ImageContainer" ref="ImageContainer">
-    <!-- <img ref="Image" id="Img" :src="this.imageUrl" :alt="this.Data.Alt"> -->
+    <img ref="Image" id="Img" :src="this.imageUrl" :alt="this.Data.Alt">
 </div> 
 </template>
-
 <script>
 import { GamesGetAssetsFile } from '@/utilitys/get_assets.js';
 
@@ -34,31 +33,41 @@ export default {
     mounted() {
         this.imageUrl = GamesGetAssetsFile(this.id, this.Data.Src);
         let data = document.getElementById('ImageContainer');
+        let ApplyImage = document.getElementById('Img');
         data = data.getBoundingClientRect();
         this.ContainerSize = {
             width: data.width,
             height: data.height
         }
-        console.log(this.ContainerSize);
         const img = new Image();
         img.onload = () => {
             let ImageDatas = {
                 width: img.width,
                 height: img.height
             };
-
-            console.log(ImageDatas);
             if (ImageDatas.width > ImageDatas.height) {
-                console.log('width');
-                img.style.width = this.ContainerSize.width + 'pt';
-                img.style.height = 'auto';
+                ApplyImage.style.width = this.ContainerSize.width + 'px';
+                ApplyImage.style.height = 'auto';
             } else {
-                console.log('height');
-                img.style.width = 'auto';
-                img.style.height = this.ContainerSize.height + 'pt';
+                ApplyImage.style.width = 'auto';
+                ApplyImage.style.height = this.ContainerSize.height + 'px';
             }   
         }
         img.src = this.imageUrl;
+        window.addEventListener('resize', () => {
+            data = data.getBoundingClientRect();
+            this.ContainerSize = {
+                width: data.width,
+                height: data.height
+            }
+            if (img.width > img.height) {
+                ApplyImage.style.width = this.ContainerSize.width + 'px';
+                ApplyImage.style.height = 'auto';
+            } else {
+                ApplyImage.style.width = 'auto';
+                ApplyImage.style.height = this.ContainerSize.height + 'px';
+            }
+        });
     },
 };
 </script>

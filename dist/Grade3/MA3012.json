@@ -4,20 +4,37 @@
     "TotalLevel": 4,
     "GameType": "SelectGame",
     "GameConfig":{
-        "GlobalTitle": "請選擇正確的角度"
+        "GlobalTitle": "請選擇正確的角度",
+        "RandomMode": true
     },
     "Questions": [
         [{
             "Question": ["鈍角","銳角","直角"],
             "Question_Text": "左圖的角度是什麼角呢???",
             "Answer":  "鈍角",
-            "img":"level1.png",
-            "img_alt": "一個角度"
+            "SlotComponents" : [
+                {
+                    "Name" : "ImageContainer",
+                    "Data" : {
+                        "Src":"level1.png",
+                        "img_alt": "一個角度"
+                    }
+                }
+            ]
         },
         {
             "Question": ["鈍角","銳角","直角"],
             "Question_Text": "左圖的角度是什麼角呢???",
             "Answer":  "鈍角",
+            "SlotComponents" : [
+                {
+                    "Name" : "ImageContainer",
+                    "Data" : {
+                        "Src":"level1.png",
+                        "Alt": "一個角度"
+                    }
+                }
+            ],
             "img":"level1.png",
             "img_alt": "一個角度"
         }
@@ -26,22 +43,58 @@
             "Question": ["鈍角","銳角","直角"],
             "Question_Text": "左圖的角度的角度是什麼角呢???",
             "Answer":  "銳角",
-            "img":"level2.png",
-            "img_alt": "一個角度"
+            "SlotComponents" : [
+                {
+                    "Name" : "ImageContainer",
+                    "Data" : {
+                        "Src":"level2.png",
+                        "Alt": "一個角度"
+                    }
+                }
+            ]
         }],
         [{
             "Question": ["鈍角","銳角","直角"],
             "Question_Text": "左圖的角度的角度是什麼角呢???",
             "Answer":  "鈍角",
-            "img":"level3.png",
-            "img_alt": "一個角度"
+            "SlotComponents" : [
+                {
+                    "Name" : "ImageContainer",
+                    "Data" : {
+                        "Src":"level3.png",
+                        "Alt": "一個角度"
+                    }
+                }
+            ]
         }],
         [{
             "Question": ["鈍角","銳角","直角"],
             "Question_Text": "左圖的角度的角度是什麼角呢???",
             "Answer":  "銳角",
-            "img":"level4.png",
-            "img_alt": "一個角度"
-        }]
+            "SlotComponents" : [
+                {
+                    "Name" : "ImageContainer",
+                    "Data" : {
+                        "Src":"level4.png",
+                        "Alt": "一個角度"
+                    }
+                }
+            ]
+        }],[
+            {
+                "Question": ["鈍角","銳角","直角"],
+                "Question_Text": "左圖的角度sssss的角度是什麼角呢???",
+                "Answer":  "銳角",
+                "SlotComponents" : [
+                    {
+                        "Name" : "ImageContainer",
+                        "Data" : {
+                            "Src":"level6.png",
+                            "Alt": "一個角度"
+                        }
+                    }
+                ]
+            }
+        ]
     ]
 }

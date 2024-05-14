@@ -15,7 +15,6 @@
 import VirtualNumPad from '@/components/VirtualNumPad.vue';
 import { GamesGetAssetsFile } from '@/utilitys/get_assets.js';
 import { defineAsyncComponent } from 'vue';
-import Imagecontainer from '../../components/imagecontainer.vue';
 export default {
     name: 'NumberInputGame',
     data() {
@@ -95,7 +94,8 @@ export default {
         justify-content: center;
         margin: 3rem;
         .component{
-            max-height: 50vh !important;
+            max-height: 50vh;
+            min-height: 40vh;
         }
     }
     .AnswerArea{
