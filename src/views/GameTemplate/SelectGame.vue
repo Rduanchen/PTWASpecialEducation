@@ -5,12 +5,8 @@
             <br>
             <div class="Info">
                 <!-- 圖片的列 -->
-                <div class="" v-if="this.GameData.SlotComponents">
-                    <div class="card mx-auto">
-                        <div class="card-body d-flex justify-content-center">
-                            <component class="w-100 h-100 GameImg" :is="this.SlotComponent" :id="this.id" :Data="this.SlotData"></component>
-                        </div>
-                    </div>
+                <div class="Component" v-if="this.GameData.SlotComponents">
+                    <component class="GameImg" :is="this.SlotComponent" :id="this.id" :Data="this.SlotData"></component>
                 </div>
                 <!-- 按鈕的列 -->
                 <div class="selection">
@@ -95,33 +91,37 @@ export default {
 button {
     width: 150px;
 }
-.GameImg{
-    width: auto;
-    max-height: 50vh !important; 
-}
 .container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    
     .index{
-        display: flex;
-        flex-direction: column;
+        width: 100%;
+        height: 100%;
+        min-height: 60vh;
         .Info{
             display: flex;
             flex-direction: row;
-            justify-content: start;
-            gap: 6em;
-            img{
-                max-height: 50vh;
-                width: auto;
-            }
-        }
-        .selection{
+            justify-content: center;
+            width: 100%;
             height: 100%;
-            align-self: center;
-            display: grid;
-            gap: 1em;
+            /* border: solid; */
+            .selection{
+                height: 100%;
+                width: 30%;
+                align-self: center;
+            }
+            .Component{
+                width: 70%;
+                min-height: 50vh;
+                .GameImg{
+                    width: 100%;
+                    height: 100%;
+                    /* border: solid; */
+                }
+            }
         }
     }
     .ImgArea{

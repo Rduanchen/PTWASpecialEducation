@@ -1,6 +1,6 @@
 <template>
 <div>
-<!-- <div class="Container container">
+<div class="Container container">
     <div class="card QuestionArea" v-if="this.GameData.QuestionArea">
         <p class="Title">{{ this.GameData.QuestionArea.Title }}</p>
         <hr v-if="this.GameData.QuestionArea.Title">
@@ -14,7 +14,7 @@
             </div>
         </div>
     </div>
-</div> -->
+</div>
 
 <div class="Container container">
     <div class="card CaluculatorBody">

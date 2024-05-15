@@ -88,7 +88,6 @@ export default {
         }
     },
     created() {
-
         // this.picture_type="sth"//FIXME
         this.QuestionRange = this.GameData.Question.Range;
         for (var i in this.GameData.Question.ObjImgList) {

@@ -24,7 +24,6 @@
         <a  v-on:click="ChangeSubject('Technology');MakeReadText('' ,'',stop=true)"><img src="@/assets/button/technology.png" style="width: 40vh;"/></a>
       </div>
     </section>
-
     <section class="GameSelectSection " style="overflow-y: hidden;" v-if="ShowContent">
           <div class="row SelectIndex">
               <div class="col-lg-2 col-md-3 col-5 SideBar">
@@ -37,21 +36,7 @@
                       <a class="list-group-item list-group-item-action" v-on:click="SelectChapter(key); MakeReadText('' ,'',stop=true)">{{ items.Title }}</a>
                     </div>
                   </div>
-                </div>
-                
-                  <!-- <div class="row">
-                    <p class="h4">現在科目</p>
-                    <button class="btn btn-primary" disabled>{{ Subjects[Subject] }}</button>
-                  </div>
-                  <br>
-                  <div class="card">
-                  <div class="card-body" :key="Refresh">
-                      <h5 class="card-title mt-2">請選擇章節</h5>
-                      <div class="list-group mt-2" v-for="(items,key) in this.ShowInfo" v-if="this.ShowInfo">
-                        <a class="list-group-item list-group-item-action" v-on:click="SelectChapter(key); MakeReadText('' ,'',stop=true)">{{ items.Title }}</a>
-                      </div>
-                  </div>
-                </div> -->
+                </div>                
               </div>
 
               <!-- 遊戲卡片區域 -->
@@ -81,14 +66,16 @@
           </div>
     </section>
     <section class="Search_result d-flex container d-gap gap-3" v-if="ShowSearch!=false">
-      <div v-if="SearchResult==null" class="d-flex flex-column d-grid gap-2 align-items-center justify-content-center" style="width: 100vw; height: 90vh;">
-        <p class="h1">沒有搜尋結果</p>
-        <button class="btn btn-primary btn-lg" v-on:click="Return2Menu()" style="height: 3em; width: 10rem">返回目錄</button>
+      <div v-if="SearchResult==undefined" class="d-flex flex-column d-grid gap-2 align-items-center justify-content-center" style="width: 100vw; height: 90vh;">
+        <div>
+          <p class="h1">沒有搜尋結果</p>
+          <br>
+          <button class="btn btn-primary btn-lg w-100" v-on:click="Return2Menu()" style="height: 3em; width: 10rem">返回目錄</button>
+        </div>
       </div>
-      <div v-if="SearchResult!=null" style="width: 100vw; height: 90vh;" class="row mt-5 justify-content-md-center">
+      <div v-else style="width: 100vw; height: 90vh;" class="row mt-5 justify-content-md-center">
         <p class="h1 mb-3">搜尋結果:</p>
         <div v-for="item in SearchResult" class="col-12 col-md-6 col-lg-4 d-flex align-self-stretch justify-content-md-center mb-3">
-          
             <div class="card GameCard my-2 flex-grow-1" style="width: 18rem;">
               <div class="card-body d-flex flex-column justify-content-between">
                 <img :src="item.Img" class="card-img-top" alt="...">
@@ -99,7 +86,6 @@
                 </div>
               </div>
             </div>
-        
         </div>
         <div class="row justify-content-center">
           <button class="btn btn-primary btn-block m-5" v-on:click="Return2Menu()" style="height: 3em; width: 20rem">返回目錄</button>
@@ -182,9 +168,7 @@ created() {
     }
     RD.InitReadProccess();
   })();
- 
 },
-
 methods: {
   GetChapterSession(){
     return sessionStorage.getItem("Chapter");
@@ -260,19 +244,20 @@ methods: {
       }
     }
     console.log(find);
+    if (find.length == 0){
+      return undefined;
+    }
     return find;
   },
   SearchGame(){
     let keyword = this.SearchInput;
-    let result = [];
+    this.SearchResult = [];
+    this.SearchResult=this.FF(this.MathShowInfo,keyword);
     this.ShowSearch = true;
     this.Show = false;
     this.ShowContent = false;
     this.ShowMenu = false;
-    this.SearchResult = [];
-    this.SearchResult=this.FF(this.MathShowInfo,keyword);
     console.log(this.SearchResult);
-    
   },
   Return2Menu(){
     location.reload();

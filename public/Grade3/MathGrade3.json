@@ -57,7 +57,7 @@
                         "id": "MA3019",
                         "Name": "數字遊戲",
                         "Description": "玩遊戲學習數字",
-                        "Img": "cover_info.jpeg"
+                        "Img": "MA3019.png"
                     },
                     "MA3020": {
                         "id": "MA3020",
@@ -74,13 +74,19 @@
                         "id": "MA3021",
                         "Name": "將相同的數字對應圖片連在一起",
                         "Description": "找出相同數字對應的圖片並連接起來",
-                        "Img": " "
+                        "Img": ""
                     },
                     "MA3022": {
                         "id": "MA3022",
                         "Name": "累加、累減找找看",
                         "Description": "找出數字在哪裡",
-                        "Img": " "
+                        "Img": "MA3022.png"
+                    },
+                    "MA3023": {
+                        "id": "MA3023",
+                        "Name": "累加、累減找找看",
+                        "Description": "找出數字在哪裡",
+                        "Img": "MA3023.png"
                     }
                 }
             },

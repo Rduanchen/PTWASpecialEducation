@@ -1,116 +1,101 @@
 <template>
-<div class="container">
-    <div class="clock">
-        <div class="clock-face">
-            <div class="hand hour-hand"></div>
-            <div class="hand min-hand"></div>
-            <div class="hand second-hand"></div>
-        </div>
-    </div>
-</div>
+	<div class="Outter">
+		<canvas id="clock" style="border: solid;">
+			
+		</canvas>
+	</div>
 </template>
+
 <script>
+import { GetSlotComponentData } from '../utilitys/get_assets';
+import Img from '../assets/SlotComponentData/Clock/Clock.png';
 export default {
-    name: 'Clock',
-    data(){
-        return {
+	name: 'Clock',
+	data() {
+		return {
+			// Your data properties go here
+		};
+	},
+	props: {
+		id: {
+			type: String,
+			required: true
+		},
+		Data: {
+			type: Object,
+			required: true
+		}
+	},
+	mounted() {
+		let canvas = document.getElementById('clock');
+		let ctx = canvas.getContext('2d');
+		let Outter = document.getElementsByClassName('Outter')[0].getBoundingClientRect();
 
-        }
-    },
-    props: {
-        Data: {
-            type: Object,
-            required: true
-        }
-    },
-    mounted(){
-        const secondHand = document.querySelector('.second-hand')
-        const minHand = document.querySelector('.min-hand')
-        const hourHand = document.querySelector('.hour-hand')
-        
-        const secondsDegrees = ((this.Data.sec / 60) * 360)
-        secondHand.style.transform = `rotate(${secondsDegrees}deg)`
-        const minsDegrees = ((this.Data.min / 60) * 360)
-        minHand.style.transform = `rotate(${minsDegrees}deg)`
-        const hourDegrees = ((this.Data.hour / 12) * 360 + ((this.Data.min / 60) * 30))
-        hourHand.style.transform = `rotate(${hourDegrees}deg)`
-        
-    }
-}
+		let border = Math.max(Outter.width, Outter.height)
+
+		canvas.width = border;
+		canvas.height = border;
+		
+		let img = new Image();
+		img.onload = () => {
+			ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+		};
+		img.src = Img;
+
+		class Vector {
+			constructor(startX, startY, angle, length) {
+				this.startX = startX;
+				this.startY = startY;
+				this.angle = Math.PI * (angle-90) / 180;
+				this.length = length;
+				this.endX = this.startX + Math.cos(this.angle) * this.length;
+				this.endY = this.startY + Math.sin(this.angle) * this.length;
+			}
+		}
+		if(this.Data.sec != undefined || this.Data.sec != ""){
+			let Lsec = border / 2 * 0.7
+			let sec = new Vector(border / 2, border / 2, this.Data.sec * 6, Lsec);
+			ctx.beginPath();
+			ctx.moveTo(border / 2, border / 2);
+			ctx.lineTo(sec.endX, sec.endY);
+			ctx.lineWidth = 3;
+			ctx.strokeStyle = 'black';
+			ctx.stroke();
+			ctx.closePath();
+		}
+		
+		if(this.Data.min != undefined || this.Data.min != ""){
+			let Lmin = border / 2 * 0.6
+			let min = new Vector(border / 2, border / 2, this.Data.min * 6, Lmin);
+			ctx.beginPath();
+			ctx.moveTo(border / 2, border / 2);
+			ctx.lineTo(min.endX, min.endY);
+			ctx.lineWidth = 4;
+			ctx.strokeStyle = 'blue';
+			ctx.stroke();
+			ctx.closePath();
+		}
+
+		if(this.Data.hour != undefined || this.Data.hour != ""){
+			let Lhour = border / 2 * 0.4
+			let hour = new Vector(border / 2, border / 2, this.Data.hour * 30, Lhour);
+			ctx.beginPath();
+			ctx.moveTo(border / 2, border / 2);
+			ctx.lineTo(hour.endX, hour.endY);
+			ctx.strokeStyle = 'red';
+			ctx.lineWidth = 5;
+			ctx.stroke();
+			ctx.closePath();
+		}
+	},
+	// Other Vue component options go here
+};
 </script>
-<style>
 
-.clock {
-    width: 20rem;
-    height: 20rem;
-	border: 20px solid #333;
-	border-radius: 50%;
-	margin: 50px auto;
-	position: relative;
-	padding: 2rem;
+<style scoped>
+/* Your component-specific styles go here */
+.Outter{
+	width: 50vh;
+	height: 50vh;
 }
-
-.clock-face {
-	position: relative;
-	width: 100%;
-	height: 100%;
-	transform: translateY(-3px); /* account for the height of the clock hands */
-}
-
-.clock-face:after {
-	content:'';
-	display:block;
-	width: 30px;
-	height:30px;
-	border-radius: 100%;
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%,-50%);
-	background-color: #F00;
-}
-
-.hand {
-	position: absolute;
-	width: 100%;
-	height: 100%;
-}
-
-.second-hand:after{
-	position: absolute;
-	content:'';
-	display:block;
-	width: 5px;
-	height: 50%;
-	background-color: red;
-	left: 50%;
-	/* bottom: 50%; */
-	transform: translate(-50%,0%);
-	/* transform: rotate(20deg); */
-}
-
-.min-hand:after{
-	position: absolute;
-	content:'';
-	display:block;
-	width: 10px;
-	height: 40%;
-	background-color: black;
-	left: 50%;
-	bottom: 50%;
-	transform: translate(-50%,0%);
-}
-
-.hour-hand:after{
-	position: absolute;
-	content:'';
-	display:block;
-	width: 15px;
-	height: 20%;
-	background-color: black;
-	left: 50%;
-	bottom: 50%;
-	transform: translate(-50%,0%);
-}
-
 </style>

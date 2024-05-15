@@ -1,5 +1,5 @@
 <template>
-<div class="Container">
+<div class="Container container">
     <div class="index">
         <p class="MainQuestion">{{ this.GameData.Question_Text }}</p>
         <div class="SlotArea">
@@ -161,6 +161,7 @@ export default {
     align-items: center;
     flex-direction: row;
     gap: 2rem;
+    height: 100%;
     .index{
         max-width: 60%;
         display: flex;
@@ -174,10 +175,12 @@ export default {
             font-size: 1.5rem;
             font-weight: bold;
         }
-        font-weight: bold;
         .QuestionArea{
             padding: 1rem;
             width: 100%;
+            p{
+                font-weight: bold;
+            }
         }
         .functionbar{
             margin: 0.5rem;

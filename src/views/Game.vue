@@ -453,6 +453,7 @@ export default {
           this.pauseTimer();
           //FIXME 傳資料進入CSV
           this.resetTimer();
+          this.startTimer();
         }    
       },
       NextQuestion() {
@@ -551,7 +552,8 @@ export default {
                   break;
               case "HarraySound":
                   var sound = new Audio();
-                  sound.src = ImportUrl.GetSystemAssetsFile("harray.mp3","effects");
+                  // sound.src = ImportUrl.GetSystemAssetsFile("harray.mp3","effects");
+                  sound.src = ImportUrl.GetSystemEffectAssetsFile("harray.mp3");
                   sound.oncanplaythrough = function(){
                     sound.play();
                   }
