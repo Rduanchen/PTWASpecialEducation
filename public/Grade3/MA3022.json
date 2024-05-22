@@ -22,20 +22,16 @@
             "Datas": [
                 [
                     {
-                        "Name" : "ImageWithText",
+                        "Name" : "CoulorBarChart",
                         "Data" : {
-                            "Text": "1",
-                            "Src": "1.png",
-                            "Alt": ""   
+                            "Total" : 5
                         }                        
                     },
                     {
-                        "Name" : "ImageWithText",
+                        "Name" : "CoulorBarChart",
                         "Data" : {
-                            "Text": "2",
-                            "Src": "1.png",
-                            "Alt": ""   
-                        }
+                            "Total" : 4
+                        }                        
                     }
                 ]
             ],

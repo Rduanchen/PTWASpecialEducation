@@ -1,7 +1,7 @@
 <template>
-<div class="card Word">
-    <p>{{ this.Data.Text }}</p>
-</div>
+    <div class="Word">
+        <p>{{ this.Data.Text }}</p>
+    </div>
 </template>
 <script>
 export default {
@@ -35,6 +35,7 @@ export default {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    text-align: center;
     p{
         font-size: 2rem
     }

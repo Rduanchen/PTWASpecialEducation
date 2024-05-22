@@ -1,48 +1,45 @@
 <template>
-<div>
-<div class="Head">
-    <p class="h1 Title" v-if="this.GameData.QuestionText && this.GameData.QuestionText!= ''">{{ this.GameData.QuestionText }}</p>
-    <p class="h2 SubTitle" v-if="this.GameData.Description && this.GameData.Description != ''">{{ this.GameData.Description }}</p>
-</div>
-<hr>
-{{ this.Answers}}
-{{ this.Symbol }}
 <div class="OutterContainer">
+    <div class="Head">
+        <p class="h1 Title" v-if="this.GameData.QuestionText && this.GameData.QuestionText!= ''">{{ this.GameData.QuestionText }}</p>
+        <p class="h2 SubTitle" v-if="this.GameData.Description && this.GameData.Description != ''">{{ this.GameData.Description }}</p>
+    </div>
+    <hr>
     <div class="QuestionArea">
         <div v-for="(item, index) in GameData.Datas" :key="index" class="QuestionContainer">
             <section class="QuestionRow" :class="{ 'QuestionRow-Wrong': this.Answered[index]==false, 'QuestionRow-Right': this.Answered[index]==true }">
-                <div class="card CompareCard">
-                    <div>
-                        <component :is="item[0].Name" :Data="item[0].Data" :ID="this.id"></component>
-                    </div>
+                <div class="CompareCard">
+                    <component :is="item[0].Name" :Data="item[0].Data" :ID="this.id"></component>
                 </div>
                 <draggable :list="Answers[index]" group="Symbols" :sort="false" item-key="name" class="CompareSymbol" @change="Add(index)" @add="CheckDrop">
                     <template #item="{ element }">
-                        <cardwithbutton :imageURL="element.img" :Text="element.Text" :altText="element.alt" class="clickable"></cardwithbutton>
+                        <div class="clickable">
+                            <p class="h1">{{ element.Text }}</p>
+                        </div>
                     </template>
                 </draggable>
-                <div class="card">
-                    <div>
-                        <component :is="item[0].Name" :Data="item[0].Data" :ID="this.id"></component>
-                    </div>
+                <div class="CompareCard">
+                    <component :is="item[1].Name" :Data="item[1].Data" :ID="this.id"></component>
                 </div>
             </section>
         </div>
     </div>
     <section class="OptionBar">
-        <p class="OptionBarTitle">{{ this.GameData.OptionBarTitle }}</p>
-        <draggable :list="this.Symbol" :sort="false" item-key="name" :group="{ name: 'Symbols', pull: 'clone', put: false }" class="Options">
-            <template #item="{ element }">
-                <cardwithbutton :imageURL="element.img" :Text="element.Text" :altText="element.alt" class="OptionBarItems clickable"></cardwithbutton>
-            </template>
-        </draggable>
+        <div class="Left">
+            <p class="OptionBarTitle">{{ this.GameData.OptionBarTitle }}</p>
+            <draggable :list="this.Symbol" :sort="false" item-key="name" :group="{ name: 'Symbols', pull: 'clone', put: false }" class="Options">
+                <template #item="{ element }">
+                    <div class="OptionBarItems clickable">
+                        <p class="h1">{{ element.Text }}</p>
+                    </div>
+                </template>
+            </draggable>
+        </div>
         <button @click="CheckAllAnswer" class="SucessButton" v-if="this.GameConfig.CheckAnswerMode=='Button'">檢查答案</button>
     </section>
 </div>
-</div>
 </template>
 <script>
-import cardwithbutton from '@/components/cardwithbutton.vue'
 import { GamesGetAssetsFile } from '@/utilitys/get_assets.js';
 import draggable from 'vuedraggable';
 import { defineAsyncComponent } from 'vue';
@@ -51,10 +48,10 @@ export default {
     name: 'CompareGame',
     components: {
         draggable,
-        cardwithbutton: defineAsyncComponent(() => import('@/components/cardwithbutton.vue')),
         ImageContainer: defineAsyncComponent(() => import('@/components/ImageContainer.vue')),
         ImageWithText: defineAsyncComponent(() => import('@/components/ImageWithText.vue')),
-        TextOnly: defineAsyncComponent(() => import('@/components/TextOnly.vue'))
+        TextOnly: defineAsyncComponent(() => import('@/components/TextOnly.vue')),
+        CoulorBarChart: defineAsyncComponent(() => import('@/components/CoulorBarChart.vue'))
     },
     emits: ['play-effect','add-record','next-level'],
     props: {
@@ -109,7 +106,9 @@ export default {
             let tmp = this.Answers[this.SelectedGroup][newVal.newIndex]
             this.Answers[this.SelectedGroup] = [tmp]
             this.RealTimeCheckAnswer()
-            
+            if (this.GameConfig.CheckAnswerMode != "OnFill") {
+                this.Answered[this.SelectedGroup] = null;
+            }
         },
         RealTimeCheckAnswer(){
             if(this.GameConfig.CheckAnswerMode == "OnFill"){
@@ -173,111 +172,90 @@ export default {
 .Head{
     width: 100%;
     padding-left: 2rem;
-}
-
-
-
-.OutterContainer{
-    margin-top: 2rem;
-    min-height: 50vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-.QuestionContainer{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-.QuestionRow{
-    margin: 1rem 0;
-    padding: 1rem;
-    border-radius: 12px;
-    width: 90%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    align-items: center;
-    .CompareSymbol{
-        min-width: 20vh;
-        min-height: 10vh;
-        display: flex;
-        align-self:center;
-        align-items: center;
-        justify-content: center;
-        border: solid;
-        border-radius: 20px;
-        border-color: #555;
-        padding: 1rem;
+    .Title{
+        font-size: 2rem;
     }
-    .card{
-        width: 15rem;
-        align-self: stretch;
-        align-items: center;
-        justify-self: center;
-    }
-    .card-text{
-        font-size: 1.5vw;
-    }
-    .CardWithoutImage{
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 15vh;
-        .card-text{
-            font-size: 3vw;
-        }
+    .SubTitle{
+        font-size: 1.5rem;
     }
 }
 .QuestionRow-Wrong{
     background-color: #cc0627c6;
 }
 .QuestionRow-Right{
-    background-color: #3a86ff;
+    background-color: rgba(255, 255, 255, 1)
 }
-
-.OptionBarItems{
-    /* border: solid; */
-    margin: 2rem 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-}
-.QuestionArea{
-    /* border: solid; */
-    width: 100%;
+.OutterContainer{
     display: flex;
     flex-direction: column;
     justify-content: center;
-}
-.CompareCard{
-    display: flex;
-    align-items: stretch;
+    align-items: center;
+    gap: 1rem;
+    .QuestionArea{
+        .QuestionContainer{
+            .QuestionRow{
+                display: flex;
+                flex-direction: row;
+                justify-content: space-evenly;
+                align-items: center;
+                height: 40vh;
+                .CompareCard{
+                    width: 40%;
+                    height: 90%;
+                    component{
+                        width: 100%;
+                        height: 100%;
+                    }
+                }
+                .CompareSymbol{
+                    min-width: 7rem;
+                    min-height: 5rem;
+                    border: solid;
+                    border-radius: 12px;
+                    border-color: #aaa;
+                    display: flex;
+                    align-items: center;
+                    padding: 1rem 1rem;
+                }
+            }
+        }
+    }
 }
 .clickable{
     cursor:pointer;
+    border: solid;
+    border-radius: 12px;
+    width : 5rem;
+    text-align: center;
+    border-color: #aaa;
 }
 .OptionBar{
-    max-height: 79vh;
     display: flex;
-    flex-direction: column;
-    justify-content: start;
+    flex-direction: row;
+    justify-content: center;
     align-items: center;
-    position: sticky;
-    top:0;
-    .OptionBarTitle{
-        font-size: 1.4rem;
-    }
-    .Options{
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        gap: 2rem;
+    margin: 0 2rem;
+    gap: 2rem;
+    .Left{
+        margin: 0 2rem;
+        .OptionBarTitle{
+            font-size: 1.4rem;
+        }
+        .Options{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            gap: 2rem;
+            .OptionBarItems{
+                display: flex;
+                flex-direction: column;
+                justify-content: space-evenly;
+            }
+        }
     }
     .SucessButton{
         padding: 1rem;
-        width: 50%;
+        width: 20%;
         background-color: #3a86ff;
         border: none;
         border-radius: 12px;

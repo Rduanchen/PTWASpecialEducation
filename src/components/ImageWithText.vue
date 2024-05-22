@@ -1,13 +1,17 @@
 <template>
-    <div class="image-with-text">
-        <img :src="imageUrl" :alt="this.Data.Alt" class="" />
-        <p class="h1">{{ text }}</p>
-    </div>
+<div class="image-with-text">
+    <ImageContainer :ID="this.ID" :Data="{ Src: this.Data.Src, Alt: this.Data.Alt }" ></ImageContainer>
+    <p class="h1">{{ text }}</p>
+</div>
 </template>
 <script>
 import { GamesGetAssetsFile } from '@/utilitys/get_assets.js';
+import ImageContainer from '@/components/ImageContainer.vue';
 export default {
     name: 'ImageWithText',
+    components: {
+        ImageContainer
+    },
     props: {
         Data: {
             type: Object,
@@ -41,9 +45,10 @@ export default {
     align-items: center;
     justify-content: center;
     gap: 1rem;
-    img{
+    ImageContainer {
         width: 100%;
-        height: auto
+        height: 70%;
+        border: solid;
     }
 }
 </style>

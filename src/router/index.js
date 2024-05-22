@@ -36,9 +36,9 @@ const router = createRouter({
       component:()=>import("@/components/countertest.vue"),
     },
     {
-      path:"/CompareGame",
-      name:"CompareGame",
-      component:()=>import("@/views/GameTemplate/CompareGame.vue"),
+      path:"/CoulorBarChart",
+      name:"CoulorBarChart",
+      component:()=>import("@/components/CoulorBarChart.vue"),
     },
     {
       path:"/ImageWithText",
