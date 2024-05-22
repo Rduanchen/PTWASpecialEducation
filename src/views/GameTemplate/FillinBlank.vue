@@ -2,9 +2,8 @@
 <div class="Container container">
     <div class="index">
         <p class="MainQuestion">{{ this.GameData.Question_Text }}</p>
-        <div class="SlotArea">
-            <img class="SlotItem" v-if="WithImage" :src="ImgSrc">
-            <component class="SlotItem" v-if="this.GameConfig.SlotModuelSwitch" v-for="slot in GameData.SlotModuel" :is="slot.Name" :Data="slot.Data"></component>
+        <div class="SlotArea">            
+            <component class="SlotItem" :ID="this.id" v-for="slot in GameData.SlotComponents" :is="slot.Name" :Data="slot.Data"></component>
         </div>
         <div class="QuestionArea card">
             <p class="SubQuestion">{{ this.GameData.SubQuestionTitle }}</p>

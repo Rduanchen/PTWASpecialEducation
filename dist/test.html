@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Draggable Images</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<style>
+    /* styles.css */
+    #container {
+    width: 800px;
+    height: 600px;
+    border: 1px solid #ccc;
+    position: relative;
+    overflow: hidden;
+    }
+
+    .draggable {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    cursor: move;
+    }
+
+</style>
+<body>
+  <div id="container">
+    <img src="image1.jpg" class="draggable" alt="Image 1">
+    <img src="image2.jpg" class="draggable" alt="Image 2">
+    <!-- Add more images as needed -->
+  </div>
+  <script src="script.js"></script>
+</body>
+<script>
+// script.js
+document.addEventListener('DOMContentLoaded', (event) => {
+  const container = document.getElementById('container');
+  const draggables = document.querySelectorAll('.draggable');
+  let highestZIndex = 1; // 初始化最高的 z-index
+
+  draggables.forEach(draggable => {
+    draggable.addEventListener('mousedown', onMouseDown);
+
+    function onMouseDown(e) {
+      e.preventDefault();
+      
+      // 將當前被拖動的圖片 z-index 設置為最高
+      highestZIndex++;
+      draggable.style.zIndex = highestZIndex;
+
+      let shiftX = e.clientX - draggable.getBoundingClientRect().left;
+      let shiftY = e.clientY - draggable.getBoundingClientRect().top;
+
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+
+      function onMouseMove(e) {
+        let newLeft = e.pageX - shiftX - container.offsetLeft;
+        let newTop = e.pageY - shiftY - container.offsetTop;
+
+        // Ensure the draggable does not exceed the container boundaries
+        if (newLeft < 0) newLeft = 0;
+        if (newTop < 0) newTop = 0;
+        if (newLeft + draggable.offsetWidth > container.clientWidth) {
+          newLeft = container.clientWidth - draggable.offsetWidth;
+        }
+        if (newTop + draggable.offsetHeight > container.clientHeight) {
+          newTop = container.clientHeight - draggable.offsetHeight;
+        }
+
+        draggable.style.left = newLeft + 'px';
+        draggable.style.top = newTop + 'px';
+      }
+
+      function onMouseUp() {
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+      }
+    }
+
+    draggable.ondragstart = function() {
+      return false;
+    };
+  });
+});
+
+
+
+
+</script>
+</html>

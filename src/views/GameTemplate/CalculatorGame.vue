@@ -10,7 +10,7 @@
         <div class="Items">
             <img v-if="this.GameData.QuestionArea.Image" :src="this.ImgUrl">
             <div class="comp" v-if="this.GameData.QuestionArea.SlotComponent" v-for="(item, index) in this.GameData.QuestionArea.SlotComponent" :key="index">
-                <component :is="item.Name" :Data="item.Data"></component>
+                <component :is="item.Name" :ID="this.id" :Data="item.Data"></component>
             </div>
         </div>
     </div>
@@ -332,7 +332,8 @@ export default {
             }
         },
         CarryCheckInput: function(newVal){
-            this.Carry[this.Index] = [`${newVal.oldIndex}`];    
+            console.log(newVal);
+            this.Carry[this.Index] = [`${newVal.oldIndex}`];
         },
         Carry2CheckInput: function(newVal){
             this.Carry2[this.Index] = [`${newVal.oldIndex}`];
@@ -384,7 +385,7 @@ export default {
             }
         },
         sym_control: function() {
-        /**
+            /**
             * 控制符號的數量，每一行只能有一個符號(Control the number of symbol, each row can only have one symbol)
             */
             this.Sy_list[0]=[];

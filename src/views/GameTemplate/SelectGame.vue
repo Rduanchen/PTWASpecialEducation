@@ -6,7 +6,7 @@
             <div class="Info">
                 <!-- 圖片的列 -->
                 <div class="Component" v-if="this.GameData.SlotComponents">
-                    <component class="GameImg" :is="this.SlotComponent" :id="this.id" :Data="this.SlotData"></component>
+                    <component class="GameImg" :is="this.SlotComponent" :ID="this.id" :Data="this.SlotData"></component>
                 </div>
                 <!-- 按鈕的列 -->
                 <div class="selection">
@@ -80,7 +80,7 @@ export default {
         console.log(this.imageUrl);
     },
     components: {
-        ImageContainer : defineAsyncComponent(() => import('@/components/ImageContainer.vue')),  
+        ImageContainer : defineAsyncComponent(() => import('@/components/ImageContainer.vue')),
     }
 }
 </script>

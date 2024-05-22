@@ -14,16 +14,15 @@
             </template>
         </draggable>
         <button @click="CheckAllAnswer" class="btn btn-lg btn-primary" v-if="this.GameConfig.CheckAnswerMode=='Button'">檢查答案</button>
-        <button @click="ClearAllData" class="btn btn-lg btn-danger">清空所有答案</button>
+        <!-- <button @click="ClearAllData" class="btn btn-lg btn-danger">清空所有答案</button> -->
     </section>
     <div class="QuestionArea">
         <div v-for="(item, index) in GameData.Datas" :key="index" class="QuestionContainer">
             <section class="QuestionRow" :class="{ 'QuestionRow-Wrong': this.Answered[index]==false, 'QuestionRow-Right': this.Answered[index]==true }">
                 <div class="card CompareCard">
-                    <div v-if="this.GameConfig.WithImage != false && this.GameConfig.WithImage != undefined">
+                    <!-- <div v-if="this.GameConfig.WithImage != false && this.GameConfig.WithImage != undefined">
                         <img :src="this.ImageDatas[index][0]" class="card-img-top" :alt="item[0].alt">
                         <div class="card-body">
-
                             <p class="card-text text-center">{{ item[0].text }}</p>
                         </div>
                     </div>
@@ -31,6 +30,9 @@
                         <div class="card-body">
                             <p class="card-text text-center">{{ item[0].text }}</p>
                         </div>
+                    </div> -->
+                    <div>
+                        <component></component>
                     </div>
                 </div>
                 <draggable :list="Answers[index]" group="Symbols" :sort="false" item-key="name" class="CompareSymbol" @change="Add(index)" @add="CheckDrop">
@@ -39,7 +41,7 @@
                     </template>
                 </draggable>
                 <div class="card">
-                    <div v-if="this.GameConfig.WithImage != false && this.GameConfig.WithImage != undefined ">
+                    <!-- <div v-if="this.GameConfig.WithImage != false && this.GameConfig.WithImage != undefined ">
                         <img :src="this.ImageDatas[index][0]" class="card-img-top" :alt="item[0].alt">
                         <div class="card-body">
                             <p class="card-text text-center">{{ item[0].text }}</p>
@@ -49,6 +51,9 @@
                         <div class="card-body">
                             <p class="card-text text-center">{{ item[0].text }}</p>
                         </div>
+                    </div> -->
+                    <div>
+                        <component></component>
                     </div>
                 </div>
             </section>

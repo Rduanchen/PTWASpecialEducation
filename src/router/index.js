@@ -41,9 +41,9 @@ const router = createRouter({
       component:()=>import("@/views/GameTemplate/CompareGame.vue"),
     },
     {
-      path:"/FillinBlank",
-      name:"FillinBlank",
-      component:()=>import("@/views/GameTemplate/FillinBlank.vue"),
+      path:"/ImageWithText",
+      name:"ImageWithText",
+      component:()=>import("@/views/GameTemplate/ImageWithText.vue"),
     },
     {
       path: '/Water' ,
@@ -56,10 +56,15 @@ const router = createRouter({
       component: () => import('@/views/GameTemplate/CalculatorGame.vue'),
     },
     {
-      path: '/FindItemGameMaker',
-      name: 'FindItemGameMaker',
-      component: () => import('@/components/FindItemGameMaker.vue'),
-    }
+      path: '/TextOnly',
+      name: 'TextOnly',
+      component: () => import('@/components/TextOnly.vue'),
+    },
+    {
+      path: '/FreeDrag',
+      name: 'FreeDrag',
+      component: () => import('@/components/FreeDrag.vue'),
+    },
     ]
 });
 router.beforeEach((to, from, next) => {

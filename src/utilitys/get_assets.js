@@ -15,5 +15,5 @@ export function GetTheamsAssetsFile(TheamName) {
 }
 
 export function GetSlotComponentData(name,url) {
-   return new URL(`../assets/SlotComponents/${name}/${url}`, import.meta.url).href
+   return new URL(`../assets/SlotComponentData/${name}/${url}`, import.meta.url).href
 }

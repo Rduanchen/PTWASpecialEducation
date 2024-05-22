@@ -3,7 +3,7 @@
         <p class="h3">{{ this.GameData.Question.text }}</p>
         <div class="container">
             <div class="component1">
-                <component :is="this.slotcomponent.Name" :Data="this.slotcomponent.Data" :id="this.id"></component>
+                <component :is="this.slotcomponent.Name" :Data="this.slotcomponent.Data" :ID="this.id"></component>
             </div>
             <div class="optionbar">
                 <p class="h5">{{ this.GameData.Question.SubQuestion }}</p>
@@ -92,7 +92,7 @@ export default {
     }
 }
 </script>
-<style>
+<style scoped>
 .GameImg{
     height: auto;
 }
@@ -103,11 +103,11 @@ p{
     display: flex;
     flex-direction: row;
     width: 100%;
+    height: 70vh;
     .component1{
         width: 60%;
         height: 100%;
         component{
-            width: 100%;
             height: 100%;
         }
     }

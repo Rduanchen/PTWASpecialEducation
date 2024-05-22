@@ -621,11 +621,10 @@ export default {
         }
         catch{
           this.Hint["Type"] = "None";
-          // console.log("No hint in this game");
           console.warn("No hint in this game");
         }
         try{
-          this.MaxWrongTimes = this.GameData.Hint.Rule.Value;
+          this.MaxWrongTimes = this.GameData.Hint.Data.MaxWrongTimes;
           if (this.MaxWrongTimes == undefined ){
             this.MaxWrongTimes = 2;
             console.warn("No MaxWrongTimes in Hint Rule, set to default 2");
@@ -799,15 +798,15 @@ transform: scale(1.07); /* 放大至原大小的 110% */
     align-items: center;
     padding-top: 1rem;
     .Buttons{
+      padding: 1vw;
       width: 100%;
       height: 100%;
       display: flex;
       flex-direction: column;
       gap: 1rem;
       justify-content: stretch;
-      align-items: center;
-      // border: solid;
       button{
+        align-self: center;
         width: 90%;
         font-size: x-large;
         border-radius: 12px;
@@ -822,6 +821,7 @@ transform: scale(1.07); /* 放大至原大小的 110% */
       width: 2vw;
       height: 2vw;
     }
+    
   }
 }
 

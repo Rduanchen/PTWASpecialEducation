@@ -18,7 +18,7 @@ export default {
         };
     },
     props: {
-        id: {
+        ID: {
             type: String,
             required: true
         },
@@ -28,10 +28,11 @@ export default {
         }
     },
     methods: {
-        // Your methods go here
+        
     },
     mounted() {
-        this.imageUrl = GamesGetAssetsFile(this.id, this.Data.Src);
+        this.imageUrl = GamesGetAssetsFile(this.ID, this.Data.Src);
+        console.log(this.imageUrl);
         let data = document.getElementById('ImageContainer');
         let ApplyImage = document.getElementById('Img');
         data = data.getBoundingClientRect();
@@ -57,6 +58,7 @@ export default {
         }
         img.src = this.imageUrl;
         window.addEventListener('resize', () => {
+            data = document.getElementById('ImageContainer');
             data = data.getBoundingClientRect();
             this.ContainerSize = {
                 width: data.width,

@@ -17,7 +17,7 @@ export default {
 		};
 	},
 	props: {
-		id: {
+		ID: {
 			type: String,
 			required: true
 		},
