@@ -43,7 +43,7 @@ const router = createRouter({
     {
       path:"/ImageWithText",
       name:"ImageWithText",
-      component:()=>import("@/views/GameTemplate/ImageWithText.vue"),
+      component:()=>import("@/components/ImageWithText.vue"),
     },
     {
       path: '/Water' ,

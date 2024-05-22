@@ -1,6 +1,6 @@
 <template>
-<div class="Word">
-    <p>{{ this.Data.Word }}  </p>
+<div class="card Word">
+    <p>{{ this.Data.Text }}</p>
 </div>
 </template>
 <script>
@@ -18,9 +18,7 @@ export default {
     },
     data() {
         return {
-            Data: {
-                Word: "Hello"
-            }
+
         };
     },
     mounted() {

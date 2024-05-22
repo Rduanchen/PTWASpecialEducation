@@ -6,72 +6,53 @@
 </div>
 <hr>
 <div class="OutterContainer">
-    <section class="OptionBar">
-        <p class="OptionBarTitle">{{ this.GameData.OptionBarTitle }}</p>
-        <draggable :list="this.Symbol" :sort="false" item-key="name" :group="{ name: 'Symbols', pull: 'clone', put: false }" class="">
-            <template #item="{ element }">
-                <cardwithbutton :imageURL="element.img" :Text="element.Text" :altText="element.alt" class="OptionBarItems clickable"></cardwithbutton>
-            </template>
-        </draggable>
-        <button @click="CheckAllAnswer" class="btn btn-lg btn-primary" v-if="this.GameConfig.CheckAnswerMode=='Button'">檢查答案</button>
-        <!-- <button @click="ClearAllData" class="btn btn-lg btn-danger">清空所有答案</button> -->
-    </section>
     <div class="QuestionArea">
         <div v-for="(item, index) in GameData.Datas" :key="index" class="QuestionContainer">
             <section class="QuestionRow" :class="{ 'QuestionRow-Wrong': this.Answered[index]==false, 'QuestionRow-Right': this.Answered[index]==true }">
                 <div class="card CompareCard">
-                    <!-- <div v-if="this.GameConfig.WithImage != false && this.GameConfig.WithImage != undefined">
-                        <img :src="this.ImageDatas[index][0]" class="card-img-top" :alt="item[0].alt">
-                        <div class="card-body">
-                            <p class="card-text text-center">{{ item[0].text }}</p>
-                        </div>
-                    </div>
-                    <div v-else class="CardWithoutImage">
-                        <div class="card-body">
-                            <p class="card-text text-center">{{ item[0].text }}</p>
-                        </div>
-                    </div> -->
                     <div>
-                        <component></component>
+                        <component :is="item[0].Name" :Data="item[0].Data" :ID="this.id"></component>
                     </div>
                 </div>
                 <draggable :list="Answers[index]" group="Symbols" :sort="false" item-key="name" class="CompareSymbol" @change="Add(index)" @add="CheckDrop">
                     <template #item="{ element }">
-                        <cardwithbutton :imageURL="element.img" :Text="element.Text" :altText="element.alt" class="clickable"></cardwithbutton>
+                        <component :is="'TextOnly'" :Data="element" :ID="this.id"></component>
                     </template>
                 </draggable>
                 <div class="card">
-                    <!-- <div v-if="this.GameConfig.WithImage != false && this.GameConfig.WithImage != undefined ">
-                        <img :src="this.ImageDatas[index][0]" class="card-img-top" :alt="item[0].alt">
-                        <div class="card-body">
-                            <p class="card-text text-center">{{ item[0].text }}</p>
-                        </div>
-                    </div>
-                    <div v-else class="CardWithoutImage">
-                        <div class="card-body">
-                            <p class="card-text text-center">{{ item[0].text }}</p>
-                        </div>
-                    </div> -->
                     <div>
-                        <component></component>
+                        <component :is="item[0].Name" :Data="item[0].Data" :ID="this.id"></component>
                     </div>
                 </div>
             </section>
         </div>
     </div>
+    <section class="OptionBar">
+        <p class="OptionBarTitle">{{ this.GameData.OptionBarTitle }}</p>
+        <draggable :list="this.Symbol" :sort="false" item-key="name" :group="{ name: 'Symbols', pull: 'clone', put: false }" class="Options">
+            <template #item="{ element }">
+                <component :is="'TextOnly'" :Data="element" :ID="this.id"></component>
+            </template>
+        </draggable>
+        <button @click="CheckAllAnswer" class="SucessButton" v-if="this.GameConfig.CheckAnswerMode=='Button'">檢查答案</button>
+    </section>
 </div>
 </div>
-
 </template>
 <script>
 import cardwithbutton from '@/components/cardwithbutton.vue'
 import { GamesGetAssetsFile } from '@/utilitys/get_assets.js';
 import draggable from 'vuedraggable';
+import { defineAsyncComponent } from 'vue';
+import TextOnly from '../../components/TextOnly.vue';
 export default {
     name: 'CompareGame',
     components: {
         draggable,
-        cardwithbutton
+        cardwithbutton: defineAsyncComponent(() => import('@/components/cardwithbutton.vue')),
+        ImageContainer: defineAsyncComponent(() => import('@/components/ImageContainer.vue')),
+        ImageWithText: defineAsyncComponent(() => import('@/components/ImageWithText.vue')),
+        TextOnly: defineAsyncComponent(() => import('@/components/TextOnly.vue'))
     },
     emits: ['play-effect','add-record','next-level'],
     props: {
@@ -99,7 +80,7 @@ export default {
             Ans2:[],
             ImageDatas:[],
             Symbol: [],
-            BSESymbol: [ //FIXME: Change to real data
+            BSESymbol: [
                 {
                     tag: "Big",
                     Text: ">"
@@ -190,20 +171,8 @@ export default {
             }
             this.ImageDatas.push(TempImg);
         }
-        if (this.GameConfig.CustomeSymbol == false) {
-            switch (this.GameConfig.SymbolType) {
-                case "BSE":
-                    this.Symbol = this.BSESymbol;
-                    break;
-                default:
-                    this.Symbol = this.BSESymbol;
-                    break;
-            }
-        }
-        else{
-            this.Symbol = this.GameData.Symbol;
-        }
-    },
+        this.Symbol = this.BSESymbol;
+    }
 };
 </script>
 
@@ -212,12 +181,15 @@ export default {
     width: 100%;
     padding-left: 2rem;
 }
+
+
+
 .OutterContainer{
     margin-top: 2rem;
     min-height: 50vh;
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    flex-direction: column;
+    justify-content: center;
 }
 .QuestionContainer{
     display: flex;
@@ -271,24 +243,7 @@ export default {
 .QuestionRow-Right{
     background-color: #3a86ff;
 }
-.OptionBar{
-    max-height: 79vh;
-    width: 30%;
-    display: flex;
-    flex-direction: column;
-    justify-content: start;
-    align-items: center;
-    position: sticky;
-    top:0;
-    .btn{
-        margin-top: 1rem;
-        width: 80%;
-    }
-    .OptionBarTitle{
-        font-size: 1.4rem;
-    }
-    
-}
+
 .OptionBarItems{
     /* border: solid; */
     margin: 2rem 0;
@@ -299,6 +254,9 @@ export default {
 .QuestionArea{
     /* border: solid; */
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 .CompareCard{
     display: flex;
@@ -306,5 +264,31 @@ export default {
 }
 .clickable{
     cursor:pointer;
+}
+.OptionBar{
+    max-height: 79vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    position: sticky;
+    top:0;
+    .OptionBarTitle{
+        font-size: 1.4rem;
+    }
+    .Options{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 2rem;
+    }
+    .SucessButton{
+        padding: 1rem;
+        width: 50%;
+        background-color: #3a86ff;
+        border: none;
+        border-radius: 12px;
+        font-size: x-large;
+    }
 }
 </style>
