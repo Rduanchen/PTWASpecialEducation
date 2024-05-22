@@ -6,6 +6,9 @@
 </div>
 <hr>
 {{ this.Answers }}
+{{ this.Answered }}
+{{ this.ImageDatas }}
+{{ this.Symbol }}
 <div class="OutterContainer">
     <section class="OptionBar">
         <p class="OptionBarTitle">{{ this.GameData.OptionBarTitle }}</p>
