@@ -5,6 +5,8 @@
     <p class="h2 SubTitle" v-if="this.GameData.Description && this.GameData.Description != ''">{{ this.GameData.Description }}</p>
 </div>
 <hr>
+{{ this.Answers}}
+{{ this.Symbol }}
 <div class="OutterContainer">
     <div class="QuestionArea">
         <div v-for="(item, index) in GameData.Datas" :key="index" class="QuestionContainer">
@@ -16,7 +18,7 @@
                 </div>
                 <draggable :list="Answers[index]" group="Symbols" :sort="false" item-key="name" class="CompareSymbol" @change="Add(index)" @add="CheckDrop">
                     <template #item="{ element }">
-                        <component :is="'TextOnly'" :Data="element" :ID="this.id"></component>
+                        <cardwithbutton :imageURL="element.img" :Text="element.Text" :altText="element.alt" class="clickable"></cardwithbutton>
                     </template>
                 </draggable>
                 <div class="card">
@@ -31,7 +33,7 @@
         <p class="OptionBarTitle">{{ this.GameData.OptionBarTitle }}</p>
         <draggable :list="this.Symbol" :sort="false" item-key="name" :group="{ name: 'Symbols', pull: 'clone', put: false }" class="Options">
             <template #item="{ element }">
-                <component :is="'TextOnly'" :Data="element" :ID="this.id"></component>
+                <cardwithbutton :imageURL="element.img" :Text="element.Text" :altText="element.alt" class="OptionBarItems clickable"></cardwithbutton>
             </template>
         </draggable>
         <button @click="CheckAllAnswer" class="SucessButton" v-if="this.GameConfig.CheckAnswerMode=='Button'">檢查答案</button>
@@ -160,15 +162,6 @@ export default {
             this.Answered.push(null);
             this.Answers.push([]);
             let TempImg = [];
-            for (var j in this.GameData.Datas[i]) {
-                try {
-                    let temp = GamesGetAssetsFile(this.id, this.GameData.Datas[i][j].img);
-                    console.log(temp);
-                    TempImg.push(temp);
-                } catch (error) {
-
-                }
-            }
             this.ImageDatas.push(TempImg);
         }
         this.Symbol = this.BSESymbol;
