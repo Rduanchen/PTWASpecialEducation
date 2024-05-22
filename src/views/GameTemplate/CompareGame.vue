@@ -5,6 +5,7 @@
     <p class="h2 SubTitle" v-if="this.GameData.Description && this.GameData.Description != ''">{{ this.GameData.Description }}</p>
 </div>
 <hr>
+{{ this.Answers }}
 <div class="OutterContainer">
     <section class="OptionBar">
         <p class="OptionBarTitle">{{ this.GameData.OptionBarTitle }}</p>
