@@ -65,6 +65,15 @@ const router = createRouter({
       name: 'FreeDrag',
       component: () => import('@/components/FreeDrag.vue'),
     },
+    {
+      path: '/TestNumberBoard',
+      name: 'TestNumberBoard',
+      component: () => import('@/components/NumberBoard.vue'),
+    },{
+      path: '/DrawImageTable',
+      name: 'DrawImageTable',
+      component: () => import('@/components/DrawImageTable.vue'),
+    }
     ]
 });
 router.beforeEach((to, from, next) => {

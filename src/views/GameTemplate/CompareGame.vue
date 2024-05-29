@@ -51,7 +51,9 @@ export default {
         ImageContainer: defineAsyncComponent(() => import('@/components/ImageContainer.vue')),
         ImageWithText: defineAsyncComponent(() => import('@/components/ImageWithText.vue')),
         TextOnly: defineAsyncComponent(() => import('@/components/TextOnly.vue')),
-        CoulorBarChart: defineAsyncComponent(() => import('@/components/CoulorBarChart.vue'))
+        CoulorBarChart: defineAsyncComponent(() => import('@/components/CoulorBarChart.vue')),
+        CircleChart: defineAsyncComponent(() => import('@/components/CircleChart.vue')),
+        ImageTable: defineAsyncComponent(() => import('@/components/DrawImageTable.vue'))
     },
     emits: ['play-effect','add-record','next-level'],
     props: {
@@ -137,13 +139,24 @@ export default {
             return true;
         },
         CheckAllAnswer(){
+            let check = true;
             for (var i in this.GameData.Answer) {
                 if (this.GameData.Answer[i] == this.Answers[i][0].tag) {
                     this.Answered[i] = true;
                 }
                 else {
                     this.Answered[i] = false;
+                    check = false;
                 }
+            }
+            if(check ==false){
+                this.$emit('play-effect', 'WrongSound',)
+                this.$emit('add-record', [this.GameData.Answer[0], this.Answers[0], "錯誤"])
+            }
+            else{
+                this.$emit('play-effect', 'CorrectSound',)
+                this.$emit('add-record', [this.GameData.Answer[0], this.Answers[0], "正確"])
+                this.$emit('next-question')
             }
         },
         ClearAllData(){
@@ -230,6 +243,7 @@ export default {
     border-color: #aaa;
 }
 .OptionBar{
+    width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -237,6 +251,7 @@ export default {
     margin: 0 2rem;
     gap: 2rem;
     .Left{
+        width: 60%;
         margin: 0 2rem;
         .OptionBarTitle{
             font-size: 1.4rem;
@@ -244,7 +259,7 @@ export default {
         .Options{
             display: flex;
             flex-direction: row;
-            justify-content: space-between;
+            justify-content: center;
             gap: 2rem;
             .OptionBarItems{
                 display: flex;
@@ -255,7 +270,7 @@ export default {
     }
     .SucessButton{
         padding: 1rem;
-        width: 20%;
+        width: 40%;
         background-color: #3a86ff;
         border: none;
         border-radius: 12px;

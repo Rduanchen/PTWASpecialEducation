@@ -1,27 +1,13 @@
 <template>
 <div class="OutterContainer" >
-    <table class="OddBorderOutline" v-if="this.Total % 2 != 0">
+    <div class="Division">
+        <p class="Child">{{ this.Data.Child }}</p>
+        <hr>
+        <p class="Mother">{{ this.Data.Total }}</p>
+    </div>
+    <table class="OddBorderOutline" v-for="(items, index1) in Drawed">
         <tr>
-            <td v-for="(item, index) in Drawed" class="table" @click="handleClick($event, index)"></td>
-        </tr>
-    </table>    
-    <table class="EvenBorderOutline" v-else>
-        <tr>
-            <td v-for="(item,index) in this.Drawed" class="table" @click="handleClick($event, index)">123</td>
-        </tr>
-        <tr>
-            <td v-for="(item,index) in this.Drawed2" class="table" @click="handleClick2($event, index)">123</td>
-        </tr>
-    </table>
-
-    <table style="border: solid;">
-        <tr>
-            <td style="border: solid;">123</td>
-            <td style="border: solid;">122</td>
-        </tr>
-        <tr>
-            <td style="border: solid;">222</td>
-            <td style="border: solid;">333</td>
+            <td v-for="(item, index2) in items" class="table" @click="handleClick($event,index1,index2)"></td>
         </tr>
     </table>
 </div>
@@ -50,15 +36,25 @@ name: 'CoulorBarChart',
         // Your component's methods go here
     },
     created(){
+        this.Data.Total = this.Data.Mother;
+        this.Drawed = [];
         if (this.Data.Total % 2 != 0){
+            let temp = []
             for(var i = 0; i < this.Data.Total; i++){
-                this.Drawed.push(true);
+                temp.push(true);
             }
+            console.log(temp)
+            this.Drawed.push(temp);
         }
         else{
-            for(var i = 0; i < this.Data.Total/2; i++){
-                this.Drawed.push(true);
-                this.Drawed2.push(true);
+            let temp = [];
+            let div = this.Data.Total / 2;
+            for(var i = 0; i<2; i++){
+                let temp = []
+                for(var x = 0; x < div; x ++){
+                    temp.push(true)
+                }
+                this.Drawed.push(temp)
             }
         }
     },
@@ -76,26 +72,14 @@ name: 'CoulorBarChart',
         }
     },
     methods: {
-        handleClick($event, index){
-            this.Drawed[index] = !this.Drawed[index];
-            if (this.Drawed[index]){
+        handleClick($event,index1,index2){
+            this.Drawed[index1][index2] = !this.Drawed[index1][index2];
+            if (this.Drawed[index1][index2]){
                 $event.target.style.backgroundColor = 'white';
             }
             else{
                 $event.target.style.backgroundColor = this.Data.Coulor;
             }
-        },
-        handleClick2($event, index){
-            this.Drawed2[index] = !this.Drawed2[index];
-            if (this.Drawed2[index]){
-                $event.target.style.backgroundColor = 'white';
-            }
-            else{
-                $event.target.style.backgroundColor = this.Data.Coulor;
-            }
-        },
-        AddCoulor(e, index){
-            
         }
     }
 };
@@ -103,6 +87,15 @@ name: 'CoulorBarChart',
 
 <style scoped>
 /* Your component's styles go here */
+.Division{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size: x-large;
+    hr {
+        margin: 0 0; /* 根據需要調整間距 */
+    }
+}
 .OutterContainer{
     width: 100%;
     height: 100%;

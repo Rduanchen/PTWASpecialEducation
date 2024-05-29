@@ -22,16 +22,68 @@
             "Datas": [
                 [
                     {
+                        "Name" : "CircleChart",
+                        "Data" : {
+                            "Mother" : 5,
+                            "Child" : 3
+                        }                        
+                    },
+                    {
+                        "Name" : "CircleChart",
+                        "Data" : {
+                            "Mother" : 5,
+                            "Child" : 2
+                        }                        
+                    }
+                ]
+            ],
+            "Answer": ["Big"]
+        },
+        {
+            "QuestionText": "比大小",
+            "Description": "比大小，選出最大的數字",
+            "OptionBarTitle": "將正確的符號拖曳到上面的框框中",
+            "Datas": [
+                [
+                    {
                         "Name" : "CoulorBarChart",
                         "Data" : {
-                            "Total" : 5
+                            "Mother" : 6,
+                            "Child" : 3
                         }                        
                     },
                     {
                         "Name" : "CoulorBarChart",
                         "Data" : {
-                            "Total" : 4
+                            "Mother" : 5,
+                            "Child" : 2
                         }                        
+                    }
+                ]
+            ],
+            "Answer": ["Big"]
+        },
+        {
+            "QuestionText": "比大小",
+            "Description": "比大小，選出最大的數字",
+            "OptionBarTitle": "將正確的符號拖曳到上面的框框中",
+            "Datas": [
+                [
+                    {
+                        "Name" : "ImageTable",
+                        "Data" : {
+                            "Mother" : 5,
+                            "Src" : "1.png",
+                            "Alt" : "1"
+                        }                        
+                    },
+                    {
+                        "Name" : "ImageTable",
+                        "Data" : {
+                            "Mother" : 5,
+                            "Src" : "1.png",
+                            "Alt" : "1"
+                        }                                  
                     }
                 ]
             ],

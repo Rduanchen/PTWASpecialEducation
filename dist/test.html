@@ -1,92 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Draggable Images</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas Pie Chart</title>
 </head>
-<style>
-    /* styles.css */
-    #container {
-    width: 800px;
-    height: 600px;
-    border: 1px solid #ccc;
-    position: relative;
-    overflow: hidden;
-    }
-
-    .draggable {
-    position: absolute;
-    width: 100px;
-    height: 100px;
-    cursor: move;
-    }
-
-</style>
 <body>
-  <div id="container">
-    <img src="image1.jpg" class="draggable" alt="Image 1">
-    <img src="image2.jpg" class="draggable" alt="Image 2">
-    <!-- Add more images as needed -->
-  </div>
-  <script src="script.js"></script>
+    <canvas id="pieChart" width="400" height="400"></canvas>
+    <script>
+        const canvas = document.getElementById('pieChart');
+        const ctx = canvas.getContext('2d');
+        const radius = 200;
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+
+        let division = 10; // 您可以改變這個數字來設定分割的部分數
+        let colors = Array(division).fill(null); // 儲存每個部分的顏色
+
+        function drawPieChart() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // 清空畫布
+            const angleStep = (2 * Math.PI) / division;
+            for (let i = 0; i < division; i++) {
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.arc(centerX, centerY, radius, i * angleStep, (i + 1) * angleStep);
+                ctx.closePath();
+                ctx.fillStyle = colors[i] ? colors[i] : 'lightgray'; // 使用已選顏色或預設顏色
+                ctx.fill();
+                ctx.stroke();
+            }
+        }
+
+        function getSegmentIndex(x, y) {
+            const dx = x - centerX;
+            const dy = y - centerY;
+            const angle = Math.atan2(dy, dx);
+            const adjustedAngle = (angle >= 0 ? angle : (2 * Math.PI + angle));
+            return Math.floor(adjustedAngle / ((2 * Math.PI) / division));
+        }
+
+        canvas.addEventListener('click', (event) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            const index = getSegmentIndex(x, y);
+            colors[index] = colors[index] ? null : `hsl(${Math.random() * 360}, 100%, 50%)`; // 隨機顏色或取消顏色
+            drawPieChart();
+        });
+
+        drawPieChart();
+    </script>
 </body>
-<script>
-// script.js
-document.addEventListener('DOMContentLoaded', (event) => {
-  const container = document.getElementById('container');
-  const draggables = document.querySelectorAll('.draggable');
-  let highestZIndex = 1; // 初始化最高的 z-index
-
-  draggables.forEach(draggable => {
-    draggable.addEventListener('mousedown', onMouseDown);
-
-    function onMouseDown(e) {
-      e.preventDefault();
-      
-      // 將當前被拖動的圖片 z-index 設置為最高
-      highestZIndex++;
-      draggable.style.zIndex = highestZIndex;
-
-      let shiftX = e.clientX - draggable.getBoundingClientRect().left;
-      let shiftY = e.clientY - draggable.getBoundingClientRect().top;
-
-      document.addEventListener('mousemove', onMouseMove);
-      document.addEventListener('mouseup', onMouseUp);
-
-      function onMouseMove(e) {
-        let newLeft = e.pageX - shiftX - container.offsetLeft;
-        let newTop = e.pageY - shiftY - container.offsetTop;
-
-        // Ensure the draggable does not exceed the container boundaries
-        if (newLeft < 0) newLeft = 0;
-        if (newTop < 0) newTop = 0;
-        if (newLeft + draggable.offsetWidth > container.clientWidth) {
-          newLeft = container.clientWidth - draggable.offsetWidth;
-        }
-        if (newTop + draggable.offsetHeight > container.clientHeight) {
-          newTop = container.clientHeight - draggable.offsetHeight;
-        }
-
-        draggable.style.left = newLeft + 'px';
-        draggable.style.top = newTop + 'px';
-      }
-
-      function onMouseUp() {
-        document.removeEventListener('mousemove', onMouseMove);
-        document.removeEventListener('mouseup', onMouseUp);
-      }
-    }
-
-    draggable.ondragstart = function() {
-      return false;
-    };
-  });
-});
-
-
-
-
-</script>
 </html>
