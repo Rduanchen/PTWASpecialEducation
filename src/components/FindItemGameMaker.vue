@@ -42,16 +42,14 @@
             drawed: [],
             counter: 1,
             counter2:1,
-            command: ["點出物件中間點", "物件左上角", "物件右下角"],
+            command: ["物件左上角", "物件右下角"],
             prototype : {
                 Name:"",
-                Location:[  ],
                 LeftTop:[ ],
                 RightBottom:[  ]
             },
             drawingprototype: {
                 Name:"",
-                Location:[  ],
                 LeftTop:[ ],
                 RightBottom:[ ]
             },
@@ -109,15 +107,11 @@
         },
         judge_position(event){
             console.log(event.pageX,event.pageY);
-            if(this.counter == 1){
-                this.drawingprototype.Location = [event.pageX,event.pageY];
-                this.counter++;
-            }
-            else if (this.counter == 2){
+            if (this.counter == 1){
                 this.drawingprototype.LeftTop = [event.pageX,event.pageY];
                 this.counter++;
             }
-            else if (this.counter == 3){
+            else if (this.counter == 2){
                 this.drawingprototype.RightBottom = [event.pageX,event.pageY];
                 // this.drawed[this.counter-1] = true;
                 this.counter = 1;
@@ -125,7 +119,6 @@
                 this.location.push(this.drawingprototype);
                 this.drawingprototype = {
                     Name:"",
-                    Location:[  ],
                     LeftTop:[ ],
                     RightBottom:[  ]
                 }

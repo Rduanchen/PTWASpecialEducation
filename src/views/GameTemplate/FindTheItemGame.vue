@@ -1,17 +1,18 @@
 <template>
 <div class="container">
-<p class="h1">{{ this.GameData.Question.Text }}</p>
-<div class="Game">
-    <canvas id="cvs" class="center" width="600" height="400" style="border: 1px solid #000" v-on:click="judge_position($event)"></canvas>
-    <div class="ObjList">
-        <p class="h4">尚未被找到:</p>
-        <div class="Objects">
-            <button v-for="(button,index) in btn" class="Object" :class="{ activebutton: answered[index]==1} ">
-                {{ button }}
-            </button>
+    <p class="h1">{{ this.GameData.Text }}</p>
+    <div class="Game">
+        <canvas id="cvs" class="center" width="600" height="400" style="border: 1px solid #000" v-on:click="judge_position($event)"></canvas>
+        <div class="ObjList">
+            <p class="h4">尚未被找到:</p>
+            <div class="Objects">
+                <button v-for="(button,index) in this.GameData.Objs" class="Object" :class="{ activebutton: answered[index] } ">
+                    {{ button.Name }}
+                </button>
+            </div>
         </div>
     </div>
-</div>
+    <!-- <button v-on:click="drawAllObj">繪製所有的位置</button> -->
 </div>
 </template>
 <script>
@@ -43,84 +44,85 @@ export default {
         //Other Game Methods
     },
     created() {
-        // this.question=this.GameData.Question;
-        for(var i=0; i<this.GameData.Question["ObjNum"]; i++){
-            this.answered.push(0);
-        }
-        for(var i in this.GameData.Question.ObjName){
-            this.btn[i]=this.GameData.Question.ObjName[i];
-        }
+
     },
     mounted(){
         var cvs=document.getElementById("cvs");
         const ctx=cvs.getContext('2d');
         var img=new Image();
-        img.src=GamesGetAssetsFile(this.id, this.GameData.img);
-        console.log(img.src);
         img.addEventListener("load", function() {
             ctx.drawImage(this,0,0,cvs.width,cvs.height);
         }, false);
+        img.src=GamesGetAssetsFile(this.id, this.GameData.img);
+        for(var i in this.GameData.Objs){
+            this.answered.push(false);
+        }
+        for(var i in this.GameData.Objs){
+            this.ObjPosition.push([this.GameData.Objs[i].Location[0],this.GameData.Objs[i].Location[1]]);
+            this.ObjPositionRange.push(
+                [
+                    [this.GameData.Objs[i].LeftTop[0],this.GameData.Objs[i].LeftTop[1]],
+                    [this.GameData.Objs[i].RightBottom[0],this.GameData.Objs[i].RightBottom[1]]
+                ]
+            );
 
-        var posX = $('#cvs').offset().left;
-        var posY = $('#cvs').offset().top;
-        console.log("page offset:",posX,posY);
-        this.ObjPosition=this.GameData.Question["ObjLocation"];
-        this.ObjPositionRange=this.GameData.Answer;
+        }
     },
     methods:{
-        outCircle(x,y){
-            // console.log("draw circle on number")//DEBUG
+        // drawAllObj(){
+        //     for(var i in this.ObjPositionRange){
+        //         var canvas = document.getElementById("cvs");
+        //         var ctx = canvas.getContext("2d");
+        //         var posX = 0;
+        //         var posY = 0;
+        //         console.log(posX,posY)
+        //         let width = this.ObjPositionRange[i][1][0]- this.ObjPositionRange[i][0][0];
+        //         let height = this.ObjPositionRange[i][1][1]- this.ObjPositionRange[i][0][1];
+        //         ctx.strokeRect(this.ObjPositionRange[i][0][0]+posX,this.ObjPositionRange[i][0][1]+posY,width,height);
+        //     }
+        // }, // this code is for DEBUG
+        DrawCircle(x1,y1,x2,y2){
             var canvas = document.getElementById("cvs");
             var ctx = canvas.getContext("2d");
-            // 設定圓形參數
-            var radius = 50;//半徑
-            var lineWidth = 2;
-            var strokeColor = "red";
-            // 繪製圓形
+            let width = x2-x1;
+            let height = y2-y1;
+            let centerX = x1+width/2;
+            let centerY = y1+height/2;
+            let bais = 10;
+            let radius = Math.max(width,height)/2 + bais;
             ctx.beginPath();
-            ctx.arc(x, y, radius, 0, 2*Math.PI);
-            ctx.lineWidth = lineWidth;
-            ctx.strokeStyle = strokeColor;
+            ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
             ctx.stroke();
         },
         judge_position(event){            
             // DEBUG
-            console.log("detect the mouse position...");
-            console.log(event);
-            console.log(event.pageX,event.pageY);
-            var posX = $('#cvs').offset().left;
-            var posY = $('#cvs').offset().top;
-            console.log(event.pageX+posX,event.pageY+posY);//DEBUG
-            console.log(this.ObjPositionRange[0][0][0],this.ObjPositionRange[0][0][1]);//DEBUG
-            for(var i=0;i<11;i++){
-                if((event.pageX>=(this.ObjPositionRange[i][0][0]+posX))&&(event.pageX<=(this.ObjPositionRange[i][0][1]+posX))){
+            // console.log("detect the mouse position...");
+            // console.log(event.pageX,event.pageY);
+            var posX = document.getElementById("cvs").getBoundingClientRect().left;
+            var posY = document.getElementById("cvs").getBoundingClientRect().top;
+            // console.log(posX,posY);
+            for(var i in this.ObjPositionRange){
+                if((event.pageX >= (this.ObjPositionRange[i][0][0]+posX))&&(event.pageX<=(this.ObjPositionRange[i][1][0]+posX))){
                     // console.log("x is right")//DEBUG
-                    if((event.pageY>=(this.ObjPositionRange[i][1][0]+posY))&&(event.pageY<=(this.ObjPositionRange[i][1][1]+posY))){
+                    if((event.pageY>=(this.ObjPositionRange[i][0][1]+posY))&&(event.pageY<=(this.ObjPositionRange[i][1][1]+posY))){
                         // console.log("y is right")//DEBUG
                         this.RightAns(i);
                     }  
                 }
-                //judge does the mouse click on the right position.
-            }   
+            }  
         },
         RightAns(num){
-            // console.log(num," was clicked!") //DEBUG
-            var x=this.ObjPosition[num][0];
-            var y=this.ObjPosition[num][1];
-            //draw circle
-            // record_time_data(num);
-            // playAudio(num);//Play Right Answer Sound
             this.$emit('play-effect', 'CorrectSound')
-            this.$emit('add-record',[num,"被找到","正確"])
-            this.outCircle(this.ObjPosition[num][0],this.ObjPosition[num][1]);
+            this.$emit('add-record',[this.GameData.Objs[num].Name,"被找到","正確"])
+            this.DrawCircle(this.ObjPositionRange[num][0][0],this.ObjPositionRange[num][0][1],this.ObjPositionRange[num][1][0],this.ObjPositionRange[num][1][1]);
             $("#bt-"+num).css("background-color","red")
             this.detect_win(num);
         },
         detect_win(i){
-            this.answered[i]=1;
+            this.answered[i]=true;
             var unanswer=0;
             for(i in this.answered){
-                if(this.answered[i]==0){
+                if(this.answered[i]==false){
                     unanswer+=1
                 }
             }
@@ -134,15 +136,15 @@ export default {
             this.$emit('add-record',["全對","","正確"])
             this.$emit('next-question',true);
         }
-        
     }
 }
 </script>
 
 <style scoped>
-
-
-
+.h1{
+    margin-left: 1rem;
+    margin-bottom: 1rem;
+}
 .Game{
     display: flex;
     flex-direction: row;
@@ -167,10 +169,7 @@ export default {
                 border-radius: 12px;
                 border: none;
             }
-            .activebutton {
-                background-color: #606c38 !important;
-                color: white;
-            }
+
         }
         @media screen and (min-width: 992px) {
             .Objects {
@@ -198,5 +197,9 @@ export default {
             
         }
     }
+}
+.activebutton {
+    background-color: #606c38 !important;
+    color: white;
 }
 </style>

@@ -13,3 +13,7 @@ export function GetSystemEffectAssetsFile(url) {
 export function GetTheamsAssetsFile(TheamName) {
    return new URL(`../theams/${TheamName}`, import.meta.url).href
 }
+
+export function GetSlotComponentData(name,url) {
+   return new URL(`../assets/SlotComponentData/${name}/${url}`, import.meta.url).href
+}

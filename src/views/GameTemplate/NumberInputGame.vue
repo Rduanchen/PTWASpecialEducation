@@ -2,7 +2,7 @@
 <div class="container">
     <!-- v-if -->
     <div class="ImageCard" v-if="this.GameData.SlotComponents != undefined">
-        <component class="component" :id="this.id" :Data="this.SlotData" :is="this.SlotComponent"></component>
+        <component class="component" :ID="this.id" :Data="this.SlotData" :is="this.SlotComponent"></component>
     </div> 
     <div class="AnswerArea">
         <p> {{ this.GameData.Question }} </p>
@@ -10,7 +10,6 @@
     </div>
 </div>
 </template>
-
 <script>
 import VirtualNumPad from '@/components/VirtualNumPad.vue';
 import { GamesGetAssetsFile } from '@/utilitys/get_assets.js';
@@ -75,8 +74,8 @@ export default {
     },
     components: {
         VirtualNumPad,
-        // Verifyed Component Here
-        ImageContainer: defineAsyncComponent(() => import('@/components/ImageContainer.vue'))
+        ImageContainer: defineAsyncComponent(() => import('@/components/ImageContainer.vue')),
+        FreeDrag: defineAsyncComponent(() => import('@/components/FreeDrag.vue'))
     }
 };
 

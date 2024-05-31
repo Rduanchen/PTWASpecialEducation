@@ -1,4 +1,5 @@
 <template>
+<<<<<<< HEAD
 <div>
 <div class="Head">
     <p class="h1 Title" v-if="this.GameData.QuestionText && this.GameData.QuestionText!= ''">{{ this.GameData.QuestionText }}</p>
@@ -9,68 +10,64 @@
 {{ this.Answered }}
 {{ this.ImageDatas }}
 {{ this.Symbol }}
+=======
+>>>>>>> develop
 <div class="OutterContainer">
-    <section class="OptionBar">
-        <p class="OptionBarTitle">{{ this.GameData.OptionBarTitle }}</p>
-        <draggable :list="this.Symbol" :sort="false" item-key="name" :group="{ name: 'Symbols', pull: 'clone', put: false }" class="">
-            <template #item="{ element }">
-                <cardwithbutton :imageURL="element.img" :Text="element.Text" :altText="element.alt" class="OptionBarItems clickable"></cardwithbutton>
-            </template>
-        </draggable>
-        <button @click="CheckAllAnswer" class="btn btn-lg btn-primary" v-if="this.GameConfig.CheckAnswerMode=='Button'">檢查答案</button>
-        <button @click="ClearAllData" class="btn btn-lg btn-danger">清空所有答案</button>
-    </section>
+    <div class="Head">
+        <p class="h1 Title" v-if="this.GameData.QuestionText && this.GameData.QuestionText!= ''">{{ this.GameData.QuestionText }}</p>
+        <p class="h2 SubTitle" v-if="this.GameData.Description && this.GameData.Description != ''">{{ this.GameData.Description }}</p>
+    </div>
+    <hr>
     <div class="QuestionArea">
         <div v-for="(item, index) in GameData.Datas" :key="index" class="QuestionContainer">
             <section class="QuestionRow" :class="{ 'QuestionRow-Wrong': this.Answered[index]==false, 'QuestionRow-Right': this.Answered[index]==true }">
-                <div class="card CompareCard">
-                    <div v-if="this.GameConfig.WithImage != false && this.GameConfig.WithImage != undefined">
-                        <img :src="this.ImageDatas[index][0]" class="card-img-top" :alt="item[0].alt">
-                        <div class="card-body">
-
-                            <p class="card-text text-center">{{ item[0].text }}</p>
-                        </div>
-                    </div>
-                    <div v-else class="CardWithoutImage">
-                        <div class="card-body">
-                            <p class="card-text text-center">{{ item[0].text }}</p>
-                        </div>
-                    </div>
+                <div class="CompareCard">
+                    <component :is="item[0].Name" :Data="item[0].Data" :ID="this.id"></component>
                 </div>
                 <draggable :list="Answers[index]" group="Symbols" :sort="false" item-key="name" class="CompareSymbol" @change="Add(index)" @add="CheckDrop">
                     <template #item="{ element }">
-                        <cardwithbutton :imageURL="element.img" :Text="element.Text" :altText="element.alt" class="clickable"></cardwithbutton>
+                        <div class="clickable">
+                            <p class="h1">{{ element.Text }}</p>
+                        </div>
                     </template>
                 </draggable>
-                <div class="card">
-                    <div v-if="this.GameConfig.WithImage != false && this.GameConfig.WithImage != undefined ">
-                        <img :src="this.ImageDatas[index][0]" class="card-img-top" :alt="item[0].alt">
-                        <div class="card-body">
-                            <p class="card-text text-center">{{ item[0].text }}</p>
-                        </div>
-                    </div>
-                    <div v-else class="CardWithoutImage">
-                        <div class="card-body">
-                            <p class="card-text text-center">{{ item[0].text }}</p>
-                        </div>
-                    </div>
+                <div class="CompareCard">
+                    <component :is="item[1].Name" :Data="item[1].Data" :ID="this.id"></component>
                 </div>
             </section>
         </div>
     </div>
+    <section class="OptionBar">
+        <div class="Left">
+            <p class="OptionBarTitle">{{ this.GameData.OptionBarTitle }}</p>
+            <draggable :list="this.Symbol" :sort="false" item-key="name" :group="{ name: 'Symbols', pull: 'clone', put: false }" class="Options">
+                <template #item="{ element }">
+                    <div class="OptionBarItems clickable">
+                        <p class="h1">{{ element.Text }}</p>
+                    </div>
+                </template>
+            </draggable>
+        </div>
+        <button @click="CheckAllAnswer" class="SucessButton" v-if="this.GameConfig.CheckAnswerMode=='Button'">檢查答案</button>
+        <button @click="Triger" class="btn btn-primary">Triger</button>
+    </section>
 </div>
-</div>
-
 </template>
 <script>
-import cardwithbutton from '@/components/cardwithbutton.vue'
 import { GamesGetAssetsFile } from '@/utilitys/get_assets.js';
 import draggable from 'vuedraggable';
+import { defineAsyncComponent } from 'vue';
+import TextOnly from '../../components/TextOnly.vue';
 export default {
     name: 'CompareGame',
     components: {
         draggable,
-        cardwithbutton
+        ImageContainer: defineAsyncComponent(() => import('@/components/ImageContainer.vue')),
+        ImageWithText: defineAsyncComponent(() => import('@/components/ImageWithText.vue')),
+        TextOnly: defineAsyncComponent(() => import('@/components/TextOnly.vue')),
+        CoulorBarChart: defineAsyncComponent(() => import('@/components/CoulorBarChart.vue')),
+        CircleChart: defineAsyncComponent(() => import('@/components/CircleChart.vue')),
+        ImageTable: defineAsyncComponent(() => import('@/components/DrawImageTable.vue'))
     },
     emits: ['play-effect','add-record','next-level'],
     props: {
@@ -98,7 +95,7 @@ export default {
             Ans2:[],
             ImageDatas:[],
             Symbol: [],
-            BSESymbol: [ //FIXME: Change to real data
+            BSESymbol: [
                 {
                     tag: "Big",
                     Text: ">"
@@ -115,6 +112,9 @@ export default {
         };
     },
     methods: {
+        Triger(){
+            this.$emit('play-effect','IncorrectAnimation');
+        },
         Add(index){
             console.log("check drop");
             this.SelectedGroup = index;
@@ -125,7 +125,9 @@ export default {
             let tmp = this.Answers[this.SelectedGroup][newVal.newIndex]
             this.Answers[this.SelectedGroup] = [tmp]
             this.RealTimeCheckAnswer()
-            
+            if (this.GameConfig.CheckAnswerMode != "OnFill") {
+                this.Answered[this.SelectedGroup] = null;
+            }
         },
         RealTimeCheckAnswer(){
             if(this.GameConfig.CheckAnswerMode == "OnFill"){
@@ -154,13 +156,24 @@ export default {
             return true;
         },
         CheckAllAnswer(){
+            let check = true;
             for (var i in this.GameData.Answer) {
                 if (this.GameData.Answer[i] == this.Answers[i][0].tag) {
                     this.Answered[i] = true;
                 }
                 else {
                     this.Answered[i] = false;
+                    check = false;
                 }
+            }
+            if(check ==false){
+                this.$emit('play-effect', 'WrongSound',)
+                this.$emit('add-record', [this.GameData.Answer[0], this.Answers[0], "錯誤"])
+            }
+            else{
+                this.$emit('play-effect', 'CorrectSound',)
+                this.$emit('add-record', [this.GameData.Answer[0], this.Answers[0], "正確"])
+                this.$emit('next-question')
             }
         },
         ClearAllData(){
@@ -178,31 +191,10 @@ export default {
             this.Answered.push(null);
             this.Answers.push([]);
             let TempImg = [];
-            for (var j in this.GameData.Datas[i]) {
-                try {
-                    let temp = GamesGetAssetsFile(this.id, this.GameData.Datas[i][j].img);
-                    console.log(temp);
-                    TempImg.push(temp);
-                } catch (error) {
-
-                }
-            }
             this.ImageDatas.push(TempImg);
         }
-        if (this.GameConfig.CustomeSymbol == false) {
-            switch (this.GameConfig.SymbolType) {
-                case "BSE":
-                    this.Symbol = this.BSESymbol;
-                    break;
-                default:
-                    this.Symbol = this.BSESymbol;
-                    break;
-            }
-        }
-        else{
-            this.Symbol = this.GameData.Symbol;
-        }
-    },
+        this.Symbol = this.BSESymbol;
+    }
 };
 </script>
 
@@ -210,100 +202,96 @@ export default {
 .Head{
     width: 100%;
     padding-left: 2rem;
-}
-.OutterContainer{
-    margin-top: 2rem;
-    min-height: 50vh;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
-.QuestionContainer{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-.QuestionRow{
-    margin: 1rem 0;
-    padding: 1rem;
-    border-radius: 12px;
-    width: 90%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    align-items: center;
-    .CompareSymbol{
-        min-width: 20vh;
-        min-height: 10vh;
-        display: flex;
-        align-self:center;
-        align-items: center;
-        justify-content: center;
-        border: solid;
-        border-radius: 20px;
-        border-color: #555;
-        padding: 1rem;
+    .Title{
+        font-size: 2rem;
     }
-    .card{
-        width: 15rem;
-        align-self: stretch;
-        align-items: center;
-        justify-self: center;
-    }
-    .card-text{
-        font-size: 1.5vw;
-    }
-    .CardWithoutImage{
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 15vh;
-        .card-text{
-            font-size: 3vw;
-        }
+    .SubTitle{
+        font-size: 1.5rem;
     }
 }
 .QuestionRow-Wrong{
     background-color: #cc0627c6;
 }
 .QuestionRow-Right{
-    background-color: #3a86ff;
+    background-color: rgba(255, 255, 255, 1)
 }
-.OptionBar{
-    max-height: 79vh;
-    width: 30%;
+.OutterContainer{
     display: flex;
     flex-direction: column;
-    justify-content: start;
+    justify-content: center;
     align-items: center;
-    position: sticky;
-    top:0;
-    .btn{
-        margin-top: 1rem;
-        width: 80%;
+    gap: 1rem;
+    .QuestionArea{
+        .QuestionContainer{
+            .QuestionRow{
+                display: flex;
+                flex-direction: row;
+                justify-content: space-evenly;
+                align-items: center;
+                height: 40vh;
+                .CompareCard{
+                    width: 40%;
+                    height: 90%;
+                    component{
+                        width: 100%;
+                        height: 100%;
+                    }
+                }
+                .CompareSymbol{
+                    min-width: 7rem;
+                    min-height: 5rem;
+                    border: solid;
+                    border-radius: 12px;
+                    border-color: #aaa;
+                    display: flex;
+                    align-items: center;
+                    padding: 1rem 1rem;
+                }
+            }
+        }
     }
-    .OptionBarTitle{
-        font-size: 1.4rem;
-    }
-    
-}
-.OptionBarItems{
-    /* border: solid; */
-    margin: 2rem 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-}
-.QuestionArea{
-    /* border: solid; */
-    width: 100%;
-}
-.CompareCard{
-    display: flex;
-    align-items: stretch;
 }
 .clickable{
     cursor:pointer;
+    border: solid;
+    border-radius: 12px;
+    width : 5rem;
+    text-align: center;
+    border-color: #aaa;
+}
+.OptionBar{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 0 2rem;
+    gap: 2rem;
+    .Left{
+        width: 60%;
+        margin: 0 2rem;
+        .OptionBarTitle{
+            font-size: 1.4rem;
+        }
+        .Options{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            gap: 2rem;
+            .OptionBarItems{
+                display: flex;
+                flex-direction: column;
+                justify-content: space-evenly;
+            }
+        }
+    }
+    .SucessButton{
+        padding: 1rem;
+        width: 40%;
+        background-color: #3a86ff;
+        border: none;
+        border-radius: 12px;
+        font-size: x-large;
+    }
 }
 </style>

@@ -36,19 +36,19 @@ const router = createRouter({
       component:()=>import("@/components/countertest.vue"),
     },
     {
-      path:"/CompareGame",
-      name:"CompareGame",
-      component:()=>import("@/views/GameTemplate/CompareGame.vue"),
+      path:"/CoulorBarChart",
+      name:"CoulorBarChart",
+      component:()=>import("@/components/CoulorBarChart.vue"),
     },
     {
-      path:"/FillinBlank",
-      name:"FillinBlank",
-      component:()=>import("@/views/GameTemplate/FillinBlank.vue"),
+      path:"/ImageWithText",
+      name:"ImageWithText",
+      component:()=>import("@/components/ImageWithText.vue"),
     },
     {
-      path: '/clock' ,
-      name: 'clock',
-      component: () => import('@/components/clock.vue'),
+      path: '/Water' ,
+      name: 'Water',
+      component: () => import('@/components/Water.vue'),
     },
     {
       path: '/Calculator',
@@ -56,9 +56,23 @@ const router = createRouter({
       component: () => import('@/views/GameTemplate/CalculatorGame.vue'),
     },
     {
-      path: '/FindItemGameMaker',
-      name: 'FindItemGameMaker',
-      component: () => import('@/components/FindItemGameMaker.vue'),
+      path: '/TextOnly',
+      name: 'TextOnly',
+      component: () => import('@/components/TextOnly.vue'),
+    },
+    {
+      path: '/FreeDrag',
+      name: 'FreeDrag',
+      component: () => import('@/components/FreeDrag.vue'),
+    },
+    {
+      path: '/TestNumberBoard',
+      name: 'TestNumberBoard',
+      component: () => import('@/components/NumberBoard.vue'),
+    },{
+      path: '/DrawImageTable',
+      name: 'DrawImageTable',
+      component: () => import('@/components/DrawImageTable.vue'),
     }
     ]
 });

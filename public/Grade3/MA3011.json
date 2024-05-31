@@ -16,6 +16,7 @@
             "RuleType": "WrongTimes"
         },
         "Data" :{
+            "MaxWrongTimes" : 2,
             "SourceType" : "video",
             "FilePath" : "hint1.mp4"
         }
@@ -29,7 +30,7 @@
                 "Name": "ImageContainer",
                 "Data": {
                     "Src": "level1.png",
-                    "Alt": ""
+                    "Alt": "ddd"
                 }
             }]
         },

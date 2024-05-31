@@ -1,15 +1,10 @@
 <template>
-    <div class="container d-flex align-items-center justify-content-center">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card mx-auto QuestionCard" >
-                    <div class="card-body">
-                        <img :src="imageUrl" alt="Game Image" class="img-fluid" style="max-height: 50vh;">
-                        <!-- <component :is="this.SlotComponent" :Data="this.SlotData" :id="this.id"></component> -->
-                    </div>
-                </div>
+    <div class="container">
+        <div class="Content">
+            <div class="QuestionView">
+                <component :is="this.SlotComponent" :Data="this.SlotData" :ID="this.id"></component>
             </div>
-            <div class="col-md-4 align-self-center">
+            <div class="SelectArea">
                 <div class="card row mx-auto mb-3">
                     <p class="h3">{{ this.GameConfig.GlobalTitle }}</p>
                     <div class="card-body">
@@ -23,12 +18,6 @@
             </div>
         </div>
     </div>
-    <!-- <p>Control Panel</p>
-    <button v-on:click="playrighteffect">playrighteffect</button>
-    <button v-on:click="playwrongeffect">playwrongeffect</button>
-    <button v-on:click="addrecodr">addrecodr</button>
-    <button v-on:click="nextquestion">nextquestion</button> -->
-
 </template>
 <script>
 import { GamesGetAssetsFile } from '@/utilitys/get_assets.js';
@@ -91,8 +80,21 @@ export default {
 button {
     width: 150px;
 }
-.QuestionCard {
-    width: 80%;
+.Content{
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    height: 70vh;
+    .QuestionView{
+        width: 60%;
+        height: 70%;
+        img{
+            height: 10px;
+        }
+    }
+    .SelectArea{
+        width: 40%;
+    }
 }
-
 </style>

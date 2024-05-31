@@ -38,6 +38,7 @@
             <div class="row Game_Component">
                 <!-- Dynamic import component -->
               <div class="games" v-if="GameStatus=='Progressing'" id="GameContainer">
+                <EffectWindow id="CorrecIncorrect" :Data="CorrectIncorrect" v-if="ShowReply"></EffectWindow>
                 <component
                   class="GameComponent111"
                   v-if="GameType!='SelfDefine'"
@@ -281,7 +282,7 @@ import axios from 'axios';
 import {defineAsyncComponent} from 'vue';
 import { useFullscreen } from '@vueuse/core'
 import CompareGame from './GameTemplate/CompareGame.vue';
-
+import EffectWindow from '@/components/EffectWindow.vue';
 export default {
   data() {
     return {
@@ -313,7 +314,7 @@ export default {
       CalculatorSwitch: null,
       QuestionsSequence: [],
       AllQuestions: [],
-      
+      ShowReply: false,
       Hint:{
         Type: "None",
         Data: {
@@ -323,6 +324,9 @@ export default {
       },
       WrongTimes: 0,
       MaxWrongTimes:2,
+      CorrectIncorrect: {
+        Status: null
+      },
       // SentData2ChildComponent: {},
     };
   },
@@ -453,6 +457,7 @@ export default {
           this.pauseTimer();
           //FIXME 傳資料進入CSV
           this.resetTimer();
+          this.startTimer();
         }    
       },
       NextQuestion() {
@@ -520,11 +525,13 @@ export default {
       EffectPlayer(type) {
         //播放音效
         // console.log("Play Effect, type: "+type);
+        let EffectWindow = document.getElementById("CorrectIncorrect");
           switch (type) {
               case "CorrectSound":
                   var sound = new Audio()
                   sound.src = ImportUrl.GetSystemEffectAssetsFile("CorrectAnswer.mp3");
                   // console.log(sound.src);
+                  this.EffectPlayer("CorrectAnimation")
                   sound.oncanplaythrough = function(){
                     sound.play();
                   }
@@ -533,6 +540,7 @@ export default {
                   this.WrongTimes++;
                   var sound = new Audio();
                   sound.src = ImportUrl.GetSystemEffectAssetsFile("WrongAnswer.mp3");
+                  this.EffectPlayer("IncorrectAnimation")
                   sound.oncanplaythrough = function(){
                     sound.play();
                   }
@@ -551,10 +559,25 @@ export default {
                   break;
               case "HarraySound":
                   var sound = new Audio();
-                  sound.src = ImportUrl.GetSystemAssetsFile("harray.mp3","effects");
+                  // sound.src = ImportUrl.GetSystemAssetsFile("harray.mp3","effects");
+                  sound.src = ImportUrl.GetSystemEffectAssetsFile("harray.mp3");
                   sound.oncanplaythrough = function(){
                     sound.play();
                   }
+                  break;
+              case "CorrectAnimation":
+                  this.CorrectIncorrect.Status = "Correct";
+                  this.ShowReply = true;
+                  setTimeout(() => {
+                    this.ShowReply = false;
+                  }, 1000);
+                  break;
+              case "IncorrectAnimation":
+                  this.CorrectIncorrect.Status = "Incorrect";
+                  this.ShowReply = true;
+                  setTimeout(() => {
+                    this.ShowReply = false;
+                  }, 1000);
                   break;
           }
       },
@@ -619,11 +642,10 @@ export default {
         }
         catch{
           this.Hint["Type"] = "None";
-          // console.log("No hint in this game");
           console.warn("No hint in this game");
         }
         try{
-          this.MaxWrongTimes = this.GameData.Hint.Rule.Value;
+          this.MaxWrongTimes = this.GameData.Hint.Data.MaxWrongTimes;
           if (this.MaxWrongTimes == undefined ){
             this.MaxWrongTimes = 2;
             console.warn("No MaxWrongTimes in Hint Rule, set to default 2");
@@ -709,7 +731,8 @@ export default {
       NumberingGame: defineAsyncComponent(() => import('@/views/GameTemplate/NumberingGame.vue')),
       CompareGame: defineAsyncComponent(() => import('@/views/GameTemplate/CompareGame.vue')),
       FillinBlank: defineAsyncComponent(() => import('@/views/GameTemplate/FillinBlank.vue')),
-      CalculatorGame: defineAsyncComponent(() => import('@/views/GameTemplate/CalculatorGame.vue'))
+      CalculatorGame: defineAsyncComponent(() => import('@/views/GameTemplate/CalculatorGame.vue')),
+      EffectWindow
   }
 }
 </script>
@@ -785,6 +808,17 @@ transform: scale(1.07); /* 放大至原大小的 110% */
     width: 85%;
     padding-right: 1rem;
     padding-left: 1rem;
+    #GameContainer{
+      height: 100%;
+      position: relative;      
+      #CorrecIncorrect{
+        position: absolute;
+        width: 98% !important;
+        height: 98% !important ;
+        z-index: 100;
+      }
+    }
+
   }
   .SideBar{
     border-left: solid 3px #aaa;
@@ -797,15 +831,15 @@ transform: scale(1.07); /* 放大至原大小的 110% */
     align-items: center;
     padding-top: 1rem;
     .Buttons{
+      padding: 1vw;
       width: 100%;
       height: 100%;
       display: flex;
       flex-direction: column;
       gap: 1rem;
       justify-content: stretch;
-      align-items: center;
-      // border: solid;
       button{
+        align-self: center;
         width: 90%;
         font-size: x-large;
         border-radius: 12px;
@@ -820,6 +854,7 @@ transform: scale(1.07); /* 放大至原大小的 110% */
       width: 2vw;
       height: 2vw;
     }
+    
   }
 }
 

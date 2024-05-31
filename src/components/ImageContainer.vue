@@ -18,7 +18,7 @@ export default {
         };
     },
     props: {
-        id: {
+        ID: {
             type: String,
             required: true
         },
@@ -28,10 +28,11 @@ export default {
         }
     },
     methods: {
-        // Your methods go here
+        
     },
     mounted() {
-        this.imageUrl = GamesGetAssetsFile(this.id, this.Data.Src);
+        this.imageUrl = GamesGetAssetsFile(this.ID, this.Data.Src);
+        console.log(this.imageUrl);
         let data = document.getElementById('ImageContainer');
         let ApplyImage = document.getElementById('Img');
         data = data.getBoundingClientRect();
@@ -45,28 +46,33 @@ export default {
                 width: img.width,
                 height: img.height
             };
-            if (ImageDatas.width > ImageDatas.height) {
-                ApplyImage.style.width = this.ContainerSize.width + 'px';
-                ApplyImage.style.height = 'auto';
-            } else {
-                ApplyImage.style.width = 'auto';
-                ApplyImage.style.height = this.ContainerSize.height + 'px';
-            }   
+            // Height First
+            let newHeight = this.ContainerSize.height;
+            let newWidth = newHeight * (img.width / img.height);
+            if (newWidth > this.ContainerSize.width) {
+                newWidth = this.ContainerSize.width;
+                newHeight = newWidth * (img.height / img.width);
+            }
+            ApplyImage.style.width = newWidth + 'px';
+            ApplyImage.style.height = newHeight + 'px';
         }
         img.src = this.imageUrl;
         window.addEventListener('resize', () => {
+            data = document.getElementById('ImageContainer');
             data = data.getBoundingClientRect();
             this.ContainerSize = {
                 width: data.width,
                 height: data.height
             }
-            if (img.width > img.height) {
-                ApplyImage.style.width = this.ContainerSize.width + 'px';
-                ApplyImage.style.height = 'auto';
-            } else {
-                ApplyImage.style.width = 'auto';
-                ApplyImage.style.height = this.ContainerSize.height + 'px';
+            // Height First
+            let newHeight = this.ContainerSize.height;
+            let newWidth = newHeight * (img.width / img.height);
+            if (newWidth > this.ContainerSize.width) {
+                newWidth = this.ContainerSize.width;
+                newHeight = newWidth * (img.height / img.width);
             }
+            ApplyImage.style.width = newWidth + 'px';
+            ApplyImage.style.height = newHeight + 'px';
         });
     },
 };
