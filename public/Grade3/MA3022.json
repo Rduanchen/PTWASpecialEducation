@@ -1,7 +1,7 @@
 {
     "id":"MA3021",
     "introvideo": "src",
-    "TotalLevel": 1,
+    "TotalLevel": 3,
     "GameType" : "CompareGame",
     "IntroText": {
         "Type": "PlainText",
@@ -73,6 +73,7 @@
                         "Name" : "ImageTable",
                         "Data" : {
                             "Mother" : 5,
+                            "Child" : 2,
                             "Src" : "1.png",
                             "Alt" : "1"
                         }                        
@@ -81,6 +82,7 @@
                         "Name" : "ImageTable",
                         "Data" : {
                             "Mother" : 5,
+                            "Child" : 2,
                             "Src" : "1.png",
                             "Alt" : "1"
                         }                                  

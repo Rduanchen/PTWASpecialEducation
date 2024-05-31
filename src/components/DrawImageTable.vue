@@ -1,4 +1,10 @@
 <template>
+  <div class="Container">
+    <div class="division">
+      <p>{{ this.Data.Child }}</p>
+      <hr>
+      <p>{{ this.Data.Mother }}</p>
+    </div>
     <div class="table-container">
       <div
         v-for="index in totalCells"
@@ -9,8 +15,8 @@
         <img v-if="index <= Data.length" :src="Src" :alt="Data.Alt" />
       </div>
     </div>
-    {{ this.Src }}
-  </template>
+  </div>
+</template>
   
   <script>
   import { GamesGetAssetsFile } from '@/utilitys/get_assets.js';
@@ -56,6 +62,31 @@
   </script>
   
   <style scoped>
+  .Container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    
+    .division{
+      width: 20%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      hr{
+        width: 20px;
+        border: solid;
+      }
+    }
+    .table-container{
+      width: 70%;
+      border: solid #ccc;
+      border-radius: 12px;
+      padding: 1rem;
+    }
+  }
   .table-container {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -65,7 +96,7 @@
   .table-cell {
     position: relative;
     border: 1px solid #ccc;
-    height: 150px;
+    /* height: 150px; */
     display: flex;
     align-items: center;
     justify-content: center;

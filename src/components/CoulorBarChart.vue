@@ -5,8 +5,8 @@
         <hr>
         <p class="Mother">{{ this.Data.Total }}</p>
     </div>
-    <table class="OddBorderOutline" v-for="(items, index1) in Drawed">
-        <tr>
+    <table class="OddBorderOutline" >
+        <tr v-for="(items, index1) in Drawed">
             <td v-for="(item, index2) in items" class="table" @click="handleClick($event,index1,index2)"></td>
         </tr>
     </table>
@@ -107,6 +107,9 @@ name: 'CoulorBarChart',
         border-width: 2px;
         border-left: solid;
         border-right: solid;
+        tr{
+            border: solid;
+        }
     }
     .EvenBorderOutline{
         border: solid;

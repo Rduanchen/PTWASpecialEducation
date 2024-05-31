@@ -36,6 +36,7 @@
             </draggable>
         </div>
         <button @click="CheckAllAnswer" class="SucessButton" v-if="this.GameConfig.CheckAnswerMode=='Button'">檢查答案</button>
+        <button @click="Triger" class="btn btn-primary">Triger</button>
     </section>
 </div>
 </template>
@@ -98,6 +99,9 @@ export default {
         };
     },
     methods: {
+        Triger(){
+            this.$emit('play-effect','IncorrectAnimation');
+        },
         Add(index){
             console.log("check drop");
             this.SelectedGroup = index;
