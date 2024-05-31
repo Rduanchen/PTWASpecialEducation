@@ -1,9 +1,12 @@
 <template>
 <div class="OutterContainer" >
-    <div class="Division">
-        <p class="Child">{{ this.Data.Child }}</p>
-        <hr>
-        <p class="Mother">{{ this.Data.Total }}</p>
+    <div class="Number">
+        <div class="Division">
+            <p class="Child">{{ this.Data.Child }}</p>
+            <hr class="fraction-line">
+            <p class="Mother">{{ this.Data.Total }}</p>
+        </div>
+        <p>{{ this.Data.Unit }}</p>
     </div>
     <table class="OddBorderOutline" >
         <tr v-for="(items, index1) in Drawed">
@@ -13,12 +16,13 @@
 </div>
 </template>
 <script>
+import { get } from 'jquery';
+
 export default {
 name: 'CoulorBarChart',
     data() {
         return {
             Drawed : [],
-            Drawed2 : [],
             container: null
         };
     },
@@ -80,6 +84,18 @@ name: 'CoulorBarChart',
             else{
                 $event.target.style.backgroundColor = this.Data.Coulor;
             }
+        },
+        GetAnswer(){
+            let TempAnswer = true;
+            for (var i = 0; i < this.Drawed.length; i++){
+                for (var x = 0; x < this.Drawed[i].length; x++){
+                    if (this.Drawed[i][x]){
+                        TempAnswer = false;
+                    }
+                }
+            }
+            alert(TempAnswer);
+            return TempAnswer;
         }
     }
 };
@@ -87,21 +103,38 @@ name: 'CoulorBarChart',
 
 <style scoped>
 /* Your component's styles go here */
-.Division{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    font-size: x-large;
-    hr {
-        margin: 0 0; /* 根據需要調整間距 */
-    }
-}
 .OutterContainer{
     width: 100%;
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    .Number{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        .Division{
+            display: inline-block;
+            text-align: center;
+            font-size: 2rem;
+            line-height: 2;  /* 設置行高 */
+            vertical-align: middle; /* 垂直對齊 */
+            .Child{
+                margin: 0;
+            }
+            .Mother{
+                margin: 0;
+            }
+            .fraction-line {
+                margin: 0;
+                border: none;
+                border-top: 2px solid black;
+                width: 2em;
+            }
+        }
+    }
     .OddBorderOutline{
         border:solid;
         border-width: 2px;
@@ -111,13 +144,11 @@ name: 'CoulorBarChart',
             border: solid;
         }
     }
-    .EvenBorderOutline{
-        border: solid;
-    }
     .table{
         border-style:dashed !important;
         height: 3rem;
         border-left: solid;
+        background-color: #FFF;
     }
 }
 </style>

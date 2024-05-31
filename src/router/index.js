@@ -46,9 +46,9 @@ const router = createRouter({
       component:()=>import("@/components/ImageWithText.vue"),
     },
     {
-      path: '/Water' ,
-      name: 'Water',
-      component: () => import('@/components/Water.vue'),
+      path: '/test', 
+      name: 'test',
+      component: () => import('@/components/test.vue'),
     },
     {
       path: '/Calculator',
@@ -73,6 +73,11 @@ const router = createRouter({
       path: '/DrawImageTable',
       name: 'DrawImageTable',
       component: () => import('@/components/DrawImageTable.vue'),
+    },
+    {
+      path: '/DrawImage',
+      name: 'DrawImage',
+      component: () => import('@/components/DrawImage.vue'),
     }
     ]
 });

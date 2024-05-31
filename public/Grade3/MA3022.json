@@ -25,14 +25,16 @@
                         "Name" : "CircleChart",
                         "Data" : {
                             "Mother" : 5,
-                            "Child" : 3
+                            "Child" : 3,
+                            "Unit" : "盒"
                         }                        
                     },
                     {
                         "Name" : "CircleChart",
                         "Data" : {
                             "Mother" : 5,
-                            "Child" : 2
+                            "Child" : 2,
+                            "Unit" : "盒"
                         }                        
                     }
                 ]
@@ -49,14 +51,16 @@
                         "Name" : "CoulorBarChart",
                         "Data" : {
                             "Mother" : 6,
-                            "Child" : 3
+                            "Child" : 3,
+                            "Unit": "盒"
                         }                        
                     },
                     {
                         "Name" : "CoulorBarChart",
                         "Data" : {
                             "Mother" : 5,
-                            "Child" : 2
+                            "Child" : 2,
+                            "Unit": "盒"
                         }                        
                     }
                 ]
@@ -74,6 +78,7 @@
                         "Data" : {
                             "Mother" : 5,
                             "Child" : 2,
+                            "Unit": "盒",
                             "Src" : "1.png",
                             "Alt" : "1"
                         }                        
@@ -83,9 +88,40 @@
                         "Data" : {
                             "Mother" : 5,
                             "Child" : 2,
+                            "Unit": "盒",
                             "Src" : "1.png",
                             "Alt" : "1"
                         }                                  
+                    }
+                ]
+            ],
+            "Answer": ["Big"]
+        },
+        {
+            "QuestionText": "比大小",
+            "Description": "比大小，選出最大的數字",
+            "OptionBarTitle": "將正確的符號拖曳到上面的框框中",
+            "Datas": [
+                [
+                    {
+                        "Name" : "DrawImage",
+                        "Data": {
+                            "Mother": 4,
+                            "Child": 2,
+                            "Unit": "盒",
+                            "Object": "apple",
+                            "Alt": "image"
+                        }
+                    },
+                    {
+                        "Name" : "DrawImage",
+                        "Data": {
+                            "Mother": 12,
+                            "Child": 2,
+                            "Unit": "盒",
+                            "Object": "apple",
+                            "Alt": "image"
+                        }                                 
                     }
                 ]
             ],

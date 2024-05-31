@@ -13,7 +13,7 @@
                 </div>
                 <draggable :list="Answers[index]" group="Symbols" :sort="false" item-key="name" class="CompareSymbol" @change="Add(index)" @add="CheckDrop">
                     <template #item="{ element }">
-                        <div class="clickable">
+                        <div class="clickable Options">
                             <p class="h1">{{ element.Text }}</p>
                         </div>
                     </template>
@@ -36,7 +36,7 @@
             </draggable>
         </div>
         <button @click="CheckAllAnswer" class="SucessButton" v-if="this.GameConfig.CheckAnswerMode=='Button'">檢查答案</button>
-        <button @click="Triger" class="btn btn-primary">Triger</button>
+        <!-- <button @click="Triger" class="btn btn-primary">Triger</button> -->
     </section>
 </div>
 </template>
@@ -44,7 +44,6 @@
 import { GamesGetAssetsFile } from '@/utilitys/get_assets.js';
 import draggable from 'vuedraggable';
 import { defineAsyncComponent } from 'vue';
-import TextOnly from '../../components/TextOnly.vue';
 export default {
     name: 'CompareGame',
     components: {
@@ -54,7 +53,8 @@ export default {
         TextOnly: defineAsyncComponent(() => import('@/components/TextOnly.vue')),
         CoulorBarChart: defineAsyncComponent(() => import('@/components/CoulorBarChart.vue')),
         CircleChart: defineAsyncComponent(() => import('@/components/CircleChart.vue')),
-        ImageTable: defineAsyncComponent(() => import('@/components/DrawImageTable.vue'))
+        ImageTable: defineAsyncComponent(() => import('@/components/DrawImageTable.vue')),
+        DrawImage: defineAsyncComponent(() => import('@/components/DrawImage.vue'))
     },
     emits: ['play-effect','add-record','next-level'],
     props: {
@@ -216,6 +216,9 @@ export default {
                 justify-content: space-evenly;
                 align-items: center;
                 height: 40vh;
+                .Options{
+                    background-color: #FFF;
+                }
                 .CompareCard{
                     width: 40%;
                     height: 90%;
