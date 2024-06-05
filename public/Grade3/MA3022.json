@@ -45,6 +45,7 @@
             "QuestionText": "比大小",
             "Description": "比大小，選出最大的數字",
             "OptionBarTitle": "將正確的符號拖曳到上面的框框中",
+            "SlotComponentVerifycation": true,
             "Datas": [
                 [
                     {

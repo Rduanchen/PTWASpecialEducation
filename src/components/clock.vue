@@ -1,7 +1,6 @@
 <template>
 	<div class="Outter">
-		<canvas id="clock" style="border: solid;">
-			
+		<canvas id="clock">
 		</canvas>
 	</div>
 </template>
@@ -23,7 +22,7 @@ export default {
 		},
 		Data: {
 			type: Object,
-			required: true
+			required: false
 		}
 	},
 	mounted() {

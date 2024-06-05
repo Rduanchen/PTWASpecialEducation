@@ -1,8 +1,7 @@
 <template>
 <div class="container">
-    <div>
-        <canvas width="500" height="500" style="border: solid;" class="Canvas"></canvas>
-    </div>
+    <canvas width="500" height="500" style="border: solid;" class="Canvas"></canvas>
+    
     <div class="Data">
         <p>Fake DOM</p>
         <p>Fake DOM</p>
@@ -29,16 +28,18 @@ export default {
     },
     mounted() {
         // Code to run when the component is mounted goes here
+        let CaptureDOM  = document.getElementsByClassName('Data')
+        CaptureDOM[0].style.display = 'block';
         htmlToImage.toPng(document.getElementsByClassName('Data')[0])
         .then(function (dataUrl) {
             var img = new Image();
-            console.log(dataUrl)
             let canvas = document.getElementsByClassName('Canvas')[0];
             let ctx = canvas.getContext('2d');
             img.onload = function(){
                 ctx.drawImage(img, 0, 0);
             }
             img.src = dataUrl;
+            CaptureDOM[0].style.display = 'none';
         })
     },
 };
@@ -46,4 +47,9 @@ export default {
 
 <style scoped>
 /* Your component-specific styles go here */
+.Data{
+    position: relative;
+    top: 0;
+    left: 0;
+}
 </style>

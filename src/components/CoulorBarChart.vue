@@ -13,6 +13,9 @@
             <td v-for="(item, index2) in items" class="table" @click="handleClick($event,index1,index2)"></td>
         </tr>
     </table>
+    <button @click="GetAnswer1">GetAnswer</button>
+    {{ this.Drawed }}
+
 </div>
 </template>
 <script>
@@ -42,7 +45,7 @@ name: 'CoulorBarChart',
     created(){
         this.Data.Total = this.Data.Mother;
         this.Drawed = [];
-        if (this.Data.Total % 2 != 0){
+        if (this.Data.Total % 2 != 0){ //奇數
             let temp = []
             for(var i = 0; i < this.Data.Total; i++){
                 temp.push(true);
@@ -50,7 +53,7 @@ name: 'CoulorBarChart',
             console.log(temp)
             this.Drawed.push(temp);
         }
-        else{
+        else{  //偶數
             let temp = [];
             let div = this.Data.Total / 2;
             for(var i = 0; i<2; i++){
@@ -84,23 +87,43 @@ name: 'CoulorBarChart',
             else{
                 $event.target.style.backgroundColor = this.Data.Coulor;
             }
+            this.GetAnswer();
         },
         GetAnswer(){
-            let TempAnswer = true;
+            let TempAnswer = 0;
             for (var i = 0; i < this.Drawed.length; i++){
                 for (var x = 0; x < this.Drawed[i].length; x++){
-                    if (this.Drawed[i][x]){
-                        TempAnswer = false;
+                    if (this.Drawed[i][x] == false){
+                        TempAnswer += 1;
                     }
                 }
             }
-            alert(TempAnswer);
-            return TempAnswer;
+            if (TempAnswer == this.Data.Child){
+                this.$emit('ReplyAnswer', true)
+            }
+            else{
+                this.$emit('ReplyAnswer', false)
+            }
+        },
+        GetAnswer1(){
+            let TempAnswer = 0;
+            for (var i = 0; i < this.Drawed.length; i++){
+                for (var x = 0; x < this.Drawed[i].length; x++){
+                    if (this.Drawed[i][x] == false){
+                        TempAnswer += 1;
+                    }
+                }
+            }
+            if (TempAnswer == this.Data.Child){
+                alert('Correct' + TempAnswer + this.Data.Child)
+            }
+            else{
+                alert('Incorrect' + TempAnswer + this.Data.Child)
+            }
         }
     }
 };
 </script>
-
 <style scoped>
 /* Your component's styles go here */
 .OutterContainer{

@@ -1,17 +1,26 @@
 <template>
-    <!-- {{ this.DotLocation }} -->
+<div>
+    {{this.QuestionDataStructure}}
     <p class="h1">{{ GameData.Question.text }}</p>
     <div class="canvas-container" id="canvas-container" ref="CanvasContainer">
         <canvas id="responsive-bg" class="position-absolute"></canvas>
         <canvas ref="line_keeper" id="line_keeper" class="position-absolute"></canvas>
+        <div class="" ref="SlotComponent" id="SlotComponent">
+            <component :is="SlotComponent" :Data="SlotComponentData" :ID="this.id" :key="SlotComponentData"></component>
+        </div>
     </div>  
+
+</div>
 </template>
 
 <script>
 import icon from '@/assets/GamePic/Cat.png';
 import { GamesGetAssetsFile } from '@/utilitys/get_assets.js';
 import LoadImageFromArray from '@/utilitys/load_images.js';
-
+import * as htmlToImage from 'html-to-image';
+import { toPng } from 'html-to-image';
+import { defineAsyncComponent } from 'vue';
+import ImageContainer from '../../components/ImageContainer.vue';
 export default {
     name: 'Link',
     props: {
@@ -27,6 +36,10 @@ export default {
             type: Object,
             required: true
         }
+    },
+    components: {
+        Clock : defineAsyncComponent(() => import('@/components/clock.vue')),
+        ImageContainer: defineAsyncComponent(() => import('@/components/ImageContainer.vue'))
     },
     data(){
         return{
@@ -57,19 +70,42 @@ export default {
 
             //Check Answer
             //Fake Data
-            QuestionDataStructure:null,
+            QuestionDataStructure:[],
             ans:[
                 [[0,0],[1,0]],
                 [[0,1],[1,2]],
                 [[0,2],[1,1]]
             ],
-            answered: []
+            answered: [],
+            SlotComponent: "",
+            SlotComponentData: {
+           
+            }
         }
     },
-    mounted() {
+    async mounted() {
+        let CaptureComponent = this.$refs.SlotComponent;
+        console.log(CaptureComponent);
         
-        // this.QuestionDataStructure = this.GameData.Question.RowData;
-        this.QuestionDataStructure = this.GameData.Question.RowData;
+        for(var i in this.GameData.Question.RowData){
+            let temp = []
+            for(var j in this.GameData.Question.RowData[i]){
+                this.SlotComponent = this.GameData.Question.RowData[i][j].Name;
+                this.SlotComponentData = this.GameData.Question.RowData[i][j].Data;
+                console.log(this.SlotComponentData, this.SlotComponent);
+                CaptureComponent.style.display = 'block';
+                awaithtmlToImage.toPng(CaptureComponent)
+                .then(function (dataUrl) {
+                    var img = new Image();
+                    img.onload = () =>{
+                        img.src = dataUrl;
+                        temp.push(img);
+                        console.log("HIIHI");
+                    }
+                })
+            }
+            this.QuestionDataStructure.push(temp);
+        }
         this.ans = this.GameData.Answer;
         let CanvasContainer = this.$refs.CanvasContainer
         this.Canvasoffset = {
@@ -226,8 +262,8 @@ export default {
             this.drawPaths();
         },  
         async DrawImgOnCanvas(question, context1) {
-            // let images = await this.ImageQuery(question);
-            let images = await LoadImageFromArray(question, this.id);
+            // let images = await LoadImageFromArray(question, this.id);
+            let images = question;
             console.log(images);
             let Column_Amount = question.length;
             var onchangegroup = false;
@@ -480,13 +516,10 @@ export default {
     .canvas-container {
         height: 70vh;
     }
+    /* #SlotComponent{
+        position: relative;
+        top: 0;
+        left: 0;
+        z-index: 10;
+    } */
 </style>
-<!-- 
-    .canvas-container {
-        display: flex; /* 使用 Flexbox 布局 */
-        flex-direction: column; /* 子元素垂直排列 */
-        align-items: center; /* 子元素水平居中 */
-        position: relative; /* 相對定位，作為子元素的定位參考 */
-    }
-
- -->
