@@ -4,14 +4,14 @@
         <p class="h1 Title" v-if="this.GameData.QuestionText && this.GameData.QuestionText!= ''">{{ this.GameData.QuestionText }}</p>
         <p class="h2 SubTitle" v-if="this.GameData.Description && this.GameData.Description != ''">{{ this.GameData.Description }}</p>
     </div>
-    {{SlotComponentanswer}}
-    {{this.Answers}}
+    <!-- {{SlotComponentanswer}}
+    {{this.Answers}} -->
     <hr>
     <div class="QuestionArea">
         <div v-for="(item, index) in GameData.Datas" :key="index" class="QuestionContainer">
             <section class="QuestionRow" :class="{ 'QuestionRow-Wrong': this.Answered[index]==false, 'QuestionRow-Right': this.Answered[index]==true }">
                 <div class="CompareCard">
-                    <component :is="item[0].Name" :Data="item[0].Data" :ID="this.id" @ReplyAnswer="SlotComponentReplyAnswer(0, $event)"></component>
+                    <component :is="item[0].Name" :Data="item[0].Data" :ID="this.id" @ReplyAnswer="SlotComponentReplyAnswer(0, $event)" ></component>
                 </div>
                 <draggable :list="Answers[index]" group="Symbols" :sort="false" item-key="name" class="CompareSymbol" @change="Add(index)" @add="CheckDrop">
                     <template #item="{ element }">
@@ -46,6 +46,7 @@
 import { GamesGetAssetsFile } from '@/utilitys/get_assets.js';
 import draggable from 'vuedraggable';
 import { defineAsyncComponent } from 'vue';
+import NumberBoard from '../../components/NumberBoard.vue';
 export default {
     name: 'CompareGame',
     components: {
@@ -56,7 +57,8 @@ export default {
         CoulorBarChart: defineAsyncComponent(() => import('@/components/CoulorBarChart.vue')),
         CircleChart: defineAsyncComponent(() => import('@/components/CircleChart.vue')),
         ImageTable: defineAsyncComponent(() => import('@/components/DrawImageTable.vue')),
-        DrawImage: defineAsyncComponent(() => import('@/components/DrawImage.vue'))
+        DrawImage: defineAsyncComponent(() => import('@/components/DrawImage.vue')),
+        NumberBoard: defineAsyncComponent(() => import('@/components/NumberBoard.vue')),
     },
     emits: ['play-effect','add-record','next-level'],
     props: {
@@ -238,14 +240,19 @@ export default {
                     background-color: #FFF;
                 }
                 .CompareCard{
+                    min-width: 200px;
                     width: 40%;
                     height: 90%;
                     component{
                         width: 100%;
                         height: 100%;
                     }
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
                 }
                 .CompareSymbol{
+                    margin: 2em;
                     min-width: 7rem;
                     min-height: 5rem;
                     border: solid;

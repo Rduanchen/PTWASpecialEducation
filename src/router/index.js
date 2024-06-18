@@ -78,6 +78,16 @@ const router = createRouter({
       path: '/DrawImage',
       name: 'DrawImage',
       component: () => import('@/components/DrawImage.vue'),
+    },
+    {
+      path: '/SVGtest',
+      name: 'SVGtest',
+      component: () => import('@/components/SVGtest.vue'),
+    },
+    {
+      path: '/NumberBoard',
+      name: 'NumberBoard',
+      component: () => import('@/components/NumberBoard.vue'),
     }
     ]
 });

@@ -80,15 +80,20 @@ methods: {
             this.Items.splice(index, 1, this.image1);
             this.clickedStatus.splice(index, 1, false);
         }
+        this,this.ReplyAnswer();
     },
-    GetAnswer(){
-        let TempAnswer = [];
-        for (let i = 0; i < this.clickedStatus.length; i++) {
-            if (this.clickedStatus[i]) {
-                TempAnswer.push(i);
+    ReplyAnswer(){
+        let temp = 0;
+        for(var i in this.clickedStatus){
+            if (this.clickedStatus[i] == true){
+                temp += 1;
             }
         }
-        alert(TempAnswer);
+        if (temp == this.Data.Child){
+            this.$emit('ReplyAnswer', true);
+        } else {
+            this.$emit('ReplyAnswer', false);
+        }
     }
 },
 };

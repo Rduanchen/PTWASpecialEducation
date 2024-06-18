@@ -5,11 +5,12 @@
     <div class="canvas-container" id="canvas-container" ref="CanvasContainer">
         <canvas id="responsive-bg" class="position-absolute"></canvas>
         <canvas ref="line_keeper" id="line_keeper" class="position-absolute"></canvas>
-        <div class="" ref="SlotComponent" id="SlotComponent">
-            <component :is="SlotComponent" :Data="SlotComponentData" :ID="this.id" :key="SlotComponentData"></component>
-        </div>
     </div>  
-
+    <div class="SlotComponent" ref="SlotComponent">
+        <component :is="SlotComponent" :Data="SlotComponentData" :ID="this.id" @hook:mounted="test()" ></component>
+    </div>
+    <button @click="captureImages">Capture</button>
+    <img :src="test">
 </div>
 </template>
 
@@ -80,31 +81,17 @@ export default {
             SlotComponent: "",
             SlotComponentData: {
            
-            }
+            },
+            test: "",
         }
     },
-    async mounted() {
-        let CaptureComponent = this.$refs.SlotComponent;
-        console.log(CaptureComponent);
-        
-        for(var i in this.GameData.Question.RowData){
-            let temp = []
-            for(var j in this.GameData.Question.RowData[i]){
-                this.SlotComponent = this.GameData.Question.RowData[i][j].Name;
-                this.SlotComponentData = this.GameData.Question.RowData[i][j].Data;
-                console.log(this.SlotComponentData, this.SlotComponent);
-                CaptureComponent.style.display = 'block';
-                awaithtmlToImage.toPng(CaptureComponent)
-                .then(function (dataUrl) {
-                    var img = new Image();
-                    img.onload = () =>{
-                        img.src = dataUrl;
-                        temp.push(img);
-                        console.log("HIIHI");
-                    }
-                })
-            }
-            this.QuestionDataStructure.push(temp);
+    mounted() {
+        // await this.captureImages();
+        this.SlotComponent = 'clock'
+        this.SlotComponentData = {
+            sec: 0,
+            min: 0,
+            hour: 0
         }
         this.ans = this.GameData.Answer;
         let CanvasContainer = this.$refs.CanvasContainer
@@ -190,6 +177,21 @@ export default {
         this.canvas.addEventListener('touchend', this.handleTouchEnd);
     },
     methods: {
+        test(){
+            console.log("Hello");
+        },
+        async captureImages() {
+            htmlToImage.toPng(document.getElementsByClassName('SlotComponent')[0])
+            .then((dataUrl) => {
+                this.test = dataUrl;
+                let img = new Image();
+                img.src = dataUrl;
+                console.log(this.test);
+                img.onload = () => {
+                    this.QuestionDataStructure[0][0] = img;
+                }
+            })
+        },
         CountRWDWidth(question){
             //利用比例計算出每個圖片的大小
             //如果太多列導致圖片太小則以圖片最小值為主

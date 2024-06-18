@@ -1,7 +1,7 @@
 {
     "id":"MA3021",
     "introvideo": "src",
-    "TotalLevel": 3,
+    "TotalLevel": 4,
     "GameType" : "CompareGame",
     "IntroText": {
         "Type": "PlainText",
@@ -18,6 +18,7 @@
         {
             "QuestionText": "比大小",
             "Description": "比大小，選出最大的數字",
+            "SlotComponentVerifycation": true,
             "OptionBarTitle": "將正確的符號拖曳到上面的框框中",
             "Datas": [
                 [
@@ -72,36 +73,7 @@
             "QuestionText": "比大小",
             "Description": "比大小，選出最大的數字",
             "OptionBarTitle": "將正確的符號拖曳到上面的框框中",
-            "Datas": [
-                [
-                    {
-                        "Name" : "ImageTable",
-                        "Data" : {
-                            "Mother" : 5,
-                            "Child" : 2,
-                            "Unit": "盒",
-                            "Src" : "1.png",
-                            "Alt" : "1"
-                        }                        
-                    },
-                    {
-                        "Name" : "ImageTable",
-                        "Data" : {
-                            "Mother" : 5,
-                            "Child" : 2,
-                            "Unit": "盒",
-                            "Src" : "1.png",
-                            "Alt" : "1"
-                        }                                  
-                    }
-                ]
-            ],
-            "Answer": ["Big"]
-        },
-        {
-            "QuestionText": "比大小",
-            "Description": "比大小，選出最大的數字",
-            "OptionBarTitle": "將正確的符號拖曳到上面的框框中",
+            "SlotComponentVerifycation": true,
             "Datas": [
                 [
                     {
@@ -122,6 +94,31 @@
                             "Unit": "盒",
                             "Object": "apple",
                             "Alt": "image"
+                        }                                 
+                    }
+                ]
+            ],
+            "Answer": ["Big"]
+        },
+        {
+            "QuestionText": "比大小",
+            "Description": "比大小，選出最大的數字",
+            "OptionBarTitle": "將正確的符號拖曳到上面的框框中",
+            "SlotComponentVerifycation": true,
+            "Datas": [
+                [
+                    {
+                        "Name" : "NumberBoard",
+                        "Data": {
+                            "Unit": ["時", "分", "秒"],
+                            "Number": 1234
+                        }
+                    },
+                    {
+                        "Name" : "NumberBoard",
+                        "Data": {
+                            "Unit": ["時", "分", "秒"],
+                            "Number": 1234
                         }                                 
                     }
                 ]

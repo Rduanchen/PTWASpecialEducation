@@ -38,6 +38,7 @@ export default {
             img.onload = function(){
                 ctx.drawImage(img, 0, 0);
             }
+            console.log(dataUrl);
             img.src = dataUrl;
             CaptureDOM[0].style.display = 'none';
         })

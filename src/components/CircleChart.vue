@@ -75,12 +75,14 @@ export default {
       centerX: 0,
       centerY: 0,
       radius: 0,
+      AnswerRecord: Array(this.Data.Mother).fill(false),
     };
   },
   mounted() {
     this.resizeCanvas();
     window.addEventListener('resize', this.resizeCanvas);
     this.drawPieChart();
+    this.AnswerRecord = []
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.resizeCanvas);
@@ -129,9 +131,25 @@ export default {
       const x = event.clientX - rect.left;
       const y = event.clientY - rect.top;
       const index = this.getSegmentIndex(x, y);
+      this.AnswerRecord[index] = !this.AnswerRecord[index];
       this.colors[index] = this.colors[index] ? null : `hsl(${Math.random() * 360}, 100%, 50%)`; // 隨機顏色或取消顏色
       this.drawPieChart();
+      this.ReplyAnswer();
     },
+    ReplyAnswer(){
+      let temp = 0;
+      this.AnswerRecord.forEach(element => {
+        if (element == true){
+          temp += 1;
+        }
+      });
+      if (temp == this.childScore){
+        this.$emit('ReplyAnswer', true)
+      }
+      else{
+        this.$emit('ReplyAnswer', false)
+      }
+    }
   },
 };
 </script>

@@ -13,8 +13,8 @@
             <td v-for="(item, index2) in items" class="table" @click="handleClick($event,index1,index2)"></td>
         </tr>
     </table>
-    <button @click="GetAnswer1">GetAnswer</button>
-    {{ this.Drawed }}
+    <!-- <button @click="GetAnswer1">GetAnswer</button> -->
+    <!-- {{ this.Drawed }} -->
 
 </div>
 </template>
