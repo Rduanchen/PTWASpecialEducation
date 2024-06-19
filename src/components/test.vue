@@ -1,56 +1,39 @@
 <template>
-<div class="container">
-    <canvas width="500" height="500" style="border: solid;" class="Canvas"></canvas>
-    
-    <div class="Data">
-        <p>Fake DOM</p>
-        <p>Fake DOM</p>
-        <p>Fake DOM</p>
-    </div>
+<div class="Outter">
+  <div class="Inner"></div>
+  <div class="Inner" v-for="items in 10">
+  </div>
+  <div class="Inner"></div>
+
+  <div class="Inner"></div>
+  <div class="Inner" v-for="items in 10">
+  </div>
+  <div class="Inner"></div>
 </div>
 </template>
 
 <script>
-import * as htmlToImage from 'html-to-image';
-import { toPng, toJpeg, toBlob, toPixelData, toSvg } from 'html-to-image';
 export default {
-    name: 'Test',
-    data() {
-        return {
-            // Your data properties go here
-        };
-    },
-    methods: {
-        // Your methods go here
-    },
-    computed: {
-        // Your computed properties go here
-    },
-    mounted() {
-        // Code to run when the component is mounted goes here
-        let CaptureDOM  = document.getElementsByClassName('Data')
-        CaptureDOM[0].style.display = 'block';
-        htmlToImage.toPng(document.getElementsByClassName('Data')[0])
-        .then(function (dataUrl) {
-            var img = new Image();
-            let canvas = document.getElementsByClassName('Canvas')[0];
-            let ctx = canvas.getContext('2d');
-            img.onload = function(){
-                ctx.drawImage(img, 0, 0);
-            }
-            console.log(dataUrl);
-            img.src = dataUrl;
-            CaptureDOM[0].style.display = 'none';
-        })
-    },
-};
+  name: 'Test',
+  data() {
+    return {
+      test: 'test'
+    }
+  },
+}
 </script>
 
 <style scoped>
-/* Your component-specific styles go here */
-.Data{
-    position: relative;
-    top: 0;
-    left: 0;
+/* Your component's styles go here */
+.Outter{
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 0.5fr repeat(10, 1fr) 0.5fr;
+    gap: 10px;
+    .Inner{
+      max-height: 30vh;
+      background-color: red;
+    }
 }
 </style>

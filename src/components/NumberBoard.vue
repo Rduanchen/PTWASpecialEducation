@@ -16,10 +16,6 @@ export default {
     name: 'NumberBoard',
     data() {
         return {
-            Data: {
-                "Unit": ["時間", "分", "秒"],
-                "Number": 1234
-            },
             Number: null,
             Unit: null
         };
@@ -51,19 +47,19 @@ export default {
             }
         }
         // 如果數字有雙位數，則縮小字體。
-        let DoubleWord = false;
-        for (var i in this.Unit){
-            if (this.Unit[i].toString().length > 1){
-                DoubleWord = true;
-                break;
-            }
-        }
-        if (DoubleWord){
-            let cl = document.getElementsByClassName("UnitEachBlanket");
-            for (let i = 0; i < cl.length; i++){
-                cl[i].style.fontSize = "6em";
-            }
-        }
+        // let DoubleWord = false;
+        // for (var i in this.Unit){
+        //     if (this.Unit[i].toString().length > 1){
+        //         DoubleWord = true;
+        //         break;
+        //     }
+        // }
+        // if (DoubleWord){
+        //     let cl = document.getElementsByClassName("UnitEachBlanket");
+        //     for (let i = 0; i < cl.length; i++){
+        //         cl[i].style.fontSize = "6em";
+        //     }
+        // }
     }
 };
 </script>

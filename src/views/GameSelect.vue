@@ -10,10 +10,10 @@
             <button class="btn btn-primary m-1" @click="ChangeSubject('Chinese')" >{{ Subjects['Chinese'] }}</button>
             <button class="btn btn-primary m-1" @click="ChangeSubject('Technology')" >{{ Subjects['Technology'] }}</button>
           </form>
-          <form class="d-flex mx-auto" role="search">
-              <input class="form-control me-2" type="search" placeholder="輸入ID或者標題" aria-label="Search" v-model="SearchInput">
-              <button class="btn btn-primary text-nowrap" type="submit" v-on:click="SearchGame()">搜尋</button>
-          </form>
+          <div class="SearchGroup d-flex">
+            <input class="form-control" :placeholder=" this.ShowSearch?'按下esc可以返回':'輸入ID或者標題' " v-model="SearchInput" @keyup.enter="SearchGame()" @keyup.esc="Return2Menu()">
+            <button class="btn btn-primary text-nowrap" type="submit" v-on:click="SearchGame()">搜尋</button>
+          </div>
         </nav>
     </header>
     <section v-if="ShowMenu">
@@ -94,7 +94,6 @@
     </section>
   </div>
 </template>
-
 <script>
 import fetchJson from '@/utilitys/fetch-json.js';
 import * as RD from '@/utilitys/readtext.js';
@@ -257,11 +256,17 @@ methods: {
     this.Show = false;
     this.ShowContent = false;
     this.ShowMenu = false;
+    this.SearchInput="";
     console.log(this.SearchResult);
   },
   Return2Menu(){
-    location.reload();
+    // location.reload();
     this.MakeReadText('' ,'',stop=true);
+    this.ShowSearch = false;
+    this.Show = true;
+    this.ShowContent = true;
+    this.ShowMenu = false;
+    this.SearchInput = "";
   },
 },
 }
