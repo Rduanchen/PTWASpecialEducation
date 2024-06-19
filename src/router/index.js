@@ -88,6 +88,11 @@ const router = createRouter({
       path: '/NumberBoard',
       name: 'NumberBoard',
       component: () => import('@/components/NumberBoard.vue'),
+    },
+    {
+      path: '/Numberline',
+      name: 'Numberline',
+      component: () => import('@/components/NumberLine.vue'),
     }
     ]
 });

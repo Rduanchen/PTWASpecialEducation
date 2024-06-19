@@ -4,8 +4,6 @@
         <p class="h1 Title" v-if="this.GameData.QuestionText && this.GameData.QuestionText!= ''">{{ this.GameData.QuestionText }}</p>
         <p class="h2 SubTitle" v-if="this.GameData.Description && this.GameData.Description != ''">{{ this.GameData.Description }}</p>
     </div>
-    <!-- {{SlotComponentanswer}}
-    {{this.Answers}} -->
     <hr>
     <div class="QuestionArea">
         <div v-for="(item, index) in GameData.Datas" :key="index" class="QuestionContainer">
