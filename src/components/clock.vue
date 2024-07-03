@@ -1,6 +1,6 @@
 <template>
-	<div class="Outter">
-		<canvas id="clock">
+	<div class="Outter" ref="Outter">
+		<canvas id="clock" ref="Clock">
 		</canvas>
 	</div>
 </template>
@@ -26,11 +26,10 @@ export default {
 		}
 	},
 	mounted() {
-		let canvas = document.getElementById('clock');
-		let ctx = canvas.getContext('2d');
-		let Outter = document.getElementsByClassName('Outter')[0].getBoundingClientRect();
-
-		let border = Math.max(Outter.width, Outter.height)
+		let canvas = this.$refs.Clock;
+		let ctx = this.$refs.Clock.getContext('2d');
+		let Outter = this.$refs.Outter;
+		let border = Math.min(Outter.clientWidth, Outter.clientHeight) - 10;
 
 		canvas.width = border;
 		canvas.height = border;
@@ -94,7 +93,7 @@ export default {
 <style scoped>
 /* Your component-specific styles go here */
 .Outter{
-	width: 50vh;
-	height: 50vh;
+	width: 100%;
+	height: 100%;
 }
 </style>

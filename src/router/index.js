@@ -90,9 +90,18 @@ const router = createRouter({
       component: () => import('@/components/NumberBoard.vue'),
     },
     {
-      path: '/Numberline',
-      name: 'Numberline',
-      component: () => import('@/components/NumberLine.vue'),
+      path: '/NumberlineV2',
+      name: 'NumberlineV2',
+      component: () => import('@/components/NumberLineV2.vue'),
+    },
+    {
+      path: '/TestParentNode',
+      name: 'TestParentNode',
+      component: () => import('@/components/TestParentNode.vue'),
+    },{
+      path: '/PairingGame',
+      name: 'PairingGame',
+      component: () => import('@/views/GameTemplate/PairingGame.vue'),
     }
     ]
 });

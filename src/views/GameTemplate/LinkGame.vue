@@ -1,27 +1,16 @@
 <template>
-<div>
-    {{this.QuestionDataStructure}}
+    <!-- {{ this.DotLocation }} -->
     <p class="h1">{{ GameData.Question.text }}</p>
-    <div class="canvas-container" id="canvas-container" ref="CanvasContainer">
-        <canvas id="responsive-bg" class="position-absolute"></canvas>
-        <canvas ref="line_keeper" id="line_keeper" class="position-absolute"></canvas>
+    <div class="canvas-container" ref="CanvasContainer">
+        <canvas id="responsive-bg" class="position-absolute " style="border: solid"></canvas>
+        <canvas ref="line_keeper" id="line_keeper" class="position-absolute" style="border: solid"></canvas>
     </div>  
-    <div class="SlotComponent" ref="SlotComponent">
-        <component :is="SlotComponent" :Data="SlotComponentData" :ID="this.id" @hook:mounted="test()" ></component>
-    </div>
-    <button @click="captureImages">Capture</button>
-    <img :src="test">
-</div>
+    
 </template>
 
 <script>
 import icon from '@/assets/GamePic/Cat.png';
 import { GamesGetAssetsFile } from '@/utilitys/get_assets.js';
-import LoadImageFromArray from '@/utilitys/load_images.js';
-import * as htmlToImage from 'html-to-image';
-import { toPng } from 'html-to-image';
-import { defineAsyncComponent } from 'vue';
-import ImageContainer from '../../components/ImageContainer.vue';
 export default {
     name: 'Link',
     props: {
@@ -38,15 +27,13 @@ export default {
             required: true
         }
     },
-    components: {
-        Clock : defineAsyncComponent(() => import('@/components/clock.vue')),
-        ImageContainer: defineAsyncComponent(() => import('@/components/ImageContainer.vue'))
-    },
     data(){
         return{
+            
             WH: null,
             Canvasoffset: {},
-            
+            previousinfo: {},
+
             // RWD Setting
             Min_border: 10,
             Min_RowGap :30,
@@ -71,28 +58,18 @@ export default {
 
             //Check Answer
             //Fake Data
-            QuestionDataStructure:[],
+            QuestionDataStructure:null,
             ans:[
                 [[0,0],[1,0]],
                 [[0,1],[1,2]],
                 [[0,2],[1,1]]
             ],
-            answered: [],
-            SlotComponent: "",
-            SlotComponentData: {
-           
-            },
-            test: "",
+            answered: []
         }
     },
     mounted() {
-        // await this.captureImages();
-        this.SlotComponent = 'clock'
-        this.SlotComponentData = {
-            sec: 0,
-            min: 0,
-            hour: 0
-        }
+        // this.QuestionDataStructure = this.GameData.Question.RowData;
+        this.QuestionDataStructure = this.GameData.Question.RowData;
         this.ans = this.GameData.Answer;
         let CanvasContainer = this.$refs.CanvasContainer
         this.Canvasoffset = {
@@ -110,13 +87,14 @@ export default {
         linekeeperCSS.style.left = this.Canvasoffset.left + 'px';
 
 
-        this.WH = CanvasContainer.getBoundingClientRect();
-        
+        let WH = CanvasContainer.getBoundingClientRect();
+        this.WH=WH;
+        this.previousinfo = WH;
 
         const canvas1 = $('#responsive-bg')[0];
         const context1 = canvas1.getContext('2d');
-        canvas1.width = this.WH.width;
-        canvas1.height = this.WH.height;
+        canvas1.width = WH.width;
+        canvas1.height = WH.height;
 
         context1.clearRect(0, 0, canvas1.width, canvas1.height);
         
@@ -128,44 +106,68 @@ export default {
             
         this.canvas = this.$refs.line_keeper;
         this.context = this.canvas.getContext('2d');
-        this.canvas.width = this.WH.width;
-        this.canvas.height = this.WH.height;
+        this.canvas.width = WH.width;
+        this.canvas.height = WH.height;
         
         window.addEventListener('resize', () => {
             let CanvasContainer = this.$refs.CanvasContainer
-            this.Canvasoffset = {
-                top: CanvasContainer.offsetTop,
-                left: CanvasContainer.offsetLeft
-            }
+        this.Canvasoffset = {
+            top: CanvasContainer.offsetTop,
+            left: CanvasContainer.offsetLeft
+        }
 
-            let CanvasCSS = document.getElementsByTagName('canvas')[0];
-            CanvasCSS.style.top = this.Canvasoffset.top + 'px';
-            CanvasCSS.style.left = this.Canvasoffset.left + 'px';
-            
-            let linekeeper = this.$refs.line_keeper;
-            let linekeeperCSS = document.getElementById('line_keeper');
-            linekeeperCSS.style.top = this.Canvasoffset.top + 'px';
-            linekeeperCSS.style.left = this.Canvasoffset.left + 'px';
+        let CanvasCSS = document.getElementsByTagName('canvas')[0];
+        CanvasCSS.style.top = this.Canvasoffset.top + 'px';
+        CanvasCSS.style.left = this.Canvasoffset.left + 'px';
+        
+        let linekeeper = this.$refs.line_keeper;
+        let linekeeperCSS = document.getElementById('line_keeper');
+        linekeeperCSS.style.top = this.Canvasoffset.top + 'px';
+        linekeeperCSS.style.left = this.Canvasoffset.left + 'px';
 
-            this.WH = CanvasContainer.getBoundingClientRect();
+
+        let WH = CanvasContainer.getBoundingClientRect();
+        this.WH=WH;
+        this.previousinfo = WH;
+
+        const canvas1 = $('#responsive-bg')[0];
+        const context1 = canvas1.getContext('2d');
+        canvas1.width = WH.width;
+        canvas1.height = WH.height;
+
+        context1.clearRect(0, 0, canvas1.width, canvas1.height);
+        
+        
+        let RWD_Info = this.CountRWDWidth(this.QuestionDataStructure);
+        this.RWD_Img_Width = RWD_Info.Img_width;
+        this.RWD_Gap_Width = RWD_Info.Gap_width;
+        this.DrawImgOnCanvas(this.QuestionDataStructure,context1);
             
-            const canvas1 = $('#responsive-bg')[0];
-            const context1 = canvas1.getContext('2d');
-            canvas1.width = this.WH.width;
-            canvas1.height = this.WH.height;
-            context1.clearRect(0, 0, canvas1.width, canvas1.height);
-            let RWD_Info = this.CountRWDWidth(this.QuestionDataStructure);
-            this.RWD_Img_Width = RWD_Info.Img_width;
-            this.RWD_Gap_Width = RWD_Info.Gap_width;
-            this.DrawImgOnCanvas(this.QuestionDataStructure,context1);
-                
-            this.canvas = this.$refs.line_keeper;
-            this.context = this.canvas.getContext('2d');
-            this.canvas.width = this.WH.width;
-            this.canvas.height = this.WH.height;
+        this.canvas = this.$refs.line_keeper;
+        this.context = this.canvas.getContext('2d');
+        this.canvas.width = WH.width;
+        this.canvas.height = WH.height;
             this.MapTransfer();
         });
-
+        // window.addEventListener('fullscreenchange', () => {
+        //     setTimeout(()=>{
+        //     context1.clearRect(0, 0, canvas1.width, canvas1.height);
+        //     let WH = this.$refs.CanvasContainer.getBoundingClientRect();
+        //     this.WH = WH;
+        //     console.log(WH);
+        //     canvas1.width = WH.width;
+        //     canvas1.height = WH.height;
+        //     this.canvas.width = WH.width;
+        //     this.canvas.height = WH.height;
+        //     let RWD_Info = this.CountRWDWidth(this.QuestionDataStructure);
+        //     this.RWD_Img_Width = RWD_Info.Img_width;
+        //     this.RWD_Gap_Width = RWD_Info.Gap_width;
+        //     this.DrawImgOnCanvas(this.QuestionDataStructure,context1);
+        //     this.MapTransfer();
+        //     },1000)
+        // });
+        
+        
         this.Runtimes=0;
         this.TotalAmount=this.ans.length;
         
@@ -177,21 +179,6 @@ export default {
         this.canvas.addEventListener('touchend', this.handleTouchEnd);
     },
     methods: {
-        test(){
-            console.log("Hello");
-        },
-        async captureImages() {
-            htmlToImage.toPng(document.getElementsByClassName('SlotComponent')[0])
-            .then((dataUrl) => {
-                this.test = dataUrl;
-                let img = new Image();
-                img.src = dataUrl;
-                console.log(this.test);
-                img.onload = () => {
-                    this.QuestionDataStructure[0][0] = img;
-                }
-            })
-        },
         CountRWDWidth(question){
             //利用比例計算出每個圖片的大小
             //如果太多列導致圖片太小則以圖片最小值為主
@@ -243,6 +230,37 @@ export default {
             return (this.WH.height-this.Min_border*2-full_space)/(question.length+1)
             // return 0
         },
+        async ImageQuery(question) {
+            let Images = [];
+
+            // 定義載入圖片的 Promise 函式
+            function loadImage(src) {
+                    return new Promise((resolve, reject) => {
+                        let img = new Image();
+                        img.onload = () => resolve(img);
+                        img.onerror = reject;
+                        img.src = src;
+                    });
+                }
+
+                // 逐一處理二維陣列中的圖片路徑
+                for (let i = 0; i < question.length; i++) {
+                    let temp = [];
+
+                    // 逐一載入圖片
+                    for (let j = 0; j < question[i].length; j++) {
+                        try {
+                            let img = await loadImage(GamesGetAssetsFile(this.id, question[i][j]));
+                            temp.push(img);
+                        } catch (error) {
+                            console.error('圖片載入失敗：', error);
+                        }
+                    }
+
+                    Images.push(temp);
+                }
+                return Images;
+        },
         FindDotXY(col,row){
             for(var i in this.DotLocation){
                 if(this.DotLocation[i][0][0]==row && this.DotLocation[i][0][1]==col){
@@ -261,11 +279,19 @@ export default {
                 paths.push({startX:start.x,startY:start.y,currentX:end.x,currentY:end.y});
             }
             this.paths=paths;
+            // let Wscale = this.WH.width/this.previousinfo.width;
+            // let Hscale = this.WH.height/this.previousinfo.height;
+            // for(var i in this.paths){
+            //     this.paths[i].startX = this.paths[i].startX*Wscale;
+            //     this.paths[i].startY = this.paths[i].startY*Hscale;
+            //     this.paths[i].currentX = this.paths[i].currentX*Wscale;
+            //     this.paths[i].currentY = this.paths[i].currentY*Hscale;
+            // }
+            // this.previousinfo = this.WH;
             this.drawPaths();
         },  
         async DrawImgOnCanvas(question, context1) {
-            // let images = await LoadImageFromArray(question, this.id);
-            let images = question;
+            let images = await this.ImageQuery(question);
             console.log(images);
             let Column_Amount = question.length;
             var onchangegroup = false;
@@ -518,10 +544,13 @@ export default {
     .canvas-container {
         height: 70vh;
     }
-    /* #SlotComponent{
-        position: relative;
-        top: 0;
-        left: 0;
-        z-index: 10;
-    } */
 </style>
+<!-- 
+    .canvas-container {
+        display: flex; /* 使用 Flexbox 布局 */
+        flex-direction: column; /* 子元素垂直排列 */
+        align-items: center; /* 子元素水平居中 */
+        position: relative; /* 相對定位，作為子元素的定位參考 */
+    }
+
+ -->

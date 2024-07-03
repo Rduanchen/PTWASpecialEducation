@@ -171,7 +171,7 @@ button {
     font-size: 2em;
     width: 100%;
     border-radius: 12px;
-    background-color: #ffb703;
+    background-color: #FFF;
 }
 .OnSubmit {
     animation: blink 1s linear infinite;
@@ -191,6 +191,7 @@ button {
     background-color: #bde0fe;
 }
 .Selected{
-    background-color: #ef233c;
+    background-color: #606c38;
+    scale: 1.05;
 }
 </style>

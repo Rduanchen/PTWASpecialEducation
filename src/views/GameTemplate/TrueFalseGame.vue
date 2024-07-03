@@ -90,9 +90,9 @@ export default {
 </script>
 <style scoped>
 .card {
-    border: solid 1px #777; 
+    border: solid 3px #a0c4ff; 
+    border-radius: 15px;
     padding: 1em;
-    background-color: #fee440;
 }
 button {
     width: 150px;
@@ -146,11 +146,11 @@ button {
                 transform: scale(1.1);
                 transition: transform 0.2s;
             }
-            .Crosss {background-color: #FCA311;}
-            .Circle {background-color: #8ECAE6;}
+            .Crosss {background-color: #fff;}
+            .Circle {background-color: #fff;}
         }
         .Submit{
-            margin-top: 5%;
+            margin-top: 2em;
             width: 90%;
             height: 15%;
             border-radius: 20px;
@@ -175,6 +175,7 @@ button {
     }
 }
 .SelectedTF{
-    background-color: #e63946 !important;
+    background-color: #a2d2ff!important;
+    scale: 1.1;
 }
 </style>

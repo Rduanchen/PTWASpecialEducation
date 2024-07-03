@@ -52,18 +52,15 @@ export default {
     mounted() {
         let Outter = this.$refs.Outter;
         let canvas = this.$refs.Cup;
-        if (Outter.offsetWidth > Outter.offsetHeight){
-            canvas.width = Outter.offsetHeight -10;
-            canvas.height = Outter.offsetHeight -10;
-        }
-        else{
-            canvas.width = Outter.offsetWidth -10;
-            canvas.height = Outter.offsetWidth -10;
-        }
+        let border = Math.min(Outter.clientWidth, Outter.clientHeight) - 10;
+        canvas.width = border;
+        canvas.height = border;
+        
         if (this.Data.Scale != 1000 && this.Data.Scale!= 250 && this.Data.Scale != 2000){
             console.warn(`SlotComponent(Water): this.Data.Scale must be 1000, 250 or 2000, not ${this.Data.Scale}, set to 2000 by default`);
             this.Data.Scale = 2000;
         }
+
         let ctx = canvas.getContext('2d');
         // Draw Cup
         let img = new Image();
