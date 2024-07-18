@@ -16,10 +16,6 @@ export default {
     name: 'NumberBoard',
     data() {
         return {
-            Data: {
-                "Unit": ["時間", "分", "秒"],
-                "Number": 1234
-            },
             Number: null,
             Unit: null
         };

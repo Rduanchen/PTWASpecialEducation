@@ -90,9 +90,9 @@ const router = createRouter({
       component: () => import('@/components/NumberBoard.vue'),
     },
     {
-      path: '/NumberlineV2',
-      name: 'NumberlineV2',
-      component: () => import('@/components/NumberLineV2.vue'),
+      path: '/Numberline',
+      name: 'Numberline',
+      component: () => import('@/components/NumberLine.vue'),
     },
     {
       path: '/TestParentNode',
@@ -102,8 +102,23 @@ const router = createRouter({
       path: '/PairingGame',
       name: 'PairingGame',
       component: () => import('@/views/GameTemplate/PairingGame.vue'),
+    },
+    {
+      path: '/NumberlineV2',
+      name: 'NumberlineV2',
+      component: () => import('@/components/NumberLineV2.vue'),
+    },
+    {
+      path: '/NumberlineGame',
+      name: 'NumberlineGame',
+      component: () => import('@/views/GameTemplate/NumberlineGame.vue'),
+    },
+    {
+      path: '/MarkDownLite',
+      name: 'MarkDownLite',
+      component: () => import('@/components/FillinBlank.vue'),
     }
-    ]
+  ]
 });
 router.beforeEach((to, from, next) => {
   console.warn(`route: ${from.path} -> ${to.path}`);

@@ -1,28 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Animation Test</title>
-    <style>
-        .OnSubmit {
-            animation: blink 1s linear infinite;
-        }
-
-        @keyframes blink {
-            0% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.1);
-            }
-            100% {
-                transform: scale(1);
-            }
-        }
-    </style>
+  <title>Simulate Keyboard Event</title>
 </head>
 <body>
-    <button type="button" class="Submit OnSubmit">送出答案</button>
+  <input type="text" class="inputField" placeholder="Type something...">
+  <input type="text" class="inputField" placeholder="Type something...">
+  <input type="text" class="inputField" placeholder="Type something...">
+
+  <script>
+    function simulateKeyPress(character) {
+      const activeElement = document.activeElement;
+      
+      if (activeElement && activeElement.classList.contains('inputField')) {
+        // Get the current value and the cursor position
+        const start = activeElement.selectionStart;
+        const end = activeElement.selectionEnd;
+        const value = activeElement.value;
+        
+        // Insert the character at the cursor position
+        activeElement.value = value.slice(0, start) + character + value.slice(end);
+        
+        // Move the cursor to the end of the inserted character
+        activeElement.selectionStart = activeElement.selectionEnd = start + character.length;
+      }
+    }
+
+    // Example usage
+    document.addEventListener('keydown', (event) => {
+      // Prevent default action for demonstration purposes
+      event.preventDefault();
+
+      // Simulate key press for the character 'H'
+      simulateKeyPress('H');
+    });
+  </script>
 </body>
 </html>
