@@ -4,7 +4,7 @@
         <p>{{ Data.QuestionWord }}</p>
     </div>
     <div class="GameWindows">
-        <table>
+        <!-- <table>
             <tr class="Test">
                 <td v-for="(i,index) in FinalData" :key="i" class="inner">
                     <img v-if="i.Arrow == true" :src="Arrow" alt="Arrow" />
@@ -12,7 +12,9 @@
                     <component v-else :is="Data.Name" :Data="i" :ID="this.ID"></component>
                 </td>
             </tr>
-        </table>
+        </table> -->
+        <!-- <Markdown :Data="{Render : this.Data.Render, Answers: this.Data.Ans}" @ReplyAnswer="Reply"></Markdown> -->
+        <component :is="Data.SlotComponentName" :Data="Data.Data" :ID="this.ID" @ReplyAnswer="Reply"></component>
     </div>
     <div class="NumberPad" v-if="ShowPad">
         <VirtualNumPad @virtualpadinput-Input="Input" @virtualpadinput-delete="Delete" @virtualpadinput-pop="Pop"></VirtualNumPad>
@@ -33,7 +35,8 @@ export default {
         VirtualNumPad,
         TextOnly: defineAsyncComponent(() => import('@/components/TextOnly.vue')),
         Input: defineAsyncComponent(() => import('@/components/ReplyInput.vue')),
-        Fractions: defineAsyncComponent(() => import('@/components/Fractions.vue'))
+        Fractions: defineAsyncComponent(() => import('@/components/Fractions.vue')),
+        Markdown: defineAsyncComponent(() => import('@/components/Markdown.vue')),
     },
     data() {
         return {
@@ -46,50 +49,27 @@ export default {
                 Name: "TextOnly",
                 BlankName: "Input",
                 NumberPadAutoDisappear: false,
-                Items:
-                [
-                    {
-                        Text: "1",
-                    },
-                    {
-                        Text: "2",
-                    },
-                    {
-                        Text: "3",
-                    },
-                    {
-                        Text: "4",
-                    },
-                    {
-                        Text: "5",
-                    },
-                    {
-                        Text: "6",
-                    },
-                    {
-                        Text: "7",
-                    },
-                    {
-                        Blank: true,
-                        Name: "Fractions",
-                        Text: "8",
-                        Data: {
-                            Mother: 2,
-                            Son: 3
-                        }
-                    },
-                    {
-                        Blank: true,
-                        Name: "Input",
-                        Data: {
-                            Type: "text",
-                            Text: "9"
-                        }
-                    },
-                    {
-                        Text: "10",
-                    }
-                ]
+                SlotComponentName: "Markdown",
+                Data:{
+                    Render: `
+                        123432
+                        # Header 1
+                        ## Header 2
+                        ### Header 3
+                        **Bold Text**
+                        - List 1
+                        $i$ $i$ Input Box
+                        $i$ Input Box
+                        $t$ tab
+                        $s$ space
+                        $n$ new line
+                    `,
+                    Answers: [
+                        '1',
+                        '2',
+                        '3'
+                    ]    
+                }
             }
         };
     },
@@ -119,10 +99,14 @@ export default {
         }
     },
     methods: {
+        Reply(result) {
+            console.log(result);
+            this.ComponentsAnswers = result;
+        },
         GetComponentAnswer(Reply,index){
             // alert('Recive:'+Reply);
             console.log('Recive:',Reply);
-            this.ComponentsAnswers[index] = Reply;
+            this.ComponentsAnswers = Reply;
         },
         NowClick(){
             if (document.activeElement.tagName == 'INPUT'){

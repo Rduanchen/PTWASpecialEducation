@@ -116,7 +116,7 @@ const router = createRouter({
     {
       path: '/MarkDownLite',
       name: 'MarkDownLite',
-      component: () => import('@/components/FillinBlank.vue'),
+      component: () => import('@/components/Markdown.vue'),
     }
   ]
 });

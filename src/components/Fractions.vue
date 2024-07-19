@@ -32,8 +32,7 @@ export default {
     },
     methods: {
         // Your methods here
-        Reply(index){
-            console.log('1234423')
+        Reply(index){            
             if (index == 0){ 
                 this.Num[0] = document.getElementById('Input1').value;
             }

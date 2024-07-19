@@ -4,12 +4,13 @@
         <tr class="Test">
             <td v-for="(i,index) in FinalData" :key="i" class="inner">
                 <img v-if="i.Arrow == true" :src="Arrow" alt="Arrow" />
-                <component v-else-if="i.Blank == true" :is="i.Name" :Data="i" @ReplyAnswer="GetComponentAnswer"></component>
+                <component v-else-if="i.Blank == true" :is="i.Name" :Data="i.Data" @ReplyAnswer="(re) => { GetComponentAnswer(re,index) }"></component>
                 <component v-else :is="Data.Name" :Data="i" :ID="this.ID"></component>
             </td>
         </tr>
     </table>
     {{ FinalData }}
+    {{ ReplyData }}
 </div>
 </template>
 <script>
@@ -30,7 +31,7 @@ export default {
     },
     data() {
         return {
-            ReplyData: [],
+            ReplyData: {},
             ID: "0",
             Data: {
                 Name: "TextOnly",
@@ -72,7 +73,8 @@ export default {
                         Text: "9",
                         Name: "Input",
                         Data: {
-                            Type: "number"
+                            Type: "number",
+                            Text: "9"
                         }
                     },
                     {
@@ -93,12 +95,36 @@ export default {
                 })
             }
         }
+        // Count the number of blanks
+        for (let i in NewArr){
+            if (NewArr[i].Blank == true){
+                this.ReplyData[i] = false;
+            }
+        }
         console.log(NewArr)
         this.FinalData = NewArr;
     },
     methods: {
-        GetComponentAnswer(Reply){
-            this.ReplyData.push(Reply);
+        GetComponentAnswer(Reply, index){
+            console.log(Reply);
+            this.ReplyData[index] = Reply;
+            this.CheckAnswer();
+        },
+        CheckAnswer(){
+            let Check = true;
+            for (let i in this.ReplyData){
+                if (this.ReplyData[i] == false){
+                    Check = false;
+                }
+            }
+            if (Check){
+                this.$emit('ReplyAnswer', true);
+                console.log("Correct");
+            }
+            else{
+                this.$emit('ReplyAnswer', false);
+                console.log("Wrong");
+            }
         }
     }
 }
