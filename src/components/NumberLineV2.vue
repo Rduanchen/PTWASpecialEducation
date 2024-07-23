@@ -9,8 +9,8 @@
             </td>
         </tr>
     </table>
-    {{ FinalData }}
-    {{ ReplyData }}
+    <!-- {{ FinalData }}
+    {{ ReplyData }} -->
 </div>
 </template>
 <script>
@@ -29,59 +29,19 @@ export default {
             return GetSlotComponentData('NumberLineV2', 'ArrowRight.svg')
         }
     },
+    props: {
+        Data: {
+            type: Object,
+            required: true
+        }
+    },
     data() {
         return {
             ReplyData: {},
             ID: "0",
-            Data: {
-                Name: "TextOnly",
-                BlankName: "Input",
-                Items:
-                [
-                    {
-                        Text: "1",
-                    },
-                    {
-                        Text: "2",
-                    },
-                    {
-                        Text: "3",
-                    },
-                    {
-                        Text: "4",
-                    },
-                    {
-                        Text: "5",
-                    },
-                    {
-                        Text: "6",
-                    },
-                    {
-                        Text: "7",
-                    },
-                    {
-                        Blank: true,
-                        Name: "Fractions",
-                        Text: "8",
-                        Data: {
-                            Mother: 2,
-                            Son: 3
-                        }
-                    },
-                    {
-                        Blank: true,
-                        Text: "9",
-                        Name: "Input",
-                        Data: {
-                            Type: "number",
-                            Text: "9"
-                        }
-                    },
-                    {
-                        Text: "10",
-                    }
-                ]
-            },
+            // Data: {
+                
+            // },
             FinalData: []
         };
     },
@@ -132,8 +92,8 @@ export default {
 <style scoped>
 /* Your component's CSS styles go here */
 .OutterContainer{
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     table{
         width: 100%;
         height: 20%;

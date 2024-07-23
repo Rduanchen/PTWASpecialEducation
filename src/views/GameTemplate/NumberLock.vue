@@ -1,20 +1,10 @@
 <template>
 <div class="OutterContainer">
-    <div class="description">
-        <p>{{ Data.QuestionWord }}</p>
+    <div class="description ">
+        <p>{{ this.GameData.QuestionWord }}</p>
     </div>
     <div class="GameWindows">
-        <!-- <table>
-            <tr class="Test">
-                <td v-for="(i,index) in FinalData" :key="i" class="inner">
-                    <img v-if="i.Arrow == true" :src="Arrow" alt="Arrow" />
-                    <component v-else-if="i.Blank == true" :is="i.Name" :Data="i.Data" @ReplyAnswer="(re) => { GetComponentAnswer(re,index) }"></component>
-                    <component v-else :is="Data.Name" :Data="i" :ID="this.ID"></component>
-                </td>
-            </tr>
-        </table> -->
-        <!-- <Markdown :Data="{Render : this.Data.Render, Answers: this.Data.Ans}" @ReplyAnswer="Reply"></Markdown> -->
-        <component :is="Data.SlotComponentName" :Data="Data.Data" :ID="this.ID" @ReplyAnswer="Reply"></component>
+        <component :is="GameData.SlotComponentName" :Data="GameData.Data" :ID="this.ID" @ReplyAnswer="Reply"></component>
     </div>
     <div class="NumberPad" v-if="ShowPad">
         <VirtualNumPad @virtualpadinput-Input="Input" @virtualpadinput-delete="Delete" @virtualpadinput-pop="Pop"></VirtualNumPad>
@@ -30,67 +20,73 @@ import VirtualNumPad from '@/components/VirtualNumPadInput.vue';
 import { defineAsyncComponent, toHandlerKey } from 'vue';
 import { GetSlotComponentData } from '@/utilitys/get_assets.js';
 export default {
-    name: 'NumberLineGame',
+    name: 'NumberLock',
     components:{
         VirtualNumPad,
         TextOnly: defineAsyncComponent(() => import('@/components/TextOnly.vue')),
         Input: defineAsyncComponent(() => import('@/components/ReplyInput.vue')),
         Fractions: defineAsyncComponent(() => import('@/components/Fractions.vue')),
         Markdown: defineAsyncComponent(() => import('@/components/Markdown.vue')),
+        NumberLine: defineAsyncComponent(() => import('@/components/NumberLineV2.vue'))
+    },
+    props: {
+        GameData: {
+            type: Object,
+            required: true
+        }
     },
     data() {
         return {
             NowSelect: null,
             ShowPad : false,
             ID: "0",
-            ComponentsAnswers: {},
-            Data: {
-                QuestionWord: "請問以下數字中哪個是分數?",
-                Name: "TextOnly",
-                BlankName: "Input",
-                NumberPadAutoDisappear: false,
-                SlotComponentName: "Markdown",
-                Data:{
-                    Render: `
-                        123432
-                        # Header 1
-                        ## Header 2
-                        ### Header 3
-                        **Bold Text**
-                        - List 1
-                        $i$ $i$ Input Box
-                        $i$ Input Box
-                        $t$ tab
-                        $s$ space
-                        $n$ new line
-                    `,
-                    Answers: [
-                        '1',
-                        '2',
-                        '3'
-                    ]    
-                }
-            }
+            ComponentsAnswers: false,
+            // Data: {
+            //     QuestionWord: "請問以下數字中哪個是分數?",
+            //     Name: "TextOnly",
+            //     BlankName: "Input",
+            //     NumberPadAutoDisappear: false,
+            //     SlotComponentName: "Markdown",
+            //     Data:{
+            //         Render: `
+            //             > 123432
+            //             # Header 1
+            //             ## Header 2
+            //             ### Header 3
+            //             **Bold Text**
+            //             - List 1
+            //             $i$ $i$ Input Box
+            //             $i$ Input Box
+            //             $t$ tab
+            //             $s$ space
+            //             $n$ new line
+            //         `,
+            //         Answers: [
+            //             '1',
+            //             '2',
+            //             '3'
+            //         ]    
+            //     }
+            // }
         };
     },
     created() {
         let NewArr = []
         let cnt = 0;
-        for(var i in this.Data.Items){
-            NewArr.push(this.Data.Items[i]);
+        for(var i in this.GameData.Data){
+            NewArr.push(this.GameData.Data[i]);
             // Initial the ComponentAnswer
-            if (this.Data.Items[i].Blank == true){
+            if (this.GameData.Data[i].Blank == true){
                 this.ComponentsAnswers[cnt] = false;
             }
             cnt ++;
-            if (i != this.Data.Items.length - 1){
+            if (i != this.GameData.Data.length - 1){
                 NewArr.push({
                     Arrow : true
                 })
                 cnt ++;
             }
         }
-        // console.log(NewArr)
         this.FinalData = NewArr;
     },
     computed: {
@@ -103,8 +99,7 @@ export default {
             console.log(result);
             this.ComponentsAnswers = result;
         },
-        GetComponentAnswer(Reply,index){
-            // alert('Recive:'+Reply);
+        GetComponentAnswer(Reply,index){            
             console.log('Recive:',Reply);
             this.ComponentsAnswers = Reply;
         },
@@ -119,7 +114,7 @@ export default {
                 this.ShowPad = true;
             }
             else{
-                if (this.Data.NumberPadAutoDisappear != false){
+                if (this.GameData.NumberPadAutoDisappear != false){
                     this.ShowPad = false;
                     this.SlidAnimation('out');
                 }
@@ -163,7 +158,7 @@ export default {
             }
         },
         SlidAnimation(action){
-            if (this.Data.NumberPadAutoDisappear != false){
+            if (this.GameData.NumberPadAutoDisappear != false){
                 let OutterContainer = document.getElementsByClassName('OutterContainer')[0]
                 let GameWindows = document.getElementsByClassName('GameWindows')[0]
                 if (action == 'in'){
@@ -177,29 +172,20 @@ export default {
             }
         },
         CheckAnswer(){
-            let ans = true;
-            let cnt = 0;
-            let all = 0
-            for(var i in this.ComponentsAnswers){
-                if (this.ComponentsAnswers[i] != true){
-                    ans = false;
-                    cnt += 1;
-                }
-                all += 1
-            }
+            let ans = this.ComponentsAnswers;
             if (ans == true){
-                this.$emit  = ('play-effect', 'CorrectSound');
-                this.$emit = ('add-record', [`總共${all}題, ${cnt}題錯誤`,`正確`]);
-                this.$emit  = ('next-question');
+                this.$emit('play-effect', 'CorrectSound');
+                this.$emit('add-record', ["", "",`正確`]);
+                this.$emit('next-question');
             }
             else{
-                this.$emit  = ('play-effect', 'WrongSound');
-                this.$emit = ('add-record', [`總共${all}題, ${cnt}題錯誤`,`錯誤`]);
+                this.$emit('play-effect', 'WrongSound');
+                this.$emit('add-record', ["", "",`錯誤`]);
             }
         }
     },
     mounted() {
-        if (this.Data.NumberPadAutoDisappear == false){
+        if (this.GameData.NumberPadAutoDisappear == false){
             this.SlidAnimation('in');
             this.ShowPad = true;
         }
@@ -212,10 +198,11 @@ export default {
 /* Your component-specific styles go here */
 .OutterContainer{
     width: 100%;
-    height: 100vh;
+    height: 100%;
     display: grid;
-    grid-template-rows: 1fr 5fr 1fr;
-    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 5fr 1fr 1fr;
+    /* grid-template-columns: 1fr; */
+    grid-template-columns: 5fr 1fr;
     gap: 1rem;
     .description{
         grid-row: 1/2;
@@ -225,6 +212,10 @@ export default {
         display: flex;
         align-items: center;
         justify-content: start;
+        padding: 1rem;
+        p{
+            font-size: 1.5rem;
+        }
     }
     .GameWindows{
         grid-row: 2/3;
@@ -242,8 +233,6 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
-        border: solid 1px black;
-        border-radius: 15px;
     }
     .Submit{
         grid-row: 3/4;
@@ -252,10 +241,16 @@ export default {
         justify-content: end;
         button{
             width: 10rem;
-            height: 3rem;
-            margin: 1rem;
+            /* height: 4rem; */
             border-radius: 15px;
-            background-color: white;
+            background-color: #FFBE0B;
+            scale: 1;
+            transition: 0.5s;
+            font-size: 1.5rem;
+        }
+        button:hover{
+            scale: 1.1;
+            transition: 0.5s;    
         }
     }   
     table{

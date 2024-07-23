@@ -176,18 +176,16 @@ export default {
         flex-direction: column;
         border-radius: 15px;
         .DragElement{
-            /* border: solid 3px #0F0; */
             display: flex;
             .InnerComponent{
-                /* margin: 1rem 1rem; */
                 display: grid;
                 grid-template-rows: 1fr;
-                /* border: solid 3px #aaa; */
                 gap: 0.5rem;
                 width: 100%;
-                div{
+                .dragable{
                     max-height: 100px;
                     border: solid 3px #aaa;
+                    border-radius: 15px;
                     display: flex;
                     align-items: center;
                     justify-content: center;

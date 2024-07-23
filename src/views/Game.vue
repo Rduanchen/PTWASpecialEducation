@@ -734,6 +734,7 @@ export default {
       FillinBlank: defineAsyncComponent(() => import('@/views/GameTemplate/FillinBlank.vue')),
       CalculatorGame: defineAsyncComponent(() => import('@/views/GameTemplate/CalculatorGame.vue')),
       PairingGame: defineAsyncComponent(() => import('@/views/GameTemplate/PairingGame.vue')),
+      NumberLock: defineAsyncComponent(() => import('@/views/GameTemplate/NumberLock.vue')),
       EffectWindow
   }
 }

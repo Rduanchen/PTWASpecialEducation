@@ -10,7 +10,7 @@
                     <component class="GameImg" :is="this.SlotComponent" :ID="this.id" :Data="this.SlotData"></component>
                 </div>
                 <!-- 按鈕的列 -->
-                <div class="selection">
+                <div class="selection" v-if="this.GameData.SlotComponents">
                     <div class="card">
                         <p class="h2">{{ this.GameData.Question_Text }}</p>
                     </div>
@@ -18,6 +18,17 @@
                         <button type="button" v-for="i in question" :class="{ 'Selected': this.Select[i] }" v-on:click="SelectItem(i)">{{ i }}</button>
                     </div>
                     <button type="button" class="Check" :class="{ 'OnSubmit': (this.Answer != null) }" v-on:click="CheckAnswer">送出答案</button>
+                </div>
+                <div class="selection2" v-else>
+                    <div class="card">
+                        <p class="h2">{{ this.GameData.Question_Text }}</p>
+                    </div>
+                    <div class="con">
+                        <div class="choese">
+                            <button type="button" v-for="i in question" :class="{ 'Selected': this.Select[i] }" v-on:click="SelectItem(i)">{{ i }}</button>
+                        </div>
+                        <button type="button" class="Check" :class="{ 'OnSubmit': (this.Answer != null) }" v-on:click="CheckAnswer">送出答案</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -91,6 +102,12 @@ export default {
         }
         console.log(this.imageUrl);
     },
+    mounted() {
+        // let selection = document.getElementsByClassName('selection')[0];
+        // selection.style.width = '100%';
+        // selection.flexDirection = 'row';
+
+    },
     components: {
         ImageContainer : defineAsyncComponent(() => import('@/components/ImageContainer.vue')),
     }
@@ -124,9 +141,11 @@ button {
             margin-top: 2em;
             width: 100%;
             height: 62vh;
+            gap: 2rem;
             .selection{
                 height: 100%;
                 width: 35%;
+                width: 60%;
                 display: flex;
                 flex-direction: column;
                 justify-content: space-between;
@@ -145,6 +164,25 @@ button {
                     button:hover{
                         transition: 0.3s;
                         transform: scale(1.03);
+                    }
+                }
+            }
+            .selection2{
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                gap: 1rem;
+                .card{
+                    display: flex;
+                    justify-content: center;
+                }
+                .con{
+                    width: 50%;
+                    display: grid;
+                    grid-template-rows: 4fr 1fr;
+                    .choese{
+                        display: grid;
+                        grid-template-columns: repeat(auto-fit, 1fr);
                     }
                 }
             }
