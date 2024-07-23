@@ -61,7 +61,7 @@ export default {
                 this.ReplyData[i] = false;
             }
         }
-        ;;ㄤonsole.log(NewArr)
+        console.log(NewArr)
         this.FinalData = NewArr;
     },
     methods: {
