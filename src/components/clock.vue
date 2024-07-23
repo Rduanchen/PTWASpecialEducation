@@ -30,7 +30,7 @@
 		let canvas = document.getElementById('clock');
 		let ctx = canvas.getContext('2d');
 		let border = Math.min(this.$refs.Outter.clientWidth, this.$refs.Outter.clientHeight);
-		let dpr = window.devicePixelRatio || 1; // 获取设备像素比率
+		let dpr = window.devicePixelRatio || 1; // 獲取設備像素比率
   
 		canvas.width = border * dpr;
 		canvas.height = border * dpr;
@@ -38,7 +38,7 @@
 		canvas.style.width = `${border}px`;
 		canvas.style.height = `${border}px`;
   
-		ctx.scale(dpr, dpr); // 根据设备像素比率缩放绘制上下文
+		ctx.scale(dpr, dpr); // 根據設備像素比率縮放畫布
   
 		let img = new Image();
 		img.src = Img;

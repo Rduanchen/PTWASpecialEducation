@@ -44,7 +44,7 @@
 import { GamesGetAssetsFile } from '@/utilitys/get_assets.js';
 import draggable from 'vuedraggable';
 import { defineAsyncComponent } from 'vue';
-import NumberBoard from '../../components/NumberBoard.vue';
+import { GetComponents } from '@/utilitys/get_components.js';
 export default {
     name: 'CompareGame',
     components: {
@@ -52,11 +52,11 @@ export default {
         ImageContainer: defineAsyncComponent(() => import('@/components/ImageContainer.vue')),
         ImageWithText: defineAsyncComponent(() => import('@/components/ImageWithText.vue')),
         TextOnly: defineAsyncComponent(() => import('@/components/TextOnly.vue')),
-        CoulorBarChart: defineAsyncComponent(() => import('@/components/CoulorBarChart.vue')),
-        CircleChart: defineAsyncComponent(() => import('@/components/CircleChart.vue')),
-        ImageTable: defineAsyncComponent(() => import('@/components/DrawImageTable.vue')),
-        DrawImage: defineAsyncComponent(() => import('@/components/DrawImage.vue')),
-        NumberBoard: defineAsyncComponent(() => import('@/components/NumberBoard.vue')),
+        CoulorBarChart: GetComponents("CoulorBarChart"),
+        CircleChart: GetComponents("CircleChart"),
+        ImageTable: GetComponents("ImageTable"),
+        DrawImage: GetComponents("DrawImage"),
+        NumberBoard: GetComponents("NumberBoard"),
     },
     emits: ['play-effect','add-record','next-level'],
     props: {

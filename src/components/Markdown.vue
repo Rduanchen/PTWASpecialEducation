@@ -94,7 +94,7 @@ computed: {
         content = content.replace(/# (.*?)\n/g, '<h1>$1</h1>\n'); // # Header 1
         content = content.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>'); // **Bold Text**
         content = content.replace(/\$i\$/g, () => {
-            const inputHTML = `<input type="text" id="Box${this.inputIndex}"/>`;
+            const inputHTML = `<input type="text" class="input" style=" border: 3px solid #ccc; border-radius: 10px; height: 40px; " id="Box${this.inputIndex}"/>`;
             this.inputIndex ++ ;
             return inputHTML;
         }); // $i$ Input Box
@@ -103,6 +103,7 @@ computed: {
         content = content.replace(/\$n\$/g, '<br/>'); // $n$ new line
         content = content.replace(/---\n/g, '<hr>\n'); // - List 1
         content = content.replace(/- (.*?)\n/g, '<ul><li>$1</li></ul>\n'); // - List 1
+        content = content.replace(/> (.*?)\n/g, '<blockquote style="border-left: solid 3px black; padding-left: 10px;">$1</blockquote>\n'); // > Blockquote
         return content;
     }
 }
@@ -115,6 +116,11 @@ computed: {
     font-family: Arial, sans-serif;
     width: 100%;
     height: 100%;
+}
+.input{
+    width: 100%;
+    height: 40px;
+    margin: 10px 0;
 }
 </style>
   

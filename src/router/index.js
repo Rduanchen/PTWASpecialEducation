@@ -109,9 +109,9 @@ const router = createRouter({
       component: () => import('@/components/NumberLineV2.vue'),
     },
     {
-      path: '/NumberlineGame',
-      name: 'NumberlineGame',
-      component: () => import('@/views/GameTemplate/NumberlineGame.vue'),
+      path: '/NumberLock',
+      name: 'NumberLock',
+      component: () => import('@/views/GameTemplate/NumberLock.vue'),
     },
     {
       path: '/MarkDownLite',
