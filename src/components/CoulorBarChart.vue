@@ -1,24 +1,31 @@
 <template>
 <div class="OutterContainer" >
-    <div class="Division">
-        <p class="Child">{{ this.Data.Child }}</p>
-        <hr>
-        <p class="Mother">{{ this.Data.Total }}</p>
+    <div class="Number">
+        <div class="Division">
+            <p class="Child">{{ this.Data.Child }}</p>
+            <hr class="fraction-line">
+            <p class="Mother">{{ this.Data.Total }}</p>
+        </div>
+        <p>{{ this.Data.Unit }}</p>
     </div>
     <table class="OddBorderOutline" >
         <tr v-for="(items, index1) in Drawed">
             <td v-for="(item, index2) in items" class="table" @click="handleClick($event,index1,index2)"></td>
         </tr>
     </table>
+    <!-- <button @click="GetAnswer1">GetAnswer</button> -->
+    <!-- {{ this.Drawed }} -->
+
 </div>
 </template>
 <script>
+import { get } from 'jquery';
+
 export default {
 name: 'CoulorBarChart',
     data() {
         return {
             Drawed : [],
-            Drawed2 : [],
             container: null
         };
     },
@@ -38,7 +45,7 @@ name: 'CoulorBarChart',
     created(){
         this.Data.Total = this.Data.Mother;
         this.Drawed = [];
-        if (this.Data.Total % 2 != 0){
+        if (this.Data.Total % 2 != 0){ //奇數
             let temp = []
             for(var i = 0; i < this.Data.Total; i++){
                 temp.push(true);
@@ -46,7 +53,7 @@ name: 'CoulorBarChart',
             console.log(temp)
             this.Drawed.push(temp);
         }
-        else{
+        else{  //偶數
             let temp = [];
             let div = this.Data.Total / 2;
             for(var i = 0; i<2; i++){
@@ -80,28 +87,77 @@ name: 'CoulorBarChart',
             else{
                 $event.target.style.backgroundColor = this.Data.Coulor;
             }
+            this.GetAnswer();
+        },
+        GetAnswer(){
+            let TempAnswer = 0;
+            for (var i = 0; i < this.Drawed.length; i++){
+                for (var x = 0; x < this.Drawed[i].length; x++){
+                    if (this.Drawed[i][x] == false){
+                        TempAnswer += 1;
+                    }
+                }
+            }
+            if (TempAnswer == this.Data.Child){
+                this.$emit('ReplyAnswer', true)
+            }
+            else{
+                this.$emit('ReplyAnswer', false)
+            }
+        },
+        GetAnswer1(){
+            let TempAnswer = 0;
+            for (var i = 0; i < this.Drawed.length; i++){
+                for (var x = 0; x < this.Drawed[i].length; x++){
+                    if (this.Drawed[i][x] == false){
+                        TempAnswer += 1;
+                    }
+                }
+            }
+            if (TempAnswer == this.Data.Child){
+                alert('Correct' + TempAnswer + this.Data.Child)
+            }
+            else{
+                alert('Incorrect' + TempAnswer + this.Data.Child)
+            }
         }
     }
 };
 </script>
-
 <style scoped>
 /* Your component's styles go here */
-.Division{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    font-size: x-large;
-    hr {
-        margin: 0 0; /* 根據需要調整間距 */
-    }
-}
 .OutterContainer{
     width: 100%;
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    .Number{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        .Division{
+            display: inline-block;
+            text-align: center;
+            font-size: 2rem;
+            line-height: 2;  /* 設置行高 */
+            vertical-align: middle; /* 垂直對齊 */
+            .Child{
+                margin: 0;
+            }
+            .Mother{
+                margin: 0;
+            }
+            .fraction-line {
+                margin: 0;
+                border: none;
+                border-top: 2px solid black;
+                width: 2em;
+            }
+        }
+    }
     .OddBorderOutline{
         border:solid;
         border-width: 2px;
@@ -111,13 +167,11 @@ name: 'CoulorBarChart',
             border: solid;
         }
     }
-    .EvenBorderOutline{
-        border: solid;
-    }
     .table{
         border-style:dashed !important;
         height: 3rem;
         border-left: solid;
+        background-color: #FFF;
     }
 }
 </style>

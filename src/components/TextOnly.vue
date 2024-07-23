@@ -1,7 +1,7 @@
 <template>
-    <div class="Word">
-        <p>{{ this.Data.Text }}</p>
-    </div>
+<div class="word">
+    <p>{{ this.Data.Text }}</p>
+</div>
 </template>
 <script>
 export default {
@@ -28,16 +28,16 @@ export default {
 </script>
 <style scoped>
 /* Your component's CSS styles go here */
-.Word{
+div{
     width: 100%;
     height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
+    /* border: solid 1px black; */
+    display: table;
     p{
-        font-size: 2rem
+        display: table-cell;
+        vertical-align: middle;
+        text-align: center;
+        font-size: 2rem;
     }
 }
 </style>

@@ -75,7 +75,8 @@ export default {
     components: {
         VirtualNumPad,
         ImageContainer: defineAsyncComponent(() => import('@/components/ImageContainer.vue')),
-        FreeDrag: defineAsyncComponent(() => import('@/components/FreeDrag.vue'))
+        FreeDrag: defineAsyncComponent(() => import('@/components/FreeDrag.vue')),
+        NumberLine: defineAsyncComponent(() => import('@/components/NumberLine.vue')),
     }
 };
 

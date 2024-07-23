@@ -7,22 +7,20 @@
         
     },
     "Questions": [
-        [
-            {   
-                "Question": {
-                    "text": "題目文字",
-                    "RowData":[
-                        ["Cat.png","Cat.png","Cat.png"],
-                        ["Cat.png","Cat.png","Cat.png"],
-                        ["Cat.png","Cat.png","Cat.png"]
-                    ]
-                },
-                "Answer": [
-                    [[0,0],[1,0]],
-                    [[0,1],[1,2]],
-                    [[0,2],[1,1]]
+        {   
+            "Question": {
+                "text": "題目文字",
+                "RowData":[
+                    ["Cat.png","Cat.png","Cat.png"],
+                    ["Cat.png","Cat.png","Cat.png"],
+                    ["Cat.png","Cat.png","Cat.png"]
                 ]
-            }
-        ]
+            },
+            "Answer": [
+                [[0,0],[1,0]],
+                [[0,1],[1,2]],
+                [[0,2],[1,1]]
+            ]
+        }
     ]
 }

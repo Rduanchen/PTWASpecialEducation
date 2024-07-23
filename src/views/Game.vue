@@ -283,6 +283,7 @@ import {defineAsyncComponent} from 'vue';
 import { useFullscreen } from '@vueuse/core'
 import CompareGame from './GameTemplate/CompareGame.vue';
 import EffectWindow from '@/components/EffectWindow.vue';
+import PairingGame from './GameTemplate/PairingGame.vue';
 export default {
   data() {
     return {
@@ -732,6 +733,8 @@ export default {
       CompareGame: defineAsyncComponent(() => import('@/views/GameTemplate/CompareGame.vue')),
       FillinBlank: defineAsyncComponent(() => import('@/views/GameTemplate/FillinBlank.vue')),
       CalculatorGame: defineAsyncComponent(() => import('@/views/GameTemplate/CalculatorGame.vue')),
+      PairingGame: defineAsyncComponent(() => import('@/views/GameTemplate/PairingGame.vue')),
+      NumberLock: defineAsyncComponent(() => import('@/views/GameTemplate/NumberLock.vue')),
       EffectWindow
   }
 }

@@ -6,7 +6,7 @@
         "Content": "小明剛剛學會看時鐘，但是他在寫作業的時候忘記了部分的答案，請聰明的你/妳幫助小明檢查答案"
     },
     "TotalLevel": 6,
-    "GameType": "TrueFalseGame",
+    "GameType": "SortingGame",
     "GameConfig": {
         "GlobalTitle": "請問以下的時間正確嗎?"
     },

@@ -22,17 +22,17 @@
         <div v-for="(item, index) in GameData.Datas" :key="index" class="QuestionContainer">
             <section class="QuestionRow" :class="{ 'QuestionRow-Wrong': this.Answered[index]==false, 'QuestionRow-Right': this.Answered[index]==true }">
                 <div class="CompareCard">
-                    <component :is="item[0].Name" :Data="item[0].Data" :ID="this.id"></component>
+                    <component :is="item[0].Name" :Data="item[0].Data" :ID="this.id" @ReplyAnswer="SlotComponentReplyAnswer(0, $event)" ></component>
                 </div>
                 <draggable :list="Answers[index]" group="Symbols" :sort="false" item-key="name" class="CompareSymbol" @change="Add(index)" @add="CheckDrop">
                     <template #item="{ element }">
-                        <div class="clickable">
+                        <div class="clickable Options">
                             <p class="h1">{{ element.Text }}</p>
                         </div>
                     </template>
                 </draggable>
                 <div class="CompareCard">
-                    <component :is="item[1].Name" :Data="item[1].Data" :ID="this.id"></component>
+                    <component :is="item[1].Name" :Data="item[1].Data" :ID="this.id" @ReplyAnswer="SlotComponentReplyAnswer(1, $event)"></component>
                 </div>
             </section>
         </div>
@@ -49,7 +49,7 @@
             </draggable>
         </div>
         <button @click="CheckAllAnswer" class="SucessButton" v-if="this.GameConfig.CheckAnswerMode=='Button'">檢查答案</button>
-        <button @click="Triger" class="btn btn-primary">Triger</button>
+        <!-- <button @click="Triger" class="btn btn-primary">Triger</button> -->
     </section>
 </div>
 </template>
@@ -57,7 +57,7 @@
 import { GamesGetAssetsFile } from '@/utilitys/get_assets.js';
 import draggable from 'vuedraggable';
 import { defineAsyncComponent } from 'vue';
-import TextOnly from '../../components/TextOnly.vue';
+import { GetComponents } from '@/utilitys/get_components.js';
 export default {
     name: 'CompareGame',
     components: {
@@ -65,9 +65,11 @@ export default {
         ImageContainer: defineAsyncComponent(() => import('@/components/ImageContainer.vue')),
         ImageWithText: defineAsyncComponent(() => import('@/components/ImageWithText.vue')),
         TextOnly: defineAsyncComponent(() => import('@/components/TextOnly.vue')),
-        CoulorBarChart: defineAsyncComponent(() => import('@/components/CoulorBarChart.vue')),
-        CircleChart: defineAsyncComponent(() => import('@/components/CircleChart.vue')),
-        ImageTable: defineAsyncComponent(() => import('@/components/DrawImageTable.vue'))
+        CoulorBarChart: GetComponents("CoulorBarChart"),
+        CircleChart: GetComponents("CircleChart"),
+        ImageTable: GetComponents("ImageTable"),
+        DrawImage: GetComponents("DrawImage"),
+        NumberBoard: GetComponents("NumberBoard"),
     },
     emits: ['play-effect','add-record','next-level'],
     props: {
@@ -95,6 +97,7 @@ export default {
             Ans2:[],
             ImageDatas:[],
             Symbol: [],
+            SlotComponentanswer: ["",""], // Two SubComponents
             BSESymbol: [
                 {
                     tag: "Big",
@@ -149,7 +152,7 @@ export default {
         },
         CheckAnsweredAll(){
             for(var i in this.Answered){
-                if(this.Answered[i] == false || this.Answered[i] == null){
+                if(this.Answered[i] == false || this.Answered[0][i] == null){
                     return false;
                 }
             }
@@ -158,11 +161,23 @@ export default {
         CheckAllAnswer(){
             let check = true;
             for (var i in this.GameData.Answer) {
-                if (this.GameData.Answer[i] == this.Answers[i][0].tag) {
+                if (this.GameData.Answer[i] == this.Answers[i][0].tag) {  //FIXME: UnEfficient
                     this.Answered[i] = true;
                 }
                 else {
                     this.Answered[i] = false;
+                    check = false;
+                }
+            }
+            if (this.GameData.SlotComponentVerifycation == true){
+                // Check if the SlotComponent is correct
+                let temp = true;
+                this.SlotComponentanswer.forEach(element => {
+                    if (element != true){
+                        temp = false;
+                    }
+                });
+                if (temp == false){
                     check = false;
                 }
             }
@@ -183,6 +198,9 @@ export default {
                 this.Answered[i] = null;
                 this.Answers[i] = [];
             }
+        },
+        SlotComponentReplyAnswer(index ,answer){
+            this.SlotComponentanswer[index] = answer;
         }
     },
     created() {
@@ -229,15 +247,23 @@ export default {
                 justify-content: space-evenly;
                 align-items: center;
                 height: 40vh;
+                .Options{
+                    background-color: #FFF;
+                }
                 .CompareCard{
+                    min-width: 200px;
                     width: 40%;
                     height: 90%;
                     component{
                         width: 100%;
                         height: 100%;
                     }
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
                 }
                 .CompareSymbol{
+                    margin: 2em;
                     min-width: 7rem;
                     min-height: 5rem;
                     border: solid;
