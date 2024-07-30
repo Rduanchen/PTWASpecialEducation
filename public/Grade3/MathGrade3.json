@@ -68,65 +68,6 @@
                 ]
             },
             {
-              "Title": "正是題目區",
-                "Games": [
-                    {
-                        "id": "MA4001",
-                        "Name": "分數比大小",
-                        "Description": "比大小",
-                        "Img": "MA4001.png"
-                    },
-                    {
-                        "id": "MA4002",
-                        "Name": "公斤公克比大小",
-                        "Description": "比大小",
-                        "Img": "MA4002.png"
-                    },
-                    {
-                        "id": "MA4003",
-                        "Name": "公分毫米比大小",
-                        "Description": "比大小",
-                        "Img": "MA4003.png"
-                    },
-                    {
-                        "id": "MA4004",
-                        "Name": "數字比大小",
-                        "Description": "比大小",
-                        "Img": "MA4004.png"
-                    },
-                    {
-                        "id": "MA4005",
-                        "Name": "毫升公升連連看",
-                        "Description": "毫升公升連連看",
-                        "Img": "MA4005.png"
-                    },
-                    {
-                        "id": "MA4006",
-                        "Name": "毫升公升比大小",
-                        "Description": "毫升公升比大小",
-                        "Img": "MA4006.png"
-                    },
-                    {
-                        "id": "MA4007",
-                        "Name": "乘法估算",
-                        "Description": "乘法估算",
-                        "Img": "MA4007.png"
-                    },
-                    {
-                        "id": "MA4008",
-                        "Name": "10000以內的數",
-                        "Description": "10000以內的數",
-                        "Img": "MA4008.png"
-                    },
-                    {
-                        "id": "MA4009",
-                        "Name": "加減估算",
-                        "Description": "加減估算",
-                        "Img": "MA4009.png"
-                    }
-                ]
-            },
-            {
                 "Title": "數到10000",
                 "Games": [
                     {
