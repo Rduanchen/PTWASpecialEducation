@@ -12,6 +12,7 @@
     <div class="Submit">
         <button @click="CheckAnswer">送出答案</button>
     </div>
+    {{NowSelect}}
 </div>
 </template>
 
@@ -27,11 +28,20 @@ export default {
         Input: defineAsyncComponent(() => import('@/components/ReplyInput.vue')),
         Fractions: defineAsyncComponent(() => import('@/components/Fractions.vue')),
         Markdown: defineAsyncComponent(() => import('@/components/Markdown.vue')),
-        NumberLine: defineAsyncComponent(() => import('@/components/NumberLineV2.vue'))
+        NumberLineArrow: defineAsyncComponent(() => import('@/components/NumberLineV2.vue')),
+        NumberLine: defineAsyncComponent(() => import('@/components/NumberLine.vue'))
     },
     props: {
         GameData: {
             type: Object,
+            required: true
+        },
+        GameConfig: {
+            type: Object,
+            required: true
+        },
+        id: {
+            type: String,
             required: true
         }
     },

@@ -42,7 +42,7 @@
             "Name": "TextOnly",
             "BlankName": "Input",
             "NumberPadAutoDisappear": false,
-            "SlotComponentName": "NumberLine",
+            "SlotComponentName": "NumberLineArrow",
             "Data": {
                 "Name": "TextOnly",
                 "BlankName": "Input",
@@ -90,6 +90,28 @@
                         "Text": "10"
                     }
                 ]
+            }
+        },
+        {
+            "QuestionWord": "請問以下數字中哪個是分數?",
+            "Name": "TextOnly",
+            "BlankName": "Input",
+            "NumberPadAutoDisappear": false,
+            "SlotComponentName": "NumberLine",
+            "Data": {
+                "Unit": "Number",
+                "Start": 0,
+                "End": 1000,
+                "Increment": 100,
+                "Annotate": 200,
+                "Blank": {
+                  "200": {
+                    "TextAnswer": 0
+                  },
+                  "400": {
+                    "TextAnswer": 0
+                  }
+                }
             }
         }
     ]
