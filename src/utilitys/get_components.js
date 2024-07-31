@@ -20,7 +20,6 @@ const ComponentsMapping = {
     NumberLine: () => import('@/components/NumberLineV2.vue'),
     Water: () => import('@/components/Water.vue'),
 }
-
 export function GetComponents(name) {
     return ComponentsMapping[name] ? defineAsyncComponent(ComponentsMapping[name]) : null
 }

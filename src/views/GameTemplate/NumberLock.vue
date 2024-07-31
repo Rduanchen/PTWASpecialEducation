@@ -199,6 +199,7 @@ export default {
 .OutterContainer{
     width: 100%;
     height: 100%;
+    max-height: 50vh;
     display: grid;
     grid-template-rows: 1fr 5fr 1fr 1fr;
     /* grid-template-columns: 1fr; */
@@ -226,6 +227,7 @@ export default {
         align-items: center;
         border: solid 1px black;
         border-radius: 15px;
+        min-height: 55vh;
     }
     .NumberPad{
         grid-row: 2/3;
