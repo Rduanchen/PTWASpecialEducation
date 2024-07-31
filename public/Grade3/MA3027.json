@@ -24,7 +24,7 @@
     "Questions": [
         {
             "Question": "這是200CC的水嗎",
-            "Answer": false,
+            "Answer": true,
             "SlotComponents" : [{
                 "Name": "Water",
                 "Data": {
@@ -35,7 +35,7 @@
         },
         {
             "Question": "這是200CC的水嗎",
-            "Answer": true,
+            "Answer": false,
             "SlotComponents" : [{
                 "Name": "Water",
                 "Data": {
