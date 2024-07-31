@@ -92,14 +92,16 @@ export default {
 <style scoped>
 /* Your component's CSS styles go here */
 .OutterContainer{
-    width: 100%;
-    height: 100%;
+    border: solid 4px #aaa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* max-height: 30vh; */
     table{
         width: 100%;
-        height: 20%;
         .Test{
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax( 40px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax( 30px, 1fr));
         }
         .inner{
             display: flex;

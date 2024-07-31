@@ -1,0 +1,96 @@
+{
+    "id": "MA3029",
+    "introvideo": "",
+    "IntroText": {
+        "Type": "PlainText",
+        "Content": "填空遊戲"
+    },
+    "TotalLevel": 1,
+    "GameType": "NumberLock",
+    "GameConfig": {
+        "GlobalTitle": "請問以下的時間正確嗎?"
+    },
+    "Hint":{
+        "ShowAs" : "None",
+        "Rule" : {
+            "RuleType": "WrongTimes"
+        },
+        "Data" :{
+            "MaxWrongTimes" : 2,
+            "SourceType" : "video",
+            "FilePath" : "hint1.mp4"
+        }
+    },
+    "Questions": [
+        {
+            "QuestionWord": "請問以下數字中哪個是分數?",
+            "Name": "TextOnly",
+            "BlankName": "Input",
+            "NumberPadAutoDisappear": false,
+            "SlotComponentName": "Markdown",
+            "Data": {
+                "Render": "> 123432\n# Header 1\n## Header 2\n### Header 3\n**Bold Text**\n- List 1\n$i$ $i$ Input Box\n$i$ Input Box\n$t$ tab\n$s$ space\n$n$ new line",
+                "Answers": [
+                    "1",
+                    "2",
+                    "3"
+                ]
+            }
+        },
+        {
+            "QuestionWord": "請問以下數字中哪個是分數?",
+            "Name": "TextOnly",
+            "BlankName": "Input",
+            "NumberPadAutoDisappear": false,
+            "SlotComponentName": "NumberLine",
+            "Data": {
+                "Name": "TextOnly",
+                "BlankName": "Input",
+                "Items": [
+                    {
+                        "Text": "1"
+                    },
+                    {
+                        "Text": "2"
+                    },
+                    {
+                        "Text": "3"
+                    },
+                    {
+                        "Text": "4"
+                    },
+                    {
+                        "Text": "5"
+                    },
+                    {
+                        "Text": "6"
+                    },
+                    {
+                        "Text": "7"
+                    },
+                    {
+                        "Blank": true,
+                        "Name": "Fractions",
+                        "Text": "8",
+                        "Data": {
+                            "Mother": 2,
+                            "Son": 3
+                        }
+                    },
+                    {
+                        "Blank": true,
+                        "Text": "9",
+                        "Name": "Input",
+                        "Data": {
+                            "Type": "number",
+                            "Text": "9"
+                        }
+                    },
+                    {
+                        "Text": "10"
+                    }
+                ]
+            }
+        }
+    ]
+}
