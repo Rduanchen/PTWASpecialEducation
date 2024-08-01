@@ -141,58 +141,58 @@
                 "Title": "第一章",
                 "Games": [
                     {
-                        "id": "MA4011",
+                        "id": "MA4001",
                         "Name": "認識時鐘",
                         "Description": "找找看現在幾點呢?",
-                        "Img": "MA4011.png"
+                        "Img": "MA4001.png"
                     },
                     {
-                        "id": "MA4012",
+                        "id": "MA4002",
                         "Name": "認識鈍角、銳角、直角",
                         "Description": "想想看圖片中的角度是幾度呢?",
-                        "Img": "MA4012.png"
+                        "Img": "MA4002.png"
                     },
                     {
-                        "id": "MA4013",
+                        "id": "MA4003",
                         "Name": "面積",
                         "Description": "看看方格板上面的積木幾平方公分呢?",
-                        "Img": "MA4013.png"
+                        "Img": "MA4003.png"
                     },
                     {
-                        "id": "MA4014",
+                        "id": "MA4004",
                         "Name": "數字填空",
                         "Description": "根據提示填入正確的數字",
-                        "Img": "MA4014.png"
+                        "Img": "MA4004.png"
                     },
                     {
-                        "id": "MA4015",
+                        "id": "MA4005",
                         "Name": "比大小",
                         "Description": "用拖曳的方式來排出數字的大小",
-                        "Img": "MA4015.png"
+                        "Img": "MA4005.png"
                     },
                     {
-                        "id": "MA4016",
+                        "id": "MA4006",
                         "Name": "找找看",
                         "Description": "找出躲藏在圖片中的數字吧",
-                        "Img": "MA4016.png"
+                        "Img": "MA4006.png"
                     },
                     {
-                        "id": "MA4017",
+                        "id": "MA4007",
                         "Name": "數數看",
                         "Description": "數出圖片中有幾個物品吧",
-                        "Img": "MA4017.png"
+                        "Img": "MA4007.png"
                     },
                     {
-                        "id": "MA4018",
+                        "id": "MA4008",
                         "Name": "數數看",
                         "Description": "數出圖片中有幾個物品吧",
-                        "Img": "MA4018.png"
+                        "Img": "MA4008.png"
                     },
                     {
-                        "id": "MA4019",
+                        "id": "MA4009",
                         "Name": "數字遊戲",
                         "Description": "玩遊戲學習數字",
-                        "Img": "MA4019.png"
+                        "Img": "MA4009.png"
                     }
                 ]
             },

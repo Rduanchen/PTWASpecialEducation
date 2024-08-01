@@ -1,16 +1,16 @@
 <template>
     <div class="container">
         <div class="index">
-            <div class="card">
+            <div class="Head">
                 <p class="h2" style="font-weight: bold;">{{ this.GameConfig.GlobalTitle }}</p>
             </div>
             <div class="Info">
                 <!-- 圖片的列 -->
-                <div class="Component" v-if="this.GameData.SlotComponents">
+                <div class="Component" v-if="this.GameData.SlotComponents != undefined">
                     <component class="GameImg" :is="this.SlotComponent" :ID="this.id" :Data="this.SlotData"></component>
                 </div>
                 <!-- 按鈕的列 -->
-                <div class="selection" v-if="this.GameData.SlotComponents">
+                <div class="selection" v-if="this.GameData.SlotComponents != undefined">
                     <div class="card">
                         <p class="h2">{{ this.GameData.Question_Text }}</p>
                     </div>
@@ -26,8 +26,8 @@
                     <div class="con">
                         <div class="choese">
                             <button type="button" v-for="i in question" :class="{ 'Selected': this.Select[i] }" v-on:click="SelectItem(i)">{{ i }}</button>
+                            <button type="button" class="Check" :class="{ 'OnSubmit': (this.Answer != null) }" v-on:click="CheckAnswer">送出答案</button>
                         </div>
-                        <button type="button" class="Check" :class="{ 'OnSubmit': (this.Answer != null) }" v-on:click="CheckAnswer">送出答案</button>
                     </div>
                 </div>
             </div>
@@ -117,16 +117,13 @@ export default {
 .card {
     border-style: solid;
 }
-button {
-    width: 150px;
-}
 .container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     .index{
-        .card{
+        .Head{
             padding: 1em;
             background-color: #bde0fe;
         }
@@ -134,69 +131,70 @@ button {
         height: 100%;
         min-height: 60vh;
         .Info{
-            display: flex;
-            flex-direction: row;
-            justify-content: space-evenly;
-            align-items: center;
-            margin-top: 2em;
-            width: 100%;
-            height: 62vh;
+            display: grid;
+            margin-top: 2rem;
+            grid-template-columns: repeat(8, 1fr);
             gap: 2rem;
+            height: 60vh;
             .selection{
-                height: 100%;
-                width: 35%;
-                width: 60%;
+                grid-column: 6/9;
                 display: flex;
                 flex-direction: column;
                 justify-content: space-between;
-                .card{
-                    margin-bottom: 2em;
-                    p{
-                        font-weight: 600;
-                    }
-                }
                 .choese{
+                    display: flex;
+                    flex-direction: column;
+                    gap: 1rem;
                     button{
-                        margin-bottom: 10px;
-                        transition: 0.3s;
-                        transform: scale(1);                        
+                        scale: 1;
+                        transition: 0.25s;
                     }
                     button:hover{
-                        transition: 0.3s;
-                        transform: scale(1.03);
+                        scale: 1.05;
                     }
                 }
             }
             .selection2{
-                display: flex;
-                flex-direction: row;
-                justify-content: space-between;
-                gap: 1rem;
-                .card{
+                grid-column: 2/8;
+                display: grid;
+                grid-template-columns: repeat(5, 1fr);
+                gap: 2rem;
+                height: 100%;
+                width: 100%;
+                .card
+                {
+                    grid-column: 1/4;
+                    border: solid 1px black;
                     display: flex;
                     justify-content: center;
+                    align-items: center;
                 }
                 .con{
-                    width: 50%;
-                    display: grid;
-                    grid-template-rows: 4fr 1fr;
+                    grid-column: 4/6;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
                     .choese{
-                        display: grid;
-                        grid-template-columns: repeat(auto-fit, 1fr);
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: space-between;
+                        gap: 1rem;
+                        button{
+                            scale: 1;
+                            transition: 0.25s;
+                        }
+                        button:hover{
+                            scale: 1.05;
+                        }
+                        .Check{
+                            margin-top: 2rem;
+                        }
                     }
                 }
             }
             .Component{
-                border: solid;
-                border-radius: 20px;
-                width: 60%;
-                height: 100%;
-                min-height: 50vh;
-                padding: 1em;
-                .GameImg{
-                    width: 100%;
-                    height: 100%;
-                }
+                grid-column: 1/5;
+                border: solid 1px black;
             }
         }
     }
@@ -229,7 +227,7 @@ button {
     background-color: #bde0fe;
 }
 .Selected{
-    background-color: #606c38;
+    background-color: #0298C0;
     scale: 1.05;
 }
 </style>

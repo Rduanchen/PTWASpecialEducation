@@ -8,17 +8,19 @@
     <div class="QuestionArea">
         <div v-for="(item, index) in GameData.Datas" :key="index" class="QuestionContainer">
             <section class="QuestionRow" :class="{ 'QuestionRow-Wrong': this.Answered[index]==false, 'QuestionRow-Right': this.Answered[index]==true }">
-                <div class="CompareCard">
+                <div class="CompareCard Left">
                     <component :is="item[0].Name" :Data="item[0].Data" :ID="this.id" @ReplyAnswer="SlotComponentReplyAnswer(0, $event)" ></component>
                 </div>
-                <draggable :list="Answers[index]" group="Symbols" :sort="false" item-key="name" class="CompareSymbol" @change="Add(index)" @add="CheckDrop">
-                    <template #item="{ element }">
-                        <div class="clickable Options">
-                            <p class="h1">{{ element.Text }}</p>
-                        </div>
-                    </template>
-                </draggable>
-                <div class="CompareCard">
+                <div class="SymbolContainer">
+                    <draggable :list="Answers[index]" group="Symbols" :sort="false" item-key="name" class="CompareSymbol" @change="Add(index)" @add="CheckDrop">
+                        <template #item="{ element }">
+                            <div class="clickable Options">
+                                <p class="h1">{{ element.Text }}</p>
+                            </div>
+                        </template>
+                    </draggable>
+                </div>
+                <div class="CompareCard Right">
                     <component :is="item[1].Name" :Data="item[1].Data" :ID="this.id" @ReplyAnswer="SlotComponentReplyAnswer(1, $event)"></component>
                 </div>
             </section>
@@ -235,20 +237,28 @@ export default {
     align-items: center;
     gap: 1rem;
     .QuestionArea{
+        width: 100%;
         .QuestionContainer{
             .QuestionRow{
-                display: flex;
+                /* display: flex;
                 flex-direction: row;
                 justify-content: space-evenly;
-                align-items: center;
+                align-items: center; */
+                display: grid;
+                grid-template-columns: 0.5fr 4fr 1fr 4fr 0.5fr;
                 height: 40vh;
                 .Options{
                     background-color: #FFF;
                 }
+                .Left{
+                    grid-column: 2/3;
+                }
+                .Right{
+                    grid-column: 4/5;
+                }
                 .CompareCard{
-                    min-width: 200px;
-                    width: 40%;
-                    height: 90%;
+                    border: solid 3px #aaa;
+                    border-radius: 20px;
                     component{
                         width: 100%;
                         height: 100%;
@@ -256,17 +266,25 @@ export default {
                     display: flex;
                     justify-content: center;
                     align-items: center;
+                    padding: 1rem;
                 }
-                .CompareSymbol{
-                    margin: 2em;
-                    min-width: 7rem;
-                    min-height: 5rem;
-                    border: solid;
-                    border-radius: 12px;
-                    border-color: #aaa;
+                .SymbolContainer{
                     display: flex;
+                    justify-content: center;
                     align-items: center;
-                    padding: 1rem 1rem;
+                    .CompareSymbol{
+                        grid-column: 3/4;
+                        margin: 2em;
+                        width: 7rem;
+                        height: 5rem;
+                        border: solid 3px #aaa;
+                        border-radius: 12px;
+                        border-color: #aaa;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        padding: 1rem 1rem;
+                    }
                 }
             }
         }
@@ -274,11 +292,10 @@ export default {
 }
 .clickable{
     cursor:pointer;
-    border: solid;
+    border: solid 2px #aaa;
     border-radius: 12px;
     width : 5rem;
     text-align: center;
-    border-color: #aaa;
 }
 .OptionBar{
     width: 100%;
