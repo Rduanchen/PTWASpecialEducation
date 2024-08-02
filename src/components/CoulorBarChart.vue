@@ -1,12 +1,13 @@
 <template>
 <div class="OutterContainer" >
-    <div class="Number">
+    <p v-if="this.Data.Text != undefined">{{ this.Data.Text }}{{ this.Data.Unit }}</p>
+    <div class="Number" v-else>
         <div class="Division">
             <p class="Child">{{ this.Data.Child }}</p>
             <hr class="fraction-line">
-            <p class="Mother">{{ this.Data.Total }}</p>
+            <p class="Mother">{{ this.Data.Mother }}</p>
         </div>
-        <p>{{ this.Data.Unit }}</p>
+        <p>{{ Data.Unit }}</p>
     </div>
     <table class="OddBorderOutline" >
         <tr v-for="(items, index1) in Drawed">
@@ -15,11 +16,11 @@
     </table>
     <!-- <button @click="GetAnswer1">GetAnswer</button> -->
     <!-- {{ this.Drawed }} -->
-
 </div>
 </template>
 <script>
 import { get } from 'jquery';
+import TextOnly from './TextOnly.vue';
 
 export default {
 name: 'CoulorBarChart',
@@ -126,6 +127,9 @@ name: 'CoulorBarChart',
 </script>
 <style scoped>
 /* Your component's styles go here */
+p{
+    font-size: 2rem;
+}
 .OutterContainer{
     width: 100%;
     height: 100%;

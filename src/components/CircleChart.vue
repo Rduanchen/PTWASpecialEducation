@@ -1,17 +1,23 @@
 <template>
 <div class="OutterContainer">
-  <div class="Division">
+  <div class="TextOnly" v-if="this.Data.Text != undefined">
+    <p class="Division" >{{ this.Data.Text }}{{ this.Data.Unit }}</p>
+  </div>
+  <div class="Division" v-else>
     <p class="Child">{{ this.childScore }}</p>
     <hr class="Fraction-line">
     <p class="Mother">{{ this.motherScore }}</p>
   </div>
-  <p>{{ this.Data.Unit }}</p>
+  <p v-if="this.Data.Text == undefined">{{ this.Data.Unit }}</p>
   <div class="container" ref="container">
     <canvas ref="canvas" @click="handleClick"></canvas>
   </div>
 </div>
 </template>
 <style scoped>
+.TextOnly{
+  grid-column: 1 / 3;
+}
 .OutterContainer{
   width: 100%;
   height: 100%;
@@ -22,6 +28,7 @@
 .container {
   display: flex;
   flex-direction: row;
+  grid-column: 3 / 4;
   gap : 1rem;
   width: 100%;
   height: 100%;

@@ -79,9 +79,6 @@ export default {
         return {
             a: "",
             SelectedGroup: 0,
-            ForceVerifyComponents:[
-                "DrawImage", "ImageTable", "CircleChart", "CoulorBarChart"
-            ],
             TotalQuestion: null,
             Answered: [],
             Answers: [],
@@ -166,14 +163,12 @@ export default {
                 let temp = true;
                 let cnt = 0
                 this.SlotComponentanswer.forEach(element => {
-                    if (this.GameData.Datas[0][cnt].Name in this.ForceVerifyComponents){
-                        if (element != true){
-                            temp = false;
-                        }
+                    if (element != true){
+                        temp = false;
                     }
                     cnt ++;
-                    cnt = cnt % 2;
                 });
+                console.log("Temp", temp)
                 if (temp == false){
                     check = false;
                 }
