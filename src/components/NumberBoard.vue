@@ -55,27 +55,29 @@ export default {
         //     }
         // }
         // if (DoubleWord){
-        //     let cl = document.getElementsByClassName("UnitEachBlanket");
-        //     for (let i = 0; i < cl.length; i++){
-        //         cl[i].style.fontSize = "6em";
-        //     }
+        //     let NumberBoard = document.getElementsByClassName('NumberBoard')[0];
+        //     NumberBoard.style.gridTemplateRows = '2fr 1fr';
         // }
     }
 };
 </script>
 <style scoped>
 /* Your component's CSS styles go here */
+
 .NumberBoard{
     border: solid;
     border-color: blue;
     display: grid;
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: 2fr 1fr;
 }
 .EachRow{
     width: 100%;
     display: flex;
     justify-content: space-around;
-    height: 70px;
+    height: 100%;
+    min-height: 70px;
+    max-height: 140px;
+    font-family: 'YuanQuan';
 }
 .EachBlanket{
     border: solid;

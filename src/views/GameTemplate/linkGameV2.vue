@@ -1,7 +1,9 @@
 <template>
     <div class="Container">
         <p class="h1">{{ GameData.Question.text }}</p>
-        {{ OnDrawing }} {{ OnDrawingLine }} / {{MouseDownDotIndex}}
+        
+        {{ IndexMappingTable }}
+        
         <div class="Index" ref="Index">
             <div class="Konva-container" ref="KonvaContainer">
                 <v-stage :config="configStage" class="Stage" @mousemove="MouseMove" @mouseup="MouseUpAtDot" >
@@ -46,17 +48,23 @@ export default {
                         [
                             { Name: 'ImageContainer', Data: { Src: '1261.png' } },
                             { Name: 'ImageContainer', Data: { Src: '1324.png' } },
-                            { Name: 'ImageContainer', Data: { Src: '1456.png' } }
+                            { Name: 'ImageContainer', Data: { Src: '1456.png' } },
+                            { Name : 'ImageContainer', Data: { Src: '1342.png' } },
+                            { Name : 'ImageContainer', Data: { Src: '1535.png' } }
                         ],
                         [
                             { Name: 'ImageContainer', Data: { Src: 'c-1456.png' } },
                             { Name: 'ImageContainer', Data: { Src: 'c-1324.png' } },
-                            { Name: 'ImageContainer', Data: { Src: 'c-1261.png' } }
+                            { Name: 'ImageContainer', Data: { Src: 'c-1261.png' } },
+                            { Name : 'ImageContainer', Data: { Src: 'c-1535.png' } },
+                            { Name : 'ImageContainer', Data: { Src: 'c-1342.png' } }
                         ],
                         [
                             { Name: 'ImageContainer', Data: { Src: 'n-1324.png' } },
                             { Name: 'ImageContainer', Data: { Src: 'n-1261.png' } },
-                            { Name: 'ImageContainer', Data: { Src: 'n-1456.png' } }
+                            { Name: 'ImageContainer', Data: { Src: 'n-1456.png' } },
+                            { Name : 'ImageContainer', Data: { Src: 'n-1342.png' } },
+                            { Name : 'ImageContainer', Data: { Src: 'n-1535.png' } }
                         ]
                     ]
                 },
@@ -95,13 +103,7 @@ export default {
         this.Init();
     },
     created() {
-        let AnswerIndex = 0;
-        for (var Colum in this.GameData.Question.RowData){
-            for (var Row in this.GameData.Question.RowData[Colum]){
-                AnswerIndex += 1;
-                this.IndexMappingTable.push([Colum,Row]);
-            }
-        }
+
     },
     methods: {
         MouseDown(e,index) {
@@ -132,6 +134,7 @@ export default {
                 let DotIndex = this.CheckMouseAtTheDot(MousePos.x, MousePos.y);
                 if (DotIndex != false){
                     let LinkAble = this.CheckLinkAble(this.MouseDownDotIndex,DotIndex);
+                    // UP OK
                     if (LinkAble){
                         let AnswerCorrect = this.CheckAnswerisCorrect(this.MouseDownDotIndex,DotIndex);
                         if (AnswerCorrect){
@@ -155,7 +158,7 @@ export default {
                 let Dot = this.DotLocation[DotIndex];
                 let differenceRadius = 7;
                 if (mouseX > Dot.X - differenceRadius && mouseX < Dot.X + differenceRadius && mouseY > Dot.Y - differenceRadius && mouseY < Dot.Y + differenceRadius){
-                    return DotIndex;
+                    return parseInt(DotIndex);
                 }
             }
             return false;
@@ -169,12 +172,15 @@ export default {
         },
         CheckLinkAble(StartIndex,EndIndex){
             // Line Can't be drawed on the same column
+            console.log(StartIndex,EndIndex);
             let StartColumn = this.MappingDotIndexToAnswerIndex(StartIndex)[0];
             let EndColumn = this.MappingDotIndexToAnswerIndex(EndIndex)[0];
             if (StartColumn == EndColumn){
+                console.log('Same Column');
                 return false;
             }
             else{
+                console.log('Different Column');
                 return true;
             }
         },
@@ -182,16 +188,31 @@ export default {
             let Answer = this.GameData.Answer;
             let Start = this.MappingDotIndexToAnswerIndex(StartIndex);
             let End = this.MappingDotIndexToAnswerIndex(EndIndex);
+            console.log(Start,End);
             for (var AnswerIndex in Answer){
                 if (Answer[AnswerIndex][0][0] == Start[0] && Answer[AnswerIndex][0][1] == Start[1] && Answer[AnswerIndex][1][0] == End[0] && Answer[AnswerIndex][1][1] == End[1]){
+                    // console.log('Correct');
+                    this.$emit('play-effect', 'CorrectSound');
+                    this.$emit('add-record',[this.GameData.Answer, [Start,End],"正確"]);
                     return true;
                 }
                 //Reverse Check
                 else if(Answer[AnswerIndex][0][0] == End[0] && Answer[AnswerIndex][0][1] == End[1] && Answer[AnswerIndex][1][0] == Start[0] && Answer[AnswerIndex][1][1] == Start[1]){
+                    this.$emit('play-effect', 'CorrectSound');
+                    this.$emit('add-record',[this.GameData.Answer, [Start,End],"正確"]);                    
                     return true;
                 }
             }
+            console.log('Wrong');
+            this.$emit('play-effect', 'WrongSound');
+            this.$emit('add-record',[this.GameData.Answer, [Start,End],"錯誤"]);
             return false;
+        },
+        CheckAll(){
+            if (this.Lines.length == this.GameData.Answer.length){
+                
+                
+            }
         },
         Init(){
             // Sync Canvas Position
@@ -208,6 +229,9 @@ export default {
             
             //Config each Object Position
             let NowX = 0;
+            let DotColIndex = 0;
+            this.DotLocation = [];
+            this.IndexMappingTable = [];
             for (var ColumnIndex in this.GameData.Question.RowData){
                 let ColumnObjectAmount = this.GameData.Question.RowData[ColumnIndex].length;
                 // Whe we calculate each object's heght, we add MiniGap at the top and bottom of the column
@@ -222,26 +246,43 @@ export default {
                     Object.Data = this.GameData.Question.RowData[ColumnIndex][ObjectInfo].Data;
                     
                     //Dot Settings, if not first or last column, add 2 dots at each side
-                    if (this.ColumnIndex != 0 && this.ColumnIndex != this.GameData.Question.RowData.length - 1){
+                    if (ColumnIndex != 0 && ColumnIndex != this.GameData.Question.RowData.length - 1){
+                        this.IndexMappingTable.push([parseInt(DotColIndex + 1),parseInt(ObjectInfo)]);
                         this.DotLocation.push({
                             X: NowX + this.ComponentPositionConfig.ObjectWidth + this.MiniGap,
                             Y: NowY + this.ComponentPositionConfig.ObjectHeight / 2
                         })
+                        this.IndexMappingTable.push([parseInt(DotColIndex ),parseInt(ObjectInfo)]);
                         this.DotLocation.push({
                             X: NowX - this.MiniGap,
                             Y: NowY + this.ComponentPositionConfig.ObjectHeight / 2
                         })
-                    } else {
+                    } else if (ColumnIndex == 0){
+                        this.IndexMappingTable.push([parseInt(DotColIndex),parseInt(ObjectInfo)]);
                         this.DotLocation.push({
                             X: NowX + this.ComponentPositionConfig.ObjectWidth + this.MiniGap,
                             Y: NowY + this.ComponentPositionConfig.ObjectHeight / 2
                         })
                     }
-
+                    else if (ColumnIndex == this.GameData.Question.RowData.length - 1){
+                        this.IndexMappingTable.push([parseInt(DotColIndex),parseInt(ObjectInfo)]);
+                        this.DotLocation.push({
+                            X: NowX - this.MiniGap,
+                            Y: NowY + this.ComponentPositionConfig.ObjectHeight / 2
+                        })
+                    }
                     NowY += this.ComponentPositionConfig.ObjectHeight + this.MiniGap;
                     this.ComponentConfig.push(Object);
                 }    
                 NowX += this.ComponentPositionConfig.ObjectWidth + this.ComponentPositionConfig.BlankWidth;
+                console.log
+                if (ColumnIndex != 0 && ColumnIndex != this.GameData.Question.RowData.length - 1){
+                    console.log('Add 2');
+                    DotColIndex += 2;
+                } else {
+                    console.log('Add 1');
+                    DotColIndex += 1;
+                }
             }
         },
     },
@@ -250,8 +291,8 @@ export default {
 <style scoped>
 /* Your component-specific styles go here */
 .Container {
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    max-height: 50vh;
     display: inline-block;
 }
 .Index {
