@@ -364,9 +364,7 @@ export default {
         for (var i in this.GameData.Questions) {
           if (this.GameData.Questions[i].length != undefined) {
             var num = this.GameData.Questions[i].length;
-            console.log("Num",num);
             var rand = Math.floor( Math.random() * ( ( num - 0 ) + 0 ) );
-            console.log("Rand",rand);
             question.push(this.GameData.Questions[i][rand]);
           }
           else{

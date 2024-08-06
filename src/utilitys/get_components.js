@@ -19,6 +19,7 @@ const ComponentsMapping = {
     Markdown: () => import('@/components/Markdown.vue'),
     NumberLine: () => import('@/components/NumberLineV2.vue'),
     Water: () => import('@/components/Water.vue'),
+    MoneyGenerator: () => import('@/components/MoneyGenerator.vue'),
 }
 export function GetComponents(name) {
     return ComponentsMapping[name] ? defineAsyncComponent(ComponentsMapping[name]) : null
