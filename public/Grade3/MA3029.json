@@ -1,0 +1,27 @@
+{
+    "id": "MA3029",
+    "introvideo": "hint1.mp4",
+    "IntroText": {
+        "Type": "PlainText",
+        "Content": "[Insert question.]"
+    },
+    "TotalLevel": 2,
+    "GameType": "RacingCar",
+    "GameConfig": {
+        "GlobalTitle": "[Insert title.]"
+    },
+    "Hint":{
+        
+    },
+    "Questions": [
+        {
+            "Options": [1, 2, 3, "ans"],
+            "Answer": 3
+        },
+
+        {
+            "Options": [1, "ans", 3],
+            "Answer": 1
+        }
+    ]
+}
