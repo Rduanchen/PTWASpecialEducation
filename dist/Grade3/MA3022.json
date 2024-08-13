@@ -25,15 +25,16 @@
                     {
                         "Name" : "CircleChart",
                         "Data" : {
-                            "Mother" : 5,
-                            "Child" : 3,
+                            "Text": "1",
+                            "Mother" : 6,
+                            "Child" : 6,
                             "Unit" : "盒"
                         }                        
                     },
                     {
                         "Name" : "CircleChart",
                         "Data" : {
-                            "Mother" : 5,
+                            "Mother" : 6,
                             "Child" : 2,
                             "Unit" : "盒"
                         }                        
@@ -52,6 +53,7 @@
                     {
                         "Name" : "CoulorBarChart",
                         "Data" : {
+                            "Text": "1",
                             "Mother" : 6,
                             "Child" : 6,
                             "Unit": "盒"
@@ -120,6 +122,41 @@
                             "Unit": ["時", "分", "秒"],
                             "Number": 1234
                         }                                 
+                    }
+                ]
+            ],
+            "Answer": ["Big"]
+        },
+        {
+            "QuestionText": "比大小",
+            "Description": "比大小，選出最大的數字",
+            "OptionBarTitle": "將正確的符號拖曳到上面的框框中",
+            "SlotComponentVerifycation": true,
+            "Datas": [
+                [
+                    {
+                        "Name" : "MoneyGenerator",
+                        "Data": {
+                            "Thousands": 10,
+                            "FiveHundreds": 1,
+                            "Hundreds": 1,
+                            "Fifties": 2,
+                            "Tens": 5,
+                            "Fives": 1,
+                            "Ones": 10
+                        }
+                    },
+                    {
+                        "Name" : "MoneyGenerator",
+                        "Data": {
+                            "Thousands": 1,
+                            "FiveHundreds": 1,
+                            "Hundreds": 1,
+                            "Fifties": 2,
+                            "Tens": 5,
+                            "Fives": 1,
+                            "Ones": 1
+                        }                              
                     }
                 ]
             ],

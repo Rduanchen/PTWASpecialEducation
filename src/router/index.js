@@ -127,6 +127,10 @@ const router = createRouter({
       path: '/MoneyGenerator',
       name: 'MoneyGenerator',
       component: () => import('@/components/MoneyGenerator.vue'),
+    },{
+      path: '/LinktoImage',
+      name: 'LinktoImage',
+      component: () => import('@/views/GameTemplate/LinktoImage.vue'),
     }
   ]
 });

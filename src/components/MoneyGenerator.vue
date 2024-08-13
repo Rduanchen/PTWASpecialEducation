@@ -144,8 +144,9 @@ export default {
 .Container {
     width: 100%;
     height: 100%;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(4,1fr);
     gap: 10px;
 }
 .MoneyContainer {
@@ -163,8 +164,7 @@ img {
     display: flex;
     flex-direction: row;
     width: 100%;
-    max-height: 50px;
-    border: solid;
+    max-height: 40px;
     .PerCoin {
         display: flex;
         justify-content: end;
