@@ -1,123 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAABICAMAAABiM0N1AAAAVFBMVEVHcExEs99Ir99Es99Est9Ar99Es99EtN9Ds99Ds99Es9////8+OzpKTE3Pzs6hn55ua2tDqdJAYG7z8/NCh6KAfn1Dmr29u7tBdIji4eFiX16SkJAryupQAAAACnRSTlMAuyDPXRB/PJbrpKz95QAAAs5JREFUeNrVmNmOozAQRdvslMsLBLPl//9z3KSTarwBgzTSnKcoEidVtwA7/vrfyOrqh6Iu/1ZSVwx2tE2RXS+laSFEXpSXimEQpW2ymxqiOVVV2cAhbXHsKVo4AzsqqoGTtHWyLQbnKRKeHK7Q3PWQ6aaHqIIiBtcpjuZ1Y3YFnGHoZ8dUugG1cMg4o6VzAr/aWDcIxHUyOMKefXP1UTE9IhrJucQB9uT+xNLFqAe3LDinJlcfFCPMwn/A3pvcqYKG/juZB/+w9hAvKYv1NCOK58J/YxBcGI0sWoyZuIPCEVyyt6gNByzUwj0mHKIPbx0M2EgeQlLa3h1QecVsww7zQAGx3pgTMA3b18gJEWJz2wdMw6arpVJK6xVfjJGQairmJxm6/Km1wA2ttbVNAikjgu1EVqOn7ceN1u+rjb1YUuyLCHmg3WWNH1ajlJShoFby7NiJRkQ0WyfrU8ng1J4oOgiR7aY/ChQT53JSRiMK7elkzAP1TgRdj9+qjUXapIXVGfVu8iGwg4SoAWJGRC1/T15t3a7aZq5xAEhXRAyIT/FWkW6rbqPvh7SIghJSuapdtzikRRSUmB6k8pBCgEd4RZtR8YRqCZQUe4ugeSRUpg+/R0rw6MS68Khq8h5bFnhBUlA8qhJuSVViDRlQ8ZhKYecOjdIOB7Wp0FH5q2R8NaKgLBJdlcHwepRDGBvUqwCcSRVYSork3oiCUjhDRyov7rZMbo4oqO2hJ5UXd5PcHdF9sOL8/mxVgbgzEmUQZ0b69fGjMvQlO7thGzsgRvFSSYo7u7SFJIaXSojwJrKC09jUreqJI43s+nb9k7qlp3vIae6qqtsa86jhEmPfW1FOjREFXKbN0v8eb/+LbG56iOq+53pOefaVImvhHE15//yAThDS1PnJcm6fRjBK51jFbh7WEFmTh4opqKkLrqJh1GTOqvrmMds35T871vsDoBmd5pS3QOsAAAAASUVORK5CYII=" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>特教教學網</title>
-  <style>
-    .toolbar {
-      position: absolute;
-      background-color: #333;
-      color: #fff;
-      padding: 5px;
-      border-radius: 4px;
-      display: none;
-      z-index: 1000;
-    }
-    .toolbar button {
-      background: none;
-      border: none;
-      color: #fff;
-      cursor: pointer;
-      margin-right: 5px;
-    }
-    .toolbar button:hover {
-      text-decoration: underline;
-    }
-    button {
-      background-color: #4CAF50;
-      border: none;
-      color: white;
-      padding: 15px 32px;
-      text-align: center;
-      text-decoration: none;
-      display: inline-block;
-      font-size: 16px;
-      margin: 4px 2px;
-      cursor: pointer;
-    }
-    #app {
-      height: 100vh;
-      border: solid 1px #000;
-      display: grid;
-      grid-template-columns: repeat(15, 1fr);
-      grid-template-rows: repeat(10, 1fr);
-    }
-    .button1 {
-      grid-column: 1 / 4;
-      grid-row: 1 / 2;
-    }
-    .button2 {
-      grid-column: 13 / 16;
-      grid-row: 1 / 2;
-    }
-    .button3 {
-      grid-column: 1 / 4;
-      grid-row: 9 / 10;
-    }
-    .button4 {
-      grid-column: 13 / 16;
-      grid-row: 9 / 10;
-    }
-    .button5 {
-      grid-column: 1 / 4;
-      grid-row: 5 / 6;
-    }
-    .button6 {
-      grid-column: 13 / 16;
-      grid-row: 5 / 6;
-    }
-    .button7 {
-      grid-column: 7 / 9;
-      grid-row: 5 / 6;
-    }
-  </style>
-</head>
-<body>
-  <div id="app">
-    <button class="button1" onclick="clickHandler(event)">按鈕1</button>
-    <button class="button2" onclick="clickHandler(event)">按鈕2</button>
-    <button class="button3" onclick="clickHandler(event)">按鈕3</button>
-    <button class="button4" onclick="clickHandler(event)">按鈕4</button>
-    <button class="button5" onclick="clickHandler(event)">按鈕5</button>
-    <button class="button6" onclick="clickHandler(event)">按鈕6</button>
-    <button class="button7" onclick="clickHandler(event)">按鈕7</button>
-  </div>
-  <div class="toolbar" id="toolbar">
-    <button>1</button>
-    <button>2</button>
-    <button>3</button>
-    <button>4</button>
-    <button>5</button>
-    <button>6</button>
-    <button>7</button>
-    <button>8</button>
-    <button>9</button>
-    <button>10</button>
-  </div>
-  <script>
-    function clickHandler(event) {
-      const toolbar = document.getElementById('toolbar');
-      const rect = event.target.getBoundingClientRect();
-
-      let top = rect.top + window.scrollY - toolbar.offsetHeight;
-      let left = rect.left + window.scrollX;
-
-      // Ensure toolbar does not exceed the top boundary
-      if (top < 0) {
-        top = rect.bottom + window.scrollY;
-      }
-
-      // Ensure toolbar does not exceed the right boundary
-      if (left + toolbar.offsetWidth > window.innerWidth) {
-        left = rect.right + window.scrollX - toolbar.offsetWidth;
-      }
-
-      toolbar.style.top = `${top}px`;
-      toolbar.style.left = `${left}px`;
-      toolbar.style.display = 'block';
-    }
-  </script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAABICAMAAABiM0N1AAAAVFBMVEVHcExEs99Ir99Es99Est9Ar99Es99EtN9Ds99Ds99Es9////8+OzpKTE3Pzs6hn55ua2tDqdJAYG7z8/NCh6KAfn1Dmr29u7tBdIji4eFiX16SkJAryupQAAAACnRSTlMAuyDPXRB/PJbrpKz95QAAAs5JREFUeNrVmNmOozAQRdvslMsLBLPl//9z3KSTarwBgzTSnKcoEidVtwA7/vrfyOrqh6Iu/1ZSVwx2tE2RXS+laSFEXpSXimEQpW2ymxqiOVVV2cAhbXHsKVo4AzsqqoGTtHWyLQbnKRKeHK7Q3PWQ6aaHqIIiBtcpjuZ1Y3YFnGHoZ8dUugG1cMg4o6VzAr/aWDcIxHUyOMKefXP1UTE9IhrJucQB9uT+xNLFqAe3LDinJlcfFCPMwn/A3pvcqYKG/juZB/+w9hAvKYv1NCOK58J/YxBcGI0sWoyZuIPCEVyyt6gNByzUwj0mHKIPbx0M2EgeQlLa3h1QecVsww7zQAGx3pgTMA3b18gJEWJz2wdMw6arpVJK6xVfjJGQairmJxm6/Km1wA2ttbVNAikjgu1EVqOn7ceN1u+rjb1YUuyLCHmg3WWNH1ajlJShoFby7NiJRkQ0WyfrU8ng1J4oOgiR7aY/ChQT53JSRiMK7elkzAP1TgRdj9+qjUXapIXVGfVu8iGwg4SoAWJGRC1/T15t3a7aZq5xAEhXRAyIT/FWkW6rbqPvh7SIghJSuapdtzikRRSUmB6k8pBCgEd4RZtR8YRqCZQUe4ugeSRUpg+/R0rw6MS68Khq8h5bFnhBUlA8qhJuSVViDRlQ8ZhKYecOjdIOB7Wp0FH5q2R8NaKgLBJdlcHwepRDGBvUqwCcSRVYSork3oiCUjhDRyov7rZMbo4oqO2hJ5UXd5PcHdF9sOL8/mxVgbgzEmUQZ0b69fGjMvQlO7thGzsgRvFSSYo7u7SFJIaXSojwJrKC09jUreqJI43s+nb9k7qlp3vIae6qqtsa86jhEmPfW1FOjREFXKbN0v8eb/+LbG56iOq+53pOefaVImvhHE15//yAThDS1PnJcm6fRjBK51jFbh7WEFmTh4opqKkLrqJh1GTOqvrmMds35T871vsDoBmd5pS3QOsAAAAASUVORK5CYII=" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>特教教學網</title>
+    <script type="module"  src="./index-d6735393.js"></script>
+    <link rel="stylesheet" href="./assets/index-797b4968.css">
+  </head>
+  <body>
+    <div id="app"></div>
+    
+  </body>
 </html>
