@@ -122,6 +122,11 @@ const router = createRouter({
       path: '/LinkGameV2',
       name: 'LinkGameV2',
       component: () => import('@/views/GameTemplate/LinkGameV2.vue'),
+    },
+    {
+      path : '/Track',
+      name : 'Track',
+      component : () => import('@/views/GameTemplate/Track.vue'),
     }
   ]
 });
