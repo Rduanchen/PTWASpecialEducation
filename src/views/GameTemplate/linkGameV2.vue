@@ -26,16 +26,15 @@
 </template>
 
 <script>
-import { Stage, Layer, Circle, Line } from 'vue-konva';
 import { defineAsyncComponent } from 'vue';
 
 export default {
     name: 'LinkGameV2',
     components: {
-        'v-stage': Stage,
-        'v-layer': Layer,
-        'v-circle': Circle,
-        'v-line': Line,
+        // 'v-stage': Stage,
+        // 'v-layer': Layer,
+        // 'v-circle': Circle,
+        // 'v-line': Line,
         ImageContainer: defineAsyncComponent(() => import('@/components/ManualImageContainer.vue')),
     },
     data() {

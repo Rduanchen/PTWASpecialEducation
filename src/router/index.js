@@ -124,11 +124,6 @@ const router = createRouter({
       component: () => import('@/views/GameTemplate/LinkGameV2.vue'),
     },
     {
-      path: '/Track',
-      name: 'Track',
-      component: () => import('@/views/GameTemplate/Track.vue'),
-    },
-    {
       path: '/CalculatorV2',
       name: 'CalculatorV2',
       component: () => import('@/components/calculatorV2.vue'),
