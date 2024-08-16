@@ -16,7 +16,6 @@
 <script>
 import { defineAsyncComponent } from 'vue';
 import { GetSlotComponentData } from '@/utilitys/get_assets.js';
-import Fractions from './fractions.vue';
 export default {
     name: 'NumberLineV2',
     components: {
