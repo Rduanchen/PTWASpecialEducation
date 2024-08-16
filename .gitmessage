@@ -1,25 +1,26 @@
 
-# 這是關於 PTWA 特教專案的 commit template
-# 請遵照以下的 commit 規則
-# <title>
-# <type> : <subject>
-# <body> : 非必要
+# This is the commit template for the PTWA special education project
+# Please follow the commit rules below
 #
-# <title> 標提，簡要概述更動
-# 
-# <type>
-# 請遵守下列標籤
-# Game: 新遊戲
-# feat: 新功能
-# fix: Bug修復
-# hotfix: 即時 Bug 修復
-# style: 代碼格式改變
-# refactor: 功能重構
-# perf: 性能優化
-# test: 增加測試代碼
-# build: 打包
-# 
-# <subject> 講述「更動了甚麼」(What)，以及「為甚麼要更動」(Why)，不得超過50字
-# 
-# <body> 描述如何做到的
+# <title>
+# <type>: <subject>
+# <body>: Optional
+#
+# <title>: Briefly summarize the changes
+#
+# <type>: 
+# Please use the following tags:
+# Game: New game
+# feat: New feature
+# fix: Bug fix
+# hotfix: Immediate bug fix
+# style: Code formatting changes
+# refactor: Functionality refactoring
+# perf: Performance optimization
+# test: Add test code
+# build: Packaging
+#
+# <subject>: Describe "what" has changed and "why" it was changed, limited to 50 characters
+#
+# <body>: Describe how it was done
 #
