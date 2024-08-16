@@ -1,7 +1,6 @@
 <template>
   <div id="GameView" ref="GameView">
     <header>
-<<<<<<< HEAD
       <nav
         class="container-fluid navbar navbar-expand-md navbar-light sticky-top justify-content-around justify-content-md-center"
         style="justify-content: flex-start !important"
@@ -42,23 +41,6 @@
                 <i class="bi bi-pen"></i><a> {{ this.Name }}</a>
               </li>
             </ol>
-=======
-      <nav class="container-fluid navbar navbar-expand-md navbar-light sticky-top justify-content-around justify-content-md-center" style="justify-content: flex-start !important;">
-          <a class="navbar-brand mx-3" href="#" alt="Home">
-              <img src="@/assets/images/nav_bar/logo.png"  />
-          </a>
-          <button class="navbar-toggler btn btn-primary mx-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText11" aria-controls="navbarText11" aria-expanded="false" aria-label="Toggle navigation" @click="PreviousPage">
-            上一頁
-          </button>
-          <div class="collapse navbar-collapse mx-3" id="navbarText" >
-            <div class="container sticky-top d-flex justify-content-end" style="--bs-breadcrumb-divider:'>';" >
-              <ol class="breadcrumb mb-0 ">
-                <li class="breadcrumb-item Pointable" aria-current="page" @click="this.$router.push('/')"><i class="bi bi-house"></i><a>主頁</a></li>
-                <li class="breadcrumb-item Pointable" aria-current="page" @click="PreviousPage"><i class="bi bi-book-half"></i> <a>{{ this.Grade }}  年級 {{ Subjects[Subject] }}</a></li>
-                <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-pen"></i><a>{{this.Name}}</a></li>
-              </ol>
-            </div>
->>>>>>> 4e5f04850c526dca9b192305fe155f847f9e5949
           </div>
         </div>
       </nav>
@@ -1032,7 +1014,6 @@ export default {
     },
   },
   components: {
-<<<<<<< HEAD
     hintbutton,
     Calculator,
     DrawCanvas,
@@ -1080,6 +1061,9 @@ export default {
     PairingGame: defineAsyncComponent(() =>
       import("@/views/GameTemplate/PairingGame.vue")
     ),
+    NumberLock: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/NumberLock.vue")
+    ),
     RacingCar: defineAsyncComponent(() =>
       import("@/views/GameTemplate/RacingCar.vue")
     ),
@@ -1090,31 +1074,6 @@ export default {
     EffectWindow,
   },
 };
-=======
-      hintbutton,
-      Calculator,
-      DrawCanvas,
-      GameStartandOver,
-      loading,
-      LinkGame: defineAsyncComponent(() => import('@/views/GameTemplate/LinkGame.vue')),
-      CompareGame: defineAsyncComponent(() => import('@/views/GameTemplate/CompareGame.vue')),
-      TrueFalseGame: defineAsyncComponent(() => import('@/views/GameTemplate/TrueFalseGame.vue')),
-      SelectGame: defineAsyncComponent(() => import('@/views/GameTemplate/SelectGame.vue')),
-      NumberInputGame: defineAsyncComponent(() => import('@/views/GameTemplate/NumberInputGame.vue')),
-      ClassifyGame: defineAsyncComponent(() => import('@/views/GameTemplate/ClassifyGame.vue')),
-      SortGame: defineAsyncComponent(() => import('@/views/GameTemplate/SortGame.vue')),
-      FindTheItemGame: defineAsyncComponent(() => import('@/views/GameTemplate/FindTheItemGame.vue')),
-      AutoNumberingGame: defineAsyncComponent(() => import('@/views/GameTemplate/AutoNumberingGame.vue')),
-      NumberingGame: defineAsyncComponent(() => import('@/views/GameTemplate/NumberingGame.vue')),
-      CompareGame: defineAsyncComponent(() => import('@/views/GameTemplate/CompareGame.vue')),
-      FillinBlank: defineAsyncComponent(() => import('@/views/GameTemplate/FillinBlank.vue')),
-      CalculatorGame: defineAsyncComponent(() => import('@/views/GameTemplate/CalculatorGame.vue')),
-      PairingGame: defineAsyncComponent(() => import('@/views/GameTemplate/PairingGame.vue')),
-      NumberLock: defineAsyncComponent(() => import('@/views/GameTemplate/NumberLock.vue')),
-      EffectWindow
-  }
-}
->>>>>>> 4e5f04850c526dca9b192305fe155f847f9e5949
 </script>
 <style scoped lang="scss">
 header {
@@ -1267,11 +1226,8 @@ header {
     height: auto;
   }
 }
-<<<<<<< HEAD
-=======
 
-.Pointable{
+.Pointable {
   cursor: pointer;
 }
->>>>>>> 4e5f04850c526dca9b192305fe155f847f9e5949
 </style>
