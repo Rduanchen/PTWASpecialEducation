@@ -42,7 +42,7 @@ export default {
         cardwithbutton,
         TextOnly: defineAsyncComponent(() => import('@/components/TextOnly.vue')),
         ImageContainer: defineAsyncComponent(() => import('@/components/ImageContainer.vue')),
-        Clock: defineAsyncComponent(() => import('@/components/Clock.vue')),
+        Clock: defineAsyncComponent(() => import('@/components/clock.vue')),
         Water: defineAsyncComponent(() => import('@/components/Water.vue')),
     },
     emits: ['play-effect','add-record','next-level'],
