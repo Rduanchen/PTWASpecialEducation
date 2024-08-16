@@ -1,0 +1,26 @@
+
+# This is the commit template for the PTWA special education project
+# Please follow the commit rules below
+#
+# <title>
+# <type>: <subject>
+# <body>: Optional
+#
+# <title>: Briefly summarize the changes
+#
+# <type>: 
+# Please use the following tags:
+# Game: New game
+# feat: New feature
+# fix: Bug fix
+# hotfix: Immediate bug fix
+# style: Code formatting changes
+# refactor: Functionality refactoring
+# perf: Performance optimization
+# test: Add test code
+# build: Packaging
+#
+# <subject>: Describe "what" has changed and "why" it was changed, limited to 50 characters
+#
+# <body>: Describe how it was done
+#
