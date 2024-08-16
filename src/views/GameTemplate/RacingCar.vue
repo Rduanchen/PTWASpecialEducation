@@ -1,7 +1,7 @@
 <template>
-  <div class="container">
-    <div>
-      <h2>{{ GameConfig.GlobalTitle }}</h2>
+  <div class="gameContainer">
+    <div id="canvasContainer">
+      <h2>{{ GameData.Question }}</h2>
       <v-stage :config="configKonva">
         <v-layer>
           <v-rect :config="configLane"></v-rect>
@@ -16,6 +16,7 @@
             v-for="i in map"
             :Y="i[1]"
             :w="laneWidth"
+            :l="configKonva.width"
             :option="GameData.Options[i[0]]"
             :speed="speed"
             @end="end"
@@ -25,9 +26,11 @@
         </v-layer>
       </v-stage>
     </div>
-    <div class="btnContainer">
+    <div id="btnContainer">
       <img :src="upBtn" class="controlBtn" @click="move(1)" />
+      <br />
       <img :src="rightBtn" class="controlBtn" @click="move(0)" />
+      <br />
       <img :src="downBtn" class="controlBtn" @click="move(-1)" />
     </div>
   </div>
@@ -35,6 +38,7 @@
 
 <script>
 import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
+import { Container } from "konva/lib/Container";
 import { defineAsyncComponent } from "vue";
 
 const carImg = document.createElement("img");
@@ -99,6 +103,13 @@ export default {
   },
 
   beforeMount() {
+    var gameWidth = document.getElementById("GameContainer").clientWidth;
+    //var canvasCon = document.getElementById("canvasContainer");
+    this.configKonva.width = Math.floor(gameWidth * 0.8);
+    this.configKonva.height = Math.floor(this.configKonva.width / 2);
+    this.configLane.width = this.configKonva.width;
+    this.configLane.height = this.configKonva.height;
+
     this.options = this.GameData.Options.length;
     this.ans = this.GameData.Answer;
     //console.log(this.GameData.Options.length);
@@ -110,8 +121,15 @@ export default {
       this.map.push([i, this.laneWidth * i, false]);
     }
     this.map[this.ans][2] = true;
+    this.configCar.height = Math.floor(this.laneWidth * 0.8);
+    this.configCar.width = this.configCar.height;
     this.configCar.y = this.laneWidth / 2 - this.configCar.height / 2;
     //this.randomPassage();
+  },
+
+  mounted() {
+    var btnCon = document.getElementById("btnContainer");
+    btnCon.style.height = this.configKonva.height + "px";
   },
 
   methods: {
@@ -196,19 +214,22 @@ export default {
 </script>
 
 <style>
-.container {
+.gameContainer {
   display: flex;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: hidden;
 }
 
-.btnContainer {
+#btnContainer {
   height: 100%;
   margin: 10px;
 }
 
 .controlBtn {
-  height: 200px;
+  height: 30%;
   aspect-ratio: 1/1;
-  margin: 5px;
+  margin: 5%;
   border: 5px solid black;
 }
 </style>

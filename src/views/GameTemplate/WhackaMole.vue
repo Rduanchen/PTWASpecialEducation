@@ -1,12 +1,16 @@
 <template>
-  <div class="container">
+  <div class="gameContainer">
     <h2>{{ GameData.Question }}</h2>
     <v-stage :config="configKonva">
+      <v-layer>
+        <v-rect :config="configBg"></v-rect>
+      </v-layer>
       <v-layer>
         <mole
           v-for="i in map"
           :X="i[1]"
           :Y="i[2]"
+          :width="configKonva.width"
           :moleId="i[0]"
           :option="i[3]"
           @showSign="giveOption"
@@ -14,7 +18,7 @@
         ></mole>
       </v-layer>
       <v-layer>
-        <hole v-for="i in map" :X="i[1]" :Y="i[2]"></hole>
+        <hole v-for="i in map" :X="i[1]" :Y="i[2]" :width="configKonva.width"></hole>
       </v-layer>
     </v-stage>
   </div>
@@ -34,6 +38,15 @@ export default {
       configKonva: {
         width: 1000,
         height: 500,
+      },
+
+      configBg: {
+        x: 0,
+        y: 0,
+        width: 1000,
+        height: 500,
+        fill: "darkgray",
+        stroke: "darkgray",
       },
 
       map: [
@@ -56,8 +69,20 @@ export default {
       required: true,
     },
   },
+  beforeMount() {
+    var gameWidth = document.getElementById("GameContainer").clientWidth;
+    this.configKonva.width = Math.floor(gameWidth * 0.8);
+    console.log(this.configKonva.width);
+    for (var i = 0; i < 5; ++i) {
+      this.map[i][1] = Math.floor((this.configKonva.width * this.map[i][1]) / 1000);
+      this.map[i][2] = Math.floor((this.configKonva.width * this.map[i][2]) / 1000);
+    }
+  },
 
   mounted() {
+    this.configKonva.height = Math.floor(this.configKonva.width / 2);
+    this.configBg.width = this.configKonva.width;
+    this.configBg.height = this.configKonva.height;
     this.true = this.GameData.True;
     this.false = this.GameData.False;
     this.ansLeft = this.true.length;
@@ -84,9 +109,7 @@ export default {
       var ans = false;
       for (let i in this.GameData.True) {
         if (option == this.GameData.True[i]) {
-          this.true = this.true.filter(
-            (option) => option != this.GameData.True[i]
-          );
+          this.true = this.true.filter((option) => option != this.GameData.True[i]);
           ans = true;
           break;
         }
@@ -100,3 +123,11 @@ export default {
   },
 };
 </script>
+
+<style>
+.gameContainer {
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+</style>

@@ -35,15 +35,21 @@ export default {
     };
   },
 
-  props: ["X", "Y", "moleId", "option"],
+  props: ["X", "Y", "width", "moleId", "option"],
 
   mounted() {
+    console.log("mole" + this.width);
+    this.configMole.radius = Math.floor(this.width * 0.04);
     this.configMole.x = this.X;
     this.configMole.y = this.Y + this.configMole.radius;
+    this.configSign.width = Math.floor(this.width * 0.2);
+    this.configSign.height = Math.floor(this.width * 0.06);
     this.configSign.x = this.X - this.configSign.width / 2;
-    this.configSign.y = this.Y - 100;
-    this.configOption.x = this.X - this.configSign.width / 2 + 10;
-    this.configOption.y = this.Y - 90;
+    this.configSign.y = this.Y - Math.floor(this.width * 0.1);
+    this.configOption.fontSize = Math.floor(this.width * 0.05);
+    this.configOption.x =
+      this.X - this.configSign.width / 2 + Math.floor(this.width * 0.01);
+    this.configOption.y = this.Y - Math.floor(this.width * 0.09);
     var random = Math.random() * 5000;
     setTimeout(() => {
       this.updateInterval = setInterval(this.update, 20);

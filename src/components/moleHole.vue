@@ -17,9 +17,12 @@ export default {
     };
   },
 
-  props: ["X", "Y"],
+  props: ["X", "Y", "width"],
 
   mounted() {
+    console.log("hole" + this.width);
+    this.configSlot.width = Math.floor(this.width * 0.1);
+    this.configSlot.height = Math.floor(this.width * 0.08);
     this.configSlot.x = this.X - this.configSlot.width / 2;
     this.configSlot.y = this.Y;
   },

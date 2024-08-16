@@ -34,23 +34,26 @@ export default {
     };
   },
 
-  props: ["Y", "w", "option", "speed"],
+  props: ["Y", "w", "l", "option", "speed"],
 
   mounted() {
     this.configPassage.y = this.Y;
-    this.configOption.y = this.Y + 50;
+    this.configOption.y = this.Y + Math.floor(this.l * 0.04);
+    this.configOption.fontSize = Math.floor(this.l * 0.05);
     this.configOption.text = this.option;
     //console.log(this.option);
     this.configPassage.height = this.w;
+    this.configPassage.width = Math.floor(this.l * 2.225);
     this.Update = window.setInterval(this.update, 20);
     //addEventListener("keydown", this.speedup);
   },
 
   methods: {
     update() {
+      //console.log(document.getElementById("M3029").clientWidth);
       this.configPassage.x -= this.speed;
-      this.configOption.x = this.configPassage.x + 1050;
-      if (this.configPassage.x <= -1200) {
+      this.configOption.x = this.configPassage.x + Math.floor(this.l * 1.05);
+      if (this.configPassage.x <= -Math.floor(this.l * 1.2)) {
         this.$emit("end");
         this.configPassage.x = 0;
         //this.speed = 1;
