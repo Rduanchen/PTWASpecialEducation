@@ -11,9 +11,9 @@
           <div class="collapse navbar-collapse mx-3" id="navbarText" >
             <div class="container sticky-top d-flex justify-content-end" style="--bs-breadcrumb-divider:'>';" >
               <ol class="breadcrumb mb-0 ">
-                <li class="breadcrumb-item"><i class="bi bi-house"></i><a href="#"> 主頁</a></li>
-                <li class="breadcrumb-item" aria-current="page" @click="PreviousPage"><i class="bi bi-book-half"></i> <a>{{ this.Grade }}  年級 {{ Subjects[Subject] }}</a></li>
-                <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-pen"></i><a>  {{this.Name}}</a></li>
+                <li class="breadcrumb-item Pointable" aria-current="page" @click="this.$router.push('/')"><i class="bi bi-house"></i><a>主頁</a></li>
+                <li class="breadcrumb-item Pointable" aria-current="page" @click="PreviousPage"><i class="bi bi-book-half"></i> <a>{{ this.Grade }}  年級 {{ Subjects[Subject] }}</a></li>
+                <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-pen"></i><a>{{this.Name}}</a></li>
               </ol>
             </div>
           </div>
@@ -896,4 +896,7 @@ transform: scale(1.07); /* 放大至原大小的 110% */
   }
 }
 
+.Pointable{
+  cursor: pointer;
+}
 </style>

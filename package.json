@@ -19,22 +19,20 @@
     "html-to-image": "^1.11.11",
     "html2canvas": "^1.4.1",
     "jquery": "^3.7.0",
+    "konva": "^9.3.14",
     "mathjax": "^3.2.2",
     "vue": "^3.3.4",
+    "vue-konva": "^3.0.2",
     "vue-mathjax": "^0.1.1",
     "vue-router": "^4.0.13",
     "vue-smooth-dnd": "^0.8.1",
     "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.7.0",
     "@vitejs/plugin-vue": "^4.1.0",
-    "eslint": "^9.7.0",
-    "eslint-plugin-vue": "^9.27.0",
     "gh-pages": "^6.1.1",
     "globals": "^15.8.0",
     "sass": "^1.62.1",
-    "typescript-eslint": "^7.17.0",
     "vite": "^4.3.9"
   }
 }

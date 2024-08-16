@@ -117,6 +117,16 @@ const router = createRouter({
       path: '/MarkDownLite',
       name: 'MarkDownLite',
       component: () => import('@/components/Markdown.vue'),
+    },
+    {
+      path: '/LinkGameV2',
+      name: 'LinkGameV2',
+      component: () => import('@/views/GameTemplate/LinkGameV2.vue'),
+    },
+    {
+      path : '/Track',
+      name : 'Track',
+      component : () => import('@/views/GameTemplate/Track.vue'),
     }
   ]
 });

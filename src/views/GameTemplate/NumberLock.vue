@@ -12,6 +12,7 @@
     <div class="Submit">
         <button @click="CheckAnswer">送出答案</button>
     </div>
+    {{NowSelect}}
 </div>
 </template>
 
@@ -27,11 +28,20 @@ export default {
         Input: defineAsyncComponent(() => import('@/components/ReplyInput.vue')),
         Fractions: defineAsyncComponent(() => import('@/components/Fractions.vue')),
         Markdown: defineAsyncComponent(() => import('@/components/Markdown.vue')),
-        NumberLine: defineAsyncComponent(() => import('@/components/NumberLineV2.vue'))
+        NumberLineArrow: defineAsyncComponent(() => import('@/components/NumberLineV2.vue')),
+        NumberLine: defineAsyncComponent(() => import('@/components/NumberLine.vue'))
     },
     props: {
         GameData: {
             type: Object,
+            required: true
+        },
+        GameConfig: {
+            type: Object,
+            required: true
+        },
+        id: {
+            type: String,
             required: true
         }
     },
@@ -199,6 +209,7 @@ export default {
 .OutterContainer{
     width: 100%;
     height: 100%;
+    max-height: 50vh;
     display: grid;
     grid-template-rows: 1fr 5fr 1fr 1fr;
     /* grid-template-columns: 1fr; */
@@ -226,6 +237,7 @@ export default {
         align-items: center;
         border: solid 1px black;
         border-radius: 15px;
+        min-height: 55vh;
     }
     .NumberPad{
         grid-row: 2/3;

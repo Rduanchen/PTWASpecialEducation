@@ -18,7 +18,30 @@
             "Question": "哥哥買了一雙1289元的運動鞋，和一件1455元的棒球衣，一共花了多少元？",
             "Answer": "2744",
             "ComponentName": "Slot2",
-            "img" : ""
+            "img" : "",
+            "SlotComponents": [
+                {
+                    "Name" : "FreeDrag",
+                    "Data" : {
+                        "Images" : [
+                            {
+                                "src" : "image1.png",
+                                "alt" : "image1",
+                                "Amount" : 2
+                            },
+                            {
+                                "src" : "image2.png",
+                                "alt" : "image2",
+                                "Amount" : 3
+                            }
+                        ],
+                        "Background" : {
+                            "Src" : "cover_info.jpeg",
+                            "Alt" : "Background Image"
+                        }
+                    }
+                }
+            ]
         }
     ]
 }
