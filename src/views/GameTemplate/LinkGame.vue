@@ -1,7 +1,6 @@
 <template>
     <div class="Container">
         <p class="h1">{{ GameData.Question.text }}</p>        
-        <p v-if="NotFinished">請連完所有的線段</p>
         <div class="Index" ref="Index">
             <div class="Konva-container" ref="KonvaContainer">
                 <v-stage :config="configStage" class="Stage" @mousemove="MouseMove" @mouseup="MouseUpAtDot" >
@@ -21,18 +20,17 @@
             </div>
         </div>
         <div class="Buttons">
+            <h3 v-if="NotFinished">請連完所有的線段</h3>
             <button @click="CheckAll" v-if="this.GameConfig.CheckingMode == 'OnSubmit'">檢查答案</button>
             <button @click="ClearAllLine" v-if="this.GameConfig.CheckingMode == 'OnSubmit'">清除所有線</button>
             <button @click="PopLastLine" v-if="this.GameConfig.CheckingMode == 'OnSubmit'">刪除最後一條線</button>
         </div>
-        
     </div>
 </template>
 
 <script>
 // import { Stage, Layer, Circle, Line } from 'vue-konva';
 import { defineAsyncComponent } from 'vue';
-
 export default {
     name: 'LinkGameV2',
     components: {
@@ -117,17 +115,24 @@ export default {
         this.Init();
         window.addEventListener('resize', this.Init);
         window.addEventListener('resize', this.ReLinktheLine);
-        window.addEventListener('resize', () => {
-            console.log('Resize');
-        });
     },
     created() {
         if (this.GameConfig.CheckingMode == undefined ){
             this.GameConfig.CheckingMode = "OnSubmit";
         }
     },
+    beforeDestroy() {
+        window.removeEventListener('resize', this.Init);
+        window.removeEventListener('resize', this.ReLinktheLine);
+    },
     methods: {
-        MouseDown(e,index) {
+        MouseDown(e,index) { // e is the event object, index is the index of the dot
+            let Lined = this.CheckLined(index); // 確認該點是否已經連線，有則刪除
+            if ( Lined[0] ){
+                this.Lines.splice(Lined[1],1);
+                this.LinkedPoints.splice(Lined[1],1);
+                this.$refs.LineLayer.getNode().draw();
+            }
             this.NotFinished = false;
             const MousePos = e.target.getStage().getPointerPosition();
             this.OnDrawing = true;
@@ -141,15 +146,13 @@ export default {
             };
         },
         MouseMove(e) {
-            if (this.OnDrawing) {
+            if (this.OnDrawing) { // 不斷更新線段的終點位置
                 const MousePos = e.target.getStage().getPointerPosition();
                 this.OnDrawingLine.points.splice(2, 2, MousePos.x, MousePos.y);
                 this.$refs.OnDrawLineLayer.getNode().draw();
             }
         },
         MouseUpAtDot(e) {
-            //FIXME Error is here
-            console.log('MouseUpAtDot');
             if (this.OnDrawing) {
                 const MousePos = e.target.getStage().getPointerPosition();
                 this.OnDrawingLine.points.splice(2, 2, MousePos.x, MousePos.y);
@@ -161,7 +164,6 @@ export default {
                         let AnswerCorrect = null;
                         if (this.GameConfig.CheckingMode =="OnAnswered"){
                             AnswerCorrect = this.CheckAnswerisCorrect(this.MouseDownDotIndex,DotIndex);
-                            console.log("Should be triggered")
                         }
                         else{
                             AnswerCorrect = true;
@@ -200,31 +202,26 @@ export default {
             // This Program give each dot a index, from top to down, left to right, start from 0 to n
             // The Teacher's Answer is a 2D array, each element is a pair of index, the first element is the index of the first dot, the second element is the index of the second dot
             // This function will convert the dot index to the answer index
-            
             return this.IndexMappingTable[DotIndex];
         },
         CheckLinkAble(StartIndex,EndIndex){
             // Line Can't be drawed on the same column
-            console.log(StartIndex,EndIndex);
             let StartColumn = this.MappingDotIndexToAnswerIndex(StartIndex)[0];
             let EndColumn = this.MappingDotIndexToAnswerIndex(EndIndex)[0];
             if (StartColumn == EndColumn){
-                console.log('Same Column');
                 return false;
             }
             else{
-                console.log('Different Column');
                 return true;
             }
         },
         CheckAnswerisCorrect(StartIndex,EndIndex){
-            let Answer = this.GameData.Answer;
+            let Answer = this.GameData.Answer; 
             let Start = this.MappingDotIndexToAnswerIndex(StartIndex);
             let End = this.MappingDotIndexToAnswerIndex(EndIndex);
             console.log(Start,End);
             for (var AnswerIndex in Answer){
                 if (Answer[AnswerIndex][0][0] == Start[0] && Answer[AnswerIndex][0][1] == Start[1] && Answer[AnswerIndex][1][0] == End[0] && Answer[AnswerIndex][1][1] == End[1]){
-                    // console.log('Correct');
                     if (this.GameConfig.CheckingMode == "OnSubmit"){
                         return true;
                     }
@@ -242,7 +239,6 @@ export default {
                     return true;
                 }
             }
-            console.log('Wrong');
             if (this.GameConfig.CheckingMode == "OnSubmit"){
                 return false;
             }
@@ -251,7 +247,7 @@ export default {
             return false;
         },
         MarkWrongLine(lineIndex){
-            this.Lines[lineIndex].stroke = 'red';
+            this.Lines[lineIndex].stroke = 'green';
             this.$refs.LineLayer.getNode().draw();
         },
         ClearAllLine(){
@@ -277,6 +273,7 @@ export default {
                 return;
             }
             for(var i in this.LinkedPoints){
+                
                 let Start = this.LinkedPoints[i][0];
                 let End = this.LinkedPoints[i][1];
                 let Answer = this.GameData.Answer[i];
@@ -288,7 +285,6 @@ export default {
                     this.MarkWrongLine(i);
                 }
             }
-            console.log(CorrectItem);
             if (CorrectItem == this.GameData.Answer.length){
                 this.$emit('play-effect', 'CorrectSound');
                 this.$emit('add-record',[this.GameData.Answer, this.LinkedPoints,"正確"]);
@@ -297,6 +293,14 @@ export default {
                 this.$emit('play-effect', 'WrongSound');
                 this.$emit('add-record',[this.GameData.Answer, this.LinkedPoints,"錯誤"]);
             }
+        },
+        CheckLined(index){
+            for (var LinkedPoint in this.LinkedPoints){
+                if (this.LinkedPoints[LinkedPoint][0] == index || this.LinkedPoints[LinkedPoint][1] == index){
+                    return [true,LinkedPoint];
+                }
+            }
+            return [false]
         },
         ReLinktheLine(){
             this.Lines = [];
@@ -369,12 +373,9 @@ export default {
                     this.ComponentConfig.push(Object);
                 }    
                 NowX += this.ComponentPositionConfig.ObjectWidth + this.ComponentPositionConfig.BlankWidth;
-                console.log
                 if (ColumnIndex != 0 && ColumnIndex != this.GameData.Question.RowData.length - 1){
-                    console.log('Add 2');
                     DotColIndex += 2;
                 } else {
-                    console.log('Add 1');
                     DotColIndex += 1;
                 }
             }
@@ -414,9 +415,13 @@ export default {
 }
 .Buttons {
     display: flex;
+    flex-direction: row;
     justify-content: end;
     align-items: center;
     gap: 1rem;
+    h3{
+        color: red;
+    }
 }
 button {
     height: 3rem;

@@ -2,8 +2,9 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';
 import VueKonva from 'vue-konva';
-import { Quasar } from 'quasar'
-import quasarLang from 'quasar/lang/zh-TW'
+import { Quasar } from 'quasar';
+import quasarLang from 'quasar/lang/zh-TW';
+import { createPinia } from 'pinia'
 
 // Import icon libraries
 import '@quasar/extras/material-icons/material-icons.css'
@@ -24,6 +25,8 @@ const app = createApp(App)
 
 app.use(router)
 app.use(VueKonva)
+const pinia = createPinia()
+app.use(pinia)
 app.use(Quasar,{
     plugins: {
     },

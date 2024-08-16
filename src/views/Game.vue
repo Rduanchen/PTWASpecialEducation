@@ -284,6 +284,7 @@ import { useFullscreen } from '@vueuse/core'
 import CompareGame from './GameTemplate/CompareGame.vue';
 import EffectWindow from '@/components/EffectWindow.vue';
 import PairingGame from './GameTemplate/PairingGame.vue';
+import LinktoImage from './GameTemplate/LinktoImage.vue';
 export default {
   data() {
     return {
@@ -364,9 +365,7 @@ export default {
         for (var i in this.GameData.Questions) {
           if (this.GameData.Questions[i].length != undefined) {
             var num = this.GameData.Questions[i].length;
-            console.log("Num",num);
             var rand = Math.floor( Math.random() * ( ( num - 0 ) + 0 ) );
-            console.log("Rand",rand);
             question.push(this.GameData.Questions[i][rand]);
           }
           else{
@@ -735,7 +734,8 @@ export default {
       CalculatorGame: defineAsyncComponent(() => import('@/views/GameTemplate/CalculatorGame.vue')),
       PairingGame: defineAsyncComponent(() => import('@/views/GameTemplate/PairingGame.vue')),
       NumberLock: defineAsyncComponent(() => import('@/views/GameTemplate/NumberLock.vue')),
-      EffectWindow
+      EffectWindow,
+      LinktoImageGame: defineAsyncComponent(() => import('@/views/GameTemplate/LinktoImage.vue')),
   }
 }
 </script>

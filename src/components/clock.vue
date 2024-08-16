@@ -25,6 +25,7 @@
 		required: false
 	  }
 	},
+
 	methods: {
 	  drawClock() {
 		let canvas = document.getElementById('clock');

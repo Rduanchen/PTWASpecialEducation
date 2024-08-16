@@ -126,6 +126,41 @@
                 ]
             ],
             "Answer": ["Big"]
+        },
+        {
+            "QuestionText": "比大小",
+            "Description": "比大小，選出最大的數字",
+            "OptionBarTitle": "將正確的符號拖曳到上面的框框中",
+            "SlotComponentVerifycation": true,
+            "Datas": [
+                [
+                    {
+                        "Name" : "MoneyGenerator",
+                        "Data": {
+                            "Thousands": 10,
+                            "FiveHundreds": 1,
+                            "Hundreds": 1,
+                            "Fifties": 2,
+                            "Tens": 5,
+                            "Fives": 1,
+                            "Ones": 10
+                        }
+                    },
+                    {
+                        "Name" : "MoneyGenerator",
+                        "Data": {
+                            "Thousands": 1,
+                            "FiveHundreds": 1,
+                            "Hundreds": 1,
+                            "Fifties": 2,
+                            "Tens": 5,
+                            "Fives": 1,
+                            "Ones": 1
+                        }                              
+                    }
+                ]
+            ],
+            "Answer": ["Big"]
         }
     ]
 }

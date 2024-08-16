@@ -59,6 +59,7 @@ export default {
         ImageTable: GetComponents("ImageTable"),
         DrawImage: GetComponents("DrawImage"),
         NumberBoard: GetComponents("NumberBoard"),
+        MoneyGenerator: GetComponents("MoneyGenerator"),
     },
     emits: ['play-effect','add-record','next-level'],
     props: {
@@ -235,10 +236,6 @@ export default {
         width: 100%;
         .QuestionContainer{
             .QuestionRow{
-                /* display: flex;
-                flex-direction: row;
-                justify-content: space-evenly;
-                align-items: center; */
                 display: grid;
                 grid-template-columns: 0.5fr 4fr 1fr 4fr 0.5fr;
                 height: 40vh;
