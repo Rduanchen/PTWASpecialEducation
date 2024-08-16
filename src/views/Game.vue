@@ -1067,6 +1067,7 @@ export default {
     WhackaMole: defineAsyncComponent(() =>
       import("@/views/GameTemplate/WhackaMole.vue")
     ),
+    Maze: defineAsyncComponent(() => import("@/views/GameTemplate/Maze.vue")),
     EffectWindow,
   },
 };
