@@ -1,11 +1,13 @@
 <template>
     <!-- 大於0的話 -->
     <div class="Content" :class="{ 'progressShake' : this.Shake }">
-        <p class="h3">生命值:  {{ (this.HintInfo.MaxWrongTimes - this.HintInfo.WrongTimes) > 0 ? this.HintInfo.MaxWrongTimes - this.HintInfo.WrongTimes: 0}}</p>
+        <!-- <p class="h3">生命值:  {{ (this.HintInfo.MaxWrongTimes - this.HintInfo.WrongTimes) > 0 ? this.HintInfo.MaxWrongTimes - this.HintInfo.WrongTimes: 0}}</p> -->
+        <div class="Heart"><p v-for="i in ((this.HintInfo.MaxWrongTimes - this.HintInfo.WrongTimes) > 0 ? this.HintInfo.MaxWrongTimes - this.HintInfo.WrongTimes: 0)">❤</p></div>
         
-        <div class="progress" >
+        <!-- 以下保留，請勿刪除 -->
+        <!-- <div class="progress" >
             <div class="progress-bar bg-danger" role="progressbar" :style="{ width:this.hint_percentage }" :aria-valuenow="this.percentage" aria-valuemin="0" aria-valuemax="100"></div>
-        </div>
+        </div> -->
         
         <button class="btn btn-primary text-nowrap img-hover-zoom" data-bs-toggle="modal" data-bs-target="#hint" @click="gethint()" v-if="showhint">
             <div class="d-flex align-items-center">
@@ -109,5 +111,14 @@ export default {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+}
+.Heart{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+.Heart p{
+    font-size: 2rem;
+    margin: 0;
 }
 </style>

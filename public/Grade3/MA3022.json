@@ -1,5 +1,5 @@
 {
-    "id":"MA3021",
+    "id":"MA3022",
     "introvideo": "src",
     "TotalLevel": 4,
     "GameType" : "CompareGame",
@@ -25,15 +25,16 @@
                     {
                         "Name" : "CircleChart",
                         "Data" : {
-                            "Mother" : 5,
-                            "Child" : 3,
+                            "Text": "1",
+                            "Mother" : 6,
+                            "Child" : 6,
                             "Unit" : "盒"
                         }                        
                     },
                     {
                         "Name" : "CircleChart",
                         "Data" : {
-                            "Mother" : 5,
+                            "Mother" : 6,
                             "Child" : 2,
                             "Unit" : "盒"
                         }                        
@@ -52,8 +53,9 @@
                     {
                         "Name" : "CoulorBarChart",
                         "Data" : {
+                            "Text": "1",
                             "Mother" : 6,
-                            "Child" : 3,
+                            "Child" : 6,
                             "Unit": "盒"
                         }                        
                     },
@@ -61,7 +63,7 @@
                         "Name" : "CoulorBarChart",
                         "Data" : {
                             "Mother" : 5,
-                            "Child" : 2,
+                            "Child" : 4,
                             "Unit": "盒"
                         }                        
                     }

@@ -98,16 +98,7 @@
             {
                 "Question": ["鈍角","銳角","直角"],
                 "Question_Text": "左圖的角度sssss的角度是什麼角呢???",
-                "Answer":  "銳角",
-                "SlotComponents" : [
-                    {
-                        "Name" : "ImageContainer",
-                        "Data" : {
-                            "Src":"level6.png",
-                            "Alt": "一個角度"
-                        }
-                    }
-                ]
+                "Answer":  "銳角"
             }
         ]
     ]
