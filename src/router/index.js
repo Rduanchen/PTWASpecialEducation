@@ -46,9 +46,9 @@ const router = createRouter({
       component:()=>import("@/components/ImageWithText.vue"),
     },
     {
-      path: '/Water' ,
-      name: 'Water',
-      component: () => import('@/components/Water.vue'),
+      path: '/test', 
+      name: 'test',
+      component: () => import('@/components/test.vue'),
     },
     {
       path: '/Calculator',
@@ -73,8 +73,77 @@ const router = createRouter({
       path: '/DrawImageTable',
       name: 'DrawImageTable',
       component: () => import('@/components/DrawImageTable.vue'),
+    },
+    {
+      path: '/DrawImage',
+      name: 'DrawImage',
+      component: () => import('@/components/DrawImage.vue'),
+    },
+    {
+      path: '/SVGtest',
+      name: 'SVGtest',
+      component: () => import('@/components/SVGtest.vue'),
+    },
+    {
+      path: '/NumberBoard',
+      name: 'NumberBoard',
+      component: () => import('@/components/NumberBoard.vue'),
+    },
+    {
+      path: '/Numberline',
+      name: 'Numberline',
+      component: () => import('@/components/NumberLine.vue'),
+    },
+    {
+      path: '/TestParentNode',
+      name: 'TestParentNode',
+      component: () => import('@/components/TestParentNode.vue'),
+    },{
+      path: '/PairingGame',
+      name: 'PairingGame',
+      component: () => import('@/views/GameTemplate/PairingGame.vue'),
+    },
+    {
+      path: '/NumberlineV2',
+      name: 'NumberlineV2',
+      component: () => import('@/components/NumberLineV2.vue'),
+    },
+    {
+      path: '/NumberLock',
+      name: 'NumberLock',
+      component: () => import('@/views/GameTemplate/NumberLock.vue'),
+    },
+    {
+      path: '/MarkDownLite',
+      name: 'MarkDownLite',
+      component: () => import('@/components/Markdown.vue'),
+    },
+    {
+      path: '/LinkGameV2',
+      name: 'LinkGameV2',
+      component: () => import('@/views/GameTemplate/LinkGameV2.vue'),
+    },
+    {
+      path: '/CalculatorV2',
+      name: 'CalculatorV2',
+      component: () => import('@/components/calculatorV2.vue'),
+    },
+    {
+      path:'/Calculator',
+      name:'Calculator',
+      component:()=>import('@/components/calculator.vue'),
+    },
+    {
+      path:'/CalculatorV3',
+      name:'Calculator',
+      component:()=>import('@/components/calculatorV3.vue'),
+    },
+    {
+      path:'/CalculatorGame',
+      name:'CalculatorGame',
+      component:()=>import('@/views/GameTemplate/CalculatorGame.vue'),
     }
-    ]
+  ]
 });
 router.beforeEach((to, from, next) => {
   console.warn(`route: ${from.path} -> ${to.path}`);

@@ -1,7 +1,7 @@
 {
     "id": "MA3013",
     "introvideo": "src",
-    "TotalLevel": 5,
+    "TotalLevel": 6,
     "GameType": "NumberInputGame",
     "GameConfig": {},
     "Questions": [
@@ -66,6 +66,26 @@
                     "Data" : {
                         "Src": "level5.png",
                         "Alt": "一個方格板上面有積木"
+                    }
+                }
+            ]
+        },
+        {
+            "Question": "請問左方的圖片是多少平方公分呢",
+            "Answer": "6",
+            "SlotComponents": [
+                {
+                    "Name": "NumberLine",
+                    "Data": {
+                        "Unit": "Number",
+                        "Start": 0,
+                        "End": 1000,
+                        "Increment": 100,
+                        "Annotate": 200,
+                        "Blank": {
+                            "100": "100",
+                            "200": "200"
+                        }
                     }
                 }
             ]

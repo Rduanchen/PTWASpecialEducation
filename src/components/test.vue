@@ -1,29 +1,39 @@
 <template>
-    <div>
-        <!-- Your HTML template code goes here -->
-    </div>
+<div class="Outter">
+  <div class="Inner"></div>
+  <div class="Inner" v-for="items in 10">
+  </div>
+  <div class="Inner"></div>
+
+  <div class="Inner"></div>
+  <div class="Inner" v-for="items in 10">
+  </div>
+  <div class="Inner"></div>
+</div>
 </template>
 
 <script>
 export default {
-    name: 'Test',
-    data() {
-        return {
-            // Your data properties go here
-        };
-    },
-    methods: {
-        // Your methods go here
-    },
-    computed: {
-        // Your computed properties go here
-    },
-    mounted() {
-        // Code to run when the component is mounted goes here
-    },
-};
+  name: 'Test',
+  data() {
+    return {
+      test: 'test'
+    }
+  },
+}
 </script>
 
 <style scoped>
-/* Your component-specific styles go here */
+/* Your component's styles go here */
+.Outter{
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 0.5fr repeat(10, 1fr) 0.5fr;
+    gap: 10px;
+    .Inner{
+      max-height: 30vh;
+      background-color: red;
+    }
+}
 </style>

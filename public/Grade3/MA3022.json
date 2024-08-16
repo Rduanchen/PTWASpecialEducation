@@ -1,7 +1,7 @@
 {
-    "id":"MA3021",
+    "id":"MA3022",
     "introvideo": "src",
-    "TotalLevel": 3,
+    "TotalLevel": 4,
     "GameType" : "CompareGame",
     "IntroText": {
         "Type": "PlainText",
@@ -18,45 +18,25 @@
         {
             "QuestionText": "比大小",
             "Description": "比大小，選出最大的數字",
+            "SlotComponentVerifycation": true,
             "OptionBarTitle": "將正確的符號拖曳到上面的框框中",
             "Datas": [
                 [
                     {
                         "Name" : "CircleChart",
                         "Data" : {
-                            "Mother" : 5,
-                            "Child" : 3
+                            "Text": "1",
+                            "Mother" : 6,
+                            "Child" : 6,
+                            "Unit" : "盒"
                         }                        
                     },
                     {
                         "Name" : "CircleChart",
-                        "Data" : {
-                            "Mother" : 5,
-                            "Child" : 2
-                        }                        
-                    }
-                ]
-            ],
-            "Answer": ["Big"]
-        },
-        {
-            "QuestionText": "比大小",
-            "Description": "比大小，選出最大的數字",
-            "OptionBarTitle": "將正確的符號拖曳到上面的框框中",
-            "Datas": [
-                [
-                    {
-                        "Name" : "CoulorBarChart",
                         "Data" : {
                             "Mother" : 6,
-                            "Child" : 3
-                        }                        
-                    },
-                    {
-                        "Name" : "CoulorBarChart",
-                        "Data" : {
-                            "Mother" : 5,
-                            "Child" : 2
+                            "Child" : 2,
+                            "Unit" : "盒"
                         }                        
                     }
                 ]
@@ -67,25 +47,81 @@
             "QuestionText": "比大小",
             "Description": "比大小，選出最大的數字",
             "OptionBarTitle": "將正確的符號拖曳到上面的框框中",
+            "SlotComponentVerifycation": true,
             "Datas": [
                 [
                     {
-                        "Name" : "ImageTable",
+                        "Name" : "CoulorBarChart",
                         "Data" : {
-                            "Mother" : 5,
-                            "Child" : 2,
-                            "Src" : "1.png",
-                            "Alt" : "1"
+                            "Text": "1",
+                            "Mother" : 6,
+                            "Child" : 6,
+                            "Unit": "盒"
                         }                        
                     },
                     {
-                        "Name" : "ImageTable",
+                        "Name" : "CoulorBarChart",
                         "Data" : {
                             "Mother" : 5,
-                            "Child" : 2,
-                            "Src" : "1.png",
-                            "Alt" : "1"
-                        }                                  
+                            "Child" : 4,
+                            "Unit": "盒"
+                        }                        
+                    }
+                ]
+            ],
+            "Answer": ["Big"]
+        },
+        {
+            "QuestionText": "比大小",
+            "Description": "比大小，選出最大的數字",
+            "OptionBarTitle": "將正確的符號拖曳到上面的框框中",
+            "SlotComponentVerifycation": true,
+            "Datas": [
+                [
+                    {
+                        "Name" : "DrawImage",
+                        "Data": {
+                            "Mother": 4,
+                            "Child": 2,
+                            "Unit": "盒",
+                            "Object": "apple",
+                            "Alt": "image"
+                        }
+                    },
+                    {
+                        "Name" : "DrawImage",
+                        "Data": {
+                            "Mother": 12,
+                            "Child": 2,
+                            "Unit": "盒",
+                            "Object": "apple",
+                            "Alt": "image"
+                        }                                 
+                    }
+                ]
+            ],
+            "Answer": ["Big"]
+        },
+        {
+            "QuestionText": "比大小",
+            "Description": "比大小，選出最大的數字",
+            "OptionBarTitle": "將正確的符號拖曳到上面的框框中",
+            "SlotComponentVerifycation": true,
+            "Datas": [
+                [
+                    {
+                        "Name" : "NumberBoard",
+                        "Data": {
+                            "Unit": ["時", "分", "秒"],
+                            "Number": 1234
+                        }
+                    },
+                    {
+                        "Name" : "NumberBoard",
+                        "Data": {
+                            "Unit": ["時", "分", "秒"],
+                            "Number": 1234
+                        }                                 
                     }
                 ]
             ],

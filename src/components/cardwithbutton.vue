@@ -1,23 +1,20 @@
 <template>
-<div>
-    <div class="card" v-if="this.imageURL != undefined && this.imageURL != ''">
-            <img :src="imageURL" class="card-img-top" :alt="altText">
-        <div class="card-body" v-if="this.Text != undefined && this.imageURL != '' ">
-            <p class="card-text text-center h3">{{ Text }}</p>
-        </div>
-    </div>
-    <div class="card" v-else>
-        <p class="h3 text-center">{{ Text }}</p>
-    </div>
+<div class="OutterContainer">
+    <img :src="imageURL" class="" :alt="altText" v-if="this.imageURL != undefined && this.imageURL != ''">
+    <p class="h3">{{ Text }}</p>
 </div>
 </template>
 <script>
+import ImageContainer from './ImageContainer.vue';
 export default {
     name: 'CardWithButton',
     data() {
         return {
             
         };
+    },
+    components: {
+        ImageContainer
     },
     props: {
         Text: {
@@ -31,13 +28,27 @@ export default {
             type: String,
         }
     },
+    computed: {
+        SentData() {
+            return {
+                Src: this.imageURL,
+            }
+        }  
+    },
     mounted() {
     },
 };
 </script>
 
 <style scoped>
-.card {
-    width: 8rem;
+.OutterContainer{
+    display: grid;
+    grid-template-rows: 5fr 1fr;
+    width: 100%;
+    height: 100%;
+    img{
+        width: 100%;
+        height: 100%;
+    }
 }
 </style>

@@ -1,20 +1,34 @@
 <template>
 <div class="OutterContainer">
+  <div class="TextOnly" v-if="this.Data.Text != undefined">
+    <p class="Division" >{{ this.Data.Text }}{{ this.Data.Unit }}</p>
+  </div>
+  <div class="Division" v-else>
+    <p class="Child">{{ this.childScore }}</p>
+    <hr class="Fraction-line">
+    <p class="Mother">{{ this.motherScore }}</p>
+  </div>
+  <p v-if="this.Data.Text == undefined">{{ this.Data.Unit }}</p>
   <div class="container" ref="container">
     <canvas ref="canvas" @click="handleClick"></canvas>
   </div>
 </div>
 </template>
 <style scoped>
+.TextOnly{
+  grid-column: 1 / 3;
+}
 .OutterContainer{
   width: 100%;
   height: 100%;
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  font-size: x-large;
+  grid-template-columns: 1fr 1fr 4fr;
 }
 .container {
   display: flex;
   flex-direction: row;
+  grid-column: 3 / 4;
   gap : 1rem;
   width: 100%;
   height: 100%;
@@ -23,12 +37,24 @@
   align-items: center;
 }
 
-.Division {
-  width: 20%;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+.Division{
+    display: inline-block;
+    text-align: center;
+    font-size: 2rem;
+    line-height: 2;  /* 設置行高 */
+    vertical-align: middle; /* 垂直對齊 */
+    .Child{
+        margin: 0;
+    }
+    .Mother{
+        margin: 0;
+    }
+    .Fraction-line {
+        margin: 0;
+        border: none;
+        border-top: 2px solid black;
+        width: 2em;
+    }
 }
 canvas {
   display: block;
@@ -56,12 +82,14 @@ export default {
       centerX: 0,
       centerY: 0,
       radius: 0,
+      AnswerRecord: Array(this.Data.Mother).fill(false),
     };
   },
   mounted() {
     this.resizeCanvas();
     window.addEventListener('resize', this.resizeCanvas);
     this.drawPieChart();
+    this.AnswerRecord = []
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.resizeCanvas);
@@ -110,9 +138,25 @@ export default {
       const x = event.clientX - rect.left;
       const y = event.clientY - rect.top;
       const index = this.getSegmentIndex(x, y);
+      this.AnswerRecord[index] = !this.AnswerRecord[index];
       this.colors[index] = this.colors[index] ? null : `hsl(${Math.random() * 360}, 100%, 50%)`; // 隨機顏色或取消顏色
       this.drawPieChart();
+      this.ReplyAnswer();
     },
+    ReplyAnswer(){
+      let temp = 0;
+      this.AnswerRecord.forEach(element => {
+        if (element == true){
+          temp += 1;
+        }
+      });
+      if (temp == this.childScore){
+        this.$emit('ReplyAnswer', true)
+      }
+      else{
+        this.$emit('ReplyAnswer', false)
+      }
+    }
   },
 };
 </script>

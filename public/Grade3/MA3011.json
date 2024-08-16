@@ -5,7 +5,7 @@
         "Type": "PlainText",
         "Content": "小明剛剛學會看時鐘，但是他在寫作業的時候忘記了部分的答案，請聰明的你/妳幫助小明檢查答案"
     },
-    "TotalLevel": 5,
+    "TotalLevel": 6,
     "GameType": "TrueFalseGame",
     "GameConfig": {
         "GlobalTitle": "請問以下的時間正確嗎?"
@@ -79,6 +79,28 @@
                 "Data": {
                     "Src": "level5.png",
                     "Alt": " dd"
+                }
+            }]
+        },
+        {
+            "Question": "100cc",
+            "Answer": true,
+            "SlotComponents" : [{
+                "Name": "Water",
+                "Data": {
+                    "Scale": 2000,
+                    "Ml": 100
+                }
+            }]
+        },{
+            "Question": "100cc",
+            "Answer": true,
+            "SlotComponents" : [{
+                "Name" : "Clock",
+                "Data" : {
+                    "hour": 3,
+                    "min": 20,
+                    "sec": 0
                 }
             }]
         }

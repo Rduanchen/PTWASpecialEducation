@@ -1,77 +1,49 @@
 <template>
     <div class="container">
-        <div class=" d-flex flex-row justify-content-center">
-            <p class="class h1 align-self-center">{{QuestionWord}}</p>
+        <div class="Header">
+            <p class="h2">{{QuestionWord}}</p>
         </div>
-        <div class="row justify-content-between d-flex flex-row align-items-stretch justify-content-center">
-            <div class="col-6 align-content-between">
-                <p class="h2">{{ this.GameData.Question[0].InitBox }}</p>
-                <draggable :list="this.Items" item-key="id" :sort="false" group="SelectItem" style="width: 100%;min-height: 75%;" class="card d-flex flex-row justify-content-center flex-wrap col-12 col-md-6 col-lg-4">
+        <div class="QuestionArea">
+            <div class="Selection">
+                <p class="h2">{{ this.GameData.InitBox }}</p>
+                <draggable :list="this.Items" item-key="id" :sort="false" group="SelectItem" class="Draggroup">
                     <template #item="{ element }">
-                        <cardwithbutton :imageURL="element['img']" :Text="element['text']" :altText="element['alt']" class="mx-auto my-2"></cardwithbutton>
+                        <div class="DragItem">
+                            <component :is="element['Name']" :Data="element['Data']" :ID="this.id"></component>
+                        </div>
                     </template>
                 </draggable>
             </div>
-            <div class="col-6"> 
-                <div v-for="(items,index) in Groups">
-                    <h1>{{ this.GameData.Answer[index].GroupName }}</h1>
-                    <div class="row">
-                        <draggable :list="Groups[index]" item-key="id" :sort="false" group="SelectItem" class="card d-flex flex-row justify-content-center flex-wrap">
-                            <template #item="{ element }">
-                                <cardwithbutton :imageURL="element['img']" :Text="element['text']" :altText="element['alt']" class="mx-auto my-2"></cardwithbutton>
-                            </template>
-                        </draggable>
-                    </div>
+            <div class="PutGroup"> 
+                <div v-for="(items,index) in Groups" class="Group">
+                    <p class="h2">{{ this.GameData.Answer[index].GroupName }}</p>
+                    <draggable :list="Groups[index]" item-key="id" :sort="false" group="SelectItem" class="ItemContainer">
+                        <template #item="{ element }">
+                            <div class="DragItem">
+                                <component :is="element['Name']" :Data="element['Data']" :ID="this.id"></component>
+                            </div>
+                        </template>
+                    </draggable>
                 </div>
             </div>
-            <div class="row">
-                <button type="button" class="btn btn-primary m-3" v-on:click="CheckAnswer()">送出答案</button>
-            </div>
         </div>
+        <button type="button" class="Submit" v-on:click="CheckAnswer()">送出答案</button>
     </div>
 </template>
 <script>
-/**
- * FIXME:
- * 1. Now the Game only Support Two Groups.
- * 2. Now the Game only Support Text. We have toadd image here
- * 3. Add Opton Feature and Game Config Parameters.
- * 
- * Game Description:
- * You can classify the items into different groups.
- * 
- * Game Data Structure Sample:
- * "Question": [
-                {
-                    "Question":"請將下列物品分類"
-                },
-                {
-                    "text": "1", //The text that display on card
-                    "img": "../../assets/images/pics/cover_info.png"  //The image route. Please make sure the image is in the right place
-                },
-                // You can add more items if you want
-            ],
-            "Answer": [
-                {
-                    "GroupName": "組別目前只能兩個",
-                    "Items":["1","2","3"]
-                },
-                {
-                    "GroupName": "未加上照片功能",
-                    "Items":["4","5"]
-                }
-                // Now we only support two groups
-            ]
-        }
- */
 import draggable from 'vuedraggable';
 import cardwithbutton from '@/components/cardwithbutton.vue'
 import { GamesGetAssetsFile } from '@/utilitys/get_assets.js';
+import { defineAsyncComponent } from 'vue';
 export default {
     name: 'ClassifyGame',
     components: {
         draggable,
-        cardwithbutton
+        cardwithbutton,
+        TextOnly: defineAsyncComponent(() => import('@/components/TextOnly.vue')),
+        ImageContainer: defineAsyncComponent(() => import('@/components/ImageContainer.vue')),
+        Clock: defineAsyncComponent(() => import('@/components/Clock.vue')),
+        Water: defineAsyncComponent(() => import('@/components/Water.vue')),
     },
     emits: ['play-effect','add-record','next-level'],
     props: {
@@ -92,35 +64,22 @@ export default {
         return {
             QuestionWord: '',
             GroupID:0,
-            // Group1:[],
-            // Group2:[],
             Groups:[],
             Items:[],
         }
     },
     created(){
         // this.icon= icon1;
-        this.QuestionWord=this.GameData.Question[0].Question
+        this.QuestionWord=this.GameData.Text
         for(var i in this.GameData.Answer){
             this.Groups.push([])
         }
-        // this.QuestionWord=this.question[0].Question
-        console.log(this.QuestionWord)
-        for(var i=1;i<this.GameData.Question.length;i++){
-            let temp={
-                "text":this.GameData.Question[i].text,
-                "img":GamesGetAssetsFile(this.id,this.GameData.Question[i].img),
-                "alt":this.GameData.Question[i].alt
-            };
-            console.log(temp.img)
-            this.Items.push(temp);
-        }
+        this.Items = this.GameData.Question;
     },
     methods: {
         CheckAnswer(){
             // This code will walk through all the groups and check if the answer is right
             // Only when all the groups are right, the game will return true.
-
             var member=0;
             for(var i in this.Groups){
                 if(this.Groups[i].length!=this.GameData.Answer[i]["Items"].length){
@@ -152,11 +111,77 @@ export default {
     }
 }
 </script>
-<style>
-
-.card {
-  min-height: 75px;
+<style scoped lang="scss">
+.container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+    .Header{
+        border: solid 1px #aaa;
+        border-radius: 15px;
+        padding: 0.5rem;
+        align-self: stretch;
+        margin-bottom: 1rem;
+    }
+    .Submit{
+        border: solid 1px #aaa;
+        border-radius: 15px;
+        background-color: #FFF;
+        align-self: flex-end;
+        height: 3rem;
+        width: 10rem;
+        margin-top: 0.5rem;
+    }
+    .QuestionArea{
+        display: grid;
+        grid-template-columns: 2fr 7fr;
+        gap: 1rem;
+        width: 100%;
+        height: 65vh;
+        .Selection{
+            border: solid 1px;
+            border-radius: 15px;
+            padding: 1rem;
+            .Draggroup{
+                height: 90%;
+                padding: 1rem;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                border: solid 3px red;
+                border-radius: 15px;
+                gap: 1rem;
+                .DragItem{
+                    cursor: pointer;
+                    display: flex;
+                    justify-content: center;
+                }
+            }
+        }
+        .PutGroup{
+            border: solid 1px;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: row;
+            padding: 1rem;
+            .Group{
+                flex-grow: 1;
+                margin: 0 1rem;
+                padding: 0 1rem;
+                .ItemContainer{
+                    border: solid 3px green;
+                    border-radius: 15px;
+                    height: 90%;
+                    .DragItem{
+                        cursor: pointer;
+                        display: flex;
+                        justify-content: center;
+                        border: solid 3px blue;
+                    }   
+                }
+            }
+        }
+    }
 }
-
 </style>
 
