@@ -124,9 +124,29 @@ const router = createRouter({
       component: () => import('@/views/GameTemplate/LinkGameV2.vue'),
     },
     {
-      path : '/Track',
-      name : 'Track',
-      component : () => import('@/views/GameTemplate/Track.vue'),
+      path: '/Track',
+      name: 'Track',
+      component: () => import('@/views/GameTemplate/Track.vue'),
+    },
+    {
+      path: '/CalculatorV2',
+      name: 'CalculatorV2',
+      component: () => import('@/components/calculatorV2.vue'),
+    },
+    {
+      path:'/Calculator',
+      name:'Calculator',
+      component:()=>import('@/components/calculator.vue'),
+    },
+    {
+      path:'/CalculatorV3',
+      name:'Calculator',
+      component:()=>import('@/components/calculatorV3.vue'),
+    },
+    {
+      path:'/CalculatorGame',
+      name:'CalculatorGame',
+      component:()=>import('@/views/GameTemplate/CalculatorGame.vue'),
     }
   ]
 });

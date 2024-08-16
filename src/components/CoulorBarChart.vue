@@ -19,9 +19,7 @@
 </div>
 </template>
 <script>
-import { get } from 'jquery';
 import TextOnly from './TextOnly.vue';
-
 export default {
 name: 'CoulorBarChart',
     data() {
