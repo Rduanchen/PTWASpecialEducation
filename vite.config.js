@@ -7,7 +7,7 @@ import { quasar, transformAssetUrls } from '@quasar/vite-plugin'
 
 import inject from '@rollup/plugin-inject'
 export default defineConfig({
-    base: '/ptwa/',
+    base: '/PTWASpecialEducation/',
     plugins: [
         vue(),
         inject({
