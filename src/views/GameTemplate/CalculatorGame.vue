@@ -147,8 +147,7 @@
         </div>
 </div>
 </div>
-</template>
-        
+</template> 
 <script>
 import draggable from 'vuedraggable';
 import { defineAsyncComponent } from 'vue';
