@@ -1,4 +1,17 @@
 <template>
+<<<<<<< HEAD
+<div>
+<div class="Head">
+    <p class="h1 Title" v-if="this.GameData.QuestionText && this.GameData.QuestionText!= ''">{{ this.GameData.QuestionText }}</p>
+    <p class="h2 SubTitle" v-if="this.GameData.Description && this.GameData.Description != ''">{{ this.GameData.Description }}</p>
+</div>
+<hr>
+{{ this.Answers }}
+{{ this.Answered }}
+{{ this.ImageDatas }}
+{{ this.Symbol }}
+=======
+>>>>>>> develop
 <div class="OutterContainer">
     <div class="Head">
         <p class="h1 Title" v-if="this.GameData.QuestionText && this.GameData.QuestionText!= ''">{{ this.GameData.QuestionText }}</p>
