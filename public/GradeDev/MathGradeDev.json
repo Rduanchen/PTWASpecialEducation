@@ -16,6 +16,12 @@
                         "Name": "時鐘問答",
                         "Description": "找找看現在幾點呢?",
                         "Img": "MA3011.png"
+                    },
+                    {
+                        "id": "Dev0103",
+                        "Name": "NumberLock",
+                        "Description": "找找看現在幾點呢?",
+                        "Img": "MA3011.png"
                     }
                 ]
             }

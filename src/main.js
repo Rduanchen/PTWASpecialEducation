@@ -21,6 +21,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 
 // import "./assets/MyVariable.scss";
 
+
 const app = createApp(App)
 
 app.use(router)

@@ -15,7 +15,6 @@
         </div>
     </div>
 </div>
-
 <div class="Container container">
     <div class="card CaluculatorBody">
         <p>{{ this.GameData.Question }}</p>

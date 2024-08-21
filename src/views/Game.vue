@@ -559,6 +559,7 @@ import CompareGame from "./GameTemplate/CompareGame.vue";
 import EffectWindow from "@/components/EffectWindow.vue";
 import PairingGame from "./GameTemplate/PairingGame.vue";
 import WhackaMole from "./GameTemplate/WhackaMole.vue";
+import SelectGameMulti from "./GameTemplate/SelectGameMulti.vue";
 export default {
   data() {
     return {
@@ -1068,6 +1069,12 @@ export default {
       import("@/views/GameTemplate/WhackaMole.vue")
     ),
     Maze: defineAsyncComponent(() => import("@/views/GameTemplate/Maze.vue")),
+    NumberLock: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/NumberLock.vue")
+    ),
+    SelectGameMulti: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/SelectGameMulti.vue")
+    ),
     EffectWindow,
   },
 };

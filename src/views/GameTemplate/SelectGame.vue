@@ -34,7 +34,6 @@
         </div>
     </div>
 </template>
-
 <script>
 import { GamesGetAssetsFile } from '@/utilitys/get_assets.js';
 import { defineAsyncComponent } from 'vue';

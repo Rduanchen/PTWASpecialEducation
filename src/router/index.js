@@ -146,6 +146,11 @@ const router = createRouter({
       path: '/LinktoImage',
       name: 'LinktoImage',
       component: () => import('@/views/GameTemplate/LinktoImage.vue'),
+    },
+    {
+      path: '/SelectGameMulti',
+      name: 'SelectGameMulti',
+      component: () => import('@/views/GameTemplate/SelectGameMulti.vue'),
     }
   ]
 });
