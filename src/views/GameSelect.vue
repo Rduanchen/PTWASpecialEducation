@@ -1,20 +1,20 @@
 <template>
   <div>
     <header>
-      <nav class="container navbar navbar-expand-md sticky-top justify-content-around" style="width: 100%;">
-          <a class="navbar-brand mt-2 mb-2 " href="#" alt="Home">
-              <img src="@/assets/images/nav_bar/logo.png" />
-          </a>
-          <form class="mx-auto">
-            <button class="btn btn-primary m-1" @click="ChangeSubject('Math')">{{ Subjects['Math'] }}</button>
-            <button class="btn btn-primary m-1" @click="ChangeSubject('Chinese')" >{{ Subjects['Chinese'] }}</button>
-            <button class="btn btn-primary m-1" @click="ChangeSubject('Technology')" >{{ Subjects['Technology'] }}</button>
-          </form>
-          <div class="SearchGroup d-flex">
-            <input class="form-control" :placeholder=" this.ShowSearch?'按下esc可以返回':'輸入ID或者標題' " v-model="SearchInput" @keyup.enter="SearchGame()" @keyup.esc="Return2Menu()">
-            <button class="btn btn-primary text-nowrap" type="submit" v-on:click="SearchGame()">搜尋</button>
-          </div>
-        </nav>
+      <nav class="container navbar navbar-expand-md sticky-top" style="width: 100%;">
+        <a class="navbar-brand mt-2 mb-2 " href="#" alt="Home">
+            <img src="@/assets/images/nav_bar/logo.png" />
+        </a>
+        <form class="mx-auto">
+          <button class="btn btn-primary m-1" @click="ChangeSubject('Math')">{{ Subjects['Math'] }}</button>
+          <button class="btn btn-primary m-1" @click="ChangeSubject('Chinese')" >{{ Subjects['Chinese'] }}</button>
+          <button class="btn btn-primary m-1" @click="ChangeSubject('Technology')" >{{ Subjects['Technology'] }}</button>
+        </form>
+        <div class="SearchGroup d-flex">
+          <input class="form-control" :placeholder=" this.ShowSearch?'按下esc可以返回':'輸入ID或者標題' " v-model="SearchInput" @keyup.enter="SearchGame()" @keyup.esc="Return2Menu()">
+          <button class="btn btn-primary text-nowrap" type="submit" v-on:click="SearchGame()">搜尋</button>
+        </div>
+      </nav>
     </header>
     <section v-if="ShowMenu">
       <div class="d-flex flex-column align-items-center d-grid gap-5 justify-content-center Subject_container"  style="width: 100%; height: 90vh;">

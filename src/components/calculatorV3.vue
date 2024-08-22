@@ -1,23 +1,24 @@
 <template>
 <div class="Container">
     <div class="CalculatorBody">
+        {{ SymbolEditable }}
         <div class="unit btn-group" style="flex-direction: row-reverse;">
             <div class="units" v-for="item in Title">
                 <button type="button" class="btn btn-primary" v-if="item != null">{{ item }}</button>
                 <div class="space" v-if="item == null"></div>
             </div>
         </div>
-        <div class="Carry btn-group">
-            <div class="Carrys" v-for="(items,cnt) in Carry">
-                <button ref="Carry" :class="{'on-line':this.CarryLine[cnt]}">
+        <div class="Carry btn-group" v-for="(carries,Row) in Carry">
+            <div class="Carrys" v-for="(items,cnt) in carries">
+                <button ref="Carry" :class="{'on-line':this.CarryLine[Row][cnt]}">
                     {{ items }}
                     <q-menu anchor="top left" self="bottom left" class="q-menu">
                         <div class="Btns">
-                            <button @click="CarryInput(cnt,0)">0</button>
-                            <button v-for="index in 5" @click="CarryInput(cnt,index)">{{index}}</button>
-                            <button v-for="index in 5" @click="CarryInput(cnt,index+5)">{{index+5}}</button>
-                            <button @click="CarryInput(cnt,'/')">/</button>
-                            <button @click="CarryInput(cnt,'delete')"><q-icon name="bi-trash"></q-icon></button>
+                            <button @click="CarryInput(Row,cnt,0)">0</button>
+                            <button v-for="index in 5" @click="CarryInput(Row,cnt,index)">{{index}}</button>
+                            <button v-for="index in 5" @click="CarryInput(Row,cnt,index+5)">{{index+5}}</button>
+                            <button @click="CarryInput(Row,cnt,'/')">/</button>
+                            <button @click="CarryInput(Row,cnt,'delete')"><q-icon name="bi-trash"></q-icon></button>
                         </div>
                     </q-menu>
                 </button>
@@ -28,7 +29,7 @@
             <div class="NumberRow btn-group" v-for="(items,Row) in Num_list">
                 <button v-if="Row != 0">
                     {{ Sy_list[Row] }}
-                    <q-menu anchor="top left" self="bottom left" class="q-menu">
+                    <q-menu anchor="top left" self="bottom left" class="q-menu" v-if="this.SymbolEditable[Row]">
                         <div class="Btns">
                             <button @click="SymbolInput(Row,'+')">+</button>
                             <button @click="SymbolInput(Row,'-')">-</button>
@@ -39,7 +40,7 @@
                 <div class="NumbersContainer btn-group">
                     <button v-for="(item,Col) in items" :class="{ 'on-line': this.ButtonLine[Row][Col]}">
                         {{item}}
-                        <q-menu anchor="top left" self="bottom left" class="q-menu">
+                        <q-menu anchor="top left" self="bottom left" class="q-menu" v-if="this.NumberEditable[Row][Col]">
                             <div class="Btns">
                                 <button @click="NumInput(Row,Col,0)">0</button>
                                 <button v-for="index in 5" @click="NumInput(Row,Col,index)">{{index}}</button>
@@ -72,6 +73,7 @@
             <button @click="AddRow">新增一行</button>
             <button @click="removerow">移除最後一行</button>
             <button @click="clear">清除所有數字</button>
+            <button @click="CheckAnswer">檢查答案</button>
         </div>
     </div>
 </div>
@@ -95,20 +97,32 @@ export default {
             ButtonLine: [],
             CarryLine: [],
             AnswerLine: [],
+            NumberEditable: [],
+            SymbolEditable: [],
             NumberRow: 2,
-            NumberAmount: 3,
-            // CustomeUnit: ["個位","十位","百位","千位","萬位"],
+            NumberAmount: 8,
             Data: {
+                Unit: "Time",
+                CarryAmount: 2,
+                CustomeUnit: undefined,
                 Preset: {
-                    CarryAmount: 2,
-                    Carry: [],
                     Number: [
-
+                        "123",
+                        "456"
                     ],
-                    Symbol: [
-
+                    Symbol: '-'
+                },
+                Answer: {
+                    Carry: [
+                        '4',
+                        '8'
                     ],
-                    Answer: [ ]
+                    Answer: '34',
+                    Number: [
+                        "123",
+                        "456"
+                    ],
+                    Symbol: '-'
                 }
             },
             CustomeUnit: undefined,
@@ -140,8 +154,8 @@ export default {
         };
     },
     mounted(){
-
-        if (this.CustomeUnit != undefined){
+        this.Data = this.GameData;
+        if (this.Data.CustomeUnit != undefined){
             for(var i = 0; i<this.CustomeUnit.length; i++){
                 this.Title.push(this.CustomeUnit[i]);
             }
@@ -150,36 +164,51 @@ export default {
                 this.Title.push(this.UnitPreset.Units[this.UnitPreset.UseUnit].Title[i]);
             }
         }
-
         for(var i = 0; i<=this.NumberAmount; i++){
-            this.Carry.push("");
-            this.CarryLine.push(false);
+            
             this.Ans.push("");
             this.AnswerLine.push(false);
+        }
+
+        for(var i = 0; i < this.Data.CarryAmount; i++){
+            let temp = [];
+            let templine = [];
+            for(var x = 0; x < this.NumberAmount; x++){
+                temp.push("");
+                templine.push(false);
+            }
+            this.Carry.push(temp);
+            this.CarryLine.push(templine);
         }
         for(var x = 0; x < this.NumberRow ; x++){
             console.log('test');
             let temp = [];
             this.Sy_list.push("");
+            this.SymbolEditable.push(true);
             let tempNumber = [];
+            let tempeditable = [];
             for(var i = 0; i<this.NumberAmount; i++){
                 temp.push("");
                 tempNumber.push(false);
+                tempeditable.push(true);
             }
             this.Num_list.push(temp);
             this.ButtonLine.push(tempNumber);
+            this.NumberEditable.push(tempeditable);
         }
+        this.UseUnit(this.Data.Unit);
+        this.PresetCalculator();
     },
     methods: {
-        CarryInput(index,num){
+        CarryInput(Row,index,num){
             if (num == 'delete'){
-                this.Carry[index] = "";
+                this.Carry[Row][index] = "";
             }
             else if (num == '/'){
-                this.CarryLine[index] = !this.CarryLine[index];
+                this.CarryLine[Row][index] = !this.CarryLine[index];
             }
             else{
-                this.Carry[index] = num;
+                this.Carry[Row][index] = num;
             }
         },
         NumInput(Row,Col,num){
@@ -204,6 +233,20 @@ export default {
                 this.Ans[index] = num;
             }
         },
+        PresetCalculator: function(){
+            for(var i in this.Data.Preset.Number){
+                let temp = this.Num_list[i].length-1;
+                if (this.Data.Preset.Symbol != undefined && this.Data.Preset.Symbol != null && this.Data.Preset.Symbol != ""){                    
+                    this.Sy_list[i] = this.Data.Preset.Symbol;
+                    this.SymbolEditable[i] = false;
+                }
+                for(var j = this.Data.Preset.Number[i].length - 1; j >= 0; j--){
+                    this.Num_list[i][temp] = this.Data.Preset.Number[i][j];
+                    this.NumberEditable[i][temp] = false;
+                    temp--;
+                }
+            }
+        },
         SymbolInput(index,num){
             this.Sy_list[index] = num;
         },
@@ -218,7 +261,6 @@ export default {
                 this.Ans = [];
                 this.ButtonLine = [];
                 this.CarryLine = [];
-
                 for(var i = 0; i<this.NumberAmount; i++){
                     this.Title.push(this.UnitPreset.Units[this.UnitPreset.UseUnit].Title[i]);
                 }
@@ -263,9 +305,52 @@ export default {
             this.Num_list.push(temp);
             this.ButtonLine.push(tempNumber);
         },
+        CheckAnswer(){
+            let AnswerCheck = true;
+            for(var i in this.Data.Answer.Number){
+                let temp = this.Num_list[i].length - 1;
+                for(var j = this.Data.Answer.Number[i].length - 1; j >= 0; j--){
+                    if (this.Num_list[i][temp] != this.Data.Answer.Number[i][j]){
+                        AnswerCheck = false;
+                        console.log('Number Wrong');
+                    }
+                    temp--;
+                }
+            }
+            let temp = this.Ans.length - 1;
+            for(var i = this.Data.Answer.Answer.length - 1; i >= 0; i--){
+                if (this.Ans[temp] != this.Data.Answer.Answer[i]){
+                    AnswerCheck = false;
+                    console.log('Answer Wrong');
+                }
+                temp--;
+            }
+            //Carry
+            for(var i in this.Data.Answer.Carry){
+                let temp = this.Carry[i].length - 1;
+                for(var j = this.Data.Answer.Carry[i].length - 1; j >= 0; j--){
+                    if (this.Carry[i][temp] != this.Data.Answer.Carry[i][j]){
+                        AnswerCheck = false;
+                        console.log('Carry Wrong');
+                    }
+                    temp--;
+                }
+            }
+            if(AnswerCheck){
+                this.$emit('play-effect', 'CorrectSound');
+                this.$emit('add-record', [this.Data.Answer, this.Answer, "正確"]);
+                this.$emit('next-question');
+            }
+            else{
+                this.$emit('play-effect', 'WrongSound',)
+                this.$emit('add-record', [this.Data.Answer, this.Answer, "錯誤"]);
+            }
+        },
         clear: function(evt) {
             for(var x in this.Carry){
-                this.Carry[x] = "";
+                for(var y in this.Carry[x]){
+                    this.Carry[x][y] = "";
+                }
             }
             for(var x in this.Ans){
                 this.Ans[x] = "";
@@ -278,6 +363,7 @@ export default {
             for(var x in this.Sy_list){
                 this.Sy_list[x] = "";
             }
+            this.PresetCalculator();
         }
     }
 };
