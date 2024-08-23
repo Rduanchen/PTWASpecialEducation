@@ -1,195 +1,430 @@
 <template>
-<div>
-    <div class="TestBtn">
-        <div v-for="item in Unit" class="Unit BtnContainer">
-            <q-btn color="white" text-color="black" :label="item" ref="Unit">
-            </q-btn>
+<div class="Container">
+    <div class="CalculatorBody">
+        {{ SymbolEditable }}
+        <div class="unit btn-group" style="flex-direction: row-reverse;">
+            <div class="units" v-for="item in Title">
+                <button type="button" class="btn btn-primary" v-if="item != null">{{ item }}</button>
+                <div class="space" v-if="item == null"></div>
+            </div>
         </div>
-        <div v-for="item in 5" class="Carry BtnContainer">
-            <q-btn color="white" text-color="black" label="1" ref="Carry">
-                <q-menu anchor="top left" self="bottom left">
-                    <div class="Btns">
-                        <button>0</button>
-                        <button v-for="index in 5">{{index}}</button>
-                        <button v-for="index in 5">{{index+5}}</button>
-                        <button>/</button>
-                        <button><q-icon name="bi-trash"></q-icon></button>
-                    </div>
-                </q-menu>
-            </q-btn>
+        <div class="Carry btn-group" v-for="(carries,Row) in Carry">
+            <div class="Carrys" v-for="(items,cnt) in carries">
+                <button ref="Carry" :class="{'on-line':this.CarryLine[Row][cnt]}">
+                    {{ items }}
+                    <q-menu anchor="top left" self="bottom left" class="q-menu">
+                        <div class="Btns">
+                            <button @click="CarryInput(Row,cnt,0)">0</button>
+                            <button v-for="index in 5" @click="CarryInput(Row,cnt,index)">{{index}}</button>
+                            <button v-for="index in 5" @click="CarryInput(Row,cnt,index+5)">{{index+5}}</button>
+                            <button @click="CarryInput(Row,cnt,'/')">/</button>
+                            <button @click="CarryInput(Row,cnt,'delete')"><q-icon name="bi-trash"></q-icon></button>
+                        </div>
+                    </q-menu>
+                </button>
+            </div>
         </div>
-        <div v-for="item in 5" class="Operation BtnContainer" ref="Operation">
-            <q-btn color="white" text-color="black" label="1">
-                <q-menu anchor="top left" self="bottom left">
-                    <div class="Btns">
-                        <button>0</button>
-                        <button v-for="index in 5">{{index}}</button>
-                        <button v-for="index in 5">{{index+5}}</button>
-                        <button>/</button>
-                        <button><q-icon name="bi-trash"></q-icon></button>
-                    </div>
-                </q-menu>
-            </q-btn>
+        <hr>
+        <div class="NumberArea">
+            <div class="NumberRow btn-group" v-for="(items,Row) in Num_list">
+                <button v-if="Row != 0">
+                    {{ Sy_list[Row] }}
+                    <q-menu anchor="top left" self="bottom left" class="q-menu" v-if="this.SymbolEditable[Row]">
+                        <div class="Btns">
+                            <button @click="SymbolInput(Row,'+')">+</button>
+                            <button @click="SymbolInput(Row,'-')">-</button>
+                        </div>
+                    </q-menu>
+                </button>
+                <div class="space"></div>
+                <div class="NumbersContainer btn-group">
+                    <button v-for="(item,Col) in items" :class="{ 'on-line': this.ButtonLine[Row][Col]}">
+                        {{item}}
+                        <q-menu anchor="top left" self="bottom left" class="q-menu" v-if="this.NumberEditable[Row][Col]">
+                            <div class="Btns">
+                                <button @click="NumInput(Row,Col,0)">0</button>
+                                <button v-for="index in 5" @click="NumInput(Row,Col,index)">{{index}}</button>
+                                <button v-for="index in 4" @click="NumInput(Row,Col,index+5)">{{index+5}}</button>
+                                <button @click="NumInput(Row,Col,'/')">/</button>
+                                <button @click="NumInput(Row,Col,'delete')"><q-icon name="bi-trash"></q-icon></button>
+                            </div>
+                        </q-menu>
+                    </button>
+                </div>
+            </div>
         </div>
-        <div v-for="item in 5" class="Numbers BtnContainer" ref="Numbers">
-            <q-btn color="white" text-color="black" label="1">
-                <q-menu anchor="top left" self="bottom left">
-                    <div class="Btns">
-                        <button>0</button>
-                        <button v-for="index in 5">{{index}}</button>
-                        <button v-for="index in 5">{{index+5}}</button>
-                        <button>/</button>
-                        <button><q-icon name="bi-trash"></q-icon></button>
-                    </div>
-                </q-menu>
-            </q-btn>
+        <hr>
+        <div class="Answer btn-group">
+            <div class="AnswerContainer" v-for="(item,Col) in Ans">
+                <button :class="{'on-line': this.AnswerLine[Col]}">
+                    {{item}}
+                    <q-menu anchor="top left" self="bottom left" class="q-menu">
+                        <div class="Btns">
+                            <button @click="AnsInput(Col,0)">0</button>
+                            <button v-for="index in 5" @click="AnsInput(Col,index)">{{index}}</button>
+                            <button v-for="index in 5" @click="AnsInput(Col,index+5)">{{index+5}}</button>
+                            <button @click="AnsInput(Col,'delete')"><q-icon name="bi-trash"></q-icon></button>
+                        </div>
+                    </q-menu>
+                </button>
+            </div>
         </div>
-        <div v-for="item in 5" class="Answer BtnContainer" ref="Answer">
-            <q-btn color="white" text-color="black" label="1">
-                <q-menu anchor="top left" self="bottom left">
-                    <div class="Btns">
-                        <button>0</button>
-                        <button v-for="index in 5">{{index}}</button>
-                        <button v-for="index in 5">{{index+5}}</button>
-                        <button>/</button>
-                        <button><q-icon name="bi-trash"></q-icon></button>
-                    </div>
-                </q-menu>
-            </q-btn>
+        <div class="buttons">
+            <button @click="AddRow">新增一行</button>
+            <button @click="removerow">移除最後一行</button>
+            <button @click="clear">清除所有數字</button>
+            <button @click="CheckAnswer">檢查答案</button>
         </div>
     </div>
 </div>
-</template> 
+</template>
+        
 <script>
 import draggable from 'vuedraggable';
-import { defineAsyncComponent } from 'vue';
-import { GamesGetAssetsFile } from '@/utilitys/get_assets.js';
 export default {
     name: "calculator",
+    display: "calculator",
+    components: {
+        draggable
+    },
     data() {
         return {
-            Num:["0","1","2","3","4","5","6","7","8","9","10"],
-            Symbol:["+","-"],
-            Unit: [],
-            Carry: [],
-            Operation: [],
-            Numbers: [],
-            Answer: [],
-            MaxWidth: 0,
-            GameConfig:{
-                "FunctionPermission":{
-                    "AddRow": false,
-                    "RemoveRow": false,
-                    "Clear": false,
-                    "CorrectUnit": false,
-                    "CorrectUseUnit": false
+            Num_list: [],
+            Sy_list: [],
+            Ans:[],
+            Carry:[],
+            Title:[],
+            ButtonLine: [],
+            CarryLine: [],
+            AnswerLine: [],
+            NumberEditable: [],
+            SymbolEditable: [],
+            NumberRow: 2,
+            NumberAmount: 8,
+            Data: {
+                Unit: "Time",
+                CarryAmount: 2,
+                CustomeUnit: undefined,
+                Preset: {
+                    Number: [
+                        "123",
+                        "456"
+                    ],
+                    Symbol: '-'
+                },
+                Answer: {
+                    Carry: [
+                        '4',
+                        '8'
+                    ],
+                    Answer: '34',
+                    Number: [
+                        "123",
+                        "456"
+                    ],
+                    Symbol: '-'
                 }
             },
-            GameData: {
-                "UseUnit": ["個位", "十位", "百位", "千位"],
-                "Preparation": {
-                    "Symbol": ["+"],
-                    "Number_list": [
-                        "478",
-                        "214"
-                    ],
-                    "Answer": "692"
+            CustomeUnit: undefined,
+            UnitPreset:{
+                UseUnit: "Volume",
+                Units:{
+                    Number:{
+                        Title:["個位","十位","百位","千位","萬位"],
+                        Total:5
+                    },
+                    Time:{
+                        Title:["秒",null,"分",null,"時",null,"日"],
+                        Total:4
+                    },
+                    Weight:{
+                        Title:["公克",null,null,"公斤",null,null,"公噸"],
+                        Total:4
+                    },
+                    Length:{
+                        Title:["毫米",null,"公分",null,"公尺",null,"公里"],
+                        Total:4
                 },
-                "Answer": {
-                    "Symbol": ["+"],
-                    "Number_list": [
-                        "478",
-                        "214"
-                    ],
-                    "Answer": "692"
-                }
-            },
-            Units:{
-                Number:{
-                    Title:["個位","十位","百位","千位","萬位"],
-                    Total:5
-                },
-                Time:{
-                    Title:["秒",null,"分",null,"時",null,"日"],
-                    Total:4
-                },
-                Weight:{
-                    Title:["公克",null,null,"公斤",null,null,"公噸"],
-                    Total:4
-                },
-                Length:{
-                    Title:["毫米","公分",null,"公尺",null,null,"公里"],
-                    Total:4
-                },
-                Volume:{
-                    Title:["毫升",null,null,"公升",null,null,"公秉"],
-                    Total:3
+                    Volume:{
+                        Title:["毫升",null,null,"公升",null,null,"公秉"],
+                        Total:3
+                    }
                 }
             }
         };
     },
-    created(){
-        this.Unit = this.GameData.UseUnit;
-        this.MaxWidth = this.Unit.length;
-        for (let i in this.GameData.Preparation){
-            for (let x in this.GameData.Preparation[i]){
-                if (this.GameData.Preparation[i][x].length > this.MaxWidth){
-                    this.MaxWidth = this.GameData.Preparation[i][x].length;
-                }
+    mounted(){
+        this.Data = this.GameData;
+        if (this.Data.CustomeUnit != undefined){
+            for(var i = 0; i<this.CustomeUnit.length; i++){
+                this.Title.push(this.CustomeUnit[i]);
+            }
+        }else{
+            for(var i = 0; i< this.NumberAmount; i++){
+                this.Title.push(this.UnitPreset.Units[this.UnitPreset.UseUnit].Title[i]);
             }
         }
+        for(var i = 0; i<=this.NumberAmount; i++){
+            
+            this.Ans.push("");
+            this.AnswerLine.push(false);
+        }
+
+        for(var i = 0; i < this.Data.CarryAmount; i++){
+            let temp = [];
+            let templine = [];
+            for(var x = 0; x < this.NumberAmount; x++){
+                temp.push("");
+                templine.push(false);
+            }
+            this.Carry.push(temp);
+            this.CarryLine.push(templine);
+        }
+        for(var x = 0; x < this.NumberRow ; x++){
+            console.log('test');
+            let temp = [];
+            this.Sy_list.push("");
+            this.SymbolEditable.push(true);
+            let tempNumber = [];
+            let tempeditable = [];
+            for(var i = 0; i<this.NumberAmount; i++){
+                temp.push("");
+                tempNumber.push(false);
+                tempeditable.push(true);
+            }
+            this.Num_list.push(temp);
+            this.ButtonLine.push(tempNumber);
+            this.NumberEditable.push(tempeditable);
+        }
+        this.UseUnit(this.Data.Unit);
+        this.PresetCalculator();
     },
     methods: {
-        // Your component's methods go here
+        CarryInput(Row,index,num){
+            if (num == 'delete'){
+                this.Carry[Row][index] = "";
+            }
+            else if (num == '/'){
+                this.CarryLine[Row][index] = !this.CarryLine[index];
+            }
+            else{
+                this.Carry[Row][index] = num;
+            }
+        },
+        NumInput(Row,Col,num){
+            if (num == 'delete'){
+                this.Num_list[Row][Col] = "";
+            }
+            else if (num == '/'){
+                this.ButtonLine[Row][Col] = !this.ButtonLine[Row][Col];
+            }
+            else{
+                this.Num_list[Row][Col] = num;
+            }
+        },
+        AnsInput(index,num){
+            if (num == 'delete'){
+                this.Ans[index] = "";
+            }
+            else if (num == '/'){
+                this.AnswerLine[index] = !this.AnswerLine[index];
+            }
+            else{
+                this.Ans[index] = num;
+            }
+        },
+        PresetCalculator: function(){
+            for(var i in this.Data.Preset.Number){
+                let temp = this.Num_list[i].length-1;
+                if (this.Data.Preset.Symbol != undefined && this.Data.Preset.Symbol != null && this.Data.Preset.Symbol != ""){                    
+                    this.Sy_list[i] = this.Data.Preset.Symbol;
+                    this.SymbolEditable[i] = false;
+                }
+                for(var j = this.Data.Preset.Number[i].length - 1; j >= 0; j--){
+                    this.Num_list[i][temp] = this.Data.Preset.Number[i][j];
+                    this.NumberEditable[i][temp] = false;
+                    temp--;
+                }
+            }
+        },
+        SymbolInput(index,num){
+            this.Sy_list[index] = num;
+        },
+        SetUnit: function(num){
+            if(!( this.NumberAmount==8 && num == 1 ) && !(this.NumberAmount==2 && num==-1)){
+                this.NumberAmount = this.NumberAmount + num;
+                console.log(this.NumberAmount);
+                this.Title = [];
+                this.Num_list = [];
+                this.Sy_list = [];
+                this.Carry = [];
+                this.Ans = [];
+                this.ButtonLine = [];
+                this.CarryLine = [];
+                for(var i = 0; i<this.NumberAmount; i++){
+                    this.Title.push(this.UnitPreset.Units[this.UnitPreset.UseUnit].Title[i]);
+                }
+                for(var i = 0; i<=this.NumberAmount; i++){
+                    this.Carry.push([]);
+                    this.Ans.push([]);
+                }
+                for(var x = 0; x < this.NumberRow ; x++){
+                    let temp = [];
+                    this.Sy_list.push([]);
+                    for(var i = 0; i<this.NumberAmount; i++){
+                        temp.push([]);
+                    }
+                    this.Num_list.push(temp);
+                }
+            }
+        },
+        UseUnit: function(unit){
+            this.UnitPreset.UseUnit = unit;
+            this.Title = [];
+            for(var i = 0; i<this.NumberAmount; i++){
+                this.Title.push(this.UnitPreset.Units[this.UnitPreset.UseUnit].Title[i]);
+            }
+        },
+        removerow: function(evt) {
+            if(this.Num_list.length>2){
+                this.Num_list.pop();
+                this.Sy_list.pop();
+                this.ButtonLine.pop();
+                this.NumberRow--;
+            }
+        },
+        AddRow:function(){
+            this.NumberRow++;
+            let temp = [];
+            let tempNumber = [];
+            this.Sy_list.push("");
+            for(var i = 0; i<this.NumberAmount; i++){
+                temp.push("");
+                tempNumber.push(false);
+            }
+            this.Num_list.push(temp);
+            this.ButtonLine.push(tempNumber);
+        },
+        CheckAnswer(){
+            let AnswerCheck = true;
+            for(var i in this.Data.Answer.Number){
+                let temp = this.Num_list[i].length - 1;
+                for(var j = this.Data.Answer.Number[i].length - 1; j >= 0; j--){
+                    if (this.Num_list[i][temp] != this.Data.Answer.Number[i][j]){
+                        AnswerCheck = false;
+                        console.log('Number Wrong');
+                    }
+                    temp--;
+                }
+            }
+            let temp = this.Ans.length - 1;
+            for(var i = this.Data.Answer.Answer.length - 1; i >= 0; i--){
+                if (this.Ans[temp] != this.Data.Answer.Answer[i]){
+                    AnswerCheck = false;
+                    console.log('Answer Wrong');
+                }
+                temp--;
+            }
+            //Carry
+            for(var i in this.Data.Answer.Carry){
+                let temp = this.Carry[i].length - 1;
+                for(var j = this.Data.Answer.Carry[i].length - 1; j >= 0; j--){
+                    if (this.Carry[i][temp] != this.Data.Answer.Carry[i][j]){
+                        AnswerCheck = false;
+                        console.log('Carry Wrong');
+                    }
+                    temp--;
+                }
+            }
+            if(AnswerCheck){
+                this.$emit('play-effect', 'CorrectSound');
+                this.$emit('add-record', [this.Data.Answer, this.Answer, "正確"]);
+                this.$emit('next-question');
+            }
+            else{
+                this.$emit('play-effect', 'WrongSound',)
+                this.$emit('add-record', [this.Data.Answer, this.Answer, "錯誤"]);
+            }
+        },
+        clear: function(evt) {
+            for(var x in this.Carry){
+                for(var y in this.Carry[x]){
+                    this.Carry[x][y] = "";
+                }
+            }
+            for(var x in this.Ans){
+                this.Ans[x] = "";
+            }
+            for(var x in this.Num_list){
+                for(var y in this.Num_list[x]){
+                    this.Num_list[x][y] = "";
+                }
+            }
+            for(var x in this.Sy_list){
+                this.Sy_list[x] = "";
+            }
+            this.PresetCalculator();
+        }
     }
-};  
+};
 </script>
-<style scoped lang="scss">
-.TestBtn{
-    margin: 3rem;
-    border: solid 1px;
-    display: grid;
-    grid-template-columns: repeat(5, 50px);
-    grid-template-rows: repeat(5, 60px);
-    .Unit{
-        grid-row: 1/1;
-        background-color: #aaa;
+<style lang="scss" scope>
+.Container{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.CalculatorBody {
+    display: flex;
+    flex-direction: column;
+    .btn-group {
+        display: flex;
+        flex-direction: row;
+        justify-content: end;
+        align-items: center;
+        gap: 12px;
+        margin: 5px 0;
+        button{
+            width: 40px;
+            height: 50px;
+        }
+        .on-line{
+            background: linear-gradient( 60deg, transparent 49.5%, black 45.5%, black 51.5%, transparent 50%);
+        }
     }
-    .Carry{
-        grid-row: 2/2;
-        background-color: red;
+    .btn-primary{
+        width: 40px;
     }
-    .Operation{
-        grid-row: 3/3;
-        background-color: blue;
-    }
-    .Numbers{
-        grid-row: 4/4;
-        background-color: green;
-    }
-    .Answer{
-        grid-row: 5/5;
-        background-color: yellow;
-    }
-    .BtnContainer{
-        border: solid;
+    :deep(.q-btn) {
+        width: 40px;
+        height: 50px;
         display: flex;
         justify-content: center;
         align-items: center;
-        margin: 0;
-        button{
-            width: 50px;
-            height: 50px;
-        }
-        :deep(.q-btn) {
-            width: 40px;
-            height: 50px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+        background: linear-gradient( 60deg, transparent 49.5%, black 45.5%, black 51.5%, transparent 50%);
     }
 }
+.space{
+    width: 40px;
+}
+
+.buttons{
+    display: flex;
+    flex-direction: row;    
+    justify-content: flex-end;
+    gap: 1rem;
+    button{
+        height: 4rem;
+    }
+}
+
+hr{
+    height:2px;
+    border-width:0;
+    color:black;
+    background-color:black;
+}
+
 .Btns{
     display: grid;
     grid-template-columns: repeat(7, 1fr);
@@ -201,6 +436,32 @@ export default {
         border-radius: 15px;
         height: 40px;
         width: 40px;
+    }
+}
+
+.Selection{
+    position: sticky;
+    top:0;
+    max-height: 100vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    .NumberContainer{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        flex-wrap: wrap;
+
+    }
+    .SymbolContainer{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    button{
+        height: 60px;
+        width: 50px;
     }
 }
 </style>

@@ -1,17 +1,4 @@
 <template>
-<<<<<<< HEAD
-<div>
-<div class="Head">
-    <p class="h1 Title" v-if="this.GameData.QuestionText && this.GameData.QuestionText!= ''">{{ this.GameData.QuestionText }}</p>
-    <p class="h2 SubTitle" v-if="this.GameData.Description && this.GameData.Description != ''">{{ this.GameData.Description }}</p>
-</div>
-<hr>
-{{ this.Answers }}
-{{ this.Answered }}
-{{ this.ImageDatas }}
-{{ this.Symbol }}
-=======
->>>>>>> develop
 <div class="OutterContainer">
     <div class="Head">
         <p class="h1 Title" v-if="this.GameData.QuestionText && this.GameData.QuestionText!= ''">{{ this.GameData.QuestionText }}</p>
@@ -72,6 +59,7 @@ export default {
         ImageTable: GetComponents("ImageTable"),
         DrawImage: GetComponents("DrawImage"),
         NumberBoard: GetComponents("NumberBoard"),
+        MoneyGenerator: GetComponents("MoneyGenerator"),
     },
     emits: ['play-effect','add-record','next-level'],
     props: {
@@ -248,10 +236,6 @@ export default {
         width: 100%;
         .QuestionContainer{
             .QuestionRow{
-                /* display: flex;
-                flex-direction: row;
-                justify-content: space-evenly;
-                align-items: center; */
                 display: grid;
                 grid-template-columns: 0.5fr 4fr 1fr 4fr 0.5fr;
                 height: 40vh;

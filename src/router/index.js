@@ -119,16 +119,6 @@ const router = createRouter({
       component: () => import('@/components/Markdown.vue'),
     },
     {
-      path: '/LinkGameV2',
-      name: 'LinkGameV2',
-      component: () => import('@/views/GameTemplate/LinkGameV2.vue'),
-    },
-    {
-      path: '/Track',
-      name: 'Track',
-      component: () => import('@/views/GameTemplate/Track.vue'),
-    },
-    {
       path: '/CalculatorV2',
       name: 'CalculatorV2',
       component: () => import('@/components/calculatorV2.vue'),
@@ -147,6 +137,20 @@ const router = createRouter({
       path:'/CalculatorGame',
       name:'CalculatorGame',
       component:()=>import('@/views/GameTemplate/CalculatorGame.vue'),
+    },
+    {
+      path: '/MoneyGenerator',
+      name: 'MoneyGenerator',
+      component: () => import('@/components/MoneyGenerator.vue'),
+    },{
+      path: '/LinktoImage',
+      name: 'LinktoImage',
+      component: () => import('@/views/GameTemplate/LinktoImage.vue'),
+    },
+    {
+      path: '/SelectGameMulti',
+      name: 'SelectGameMulti',
+      component: () => import('@/views/GameTemplate/SelectGameMulti.vue'),
     }
   ]
 });

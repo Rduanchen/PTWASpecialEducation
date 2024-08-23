@@ -31,53 +31,53 @@ export default {
         NumberLineArrow: defineAsyncComponent(() => import('@/components/NumberLineV2.vue')),
         NumberLine: defineAsyncComponent(() => import('@/components/NumberLine.vue'))
     },
-    props: {
-        GameData: {
-            type: Object,
-            required: true
-        },
-        GameConfig: {
-            type: Object,
-            required: true
-        },
-        id: {
-            type: String,
-            required: true
-        }
-    },
+    // props: {
+    //     GameData: {
+    //         type: Object,
+    //         required: true
+    //     },
+    //     GameConfig: {
+    //         type: Object,
+    //         required: true
+    //     },
+    //     id: {
+    //         type: String,
+    //         required: true
+    //     }
+    // },
     data() {
         return {
             NowSelect: null,
             ShowPad : false,
             ID: "0",
             ComponentsAnswers: false,
-            // Data: {
-            //     QuestionWord: "請問以下數字中哪個是分數?",
-            //     Name: "TextOnly",
-            //     BlankName: "Input",
-            //     NumberPadAutoDisappear: false,
-            //     SlotComponentName: "Markdown",
-            //     Data:{
-            //         Render: `
-            //             > 123432
-            //             # Header 1
-            //             ## Header 2
-            //             ### Header 3
-            //             **Bold Text**
-            //             - List 1
-            //             $i$ $i$ Input Box
-            //             $i$ Input Box
-            //             $t$ tab
-            //             $s$ space
-            //             $n$ new line
-            //         `,
-            //         Answers: [
-            //             '1',
-            //             '2',
-            //             '3'
-            //         ]    
-            //     }
-            // }
+            GameData: {
+                QuestionWord: "請問以下數字中哪個是分數?",
+                Name: "TextOnly",
+                BlankName: "Input",
+                NumberPadAutoDisappear: false,
+                SlotComponentName: "Markdown",
+                Data:{
+                    Render: `
+                        > 123432
+                        # Header 1
+                        ## Header 2
+                        ### Header 3
+                        **Bold Text**
+                        - List 1
+                        $i$ $i$ Input Box
+                        $i$ Input Box
+                        $t$ tab
+                        $s$ space
+                        $n$ new line
+                    `,
+                    Answers: [
+                        '1',
+                        '2',
+                        '3'
+                    ]    
+                }
+            }
         };
     },
     created() {
