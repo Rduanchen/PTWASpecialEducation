@@ -18,7 +18,12 @@
         ></mole>
       </v-layer>
       <v-layer>
-        <hole v-for="i in map" :X="i[1]" :Y="i[2]" :width="configKonva.width"></hole>
+        <hole
+          v-for="i in map"
+          :X="i[1]"
+          :Y="i[2]"
+          :width="configKonva.width"
+        ></hole>
       </v-layer>
     </v-stage>
   </div>
@@ -72,10 +77,13 @@ export default {
   beforeMount() {
     var gameWidth = document.getElementById("GameContainer").clientWidth;
     this.configKonva.width = Math.floor(gameWidth * 0.8);
-    console.log(this.configKonva.width);
     for (var i = 0; i < 5; ++i) {
-      this.map[i][1] = Math.floor((this.configKonva.width * this.map[i][1]) / 1000);
-      this.map[i][2] = Math.floor((this.configKonva.width * this.map[i][2]) / 1000);
+      this.map[i][1] = Math.floor(
+        (this.configKonva.width * this.map[i][1]) / 1000
+      );
+      this.map[i][2] = Math.floor(
+        (this.configKonva.width * this.map[i][2]) / 1000
+      );
     }
   },
 
@@ -109,7 +117,9 @@ export default {
       var ans = false;
       for (let i in this.GameData.True) {
         if (option == this.GameData.True[i]) {
-          this.true = this.true.filter((option) => option != this.GameData.True[i]);
+          this.true = this.true.filter(
+            (option) => option != this.GameData.True[i]
+          );
           ans = true;
           break;
         }

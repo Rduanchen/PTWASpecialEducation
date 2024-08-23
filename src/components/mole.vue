@@ -1,7 +1,7 @@
 <template>
-  <v-circle :config="configMole" @click="whacked"></v-circle>
-  <v-rect :config="configSign" @click="whacked"></v-rect>
-  <v-text :config="configOption" @click="whacked"></v-text>
+  <v-circle :config="configMole" @click="whacked" @touch="whacked"></v-circle>
+  <v-rect :config="configSign" @click="whacked" @touch="whacked"></v-rect>
+  <v-text :config="configOption" @click="whacked" @touch="whacked"></v-text>
 </template>
 
 <script>
@@ -37,8 +37,9 @@ export default {
 
   props: ["X", "Y", "width", "moleId", "option"],
 
+  emits: ["showSign", "whacked"],
+
   mounted() {
-    console.log("mole" + this.width);
     this.configMole.radius = Math.floor(this.width * 0.04);
     this.configMole.x = this.X;
     this.configMole.y = this.Y + this.configMole.radius;
