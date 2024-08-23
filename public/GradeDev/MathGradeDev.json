@@ -32,5 +32,33 @@
                 ]
             }
         ]
+    },
+    {
+        "Title": "Ray的工作區",
+        "Section": [
+            {
+                "Title": "Ray的工作區",
+                "Games": [
+                    {
+                        "id": "Dev02_RacingCar",
+                        "Name": "賽車遊戲",
+                        "Description": "Make your choice.",
+                        "Img": "MA3011.png"
+                    },
+                    {
+                        "id": "Dev02_WhackaMole",
+                        "Name": "打地鼠",
+                        "Description": "Make your choice.",
+                        "Img": "MA3011.png"
+                    },
+                    {
+                        "id": "Dev02_Maze",
+                        "Name": "迷宮遊戲",
+                        "Description": "Make your choice.",
+                        "Img": "MA3011.png"
+                    }
+                ]
+            }
+        ]
     }
 ]

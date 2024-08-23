@@ -1062,6 +1062,9 @@ export default {
     PairingGame: defineAsyncComponent(() =>
       import("@/views/GameTemplate/PairingGame.vue")
     ),
+    NumberLock: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/NumberLock.vue")
+    ),
     RacingCar: defineAsyncComponent(() =>
       import("@/views/GameTemplate/RacingCar.vue")
     ),
@@ -1231,7 +1234,7 @@ header {
   }
 }
 
-.Pointable{
+.Pointable {
   cursor: pointer;
 }
 </style>
