@@ -1078,6 +1078,7 @@ export default {
     SelectGameMulti: defineAsyncComponent(() =>
       import("@/views/GameTemplate/SelectGameMulti.vue")
     ),
+    Track: defineAsyncComponent(() => import("@/views/GameTemplate/Track.vue")),
     EffectWindow,
   },
 };

@@ -151,7 +151,11 @@ const router = createRouter({
       path: '/SelectGameMulti',
       name: 'SelectGameMulti',
       component: () => import('@/views/GameTemplate/SelectGameMulti.vue'),
-    }
+    },{
+      path: '/Track',
+      name: 'Track',
+      component: () => import('@/views/GameTemplate/Track.vue'),
+    },
   ]
 });
 router.beforeEach((to, from, next) => {
