@@ -2,9 +2,6 @@
     <div class="Container">
       <!-- Life bar section -->
       <div class="life-bar">
-        <!-- <div class="life-container">
-          <img v-for="index in totalLives" :key="index" :src="index <= remainingLives ? heartImageUrl : deadHeartImageUrl" class="heart-icon" />
-        </div> -->
         <div class="volume-control">
           <img :src="isMuted ? muteIconUrl : unmuteIconUrl" @click="toggleMute" class="volume-icon" />
           <div v-if="showVolumeSlider" class="slider-container">

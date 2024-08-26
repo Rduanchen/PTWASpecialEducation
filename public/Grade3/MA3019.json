@@ -11,9 +11,9 @@
             "Question": {
                 "text": "題目文字",
                 "RowData":[
-                    ["Cat.png","Cat.png","Cat.png"],
-                    ["Cat.png","Cat.png","Cat.png"],
-                    ["Cat.png","Cat.png","Cat.png"]
+                    [{"Name": "ImageContainer","Data":{"Src":"Cat.png"}},{"Name": "ImageContainer","Data":{"Src":"Cat.png"}},{"Name": "ImageContainer","Data":{"Src":"Cat.png"}}],
+                    [{"Name": "ImageContainer","Data":{"Src":"Cat.png"}},{"Name": "ImageContainer","Data":{"Src":"Cat.png"}},{"Name": "ImageContainer","Data":{"Src":"Cat.png"}}],
+                    [{"Name": "ImageContainer","Data":{"Src":"Cat.png"}},{"Name": "ImageContainer","Data":{"Src":"Cat.png"}},{"Name": "ImageContainer","Data":{"Src":"Cat.png"}}]
                 ]
             },
             "Answer": [
