@@ -48,28 +48,46 @@
                         "Img": "MA3016.png"
                     },
                     {
-                        "id": "MA3014",
-                        "Name": "分類題",
-                        "Description": "請將所有的垃圾進行分類吧",
-                        "Img": "MA3014.png"
-                    },
-                    {
                         "id": "MA3028",
                         "Name": "配對題",
-                        "Description": "",
+                        "Description": "將選項與正確得敘述進行配對",
                         "Img": "MA3028.png"
                     },
                     {
                         "id": "MA3011",
                         "Name": "是非題",
                         "Description": "請選出正確的時間",
-                        "Img": "MA3016.png"
+                        "Img": "MA3011.png"
                     },
                     {
                         "id": "Dev0104",
+                        "Name": "圈選題",
+                        "Description": "請圈選出正確的時間",
+                        "Img": "Dev0104.png"
+                    },
+                    {
+                        "id": "MA3017",
+                        "Name": "數數看",
+                        "Description": "數數看有幾個物品",
+                        "Img": "MA3017.png"
+                    },
+                    {
+                        "id": "Dev0103",
                         "Name": "多選題",
                         "Description": "請選出正確的時間",
+                        "Img": "Dev0103.png"
+                    },
+                    {
+                        "id": "Dev0105",
+                        "Name": "輸送帶",
+                        "Description": "東西會從左邊飄移進來，請選出正確的答案",
                         "Img": "Dev0104.png"
+                    },
+                    {
+                        "id": "Dev02_RacingCar",
+                        "Name": "賽車遊戲",
+                        "Description": "請選標出正確的時間",
+                        "Img": "Dev02_RacingCar.png"
                     }
                 ]
             }

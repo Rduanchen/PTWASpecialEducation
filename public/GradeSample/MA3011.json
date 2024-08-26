@@ -83,17 +83,7 @@
             }]
         },
         {
-            "Question": "100cc",
-            "Answer": true,
-            "SlotComponents" : [{
-                "Name": "Water",
-                "Data": {
-                    "Scale": 2000,
-                    "Ml": 100
-                }
-            }]
-        },{
-            "Question": "100cc",
+            "Question": "3:20",
             "Answer": true,
             "SlotComponents" : [{
                 "Name" : "Clock",

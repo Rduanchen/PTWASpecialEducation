@@ -9,9 +9,10 @@
           </div>
         </div>
       </div>
-      
+
+
       <!-- Conveyor belt section -->
-      <div class="box ratio-7">
+      <div class="ratio-7">
         <div class="conveyor-belt" :class="{ 'paused': isPaused }" :style="conveyorStyle">
           <div class="conveyor-item" v-for="(item, index) in currentQuestions" :key="index">
             <div class="question-container">
@@ -187,13 +188,14 @@
     padding: 0;
     box-sizing: border-box;
     background-color: transparent;
+    width: 100%;
   }
   .Selections{
     .button-container{
       display: flex;
       flex-direction: row;
       width: 100%;
-      height: 100%;
+      height: 10vh;
       justify-content: space-between;
       .Select-Button{
         flex: 1;
@@ -241,15 +243,15 @@
   }
   
   .ratio-7 {
-    flex: 7;
     position: relative;
     overflow: hidden;
+    height: 30vh !important;
   }
   
   .conveyor-belt {
     display: flex;
     flex-direction: row;
-    height: 100%;
+    max-height: 40vh;
     position: absolute;
     top: 0;
     left: 0;
@@ -266,8 +268,11 @@
   }
   
   .question-container {
-    padding: 100px;
-    background-color: transparent;
+    /* padding: 100px;
+    background-color: transparent; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border-radius: 10px;
     z-index: 10;
   }
