@@ -29,11 +29,11 @@
               <div class="col-lg-2 col-md-3 col-5 SideBar">
                 <div>
                   <p class="Title">現在科目</p>
-                  <button class="btn btn-primary" disabled>{{ Subjects[Subject] }}</button>
+                  <button class="">{{ Subjects[Subject] }}</button>
                   <p class="Title">章節</p>
                   <div class="ButtonContainer">
-                    <div class="list-group mt-2" v-for="(items,key) in this.ShowInfo" v-if="this.ShowInfo">
-                      <a class="list-group-item list-group-item-action" v-on:click="SelectChapter(key); MakeReadText('' ,'',stop=true)">{{ items.Title }}</a>
+                    <div v-for="(items,key) in this.ShowInfo" v-if="this.ShowInfo">
+                      <button class="list-group-item" @click="() => {SelectChapter(key); MakeReadText('' ,'',stop=true)}">{{ items.Title }}</button>
                     </div>
                   </div>
                 </div>                
@@ -274,11 +274,20 @@ methods: {
 
 <style lang="scss" scoped>
 header{
-  background-color: #F19C79;
+  background-color: $primary-color;
 }
 .navbar {
-  background-color: #F19C79; 
-  
+  background-color: $primary-color;
+  button{
+    background-color: $primary-btn-bg;
+    border: solid 1px $primary-btn-bg;
+    border-radius: $border-radius;
+    margin: 0 1rem;
+  }
+  button:hover{
+    background-color: $primary-btn-hover-bg;
+    transform: scale($transform-scale);
+  }
   @media (min-width: 768px){
     height: 10vh;
   }
@@ -321,11 +330,18 @@ header{
   justify-content: stretch;
   display: grid;
   gap: 1vh;
-  background-color: #FFEDDA;
+  background-color: $sub-color;
   height: 90vh;
-  border-right: 3px solid #aaa;
+  
   button{
     width: 100%;
+    background-color: $info-btn-bg;
+    border: none;
+    border-radius: $border-radius;
+    color: $secondary-btn-text;
+    font-weight: 700;
+    font-size: 1.2rem;
+    height: 2.6rem;
   }
   .Title{
     font-size: 1.5em;
@@ -333,14 +349,19 @@ header{
   }
   .ButtonContainer{
     display: grid;
-    gap: 0.5vh;
-    a{
+    gap: 1rem;
+    button{
       transition: transform 0.3s ease; /* 平滑的過渡效果 */
+      font-size: 1rem;
+      font-weight: 800;
+      background-color: darken($secondary-btn-bg, 0);
+      border-radius: $border-radius;
+      color: $secondary-btn-text;
     }
-    a:hover{
-      transform: scale(1.1);
+    button:hover{
+      transform: scale($transform-scale);
+      background-color: $secondary-btn-hover-bg;
     }
-
   }
   overflow-y: scroll;
   padding: 2vh 2vw;
