@@ -24,8 +24,8 @@
         <a  v-on:click="ChangeSubject('Technology');MakeReadText('' ,'',stop=true)"><img src="@/assets/button/technology.png" style="width: 40vh;"/></a>
       </div>
     </section>
-    <section class="GameSelectSection " style="overflow-y: hidden;" v-if="ShowContent">
-          <div class="row SelectIndex">
+    <section class="GameSelectSection" style="overflow-y: hidden;" v-if="ShowContent">
+          <div class="SelectIndex">
               <div class="col-lg-2 col-md-3 col-5 SideBar">
                 <div>
                   <p class="Title">現在科目</p>
@@ -332,7 +332,6 @@ header{
   gap: 1vh;
   background-color: $sub-color;
   height: 90vh;
-  
   button{
     width: 100%;
     background-color: $info-btn-bg;
@@ -372,10 +371,6 @@ header{
     }
   }
 }
-.GameSelectSection{
-  height: 89vh
-}
-
 
 .GameCardGroup{
   @media (pointer: fine) { 
@@ -419,4 +414,5 @@ transition: transform 0.3s ease; /* 平滑過渡效果 */
     transition: transform 0.3s ease; /* 平滑過渡效果 */
   }
 }
+
 </style>
