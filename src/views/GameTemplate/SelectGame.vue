@@ -120,7 +120,9 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: start;
+    width: 100%;
+    max-height: 60vh !important;
     .index{
         .Head{
             padding: 1em;
@@ -135,6 +137,8 @@ export default {
                 grid-column: 6/9;
                 display: flex;
                 flex-direction: column;
+                gap: 1rem;
+                max-height: 40vh;
                 .card{
                     padding: 1rem;
                 }
