@@ -161,25 +161,6 @@ export default {
           movement: "left",
         },
       },
-
-      playerPos: [0, 0],
-      playerCollision: [0, 0, 0, 0],
-      playerXY: [0, 0],
-
-      ghostPos: [
-        [3.5, 1.5],
-        [16.5, 8.5],
-      ],
-      ghostMovement: [1, 0],
-      ghostCollision: [
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-      ],
-      ghostXY: [
-        [0, 0],
-        [0, 0],
-      ],
-      ghostTurn: [1, 1],
     };
   },
 
@@ -195,6 +176,7 @@ export default {
   },
 
   beforeMount() {
+    this.fitCanvasInScreen();
     this.generateMap();
   },
 
@@ -246,19 +228,19 @@ export default {
       switch (e.keyCode) {
         case 37:
         case 65:
-          this.keys.horizontal = "left";
+          this.entityInfo.player.keys.horizontal = "left";
           break;
         case 39:
         case 68:
-          this.keys.horizontal = "right";
+          this.entityInfo.player.keys.horizontal = "right";
           break;
         case 38:
         case 87:
-          this.keys.vertical = "up";
+          this.entityInfo.player.keys.vertical = "up";
           break;
         case 40:
         case 83:
-          this.keys.vertical = "down";
+          this.entityInfo.player.keys.vertical = "down";
           break;
       }
     },
@@ -270,129 +252,143 @@ export default {
         case 65:
         case 39:
         case 68:
-          this.keys.horizontal = "idle";
+          this.entityInfo.player.keys.horizontal = "idle";
           break;
         case 38:
         case 87:
         case 40:
         case 83:
-          this.keys.vertical = "idle";
+          this.entityInfo.player.keys.vertical = "idle";
           break;
       }
     },
     update() {
-      this.mapInxyGrid(this.entityInfo.player);
-      this.checkPlayerCollision(this.entityInfo.player);
+      this.entityInfo.player.xyGrid = this.mapInxyGrid(this.entityInfo.player);
+      this.entityInfo.player.collision = this.checkCollision(
+        this.entityInfo.player
+      );
       this.movePlayer();
-      this.mapInxyGrid(this.entityInfo.ghost_1);
-      this.mapInxyGrid(this.entityInfo.ghost_2);
-      this.checkGhostCollision(this.entityInfo.ghost_1);
-      this.checkGhostCollision(this.entityInfo.ghost_2);
+      this.entityInfo.ghost_1.xyGrid = this.mapInxyGrid(
+        this.entityInfo.ghost_1
+      );
+      this.entityInfo.ghost_2.xyGrid = this.mapInxyGrid(
+        this.entityInfo.ghost_2
+      );
+      this.entityInfo.ghost_1.collision = this.checkCollision(
+        this.entityInfo.ghost_1
+      );
+      this.entityInfo.ghost_2.collision = this.checkCollision(
+        this.entityInfo.ghost_2
+      );
       this.moveGhost();
       //console.log(this.keys);
     },
     mapInxyGrid(entity) {
-      entity.xy.x = entity.position.x / this.laneWidth - 0.5;
-      entity.xy.y = entity.position.y / this.laneWidth - 0.5;
+      return {
+        x: entity.position.x / this.laneWidth - 0.5,
+        y: entity.position.y / this.laneWidth - 0.5,
+      };
     },
-    checkPlayerCollision(entity) {
-      var collision = [false, false, false, false];
-      //left, right, up, down
+    checkCollision(entity) {
+      var collision = {
+        left: true,
+        right: true,
+        up: true,
+        down: true,
+      };
+      var XY = entity.xyGrid;
+      if (entity.keys) {
+        if (XY.x % 1 >= 0.8 || XY.x % 1 <= 0.1) {
+          XY.x = Math.round(XY.x);
+          collision.up = false;
+          collision.down = false;
+        }
+        if (XY.y % 1 > 0.8 || XY.y % 1 < 0.1) {
+          XY.y = Math.round(XY.y);
+          collision.left = false;
+          collision.right = false;
+        }
+      } else {
+        if (XY.x % 1 >= 0.95 || XY.x % 1 <= 0.05) {
+          XY.x = Math.round(XY.x);
+          collision.up = false;
+          collision.down = false;
+        }
+        if (XY.y % 1 > 0.95 || XY.y % 1 < 0.05) {
+          XY.y = Math.round(XY.y);
+          collision.left = false;
+          collision.right = false;
+        }
+      }
 
-      if (entity.xy.x % 1 >= 0.8 || entity.xy.x % 1 <= 0.1) {
-        entity.xy.x = Math.round(entity.xy.x);
-        collision[2] = true;
-        collision[3] = true;
-      }
-      if (entity.xy.y % 1 > 0.8 || entity.xy.y % 1 < 0.1) {
-        entity.xy.y = Math.round(entity.xy.y);
-        collision[0] = true;
-        collision[1] = true;
-      }
-      entity.collision.left = collision[0];
-      entity.collision.right = collision[1];
-      entity.collision.up = collision[2];
-      entity.collision.down = collision[3];
-    },
-    checkGhostCollision(entity) {
-      var collision = [false, false, false, false];
-      //left, right, up, down
-
-      if (entity.xy.x % 1 >= 0.95 || entity.xy.x % 1 <= 0.05) {
-        entity.xy.x = Math.round(entity.xy.x);
-        collision[2] = true;
-        collision[3] = true;
-      }
-      if (entity.xy.y % 1 > 0.95 || entity.xy.y % 1 < 0.05) {
-        entity.xy.y = Math.round(entity.xy.y);
-        collision[0] = true;
-        collision[1] = true;
-      }
-      entity.collision.left = collision[0];
-      entity.collision.right = collision[1];
-      entity.collision.up = collision[2];
-      entity.collision.down = collision[3];
-    },
-    movePlayer() {
-      var collision = this.entityInfo.player.collision;
-      var XY = this.playerXY;
       if (
-        collision[0] == 1 &&
-        collision[1] == 1 &&
-        collision[2] == 1 &&
-        collision[3] == 1
+        collision.left == false &&
+        collision.right == false &&
+        collision.up == false &&
+        collision.down == false
       ) {
         //console.log(this.playerXY);
-        if (XY[0] == 0) collision[0] = 0;
-        else if (this.map[this.randomMapId][XY[1]][XY[0] - 1] == 1) {
-          collision[0] = 0;
+        if (XY.x <= 0) collision.left = true;
+        else if (this.map[this.randomMapId][XY.y][XY.x - 1] == 1) {
+          collision.left = true;
         }
 
-        if (XY[0] == 19) collision[1] = 0;
-        else if (this.map[this.randomMapId][XY[1]][XY[0] + 1] == 1) {
-          collision[1] = 0;
+        if (XY.x >= 19) collision.right = true;
+        else if (this.map[this.randomMapId][XY.y][XY.x + 1] == 1) {
+          collision.right = true;
         }
 
-        if (XY[1] == 0) collision[2] = 0;
-        else if (this.map[this.randomMapId][XY[1] - 1][XY[0]] == 1) {
-          collision[2] = 0;
+        if (XY.y <= 0) collision.up = true;
+        else if (this.map[this.randomMapId][XY.y - 1][XY.x] == 1) {
+          collision.up = true;
         }
 
-        if (XY[1] == 9) collision[3] = 0;
-        else if (this.map[this.randomMapId][XY[1] + 1][XY[0]] == 1) {
-          collision[3] = 0;
+        if (XY.y >= 9) collision.down = true;
+        else if (this.map[this.randomMapId][XY.y + 1][XY.x] == 1) {
+          collision.down = true;
         }
       }
 
-      if (this.keys.horizontal == "left") {
-        if (!this.entityInfo.player.collision.left)
-          this.keys.horizontal == "idle";
+      return {
+        left: collision.left,
+        right: collision.right,
+        up: collision.up,
+        down: collision.down,
+      };
+    },
+
+    movePlayer() {
+      var collision = this.entityInfo.player.collision;
+      var keys = this.entityInfo.player.keys;
+      var XY = this.entityInfo.player.xyGrid;
+
+      if (keys.horizontal == "left") {
+        if (collision.left) keys.horizontal == "idle";
       }
-      if (this.keys.horizontal == "right") {
-        if (!this.entityInfo.player.collision.right)
-          this.keys.horizontal == "idle";
+      if (keys.horizontal == "right") {
+        if (collision.right) keys.horizontal == "idle";
       }
-      if (this.keys.vertical == "up") {
-        if (!this.entityInfo.player.collision.up) this.keys.vertical == "idle";
+      if (keys.vertical == "up") {
+        if (collision.up) keys.vertical == "idle";
       }
-      if (this.keys.vertical == "down") {
-        if (!this.entityInfo.player.collision.down)
-          this.keys.vertical == "idle";
+      if (keys.vertical == "down") {
+        if (collision.down) keys.vertical == "idle";
       }
 
-      if (this.keys.horizontal == "left") {
+      if (keys.horizontal == "left") {
         this.entityInfo.player.position.x -= Math.floor(this.laneWidth * 0.1);
-      } else if (this.keys.horizontal == "right") {
+      } else if (keys.horizontal == "right") {
         this.entityInfo.player.position.x += Math.floor(this.laneWidth * 0.1);
       }
 
-      if (this.keys.horizontal == "up") {
+      if (keys.horizontal == "up") {
         this.entityInfo.player.position.y -= Math.floor(this.laneWidth * 0.1);
-      } else if (this.keys.horizontal == "down") {
+      } else if (keys.horizontal == "down") {
         this.entityInfo.player.position.y += Math.floor(this.laneWidth * 0.1);
       }
     },
     moveGhost() {
+      /*
       for (var i = 0; i < 2; ++i) {
         if (this.ghostXY[i][0] % 1 == 0 || this.ghostXY[i][1] % 1 == 0) {
           var randomDirec = [];
@@ -411,8 +407,6 @@ export default {
           }
           this.ghostMovement[i] =
             randomDirec[Math.floor(Math.random() * randomDirec.length)];
-          if (i == 0)
-            console.log(i, this.ghostCollision[i], this.ghostMovement[i]);
         }
 
         if (this.ghostMovement[i] == 0) {
@@ -424,7 +418,7 @@ export default {
         } else if (this.ghostMovement[i] == 3) {
           this.ghostPos[i][1] += Math.floor(this.laneWidth * 0.03);
         }
-      }
+      }*/
     },
   },
 };
