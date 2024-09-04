@@ -24,23 +24,9 @@
           ></bounds>
         </v-layer>
         <v-layer>
-          <pacman
-            :x="entityInfo.player.position.x"
-            :y="entityInfo.player.position.y"
-            :width="laneWidth"
-          ></pacman>
-          <ghost
-            :x="entityInfo.ghost_1.position.x"
-            :y="entityInfo.ghost_1.position.y"
-            :width="laneWidth"
-          >
-          </ghost>
-          <ghost
-            :x="entityInfo.ghost_2.position.x"
-            :y="entityInfo.ghost_2.position.y"
-            :width="laneWidth"
-          >
-          </ghost>
+          <v-circle :config="configPlayer"></v-circle>
+          <v-circle :config="configGhost_1"></v-circle>
+          <v-circle :config="configGhost_2"></v-circle>
         </v-layer>
       </v-stage>
     </div>
@@ -73,6 +59,18 @@ export default {
         y: 0,
         fill: "black",
         stroke: "black",
+      },
+      configPlayer: {
+        fill: "yellow",
+        stroke: "yellow",
+      },
+      configGhost_1: {
+        fill: "red",
+        stroke: "red",
+      },
+      configGhost_2: {
+        fill: "red",
+        stroke: "red",
       },
 
       map: [
@@ -107,10 +105,6 @@ export default {
 
       entityInfo: {
         player: {
-          position: {
-            x: 0,
-            y: 0,
-          },
           collision: {
             left: true,
             right: true,
@@ -127,10 +121,6 @@ export default {
           },
         },
         ghost_1: {
-          position: {
-            x: 0,
-            y: 0,
-          },
           collision: {
             left: true,
             right: true,
@@ -144,10 +134,6 @@ export default {
           movement: "right",
         },
         ghost_2: {
-          position: {
-            x: 0,
-            y: 0,
-          },
           collision: {
             left: true,
             right: true,
@@ -181,6 +167,7 @@ export default {
   },
 
   mounted() {
+    this.initializeEntityConfig();
     this.initializeEntityPosition();
     this.bootGame();
   },
@@ -209,12 +196,17 @@ export default {
     },
 
     initializeEntityPosition() {
-      this.entityInfo.player.position.x = Math.floor(this.laneWidth * 9.5);
-      this.entityInfo.player.position.y = Math.floor(this.laneWidth * 3.5);
-      this.entityInfo.ghost_1.position.x = Math.floor(this.laneWidth * 3.5);
-      this.entityInfo.ghost_1.position.y = Math.floor(this.laneWidth * 1.5);
-      this.entityInfo.ghost_2.position.x = Math.floor(this.laneWidth * 18.5);
-      this.entityInfo.ghost_2.position.y = Math.floor(this.laneWidth * 8.5);
+      this.configPlayer.x = Math.floor(this.laneWidth * 9.5);
+      this.configPlayer.y = Math.floor(this.laneWidth * 3.5);
+      this.configGhost_1.x = Math.floor(this.laneWidth * 3.5);
+      this.configGhost_1.y = Math.floor(this.laneWidth * 1.5);
+      this.configGhost_2.x = Math.floor(this.laneWidth * 18.5);
+      this.configGhost_2.y = Math.floor(this.laneWidth * 8.5);
+    },
+    initializeEntityConfig() {
+      this.configPlayer.radius = Math.floor(this.laneWidth * 0.35);
+      this.configGhost_1.radius = Math.floor(this.laneWidth * 0.35);
+      this.configGhost_2.radius = Math.floor(this.laneWidth * 0.35);
     },
     bootGame() {
       window.addEventListener("keydown", this.keyDown);
@@ -263,17 +255,13 @@ export default {
       }
     },
     update() {
-      this.entityInfo.player.xyGrid = this.mapInxyGrid(this.entityInfo.player);
+      this.entityInfo.player.xyGrid = this.mapInxyGrid(this.configPlayer);
       this.entityInfo.player.collision = this.checkCollision(
         this.entityInfo.player
       );
       this.movePlayer();
-      this.entityInfo.ghost_1.xyGrid = this.mapInxyGrid(
-        this.entityInfo.ghost_1
-      );
-      this.entityInfo.ghost_2.xyGrid = this.mapInxyGrid(
-        this.entityInfo.ghost_2
-      );
+      this.entityInfo.ghost_1.xyGrid = this.mapInxyGrid(this.configGhost_1);
+      this.entityInfo.ghost_2.xyGrid = this.mapInxyGrid(this.configGhost_2);
       this.entityInfo.ghost_1.collision = this.checkCollision(
         this.entityInfo.ghost_1
       );
@@ -283,10 +271,10 @@ export default {
       this.moveGhost();
       //console.log(this.keys);
     },
-    mapInxyGrid(entity) {
+    mapInxyGrid(config) {
       return {
-        x: entity.position.x / this.laneWidth - 0.5,
-        y: entity.position.y / this.laneWidth - 0.5,
+        x: config.x / this.laneWidth - 0.5,
+        y: config.y / this.laneWidth - 0.5,
       };
     },
     checkCollision(entity) {
@@ -376,15 +364,15 @@ export default {
       }
 
       if (keys.horizontal == "left") {
-        this.entityInfo.player.position.x -= Math.floor(this.laneWidth * 0.1);
+        this.configPlayer.x -= Math.floor(this.laneWidth * 0.1);
       } else if (keys.horizontal == "right") {
-        this.entityInfo.player.position.x += Math.floor(this.laneWidth * 0.1);
+        this.configPlayer.x += Math.floor(this.laneWidth * 0.1);
       }
 
       if (keys.horizontal == "up") {
-        this.entityInfo.player.position.y -= Math.floor(this.laneWidth * 0.1);
+        this.configPlayer.y -= Math.floor(this.laneWidth * 0.1);
       } else if (keys.horizontal == "down") {
-        this.entityInfo.player.position.y += Math.floor(this.laneWidth * 0.1);
+        this.configPlayer.y += Math.floor(this.laneWidth * 0.1);
       }
     },
     moveGhost() {
