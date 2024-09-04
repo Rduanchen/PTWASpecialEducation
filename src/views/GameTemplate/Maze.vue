@@ -45,8 +45,6 @@ export default {
     safeArea: defineAsyncComponent(() =>
       import("@/components/mazeSafeArea.vue")
     ),
-    pacman: defineAsyncComponent(() => import("@/components/pacman.vue")),
-    ghost: defineAsyncComponent(() => import("@/components/ghost.vue")),
   },
   data() {
     return {
@@ -348,19 +346,18 @@ export default {
     movePlayer() {
       var collision = this.entityInfo.player.collision;
       var keys = this.entityInfo.player.keys;
-      var XY = this.entityInfo.player.xyGrid;
 
       if (keys.horizontal == "left") {
-        if (collision.left) keys.horizontal == "idle";
+        if (collision.left) keys.horizontal = "idle";
       }
       if (keys.horizontal == "right") {
-        if (collision.right) keys.horizontal == "idle";
+        if (collision.right) keys.horizontal = "idle";
       }
       if (keys.vertical == "up") {
-        if (collision.up) keys.vertical == "idle";
+        if (collision.up) keys.vertical = "idle";
       }
       if (keys.vertical == "down") {
-        if (collision.down) keys.vertical == "idle";
+        if (collision.down) keys.vertical = "idle";
       }
 
       if (keys.horizontal == "left") {
@@ -369,9 +366,9 @@ export default {
         this.configPlayer.x += Math.floor(this.laneWidth * 0.1);
       }
 
-      if (keys.horizontal == "up") {
+      if (keys.vertical == "up") {
         this.configPlayer.y -= Math.floor(this.laneWidth * 0.1);
-      } else if (keys.horizontal == "down") {
+      } else if (keys.vertical == "down") {
         this.configPlayer.y += Math.floor(this.laneWidth * 0.1);
       }
     },
