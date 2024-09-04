@@ -133,12 +133,12 @@ export default {
             margin-top: 2rem;
             grid-template-columns: repeat(8, 1fr);
             gap: 2rem;
+            align-items: center;
             .selection{
                 grid-column: 6/9;
                 display: flex;
                 flex-direction: column;
                 gap: 1rem;
-                max-height: 40vh;
                 .card{
                     padding: 1rem;
                 }
@@ -197,7 +197,7 @@ export default {
             .Component{
                 grid-column: 1/5;
                 border: solid 1px black;
-                height: 70%;
+                height: 80%;
             }
         }
     }
