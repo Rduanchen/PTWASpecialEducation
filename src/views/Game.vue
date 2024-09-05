@@ -402,6 +402,7 @@ import EffectWindow from "@/components/EffectWindow.vue";
 import PairingGame from "./GameTemplate/PairingGame.vue";
 import WhackaMole from "./GameTemplate/WhackaMole.vue";
 import SelectGameMulti from "./GameTemplate/SelectGameMulti.vue";
+import CopyItem from "./GameTemplate/CopyItem.vue";
 export default {
   data() {
     return {
@@ -924,6 +925,9 @@ export default {
     SideBar: defineAsyncComponent(() =>
       import("@/components/GameSystem/SideBar.vue")
     ),
+    CopyItem: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/CopyItem.vue")
+    )
   },
 };
 </script>
