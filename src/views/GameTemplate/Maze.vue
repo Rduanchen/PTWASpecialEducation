@@ -104,10 +104,10 @@ export default {
       entityInfo: {
         player: {
           collision: {
-            left: true,
-            right: true,
-            up: true,
-            down: true,
+            left: false,
+            right: false,
+            up: false,
+            down: false,
           },
           xyGrid: {
             x: 0,
@@ -117,10 +117,10 @@ export default {
         },
         ghost_1: {
           collision: {
-            left: true,
-            right: true,
-            up: true,
-            down: true,
+            left: false,
+            right: false,
+            up: false,
+            down: false,
           },
           xyGrid: {
             x: 0,
@@ -130,10 +130,10 @@ export default {
         },
         ghost_2: {
           collision: {
-            left: true,
-            right: true,
-            up: true,
-            down: true,
+            left: false,
+            right: false,
+            up: false,
+            down: false,
           },
           xyGrid: {
             x: 0,
@@ -248,18 +248,17 @@ export default {
       }
     },
     update() {
-      this.entityInfo.player.xyGrid = this.mapInxyGrid(this.configPlayer);
-      this.checkCollision(this.entityInfo.player);
       this.movePlayer();
-      this.entityInfo.ghost_1.xyGrid = this.mapInxyGrid(this.configGhost_1);
-      this.entityInfo.ghost_2.xyGrid = this.mapInxyGrid(this.configGhost_2);
-      this.checkCollision(this.entityInfo.ghost_1);
-      this.checkCollision(this.entityInfo.ghost_2);
       this.moveGhost({
         config: this.configGhost_1,
         entity: this.entityInfo.ghost_1,
       });
+      this.moveGhost({
+        config: this.configGhost_2,
+        entity: this.entityInfo.ghost_2,
+      });
     },
+
     mapInxyGrid(config) {
       return {
         x: config.x / this.laneWidth - 0.5,
@@ -277,40 +276,70 @@ export default {
       var roundedX = Math.round(entity.xyGrid.x);
       var roundedY = Math.round(entity.xyGrid.y);
 
-      if (
+      if (entity.xyGrid.x <= 0) entity.collision.left = true;
+      else if (
         entity.movement == "left" &&
         entity.xyGrid.x % 1 >= 1 - margin &&
-        entity.xyGrid.x < roundedX &&
         this.map[this.randomMapId][roundedY][roundedX - 1] == 1
       )
         entity.collision.left = true;
 
-      if (
+      if (entity.xyGrid.x >= 19) entity.collision.right = true;
+      else if (
         entity.movement == "right" &&
-        entity.xyGrid.x % 1 <= margin &&
-        entity.xyGrid.x > roundedX &&
+        entity.xyGrid.x % 1 >= 1 - margin &&
         this.map[this.randomMapId][roundedY][roundedX + 1] == 1
       )
         entity.collision.right = true;
 
-      if (
+      if (entity.xyGrid.y <= 0) entity.collision.up = true;
+      else if (
         entity.movement == "up" &&
-        entity.xyGrid.y % 1 >= 1 - margin &&
-        entity.xyGrid.y < roundedY &&
+        entity.xyGrid.y % 1 <= margin &&
         this.map[this.randomMapId][roundedY - 1][roundedX] == 1
       )
         entity.collision.up = true;
 
-      if (
+      if (entity.xyGrid.y >= 9) entity.collision.down = true;
+      else if (
         entity.movement == "down" &&
-        entity.xyGrid.y % 1 <= margin &&
-        entity.xyGrid.y > roundedY &&
+        entity.xyGrid.y % 1 > 1 - margin &&
         this.map[this.randomMapId][roundedY + 1][roundedX] == 1
       )
         entity.collision.down = true;
     },
 
+    ghostRandomMovement(entity) {
+      var possibleDirection = [];
+      if (!entity.collision[entity.movement])
+        possibleDirection.push(entity.movement);
+
+      switch (entity.movement) {
+        case "left":
+          if (!entity.collision.up) possibleDirection.push("up");
+          if (!entity.collision.down) possibleDirection.push("down");
+          break;
+        case "right":
+          if (!entity.collision.up) possibleDirection.push("up");
+          if (!entity.collision.down) possibleDirection.push("down");
+          break;
+        case "up":
+          if (!entity.collision.left) possibleDirection.push("left");
+          if (!entity.collision.right) possibleDirection.push("right");
+          break;
+        case "down":
+          if (!entity.collision.left) possibleDirection.push("left");
+          if (!entity.collision.right) possibleDirection.push("right");
+          break;
+      }
+
+      entity.movement =
+        possibleDirection[Math.floor(Math.random(possibleDirection.length))];
+    },
+
     movePlayer() {
+      this.entityInfo.player.xyGrid = this.mapInxyGrid(this.configPlayer);
+      this.checkCollision(this.entityInfo.player);
       if (
         this.entityInfo.player.movement == "left" &&
         !this.entityInfo.player.collision.left
@@ -352,25 +381,9 @@ export default {
       }
     },
     moveGhost({ config, entity }) {
-      var possibleDirection = [];
-      if (!entity.collision[entity.movement])
-        possibleDirection.push(entity.movement);
-
-      switch (entity.movement) {
-        case "left":
-          config.x -= Math.floor(this.laneWidth * 0.1);
-          break;
-        case "right":
-          config.x += Math.floor(this.laneWidth * 0.1);
-          break;
-        case "up":
-          config.y -= Math.floor(this.laneWidth * 0.1);
-          break;
-        case "down":
-          config.y += Math.floor(this.laneWidth * 0.1);
-          break;
-      }
-
+      entity.xyGrid = this.mapInxyGrid(config);
+      this.checkCollision(entity);
+      /*this.ghostRandomMovement(entity);
       switch (entity.movement) {
         case "left":
           config.x -= Math.floor(this.laneWidth * 0.1);
@@ -396,37 +409,6 @@ export default {
             (Math.round(entity.xyGrid.x) + 0.5) * this.laneWidth
           );
           break;
-      }
-      /*
-      for (var i = 0; i < 2; ++i) {
-        if (this.ghostXY[i][0] % 1 == 0 || this.ghostXY[i][1] % 1 == 0) {
-          var randomDirec = [];
-          if (this.ghostCollision[i][this.ghostMovement[i]] != 0) {
-            for (var j = 0; j < 10; ++j) {
-              randomDirec.push(this.ghostMovement[i]);
-            }
-          }
-
-          if (this.ghostMovement[i] == 0 || this.ghostMovement[i] == 1) {
-            if (this.ghostCollision[i][2] == 1) randomDirec.push(2);
-            if (this.ghostCollision[i][3] == 1) randomDirec.push(3);
-          } else if (this.ghostMovement[i] == 2 || this.ghostMovement[i] == 3) {
-            if (this.ghostCollision[i][0] == 1) randomDirec.push(0);
-            if (this.ghostCollision[i][1] == 1) randomDirec.push(1);
-          }
-          this.ghostMovement[i] =
-            randomDirec[Math.floor(Math.random() * randomDirec.length)];
-        }
-
-        if (this.ghostMovement[i] == 0) {
-          this.ghostPos[i][0] -= Math.floor(this.laneWidth * 0.03);
-        } else if (this.ghostMovement[i] == 1) {
-          this.ghostPos[i][0] += Math.floor(this.laneWidth * 0.03);
-        } else if (this.ghostMovement[i] == 2) {
-          this.ghostPos[i][1] -= Math.floor(this.laneWidth * 0.03);
-        } else if (this.ghostMovement[i] == 3) {
-          this.ghostPos[i][1] += Math.floor(this.laneWidth * 0.03);
-        }
       }*/
     },
   },
