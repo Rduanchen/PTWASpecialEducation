@@ -86,7 +86,6 @@
     methods: {
       playNumberSound() {
         speech.ReadText( String( this.randomQuestionOrder[this.questionNum] ) );
-        console.log(this.randomQuestionOrder[this.questionNum]);
       },
       handleMouseClick() {
         const mousePos = this.$refs.stage.getNode().getPointerPosition();
