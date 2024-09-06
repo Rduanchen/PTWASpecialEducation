@@ -85,7 +85,14 @@
     },
     methods: {
       playNumberSound() {
-        speech.ReadText( String( this.randomQuestionOrder[this.questionNum] ) );
+        const number = this.randomQuestionOrder[this.questionNum];
+        var numSound = new Audio();
+        numSound.src = GamesGetAssetsFile(this.id,`${number}.mp3`);
+        numSound.oncanplaythrough = function () {
+          numSound.play();
+        };
+        // speech.ReadText( String( this.randomQuestionOrder[this.questionNum] ) );
+        console.log(this.randomQuestionOrder[this.questionNum]);
       },
       handleMouseClick() {
         const mousePos = this.$refs.stage.getNode().getPointerPosition();
