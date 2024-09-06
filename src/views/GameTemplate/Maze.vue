@@ -73,16 +73,16 @@ export default {
 
       map: [
         [
-          [2, 2, 2, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 2, 2, 2],
+          [2, 2, 2, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 2],
           [2, 2, 2, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2],
-          [2, 2, 2, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 2, 2, 2],
+          [2, 2, 2, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 2, 2, 2],
           [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
           [1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1],
           [1, 0, 1, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1],
           [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
-          [2, 2, 2, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 2, 2, 2],
+          [2, 2, 2, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 2, 2, 2],
           [2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 2, 2, 2],
-          [2, 2, 2, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 2, 2, 2],
+          [2, 2, 2, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2],
         ],
         [
           [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -103,6 +103,7 @@ export default {
 
       entityInfo: {
         player: {
+          tag: "player",
           collision: {
             left: false,
             right: false,
@@ -116,6 +117,7 @@ export default {
           movement: "idle",
         },
         ghost_1: {
+          tag: "ghost",
           collision: {
             left: false,
             right: false,
@@ -129,6 +131,7 @@ export default {
           movement: "right",
         },
         ghost_2: {
+          tag: "ghost",
           collision: {
             left: false,
             right: false,
@@ -195,7 +198,7 @@ export default {
       this.configPlayer.y = Math.floor(this.laneWidth * 3.5);
       this.configGhost_1.x = Math.floor(this.laneWidth * 3.5);
       this.configGhost_1.y = Math.floor(this.laneWidth * 1.5);
-      this.configGhost_2.x = Math.floor(this.laneWidth * 18.5);
+      this.configGhost_2.x = Math.floor(this.laneWidth * 16.5);
       this.configGhost_2.y = Math.floor(this.laneWidth * 8.5);
     },
     initializeEntityConfig() {
@@ -206,7 +209,7 @@ export default {
     bootGame() {
       window.addEventListener("keydown", this.keyDown);
       window.addEventListener("keyup", this.keyUp);
-      this.Update = window.setInterval(this.update, 20);
+      this.game = window.setInterval(this.update, 20);
     },
 
     keyDown(e) {
@@ -280,59 +283,91 @@ export default {
       else if (
         entity.movement == "left" &&
         entity.xyGrid.x % 1 >= 1 - margin &&
-        this.map[this.randomMapId][roundedY][roundedX - 1] == 1
-      )
-        entity.collision.left = true;
+        entity.xyGrid.x <= roundedX
+      ) {
+        if (this.map[this.randomMapId][roundedY][roundedX - 1] == 1)
+          entity.collision.left = true;
+        if (
+          this.map[this.randomMapId][roundedY][roundedX - 1] == 2 &&
+          entity.tag == "ghost"
+        )
+          entity.collision.left = true;
+      }
 
       if (entity.xyGrid.x >= 19) entity.collision.right = true;
       else if (
         entity.movement == "right" &&
-        entity.xyGrid.x % 1 >= 1 - margin &&
-        this.map[this.randomMapId][roundedY][roundedX + 1] == 1
-      )
-        entity.collision.right = true;
-
+        entity.xyGrid.x % 1 <= margin &&
+        entity.xyGrid.x >= roundedX
+      ) {
+        if (this.map[this.randomMapId][roundedY][roundedX + 1] == 1)
+          entity.collision.right = true;
+        if (
+          this.map[this.randomMapId][roundedY][roundedX + 1] == 2 &&
+          entity.tag == "ghost"
+        )
+          entity.collision.right = true;
+      }
       if (entity.xyGrid.y <= 0) entity.collision.up = true;
       else if (
         entity.movement == "up" &&
-        entity.xyGrid.y % 1 <= margin &&
-        this.map[this.randomMapId][roundedY - 1][roundedX] == 1
-      )
-        entity.collision.up = true;
-
+        entity.xyGrid.y % 1 >= 1 - margin &&
+        entity.xyGrid.y <= roundedY
+      ) {
+        if (this.map[this.randomMapId][roundedY - 1][roundedX] == 1)
+          entity.collision.up = true;
+        if (
+          this.map[this.randomMapId][roundedY - 1][roundedX] == 2 &&
+          entity.tag == "ghost"
+        )
+          entity.collision.up = true;
+      }
       if (entity.xyGrid.y >= 9) entity.collision.down = true;
       else if (
         entity.movement == "down" &&
-        entity.xyGrid.y % 1 > 1 - margin &&
-        this.map[this.randomMapId][roundedY + 1][roundedX] == 1
-      )
-        entity.collision.down = true;
+        entity.xyGrid.y % 1 <= margin &&
+        entity.xyGrid.y >= roundedY
+      ) {
+        if (this.map[this.randomMapId][roundedY + 1][roundedX] == 1)
+          entity.collision.down = true;
+        if (
+          this.map[this.randomMapId][roundedY + 1][roundedX] == 2 &&
+          entity.tag == "ghost"
+        )
+          entity.collision.down = true;
+      }
     },
 
-    ghostRandomMovement(entity) {
+    ghostCollision(entity) {
       var possibleDirection = [];
-      if (!entity.collision[entity.movement])
-        possibleDirection.push(entity.movement);
-
+      var roundedX = Math.round(entity.xyGrid.x);
+      var roundedY = Math.round(entity.xyGrid.y);
       switch (entity.movement) {
         case "left":
-          if (!entity.collision.up) possibleDirection.push("up");
-          if (!entity.collision.down) possibleDirection.push("down");
+          if (this.map[this.randomMapId][roundedY - 1][roundedX] == 0)
+            possibleDirection.push("up");
+          if (this.map[this.randomMapId][roundedY + 1][roundedX] == 0)
+            possibleDirection.push("down");
           break;
         case "right":
-          if (!entity.collision.up) possibleDirection.push("up");
-          if (!entity.collision.down) possibleDirection.push("down");
+          if (this.map[this.randomMapId][roundedY - 1][roundedX] == 0)
+            possibleDirection.push("up");
+          if (this.map[this.randomMapId][roundedY + 1][roundedX] == 0)
+            possibleDirection.push("down");
           break;
         case "up":
-          if (!entity.collision.left) possibleDirection.push("left");
-          if (!entity.collision.right) possibleDirection.push("right");
+          if (this.map[this.randomMapId][roundedY][roundedX - 1] == 0)
+            possibleDirection.push("left");
+          if (this.map[this.randomMapId][roundedY][roundedX + 1] == 0)
+            possibleDirection.push("right");
           break;
         case "down":
-          if (!entity.collision.left) possibleDirection.push("left");
-          if (!entity.collision.right) possibleDirection.push("right");
+          if (this.map[this.randomMapId][roundedY][roundedX - 1] == 0)
+            possibleDirection.push("left");
+          if (this.map[this.randomMapId][roundedY][roundedX + 1] == 0)
+            possibleDirection.push("right");
           break;
       }
-
       entity.movement =
         possibleDirection[Math.floor(Math.random(possibleDirection.length))];
     },
@@ -344,8 +379,8 @@ export default {
         this.entityInfo.player.movement == "left" &&
         !this.entityInfo.player.collision.left
       ) {
-        this.configPlayer.x -= Math.floor(this.laneWidth * 0.1);
-        this.configPlayer.y = Math.floor(
+        this.configPlayer.x -= Math.round(this.laneWidth * 0.1);
+        this.configPlayer.y = Math.round(
           (Math.round(this.entityInfo.player.xyGrid.y) + 0.5) * this.laneWidth
         );
       }
@@ -354,8 +389,8 @@ export default {
         this.entityInfo.player.movement == "right" &&
         !this.entityInfo.player.collision.right
       ) {
-        this.configPlayer.x += Math.floor(this.laneWidth * 0.1);
-        this.configPlayer.y = Math.floor(
+        this.configPlayer.x += Math.round(this.laneWidth * 0.1);
+        this.configPlayer.y = Math.round(
           (Math.round(this.entityInfo.player.xyGrid.y) + 0.5) * this.laneWidth
         );
       }
@@ -364,8 +399,8 @@ export default {
         this.entityInfo.player.movement == "up" &&
         !this.entityInfo.player.collision.up
       ) {
-        this.configPlayer.y -= Math.floor(this.laneWidth * 0.1);
-        this.configPlayer.x = Math.floor(
+        this.configPlayer.y -= Math.round(this.laneWidth * 0.1);
+        this.configPlayer.x = Math.round(
           (Math.round(this.entityInfo.player.xyGrid.x) + 0.5) * this.laneWidth
         );
       }
@@ -374,8 +409,8 @@ export default {
         this.entityInfo.player.movement == "down" &&
         !this.entityInfo.player.collision.down
       ) {
-        this.configPlayer.y += Math.floor(this.laneWidth * 0.1);
-        this.configPlayer.x = Math.floor(
+        this.configPlayer.y += Math.round(this.laneWidth * 0.1);
+        this.configPlayer.x = Math.round(
           (Math.round(this.entityInfo.player.xyGrid.x) + 0.5) * this.laneWidth
         );
       }
@@ -383,33 +418,33 @@ export default {
     moveGhost({ config, entity }) {
       entity.xyGrid = this.mapInxyGrid(config);
       this.checkCollision(entity);
-      /*this.ghostRandomMovement(entity);
+      if (entity.collision[entity.movement]) this.ghostCollision(entity);
       switch (entity.movement) {
         case "left":
-          config.x -= Math.floor(this.laneWidth * 0.1);
-          config.y = Math.floor(
+          config.x -= Math.floor(this.laneWidth * 0.08);
+          config.y = Math.round(
             (Math.round(entity.xyGrid.y) + 0.5) * this.laneWidth
           );
           break;
         case "right":
-          config.x += Math.floor(this.laneWidth * 0.1);
-          config.y = Math.floor(
+          config.x += Math.floor(this.laneWidth * 0.08);
+          config.y = Math.round(
             (Math.round(entity.xyGrid.y) + 0.5) * this.laneWidth
           );
           break;
         case "up":
-          config.y -= Math.floor(this.laneWidth * 0.1);
-          config.x = Math.floor(
+          config.y -= Math.floor(this.laneWidth * 0.08);
+          config.x = Math.round(
             (Math.round(entity.xyGrid.x) + 0.5) * this.laneWidth
           );
           break;
         case "down":
-          config.y += Math.floor(this.laneWidth * 0.1);
-          config.x = Math.floor(
+          config.y += Math.floor(this.laneWidth * 0.08);
+          config.x = Math.round(
             (Math.round(entity.xyGrid.x) + 0.5) * this.laneWidth
           );
           break;
-      }*/
+      }
     },
   },
 };
