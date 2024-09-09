@@ -1,7 +1,7 @@
 <template>
     <div class="game-container">
       <div class="game">
-        <v-stage ref="stage" :config="stageSize" @click="handleMouseClick" @touchstart="handleMouseClick">
+        <v-stage ref="stage" :config="stageSize" @touchstart="handleMouseClick">
           <v-layer ref="layer">
             <v-image :config="imageConfig" />
             <v-circle v-for="(circle, index) in circles" :key="index" :config="circle" />
@@ -11,13 +11,13 @@
           <p class="game__question">{{ GameData.Text }}</p>
           <div class="game__actions">
             <div class="game__sound">
-              <button class="game__sound-btn" @click="playNumberSound">
+              <button class="game__sound-btn" @touchend="playNumberSound">
                 <img src="@/assets/GamePic/SpeakerIcon.png" alt="Speaker Icon" />
               </button>
             </div>
             <div class="game__navigation">
-              <button @click="previousQuestion">上一題</button>
-              <button @click="nextQuestion">下一題</button>
+              <button @touchend="previousQuestion">上一題</button>
+              <button @touchend="nextQuestion">下一題</button>
             </div>
           </div>
           <p class="game__remaining">剩餘題數：{{ remainingQuestions }}</p>
@@ -32,9 +32,7 @@
   <script>
   import { getGameAssets } from '@/utilitys/get_assets.js';
   import { getSystemAssets } from '@/utilitys/get_assets.js';
-  
-  import * as speech from '@/utilitys/readtext.js';
-  
+
   export default {
     name: 'FindTheItem',
     data() {
@@ -99,7 +97,7 @@
         if (this.checkAnswer(questionNum, mousePos.x, mousePos.y)) {
           this.addCircle(questionNum);
           this.answerCorrectly();
-          this.nextQuestion();
+          setTimeout(() => {this.nextQuestion();}, 500);
         } else {
           this.$emit('play-effect', 'WrongSound');
         }
@@ -140,7 +138,6 @@
         });
       },
       nextQuestion() {
-        this.questionNum++;
         if (this.gameOver()) {
           this.$emit('next-question', true);
         } else {
@@ -149,16 +146,20 @@
         }
       },
       previousQuestion() {
-        this.questionNum--;
-        if (this.questionNum < 0) {
-          this.questionNum=10;
+        if (this.questionNum > 0) {
+          this.questionNum--;
         }
-        this.playNumberSound();
       },
       skipAnsweredQuestions() {
+        this.questionNum++;
         const totalQuestions = this.GameData.ObjNum;
-        while (this.correctlyAnsweredQuestions[this.questionNum] && this.questionNum < totalQuestions - 1) {
-          this.questionNum++;
+        if(this.correctlyAnsweredQuestions[this.questionNum] || this.questionNum >= totalQuestions){
+          for(let i = 0; i < totalQuestions; i++){
+            if(!this.correctlyAnsweredQuestions[i]){
+              this.questionNum = i;
+              break;
+            }
+          }  
         }
       },
       gameOver() {
@@ -220,10 +221,11 @@
   .game__sound-btn {
     width: 100%;
     height: 100%;
-    img {
-        width: 4rem;
-        height: auto;
-    }
+  }
+
+  .game__sound-btn img {
+    width: 3rem;
+    height: auto;
   }
   
   .game__navigation {
@@ -234,12 +236,13 @@
   
   .game__actions button {
     transition: background-color 0.2s;
+    color: black;
   }
   
-  .game button:active {
+  .game__actions button:active {
     background-color: #606c38 ; 
   }
-  
+
   .game__remaining {
     font-size: 1.7rem;
     margin-top: 1rem;
@@ -253,12 +256,13 @@
   }
   
   .game button {
-    font-size: 2rem;
+    font-size: 1.3rem;
+    font-weight: bold;
     border: 2px solid #606c38;
     background-color: transparent;
     border-radius: 10px;
-
   }
+
   .progress-bar {
     height: 20px;
     background-color: #4caf50;
