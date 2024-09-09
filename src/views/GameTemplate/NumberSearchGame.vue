@@ -1,7 +1,7 @@
 <template>
     <div class="game-container">
       <div class="game">
-        <v-stage ref="stage" :config="stageSize" @click="handleMouseClick">
+        <v-stage ref="stage" :config="stageSize" @click="handleMouseClick" @touchstart="handleMouseClick">
           <v-layer ref="layer">
             <v-image :config="imageConfig" />
             <v-circle v-for="(circle, index) in circles" :key="index" :config="circle" />
@@ -30,7 +30,9 @@
   </template>
   
   <script>
-  import { GamesGetAssetsFile } from '@/utilitys/get_assets.js';
+  import { getGameAssets } from '@/utilitys/get_assets.js';
+  import { getAssets } from '@/utilitys/get_assets.js';
+  
   import * as speech from '@/utilitys/readtext.js';
   
   export default {
@@ -42,14 +44,14 @@
         correctlyAnsweredQuestions: [],
         randomQuestionOrder: [],
         stageSize: {
-          width: 800,
-          height: 600
+          width: 600,
+          height: 400
         },
         imageConfig: {
           x: 0,
           y: 0,
-          width: 800,
-          height: 600,
+          width: 600,
+          height: 400,
           image: null
         },
         circles: []
@@ -71,7 +73,7 @@
     },
     created() {
       const image = new window.Image();
-      image.src = GamesGetAssetsFile(this.id, this.GameData.img);
+      image.src = getGameAssets(this.id, this.GameData.img);
       image.onload = () => {
         const aspectRatio = image.width / image.height;
         this.imageConfig.width = this.stageSize.width;
@@ -80,14 +82,13 @@
       };
   
       this.randomQuestionOrder = this.generateRandomOrder(this.GameData.ObjNum);
-
       speech.InitReadProccess()
     },
     methods: {
       playNumberSound() {
         const number = this.randomQuestionOrder[this.questionNum];
         var numSound = new Audio();
-        numSound.src = GamesGetAssetsFile(this.id,`${number}.mp3`);
+        numSound.src = getAssets(`System/numbers/${number}.mp3`);
         numSound.oncanplaythrough = function () {
           numSound.play();
         };
@@ -97,7 +98,7 @@
       handleMouseClick() {
         const mousePos = this.$refs.stage.getNode().getPointerPosition();
         const questionNum = this.randomQuestionOrder[this.questionNum];
-  
+        // console.log(mousePos.x, mousePos.y)
         if (this.checkAnswer(questionNum, mousePos.x, mousePos.y)) {
           this.addCircle(questionNum);
           this.answerCorrectly();

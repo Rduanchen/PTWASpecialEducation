@@ -921,7 +921,7 @@ export default {
       import("@/views/GameTemplate/SelectGameMulti.vue")
     ),
     FindTheItemGameV2: defineAsyncComponent(() =>
-      import("@/views/GameTemplate/FindTheItemGameV2.vue")
+      import("@/views/GameTemplate/NumberSearchGame.vue")
     ),
     EffectWindow,
     SideBar: defineAsyncComponent(() =>
