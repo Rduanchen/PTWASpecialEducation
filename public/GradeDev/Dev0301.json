@@ -2,7 +2,7 @@
     "id": "Dev0301",
     "introvideo": "src",
     "TotalLevel": 1,
-    "GameType": "FindTheItemGameV2",
+    "GameType": "NumberSearchGame",
     "GameConfig":{
         
     },
