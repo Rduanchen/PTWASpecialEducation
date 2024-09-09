@@ -383,7 +383,7 @@ section{
         transition: transform 0.3s ease; /* 平滑的過渡效果 */
         font-size: 1rem;
         font-weight: 800;
-        background-color: darken($secondary-btn-bg, 0);
+        background-color: #FEECE9;
         border-radius: $border-radius;
         color: $secondary-btn-text;
       }
@@ -405,7 +405,7 @@ section{
   .item-frame{
     height: 90vh;
     overflow-y: scroll;
-    padding: 1.5rem 2rem;
+    padding: 1.8rem 2rem;
     @media (pointer: fine) { 
       -ms-overflow-style: none; /* IE/Edge */
       &::-webkit-scrollbar {

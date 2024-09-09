@@ -1,42 +1,52 @@
 <template>
 <div class="outter-container">
     <div class="container-title title">
-        <p class="title__text">123456</p>
+        <p class="title__text">{{ this.GameData.Title }}</p>
     </div>
-    <div class="box-tar box">
-        <draggable
-            class="drag-container"
-            :list="sourceList"
-            group="items"
-        >
-            <template #item="{ element }">
-                <div class="list-group-item">
-                    {{ element.name }}
-                </div>
-            </template>
-        </draggable>
-    </div>
-    <div class="box-source">
-        <div class="source">
+    <div class="game-index">
+        <div class="box-tar">
             <draggable
-                class="item-container box"
+                class="drag-container box"
                 :list="tarList"
-                :group="{ name: 'items', pull: 'clone', put: false}"
-                :sort="false"
+                :key="tarList.key"
+                group="items"
             >
                 <template #item="{ element }">
-                    <div class="list-group-item">
-                        {{ element.name }}
-                    </div>
+                    <component
+                        :is="element.Name"
+                        :Data="element.Data"
+                        :ID="element.ID"
+                        class="list-group-item"
+                    ></component>
                 </template>
             </draggable>
         </div>
-        <div class="box">
-            <p>{{ 1 }}</p>
-        </div>
-        <div class="tool-container box">
-            <button class="button-basic">檢查答案</button>
-            <button class="button-basic">下一關</button>
+        <div class="box-source">
+            <div class="box question">
+                <p v-for="(question, index) in this.GameData.Questions" :key="index">{{ question }}</p>
+            </div>
+            <div class="source box">
+                <draggable
+                    class="item-container "
+                    :list="sourceList"
+                    :group="{ name: 'items', pull: 'clone', put: true }"
+                    @change="init"
+                    :sort="false"
+                    :key="sourceList.key"
+                >
+                    <template #item="{ element }">
+                        <component
+                            :is="element.Name"
+                            :Data="element.Data"
+                            :ID="element.ID"
+                            class="list-group-item"
+                        ></component>
+                    </template>
+                </draggable>
+            </div>
+
+            <button class="button-basic tool-container">檢查答案</button>
+
         </div>
     </div>
 </div>
@@ -44,29 +54,64 @@
 
 <script>
 import draggable from 'vuedraggable';
+import { getComponents } from '@/utilitys/get-components';
+import { defineAsyncComponent } from 'vue';
+import ImageContainer from '@/components/ImageContainer.vue';
 export default {
     name: 'CopyItem',
     components: {
         draggable,
+        ImageContainer
     },
     data() {
         return {
             // Your data properties go here
+            id: 'Dev0105',
+            GameData: {
+                Title: "123456",
+                Questions: [
+                    "請放入五個糖果"
+                ],
+                Items: [{
+                    Name: "ImageContainer",
+                    Amount: 3,                    
+                    Data: {
+                        Src: "sugar.png",
+                        Alt: "糖果照片",
+                    }
+                }]
+            },
             tarList: [
-                { name: "John", id: 1 },
-                { name: "Joao", id: 2 },
-                { name: "Jean", id: 3 },
-                { name: "Gerard", id: 4 }
+                
             ],
             sourceList: [
-                { name: "Juan", id: 5 },
-                { name: "Edgard", id: 6 },
-                { name: "Johnson", id: 7 },
             ]
         };
     },
+    created() {
+        // Code to run when the component is created goes here
+        this.init();
+    },
     methods: {
         // Your methods go here
+        init() {
+            this.sourceList = [];
+            for (var i in this.GameData.Items) {
+                var item = this.GameData.Items[i];
+                this.sourceList.push({
+                    Name: item.Name,
+                    Data: item.Data,
+                    ID: this.id,
+                    item: i
+                });
+            }
+        },
+        checkAnswer() {
+            for(var i in this.tarList){
+                var item = this.tarList[i];
+                console.log(item);
+            }
+        }
     },
     mounted() {
         // Code to run when the component is mounted goes here
@@ -77,63 +122,80 @@ export default {
 <style scoped lang="scss">
 /* Your component-specific styles go here */
 .outter-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 7fr;
-    gap: 1rem;
-    width: 100%;
-    height: 79vh !important;
-    border: solid 1px #000;
-    .title {
-        grid-column: 1 / 3;
-        grid-row: 1 / 2;
-    }
-    .box-tar {
-        grid-column: 1 / 2;
-        grid-row: 2 / 3;
-    }
-    .box-source {
-        grid-column: 2 / 3;
-        grid-row: 2 / 3;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: 7fr 2fr;
-        column-gap: 1rem;
-        grid-gap: 1rem;
-        height: 100%;
-        .source {
-            height: 50%;
-        }
-        .tool-container {
-            padding: $gap--medium;
-        }
-    }
-    .box {
-        @extend .container-basic;
-    }
-}
-
-.drag-container {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(5, 1fr);
-    gap: 1rem;
-    width: 100%;
-    margin: $gap--large;
-    .list-group-item {
-        padding: 1rem;
-        border: 1px solid #000;
-        border-radius: 5px;
-    }
-}
-
-.item-container {
-    height: 100%;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     gap: 1rem;
-    padding: 1rem;
-    border: 1px solid #000;
-    border-radius: 5px;
+    max-height: 78vh;
+    .title {
+        background-color: $info-color;
+    }
+    .game-index {
+        height: 100%;
+        display: flex;
+        gap: 1rem;
+        .box-tar {
+            flex: 2;
+            gap: 1rem;
+            height: 60vh;
+        }
+        .box-source {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            .question {
+                flex: 2;
+                border: $border--normal solid #000;
+                padding: $padding--small;
+                font-size: $text-small;
+                display: flex;
+                flex-direction: column;
+                align-items: start;
+                justify-content: center;
+            }
+            .source {
+                flex: 3;
+                max-height: 30vh;
+                border: $border--normal solid #000;
+                padding: 1rem;
+                .item-container {
+                    padding: $padding--small;
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: center;
+                    gap: 1rem;
+                    height: 100%;
+                    width: 100%;
+                }
+            }
+            .tool-container {
+                flex: 1;
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                gap: 1rem;
+                padding: $padding--small;
+                font-size: $text-medium;
+                background-color: $submit-color;
+            }
+            .tool-container:hover {
+                scale: 1.05;
+                transition: 0.5s;
+            }
+        }
+    }
+    .drag-container {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        grid-template-rows: repeat(5, 9vh);
+        gap: 1rem;
+        padding: $padding--small;
+        width: 100%;
+        height: 100%;
+    }
+}
+.box {
+    @extend .container-basic;
 }
 </style>
