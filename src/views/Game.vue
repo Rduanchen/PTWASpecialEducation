@@ -920,7 +920,7 @@ export default {
     SelectGameMulti: defineAsyncComponent(() =>
       import("@/views/GameTemplate/SelectGameMulti.vue")
     ),
-    FindTheItemGameV2: defineAsyncComponent(() =>
+    NumberSearchGame: defineAsyncComponent(() =>
       import("@/views/GameTemplate/NumberSearchGame.vue")
     ),
     EffectWindow,
