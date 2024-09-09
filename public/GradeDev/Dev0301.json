@@ -23,6 +23,7 @@
                     { "Name": "9", "xRange": [ 515, 533 ], "yRange": [ 210, 238 ] }, 
                     { "Name": "10", "xRange": [ 12, 39 ], "yRange": [ 230, 253 ] }
                 ],
+                "tolerance":8,
                 "ObjNum":11,
                 "img": "FindItemGameSample1.jpg",
                 "SpeakerIcon":"SpeakerIcon"

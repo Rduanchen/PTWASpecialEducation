@@ -31,7 +31,7 @@
   
   <script>
   import { getGameAssets } from '@/utilitys/get_assets.js';
-  import { getAssets } from '@/utilitys/get_assets.js';
+  import { getSystemAssets } from '@/utilitys/get_assets.js';
   
   import * as speech from '@/utilitys/readtext.js';
   
@@ -82,17 +82,16 @@
       };
   
       this.randomQuestionOrder = this.generateRandomOrder(this.GameData.ObjNum);
-      speech.InitReadProccess()
+      this.playNumberSound()
     },
     methods: {
       playNumberSound() {
         const number = this.randomQuestionOrder[this.questionNum];
         var numSound = new Audio();
-        numSound.src = getAssets(`System/numbers/${number}.mp3`);
+        numSound.src = getSystemAssets(`${number}.mp3`,'read-numbers');
         numSound.oncanplaythrough = function () {
           numSound.play();
         };
-        console.log(this.randomQuestionOrder[this.questionNum]);
       },
       handleMouseClick() {
         const mousePos = this.$refs.stage.getNode().getPointerPosition();
@@ -117,9 +116,10 @@
       },
       checkAnswer(questionNum, posX, posY) {
         const obj = this.GameData.Objs[questionNum];
+        const tolerance = this.GameData.tolerance;
         return (
-          posX >= obj.xRange[0] && posX <= obj.xRange[1] &&
-          posY >= obj.yRange[0] && posY <= obj.yRange[1]
+          posX >= obj.xRange[0]-tolerance && posX <= obj.xRange[1]+tolerance &&
+          posY >= obj.yRange[0]-tolerance && posY <= obj.yRange[1]+tolerance
         );
       },
       answerCorrectly() {
@@ -145,12 +145,15 @@
           this.$emit('next-question', true);
         } else {
           this.skipAnsweredQuestions();
+          this.playNumberSound();
         }
       },
       previousQuestion() {
-        if (this.questionNum > 0) {
-          this.questionNum--;
+        this.questionNum--;
+        if (this.questionNum < 0) {
+          this.questionNum=10;
         }
+        this.playNumberSound();
       },
       skipAnsweredQuestions() {
         const totalQuestions = this.GameData.ObjNum;
@@ -229,12 +232,12 @@
     gap: 1rem;
   }
   
-  .game__navigation button {
-    transition: background-color 0.3s;
+  .game__actions button {
+    transition: background-color 0.2s;
   }
   
-  .game button:hover {
-    background-color: #606c38;
+  .game button:active {
+    background-color: #606c38 ; 
   }
   
   .game__remaining {
