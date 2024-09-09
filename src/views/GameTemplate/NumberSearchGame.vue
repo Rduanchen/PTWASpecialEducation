@@ -92,13 +92,11 @@
         numSound.oncanplaythrough = function () {
           numSound.play();
         };
-        // speech.ReadText( String( this.randomQuestionOrder[this.questionNum] ) );
         console.log(this.randomQuestionOrder[this.questionNum]);
       },
       handleMouseClick() {
         const mousePos = this.$refs.stage.getNode().getPointerPosition();
         const questionNum = this.randomQuestionOrder[this.questionNum];
-        // console.log(mousePos.x, mousePos.y)
         if (this.checkAnswer(questionNum, mousePos.x, mousePos.y)) {
           this.addCircle(questionNum);
           this.answerCorrectly();
