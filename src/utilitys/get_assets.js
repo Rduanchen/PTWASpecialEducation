@@ -10,6 +10,10 @@ export function getSystemEffectAssets(url) {
    return new URL(`../assets/System/Effects/${url}`, import.meta.url).href
 }
 
+export function getSystemAssets(url, service) {
+   return new URL(`../assets/System/${service}/${url}`, import.meta.url).href
+}
+
 export function getTheamsAssets(TheamName) {
    return new URL(`../theams/${TheamName}`, import.meta.url).href
 }

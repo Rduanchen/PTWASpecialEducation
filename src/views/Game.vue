@@ -921,6 +921,9 @@ export default {
     SelectGameMulti: defineAsyncComponent(() =>
       import("@/views/GameTemplate/SelectGameMulti.vue")
     ),
+    NumberSearchGame: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/NumberSearchGame.vue")
+    ),
     EffectWindow,
     SideBar: defineAsyncComponent(() =>
       import("@/components/GameSystem/SideBar.vue")
