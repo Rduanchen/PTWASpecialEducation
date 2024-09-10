@@ -353,7 +353,7 @@ export default {
                 this.$emit('next-question');
             }
             else{
-                this.$emit('play-effect', 'WrongSound',)
+                this.$emit('play-effect', 'WrongSound');
                 this.$emit('add-record', [this.Data.Answer, this.Answer, "錯誤"]);
             }
         },
