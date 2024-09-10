@@ -166,7 +166,6 @@
           </div>
           <SideBar
             class="SideBar col-2"
-
             v-if="Dataloaded"
             :GameStatus="GameStatus"
             :HintInfo="HintInfo"
@@ -178,18 +177,18 @@
             @next-question="NextQuestion"
             @start-game="StartGame"
             @reload-page="reloadPage"
-            @switch-calculator="CalculatorSwitch = false"
+            @scratchSheet="scratchSheetVisible = true"
           >
-          <template #hint>
-            <hintbutton
-              :HintInfo="HintInfo"
-              v-if="
+            <template #hint>
+              <hintbutton
+                :HintInfo="HintInfo"
+                v-if="
                   GameStatus == 'Progressing' && this.Hint['Type'] != 'Method'
-              "
-              @provide-hint="ProvideHint()"
+                "
+                @provide-hint="ProvideHint()"
               >
-            </hintbutton>
-          </template>
+              </hintbutton>
+            </template>
           </SideBar>
 
           <!-- Modal -->
@@ -203,21 +202,10 @@
             <div class="modal-dialog modal-xl" style="max-height: 90vh">
               <div class="modal-content">
                 <div class="modal-header">
-                  <div class="modal-title fs-5 mx-auto" id="exampleModalLabel">
-                    <button
-                      class="btn btn-primary mx-3"
-                      @click="CalculatorSwitch = false"
-                    >
-                      計算紙
-                    </button>
-                    <button
-                      class="btn btn-primary mx-3"
-                      @click="CalculatorSwitch = true"
-                      :key="CalculatorSwitch"
-                    >
-                      直式計算版
-                    </button>
-                  </div>
+                  <div
+                    class="modal-title fs-5 mx-auto"
+                    id="exampleModalLabel"
+                  ></div>
                   <button
                     type="button"
                     class="btn-close"
@@ -225,22 +213,16 @@
                     aria-label="Close"
                   ></button>
                 </div>
-                <div
-                  class="modal-body justify-content-center"
-                  v-if="CalculatorSwitch != null"
-                >
-                  <DrawCanvas
-                    v-if="CalculatorSwitch == false"
-                    style="height: 70vh"
-                  ></DrawCanvas>
-                  <Calculator v-if="CalculatorSwitch == true"></Calculator>
-                </div>
+                <DrawCanvas
+                  v-if="scratchSheetVisible == true"
+                  style="height: 70vh"
+                ></DrawCanvas>
                 <div class="modal-footer">
                   <button
                     type="button"
                     class="btn btn-secondary"
                     data-bs-dismiss="modal"
-                    @click="CalculatorSwitch == null"
+                    @click="scratchSheetVisible == false"
                   >
                     關閉!
                   </button>
@@ -431,7 +413,7 @@ export default {
       intervalId: null,
       EffectWindow: false,
       EffectSrc: "",
-      CalculatorSwitch: null,
+      scratchSheetVisible: false,
       QuestionsSequence: [],
       AllQuestions: [],
       ShowReply: false,
@@ -930,7 +912,7 @@ export default {
     ),
     CopyItem: defineAsyncComponent(() =>
       import("@/views/GameTemplate/CopyItem.vue")
-    )
+    ),
   },
 };
 </script>
