@@ -93,16 +93,16 @@ export default {
 
       map: [
         [
-          [2, 2, 2, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 2],
-          [2, 2, 2, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 2, 2, 2],
-          [2, 2, 2, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 2, 2, 2],
+          [2, 2, 2, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 3, 3, 3],
+          [2, 2, 2, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 3, 3, 3],
+          [2, 2, 2, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 3, 3, 3],
           [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
           [1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1],
           [1, 0, 1, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1],
           [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
-          [2, 2, 2, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 2, 2, 2],
-          [2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 2, 2, 2],
-          [2, 2, 2, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2],
+          [4, 4, 4, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 5, 5, 5],
+          [4, 4, 4, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 5, 5, 5],
+          [4, 4, 4, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 5, 5, 5],
         ],
         [
           [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -120,20 +120,7 @@ export default {
       randomMapId: 0,
       genMap: [],
       safeMap: [],
-      optionMap: [
-        [
-          { x: 0, y: 0 },
-          { x: 17, y: 0 },
-          { x: 0, y: 7 },
-          { x: 17, y: 7 },
-        ],
-        [
-          { x: 0, y: 0 },
-          { x: 17, y: 0 },
-          { x: 0, y: 7 },
-          { x: 17, y: 7 },
-        ],
-      ],
+      optionMap: [0, 0, 0, 0],
 
       entityInfo: {
         player: {
@@ -198,6 +185,7 @@ export default {
   beforeMount() {
     this.fitCanvasInScreen();
     this.generateMap();
+    this.getOptionPosition();
   },
 
   mounted() {
@@ -216,25 +204,46 @@ export default {
       this.configBg.width = this.laneWidth * 20 - 3;
       this.configBg.height = this.laneWidth * 10 - 3;
       this.configBg.strokeWidth = Math.floor(this.laneWidth * 0.1);
-      for (var i = 0; i < 10; ++i) {
-        for (var j = 0; j < 20; ++j) {
-          if (this.map[this.randomMapId][i][j] == 1) {
-            this.genMap.push([this.laneWidth * j, this.laneWidth * i]);
-          } else if (this.map[this.randomMapId][i][j] == 2) {
-            this.safeMap.push([this.laneWidth * j, this.laneWidth * i]);
+      for (var i = 0; i < 20; ++i) {
+        for (var j = 0; j < 10; ++j) {
+          if (this.map[this.randomMapId][j][i] == 1) {
+            this.genMap.push([this.laneWidth * i, this.laneWidth * j]);
+          } else if (this.map[this.randomMapId][j][i] != 0) {
+            this.safeMap.push([this.laneWidth * i, this.laneWidth * j]);
           }
         }
       }
     },
 
-    initializeOptions() {
+    getOptionPosition() {
+      for (var i = 0; i < 20; ++i) {
+        for (var j = 0; j < 10; ++j) {
+          switch (this.map[this.randomMapId][j][i]) {
+            case 2:
+              if (this.optionMap[0] == 0) this.optionMap[0] = { x: i, y: j };
+              break;
+            case 3:
+              if (this.optionMap[1] == 0) this.optionMap[1] = { x: i, y: j };
+              break;
+            case 4:
+              if (this.optionMap[2] == 0) this.optionMap[2] = { x: i, y: j };
+              break;
+            case 5:
+              if (this.optionMap[3] == 0) this.optionMap[3] = { x: i, y: j };
+              break;
+          }
+        }
+      }
+    },
+
+    printOptions() {
       for (var i = 0; i < 4; ++i) {
         this.configOption[i].text = this.GameData.Options[i];
         this.configOption[i].x =
-          this.optionMap[this.randomMapId][i].x * this.laneWidth +
+          this.optionMap[i].x * this.laneWidth +
           Math.floor(0.1 * this.laneWidth);
         this.configOption[i].y =
-          this.optionMap[this.randomMapId][i].y * this.laneWidth +
+          this.optionMap[i].y * this.laneWidth +
           Math.floor(0.1 * this.laneWidth);
         this.configOption[i].fontSize = Math.floor(this.laneWidth * 0.8);
       }
@@ -254,7 +263,7 @@ export default {
       this.configGhost_2.radius = Math.floor(this.laneWidth * 0.35);
     },
     bootGame() {
-      this.initializeOptions();
+      this.printOptions();
       this.initializeEntityConfig();
       this.initializeEntityPosition();
       window.addEventListener("keydown", this.keyDown);
