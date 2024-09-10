@@ -262,6 +262,7 @@ export default {
         config: this.configGhost_2,
         entity: this.entityInfo.ghost_2,
       });
+      this.playerInteraction();
     },
 
     mapInxyGrid(config) {
@@ -510,30 +511,47 @@ export default {
       else if (entity.randomRouteCD) this.ghostRandomRoute(entity);
       switch (entity.movement) {
         case "left":
-          config.x -= Math.floor(this.laneWidth * 0.08);
+          config.x -= Math.floor(this.laneWidth * 0.05);
           config.y = Math.round(
             (Math.round(entity.xyGrid.y) + 0.5) * this.laneWidth
           );
           break;
         case "right":
-          config.x += Math.floor(this.laneWidth * 0.08);
+          config.x += Math.floor(this.laneWidth * 0.05);
           config.y = Math.round(
             (Math.round(entity.xyGrid.y) + 0.5) * this.laneWidth
           );
           break;
         case "up":
-          config.y -= Math.floor(this.laneWidth * 0.08);
+          config.y -= Math.floor(this.laneWidth * 0.05);
           config.x = Math.round(
             (Math.round(entity.xyGrid.x) + 0.5) * this.laneWidth
           );
           break;
         case "down":
-          config.y += Math.floor(this.laneWidth * 0.08);
+          config.y += Math.floor(this.laneWidth * 0.05);
           config.x = Math.round(
             (Math.round(entity.xyGrid.x) + 0.5) * this.laneWidth
           );
           break;
       }
+    },
+    playerInteraction() {
+      if (
+        this.entitiesDistance(this.configPlayer, this.configGhost_1) <=
+          this.configPlayer.radius * 2 ||
+        this.entitiesDistance(this.configPlayer, this.configGhost_2) <=
+          this.configPlayer.radius * 2
+      ) {
+        this.initializeEntityPosition();
+        this.$emit("play-effect", "WrongSound");
+      }
+    },
+    entitiesDistance(config_1, config_2) {
+      return (
+        ((config_1.x - config_2.x) ** 2 + (config_1.y - config_2.y) ** 2) **
+        (1 / 2)
+      );
     },
   },
 };
