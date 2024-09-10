@@ -22,6 +22,10 @@
             :y="i[1]"
             :width="laneWidth"
           ></bounds>
+          <v-text :config="configOption[0]"></v-text>
+          <v-text :config="configOption[1]"></v-text>
+          <v-text :config="configOption[2]"></v-text>
+          <v-text :config="configOption[3]"></v-text>
         </v-layer>
         <v-layer>
           <v-circle :config="configPlayer"></v-circle>
@@ -58,6 +62,22 @@ export default {
         fill: "black",
         stroke: "black",
       },
+
+      configOption: [
+        {
+          stroke: "black",
+        },
+        {
+          stroke: "black",
+        },
+        {
+          stroke: "black",
+        },
+        {
+          stroke: "black",
+        },
+      ],
+
       configPlayer: {
         fill: "yellow",
         stroke: "yellow",
@@ -100,6 +120,20 @@ export default {
       randomMapId: 0,
       genMap: [],
       safeMap: [],
+      optionMap: [
+        [
+          { x: 0, y: 0 },
+          { x: 17, y: 0 },
+          { x: 0, y: 7 },
+          { x: 17, y: 7 },
+        ],
+        [
+          { x: 0, y: 0 },
+          { x: 17, y: 0 },
+          { x: 0, y: 7 },
+          { x: 17, y: 7 },
+        ],
+      ],
 
       entityInfo: {
         player: {
@@ -167,8 +201,6 @@ export default {
   },
 
   mounted() {
-    this.initializeEntityConfig();
-    this.initializeEntityPosition();
     this.bootGame();
   },
 
@@ -179,6 +211,7 @@ export default {
       this.configKonva.height = Math.floor(this.configKonva.width / 2);
     },
     generateMap() {
+      //this.randomMapId= Math.floor( Math.random()* 3);
       this.laneWidth = Math.floor(this.configKonva.width * 0.05);
       this.configBg.width = this.laneWidth * 20 - 3;
       this.configBg.height = this.laneWidth * 10 - 3;
@@ -191,7 +224,19 @@ export default {
             this.safeMap.push([this.laneWidth * j, this.laneWidth * i]);
           }
         }
-        //console.log(row);
+      }
+    },
+
+    initializeOptions() {
+      for (var i = 0; i < 4; ++i) {
+        this.configOption[i].text = this.GameData.Options[i];
+        this.configOption[i].x =
+          this.optionMap[this.randomMapId][i].x * this.laneWidth +
+          Math.floor(0.1 * this.laneWidth);
+        this.configOption[i].y =
+          this.optionMap[this.randomMapId][i].y * this.laneWidth +
+          Math.floor(0.1 * this.laneWidth);
+        this.configOption[i].fontSize = Math.floor(this.laneWidth * 0.8);
       }
     },
 
@@ -209,6 +254,9 @@ export default {
       this.configGhost_2.radius = Math.floor(this.laneWidth * 0.35);
     },
     bootGame() {
+      this.initializeOptions();
+      this.initializeEntityConfig();
+      this.initializeEntityPosition();
       window.addEventListener("keydown", this.keyDown);
       window.addEventListener("keyup", this.keyUp);
       this.game = window.setInterval(this.update, 20);
@@ -283,15 +331,11 @@ export default {
       var roundedY = Math.round(entity.xyGrid.y);
 
       if (entity.xyGrid.x <= 0) entity.collision.left = true;
-      else if (
-        entity.movement == "left" &&
-        entity.xyGrid.x % 1 >= 1 - margin &&
-        entity.xyGrid.x <= roundedX
-      ) {
+      else if (entity.movement == "left" && entity.xyGrid.x <= roundedX) {
         if (this.map[this.randomMapId][roundedY][roundedX - 1] == 1)
           entity.collision.left = true;
         if (
-          this.map[this.randomMapId][roundedY][roundedX - 1] == 2 &&
+          this.map[this.randomMapId][roundedY][roundedX - 1] != 0 &&
           entity.tag == "ghost"
         )
           entity.collision.left = true;
@@ -306,21 +350,17 @@ export default {
         if (this.map[this.randomMapId][roundedY][roundedX + 1] == 1)
           entity.collision.right = true;
         if (
-          this.map[this.randomMapId][roundedY][roundedX + 1] == 2 &&
+          this.map[this.randomMapId][roundedY][roundedX + 1] != 0 &&
           entity.tag == "ghost"
         )
           entity.collision.right = true;
       }
       if (entity.xyGrid.y <= 0) entity.collision.up = true;
-      else if (
-        entity.movement == "up" &&
-        entity.xyGrid.y % 1 >= 1 - margin &&
-        entity.xyGrid.y <= roundedY
-      ) {
+      else if (entity.movement == "up" && entity.xyGrid.y <= roundedY) {
         if (this.map[this.randomMapId][roundedY - 1][roundedX] == 1)
           entity.collision.up = true;
         if (
-          this.map[this.randomMapId][roundedY - 1][roundedX] == 2 &&
+          this.map[this.randomMapId][roundedY - 1][roundedX] != 0 &&
           entity.tag == "ghost"
         )
           entity.collision.up = true;
@@ -334,7 +374,7 @@ export default {
         if (this.map[this.randomMapId][roundedY + 1][roundedX] == 1)
           entity.collision.down = true;
         if (
-          this.map[this.randomMapId][roundedY + 1][roundedX] == 2 &&
+          this.map[this.randomMapId][roundedY + 1][roundedX] != 0 &&
           entity.tag == "ghost"
         )
           entity.collision.down = true;
