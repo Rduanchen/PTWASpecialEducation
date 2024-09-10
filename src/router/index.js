@@ -151,6 +151,11 @@ const router = createRouter({
       path: '/SelectGameMulti',
       name: 'SelectGameMulti',
       component: () => import('@/views/GameTemplate/SelectGameMulti.vue'),
+    },
+    {
+      path: '/CopyItem',
+      name: 'CopyItem',
+      component: () => import('@/views/GameTemplate/CopyItem.vue'),
     }
   ]
 });
