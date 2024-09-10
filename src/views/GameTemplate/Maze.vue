@@ -129,6 +129,7 @@ export default {
             y: 0,
           },
           movement: "right",
+          randomRouteCD: true,
         },
         ghost_2: {
           tag: "ghost",
@@ -143,6 +144,7 @@ export default {
             y: 0,
           },
           movement: "left",
+          randomRouteCD: true,
         },
       },
     };
@@ -342,34 +344,120 @@ export default {
       var possibleDirection = [];
       var roundedX = Math.round(entity.xyGrid.x);
       var roundedY = Math.round(entity.xyGrid.y);
+      var cd = 300;
       switch (entity.movement) {
         case "left":
-          if (this.map[this.randomMapId][roundedY - 1][roundedX] == 0)
-            possibleDirection.push("up");
-          if (this.map[this.randomMapId][roundedY + 1][roundedX] == 0)
-            possibleDirection.push("down");
+          if (roundedY > 0) {
+            if (this.map[this.randomMapId][roundedY - 1][roundedX] == 0)
+              possibleDirection.push("up");
+          }
+          if (roundedY < 9) {
+            if (this.map[this.randomMapId][roundedY + 1][roundedX] == 0)
+              possibleDirection.push("down");
+          }
+
           break;
         case "right":
-          if (this.map[this.randomMapId][roundedY - 1][roundedX] == 0)
-            possibleDirection.push("up");
-          if (this.map[this.randomMapId][roundedY + 1][roundedX] == 0)
-            possibleDirection.push("down");
+          if (roundedY > 0) {
+            if (this.map[this.randomMapId][roundedY - 1][roundedX] == 0)
+              possibleDirection.push("up");
+          }
+          if (roundedY < 9) {
+            if (this.map[this.randomMapId][roundedY + 1][roundedX] == 0)
+              possibleDirection.push("down");
+          }
+
           break;
         case "up":
-          if (this.map[this.randomMapId][roundedY][roundedX - 1] == 0)
-            possibleDirection.push("left");
-          if (this.map[this.randomMapId][roundedY][roundedX + 1] == 0)
-            possibleDirection.push("right");
+          if (roundedX > 0) {
+            if (this.map[this.randomMapId][roundedY][roundedX - 1] == 0)
+              possibleDirection.push("left");
+          }
+          if (roundedX < 19) {
+            if (this.map[this.randomMapId][roundedY][roundedX + 1] == 0)
+              possibleDirection.push("right");
+          }
+
           break;
         case "down":
-          if (this.map[this.randomMapId][roundedY][roundedX - 1] == 0)
-            possibleDirection.push("left");
-          if (this.map[this.randomMapId][roundedY][roundedX + 1] == 0)
-            possibleDirection.push("right");
+          if (roundedX > 0) {
+            if (this.map[this.randomMapId][roundedY][roundedX - 1] == 0)
+              possibleDirection.push("left");
+          }
+          if (roundedX < 19) {
+            if (this.map[this.randomMapId][roundedY][roundedX + 1] == 0)
+              possibleDirection.push("right");
+          }
+
           break;
       }
+      entity.randomRouteCD = false;
+      setTimeout(() => {
+        entity.randomRouteCD = true;
+      }, cd);
       entity.movement =
         possibleDirection[Math.floor(Math.random(possibleDirection.length))];
+    },
+
+    ghostRandomRoute(entity) {
+      var margin = 0.1;
+      var cd = 300;
+      var possibleDirection = [entity.movement];
+      var roundedX = Math.round(entity.xyGrid.x);
+      var roundedY = Math.round(entity.xyGrid.y);
+      if (roundedX <= 0 || roundedX >= 19 || roundedY <= 0 || roundedY >= 9)
+        return 0;
+      switch (entity.movement) {
+        case "left":
+          if (
+            entity.xyGrid.x % 1 >= 1 - margin &&
+            entity.xyGrid.x <= roundedX
+          ) {
+            if (this.map[this.randomMapId][roundedY - 1][roundedX] == 0)
+              possibleDirection.push("up");
+            if (this.map[this.randomMapId][roundedY + 1][roundedX] == 0)
+              possibleDirection.push("down");
+          }
+          break;
+        case "right":
+          if (entity.xyGrid.x % 1 <= margin && entity.xyGrid.x >= roundedX) {
+            if (this.map[this.randomMapId][roundedY - 1][roundedX] == 0)
+              possibleDirection.push("up");
+            if (this.map[this.randomMapId][roundedY + 1][roundedX] == 0)
+              possibleDirection.push("down");
+          }
+          break;
+        case "up":
+          if (
+            entity.xyGrid.y % 1 >= 1 - margin &&
+            entity.xyGrid.y <= roundedY
+          ) {
+            if (this.map[this.randomMapId][roundedY][roundedX - 1] == 0)
+              possibleDirection.push("left");
+            if (this.map[this.randomMapId][roundedY][roundedX + 1] == 0)
+              possibleDirection.push("right");
+          }
+          break;
+        case "down":
+          if (entity.xyGrid.y % 1 <= margin && entity.xyGrid.y >= roundedY) {
+            if (this.map[this.randomMapId][roundedY][roundedX - 1] == 0)
+              possibleDirection.push("left");
+            if (this.map[this.randomMapId][roundedY][roundedX + 1] == 0)
+              possibleDirection.push("right");
+          }
+          break;
+      }
+
+      var newDirection =
+        possibleDirection[Math.floor(Math.random() * possibleDirection.length)];
+      if (newDirection != entity.movement) {
+        entity.randomRouteCD = false;
+        setTimeout(() => {
+          entity.randomRouteCD = true;
+        }, cd);
+      }
+
+      entity.movement = newDirection;
     },
 
     movePlayer() {
@@ -419,6 +507,7 @@ export default {
       entity.xyGrid = this.mapInxyGrid(config);
       this.checkCollision(entity);
       if (entity.collision[entity.movement]) this.ghostCollision(entity);
+      else if (entity.randomRouteCD) this.ghostRandomRoute(entity);
       switch (entity.movement) {
         case "left":
           config.x -= Math.floor(this.laneWidth * 0.08);
