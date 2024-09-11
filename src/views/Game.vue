@@ -213,10 +213,10 @@
                     aria-label="Close"
                   ></button>
                 </div>
-                <DrawCanvas
+                <scratchSheet
                   v-if="scratchSheetVisible == true"
                   style="height: 70vh"
-                ></DrawCanvas>
+                ></scratchSheet>
                 <div class="modal-footer">
                   <button
                     type="button"
@@ -372,8 +372,7 @@ import fetchJson from "@/utilitys/fetch-json.js";
 import * as Arr2CSV from "@/utilitys/array2csv.js";
 import loading from "@/components/loading.vue";
 import GameStartandOver from "@/components/GameStartandOver.vue";
-import Calculator from "@/components/calculator.vue";
-import DrawCanvas from "@/components/canvas.vue";
+import scratchSheet from "@/components/scratchSheet.vue";
 import hintbutton from "@/components/hintbutton.vue";
 import * as ImportUrl from "@/utilitys/get_assets.js";
 import axios from "axios";
@@ -841,8 +840,7 @@ export default {
   },
   components: {
     hintbutton,
-    Calculator,
-    DrawCanvas,
+    scratchSheet,
     GameStartandOver,
     loading,
     LinkGame: defineAsyncComponent(() =>
