@@ -2,7 +2,7 @@
   <div class="gameContainer">
     <div id="canvasContainer">
       <h2>{{ GameData.Question }}</h2>
-      <v-stage :config="configKonva">
+      <v-stage :config="configKonva" @mousedown="touched">
         <v-layer>
           <v-rect :config="configBg"></v-rect>
         </v-layer>
@@ -32,6 +32,9 @@
           <v-circle :config="configGhost_1"></v-circle>
           <v-circle :config="configGhost_2"></v-circle>
         </v-layer>
+        <v-layer>
+          <joystick :laneWidth="laneWidth"></joystick>
+        </v-layer>
       </v-stage>
     </div>
   </div>
@@ -48,6 +51,9 @@ export default {
     bounds: defineAsyncComponent(() => import("@/components/mazeBounds.vue")),
     safeArea: defineAsyncComponent(() =>
       import("@/components/mazeSafeArea.vue")
+    ),
+    joystick: defineAsyncComponent(() =>
+      import("@/components/touchscreenJoystick.vue")
     ),
   },
   data() {
@@ -319,7 +325,6 @@ export default {
         config: this.configGhost_2,
         entity: this.entityInfo.ghost_2,
       });
-      this.playerInteraction();
     },
 
     mapInxyGrid(config) {
@@ -552,6 +557,8 @@ export default {
           (Math.round(this.entityInfo.player.xyGrid.x) + 0.5) * this.laneWidth
         );
       }
+      this.playerCollisionWithGhost();
+      this.playerEnterSafeZone();
     },
     moveGhost({ config, entity }) {
       entity.xyGrid = this.mapInxyGrid(config);
@@ -585,7 +592,7 @@ export default {
           break;
       }
     },
-    playerInteraction() {
+    playerCollisionWithGhost() {
       if (
         this.entitiesDistance(this.configPlayer, this.configGhost_1) <=
           this.configPlayer.radius * 2 ||
@@ -594,6 +601,52 @@ export default {
       ) {
         this.initializeEntityPosition();
         this.$emit("play-effect", "WrongSound");
+        this.$emit("add-record", [
+          this.GameData.Options[this.GameData.Answer],
+          "與敵人碰撞",
+          "錯誤",
+        ]);
+      }
+    },
+    playerEnterSafeZone() {
+      if (
+        this.map[this.randomMapId][Math.round(this.entityInfo.player.xyGrid.y)][
+          Math.round(this.entityInfo.player.xyGrid.x)
+        ] != 0 &&
+        this.map[this.randomMapId][Math.round(this.entityInfo.player.xyGrid.y)][
+          Math.round(this.entityInfo.player.xyGrid.x)
+        ] != 1
+      ) {
+        if (
+          this.GameData.Answer + 2 ==
+          this.map[this.randomMapId][
+            Math.round(this.entityInfo.player.xyGrid.y)
+          ][Math.round(this.entityInfo.player.xyGrid.x)]
+        ) {
+          this.$emit("play-effect", "CorrectSound");
+          this.$emit("add-record", [
+            this.GameData.Options[this.GameData.Answer],
+            this.GameData.Options[
+              this.map[this.randomMapId][
+                Math.round(this.entityInfo.player.xyGrid.y)
+              ][Math.round(this.entityInfo.player.xyGrid.x)] - 2
+            ],
+            "正確",
+          ]);
+          this.$emit("next-question");
+        } else {
+          this.initializeEntityPosition();
+          this.$emit("play-effect", "WrongSound");
+          this.$emit("add-record", [
+            this.GameData.Options[this.GameData.Answer],
+            this.GameData.Options[
+              this.map[this.randomMapId][
+                Math.round(this.entityInfo.player.xyGrid.y)
+              ][Math.round(this.entityInfo.player.xyGrid.x)] - 2
+            ],
+            "錯誤",
+          ]);
+        }
       }
     },
     entitiesDistance(config_1, config_2) {
