@@ -594,6 +594,49 @@ export default {
       ) {
         this.initializeEntityPosition();
         this.$emit("play-effect", "WrongSound");
+        this.$emit("add-record", [
+          this.GameData.Options[this.GameData.Answer],
+          "與敵人碰撞",
+          "錯誤",
+        ]);
+      } else if (
+        this.map[this.randomMapId][Math.round(this.entityInfo.player.xyGrid.y)][
+          Math.round(this.entityInfo.player.xyGrid.x)
+        ] != 0 &&
+        this.map[this.randomMapId][Math.round(this.entityInfo.player.xyGrid.y)][
+          Math.round(this.entityInfo.player.xyGrid.x)
+        ] != 1
+      ) {
+        if (
+          this.GameData.Answer + 2 ==
+          this.map[this.randomMapId][
+            Math.round(this.entityInfo.player.xyGrid.y)
+          ][Math.round(this.entityInfo.player.xyGrid.x)]
+        ) {
+          this.$emit("play-effect", "CorrectSound");
+          this.$emit("add-record", [
+            this.GameData.Options[this.GameData.Answer],
+            this.GameData.Options[
+              this.map[this.randomMapId][
+                Math.round(this.entityInfo.player.xyGrid.y)
+              ][Math.round(this.entityInfo.player.xyGrid.x)] - 2
+            ],
+            "正確",
+          ]);
+          this.$emit("next-question");
+        } else {
+          this.initializeEntityPosition();
+          this.$emit("play-effect", "WrongSound");
+          this.$emit("add-record", [
+            this.GameData.Options[this.GameData.Answer],
+            this.GameData.Options[
+              this.map[this.randomMapId][
+                Math.round(this.entityInfo.player.xyGrid.y)
+              ][Math.round(this.entityInfo.player.xyGrid.x)] - 2
+            ],
+            "錯誤",
+          ]);
+        }
       }
     },
     entitiesDistance(config_1, config_2) {
