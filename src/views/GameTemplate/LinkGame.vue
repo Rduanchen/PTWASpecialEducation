@@ -1,6 +1,5 @@
 <template>
   <div class="Container">
-    <p>test</p>
     <p class="h1">{{ GameData.Question.text }}</p>
     <div class="Index" ref="Index">
       <div class="Konva-container" ref="KonvaContainer">
@@ -26,7 +25,7 @@
               "
               v-for="(Object, index) in DotLocation"
               :key="index"
-              :config="{ x: Object.X, y: Object.Y, radius: 5, fill: 'black' }"
+              :config="{ x: Object.X, y: Object.Y, radius: 8, fill: 'black' }"
             ></v-circle>
           </v-layer>
           <v-layer ref="LineLayer">
@@ -93,7 +92,7 @@ export default {
     // 'v-circle': Circle,
     // 'v-line': Line,
     ImageContainer: defineAsyncComponent(() =>
-      import("@/components/ManualImageContainer.vue")
+      import("@/components/ImageContainer.vue")
     ),
   },
   props: {
@@ -274,7 +273,7 @@ export default {
     CheckMouseAtTheDot(mouseX, mouseY) {
       for (var DotIndex in this.DotLocation) {
         let Dot = this.DotLocation[DotIndex];
-        let differenceRadius = 10;
+        let differenceRadius = 15;
         if (
           mouseX > Dot.X - differenceRadius &&
           mouseX < Dot.X + differenceRadius &&
@@ -538,6 +537,11 @@ export default {
   max-height: 65vh;
   display: inline-block;
   position: relative;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 .Index {
   position: relative; /* 設置相對定位作為子元素的參考 */
