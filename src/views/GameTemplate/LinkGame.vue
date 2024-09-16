@@ -293,13 +293,16 @@ export default {
       return this.IndexMappingTable[DotIndex];
     },
     CheckLinkAble(StartIndex, EndIndex) {
-      // Line Can't be drawed on the same column
       let StartColumn = this.MappingDotIndexToAnswerIndex(StartIndex)[0];
       let EndColumn = this.MappingDotIndexToAnswerIndex(EndIndex)[0];
       if (StartColumn == EndColumn) {
         return false;
-      } else {
+      } else if (StartColumn % 2 == 0 && EndColumn == StartColumn + 1) {
         return true;
+      } else if (StartColumn % 2 == 1 && EndColumn == StartColumn - 1) {
+        return true;
+      } else {
+        return false;
       }
     },
     CheckAnswerisCorrect(StartIndex, EndIndex) {
