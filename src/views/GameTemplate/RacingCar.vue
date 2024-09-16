@@ -180,7 +180,6 @@ export default {
             "正確",
           ]);
           this.$emit("next-question");
-          console.log("check answer : True");
         } else {
           this.$emit("play-effect", "WrongSound");
           this.$emit("add-record", [
@@ -189,7 +188,6 @@ export default {
             "錯誤",
           ]);
           setTimeout(this.replay, 1000);
-          console.log("check answer : False");
         }
         //this.configTemp.visible = true;
       }
