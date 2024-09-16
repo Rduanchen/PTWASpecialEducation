@@ -2,7 +2,11 @@
   <div class="gameContainer">
     <div id="canvasContainer">
       <h2>{{ GameData.Question }}</h2>
-      <v-stage :config="configKonva" @mousedown="touched">
+      <v-stage
+        :config="configKonva"
+        @touchstart="touchStart"
+        @touchend="touchEnd"
+      >
         <v-layer>
           <v-rect :config="configBg"></v-rect>
         </v-layer>
@@ -33,7 +37,12 @@
           <v-circle :config="configGhost_2"></v-circle>
         </v-layer>
         <v-layer>
-          <joystick :laneWidth="laneWidth"></joystick>
+          <joystick
+            :laneWidth="laneWidth"
+            :position="touchPosition"
+            :visible="joystickVisible"
+            @move="moveByJoystick"
+          ></joystick>
         </v-layer>
       </v-stage>
     </div>
@@ -42,7 +51,6 @@
 
 <script>
 import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
-import { fasK } from "@quasar/extras/fontawesome-v6";
 import { Container } from "konva/lib/Container";
 import { defineAsyncComponent } from "vue";
 
@@ -174,6 +182,11 @@ export default {
           randomRouteCD: true,
         },
       },
+      touchPosition: {
+        x: 0,
+        y: 0,
+      },
+      joystickVisible: false,
     };
   },
 
@@ -654,6 +667,17 @@ export default {
         ((config_1.x - config_2.x) ** 2 + (config_1.y - config_2.y) ** 2) **
         (1 / 2)
       );
+    },
+
+    touchStart(e) {
+      this.touchPosition = e.target.getStage().getPointerPosition();
+      this.joystickVisible = true;
+    },
+    touchEnd() {
+      this.joystickVisible = false;
+    },
+    moveByJoystick(direction) {
+      this.entityInfo.player.movement = direction;
     },
   },
 };
