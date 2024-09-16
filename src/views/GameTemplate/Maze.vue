@@ -2,7 +2,11 @@
   <div class="gameContainer">
     <div id="canvasContainer">
       <h2>{{ GameData.Question }}</h2>
-      <v-stage :config="configKonva">
+      <v-stage
+        :config="configKonva"
+        @touchstart="touchStart"
+        @touchend="touchEnd"
+      >
         <v-layer>
           <v-rect :config="configBg"></v-rect>
         </v-layer>
@@ -32,6 +36,14 @@
           <v-circle :config="configGhost_1"></v-circle>
           <v-circle :config="configGhost_2"></v-circle>
         </v-layer>
+        <v-layer>
+          <joystick
+            :laneWidth="laneWidth"
+            :position="touchPosition"
+            :visible="joystickVisible"
+            @move="moveByJoystick"
+          ></joystick>
+        </v-layer>
       </v-stage>
     </div>
   </div>
@@ -39,7 +51,6 @@
 
 <script>
 import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
-import { fasK } from "@quasar/extras/fontawesome-v6";
 import { Container } from "konva/lib/Container";
 import { defineAsyncComponent } from "vue";
 
@@ -48,6 +59,9 @@ export default {
     bounds: defineAsyncComponent(() => import("@/components/mazeBounds.vue")),
     safeArea: defineAsyncComponent(() =>
       import("@/components/mazeSafeArea.vue")
+    ),
+    joystick: defineAsyncComponent(() =>
+      import("@/components/touchscreenJoystick.vue")
     ),
   },
   data() {
@@ -168,6 +182,11 @@ export default {
           randomRouteCD: true,
         },
       },
+      touchPosition: {
+        x: 0,
+        y: 0,
+      },
+      joystickVisible: false,
     };
   },
 
@@ -319,7 +338,6 @@ export default {
         config: this.configGhost_2,
         entity: this.entityInfo.ghost_2,
       });
-      this.playerInteraction();
     },
 
     mapInxyGrid(config) {
@@ -552,6 +570,8 @@ export default {
           (Math.round(this.entityInfo.player.xyGrid.x) + 0.5) * this.laneWidth
         );
       }
+      this.playerCollisionWithGhost();
+      this.playerEnterSafeZone();
     },
     moveGhost({ config, entity }) {
       entity.xyGrid = this.mapInxyGrid(config);
@@ -585,7 +605,7 @@ export default {
           break;
       }
     },
-    playerInteraction() {
+    playerCollisionWithGhost() {
       if (
         this.entitiesDistance(this.configPlayer, this.configGhost_1) <=
           this.configPlayer.radius * 2 ||
@@ -599,7 +619,10 @@ export default {
           "與敵人碰撞",
           "錯誤",
         ]);
-      } else if (
+      }
+    },
+    playerEnterSafeZone() {
+      if (
         this.map[this.randomMapId][Math.round(this.entityInfo.player.xyGrid.y)][
           Math.round(this.entityInfo.player.xyGrid.x)
         ] != 0 &&
@@ -644,6 +667,17 @@ export default {
         ((config_1.x - config_2.x) ** 2 + (config_1.y - config_2.y) ** 2) **
         (1 / 2)
       );
+    },
+
+    touchStart(e) {
+      this.touchPosition = e.target.getStage().getPointerPosition();
+      this.joystickVisible = true;
+    },
+    touchEnd() {
+      this.joystickVisible = false;
+    },
+    moveByJoystick(direction) {
+      this.entityInfo.player.movement = direction;
     },
   },
 };
