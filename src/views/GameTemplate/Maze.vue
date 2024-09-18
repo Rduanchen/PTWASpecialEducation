@@ -220,7 +220,7 @@ export default {
   },
 
   mounted() {
-    //this.bootGame();
+    this.bootGame();
   },
 
   methods: {
@@ -280,13 +280,68 @@ export default {
       }
     },
 
-    initializeEntityPosition() {
-      this.configPlayer.x = Math.floor(this.laneWidth * 9.5);
-      this.configPlayer.y = Math.floor(this.laneWidth * 3.5);
-      this.configGhost_1.x = Math.floor(this.laneWidth * 3.5);
-      this.configGhost_1.y = Math.floor(this.laneWidth * 1.5);
-      this.configGhost_2.x = Math.floor(this.laneWidth * 16.5);
-      this.configGhost_2.y = Math.floor(this.laneWidth * 8.5);
+    initializeEnemyPosition() {
+      for (var i = 0; i < 10; ++i) {
+        for (var j = 0; j < 20; ++j) {
+          if (j >= 8 && j <= 11) continue;
+          if (this.map[this.randomMapId][i][j] == 0) {
+            this.configGhost_1.x = Math.floor(this.laneWidth * (j + 0.5));
+            this.configGhost_1.y = Math.floor(this.laneWidth * (i + 0.5));
+            break;
+          }
+        }
+      }
+      for (var i = 9; i > -1; --i) {
+        for (var j = 19; j > -1; --j) {
+          if (j >= 8 && j <= 11) continue;
+          if (this.map[this.randomMapId][i][j] == 0) {
+            this.configGhost_2.x = Math.floor(this.laneWidth * (j + 0.5));
+            this.configGhost_2.y = Math.floor(this.laneWidth * (i + 0.5));
+            break;
+          }
+        }
+      }
+    },
+    initializePlayerPosition() {
+      var possiblePosition = [];
+      for (var i = 4; i < 6; ++i) {
+        for (var j = 9; j < 11; ++j) {
+          if (this.map[this.randomMapId][i][j] == 0) {
+            possiblePosition.push({ x: j, y: i });
+          }
+        }
+      }
+      if (possiblePosition[0]) {
+        var randomPosition = Math.floor(
+          Math.random() * possiblePosition.length
+        );
+        this.configPlayer.x = Math.floor(
+          this.laneWidth * (possiblePosition[randomPosition].x + 0.5)
+        );
+        this.configPlayer.y = Math.floor(
+          this.laneWidth * (possiblePosition[randomPosition].y + 0.5)
+        );
+        return 0;
+      }
+      for (var i = 3; i < 7; ++i) {
+        for (var j = 8; j < 12; ++j) {
+          if (this.map[this.randomMapId][i][j] == 0) {
+            possiblePosition.push({ x: j, y: i });
+          }
+        }
+      }
+      if (possiblePosition[0]) {
+        var randomPosition = Math.floor(
+          Math.random() * possiblePosition.length
+        );
+        this.configPlayer.x = Math.floor(
+          this.laneWidth * (possiblePosition[randomPosition].x + 0.5)
+        );
+        this.configPlayer.y = Math.floor(
+          this.laneWidth * (possiblePosition[randomPosition].y + 0.5)
+        );
+        return 0;
+      }
     },
     initializeEntityConfig() {
       this.configPlayer.radius = Math.floor(this.laneWidth * 0.35);
@@ -296,10 +351,11 @@ export default {
     bootGame() {
       this.printOptions();
       this.initializeEntityConfig();
-      this.initializeEntityPosition();
+      this.initializeEnemyPosition();
+      this.initializePlayerPosition();
       window.addEventListener("keydown", this.keyDown);
       window.addEventListener("keyup", this.keyUp);
-      this.game = window.setInterval(this.update, 20);
+      //this.game = window.setInterval(this.update, 20);
     },
 
     keyDown(e) {
