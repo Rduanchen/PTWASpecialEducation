@@ -230,7 +230,7 @@ export default {
       this.configKonva.height = Math.floor(this.configKonva.width / 2);
     },
     generateMap() {
-      //this.randomMapId= Math.floor( Math.random()* this.map.length);
+      this.randomMapId = Math.floor(Math.random() * this.map.length);
       this.laneWidth = Math.floor(this.configKonva.width * 0.05);
       this.configBg.width = this.laneWidth * 20 - 3;
       this.configBg.height = this.laneWidth * 10 - 3;
