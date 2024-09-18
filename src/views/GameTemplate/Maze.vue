@@ -131,7 +131,7 @@ export default {
           [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1],
         ],
         [
-          [0, 0, 0, 1, 0, 1, 1, 0, 2, 2, 2, 2, 0, 0, 1, 1, 0, 0, 0, 0],
+          [0, 0, 0, 1, 0, 1, 1, 0, 2, 2, 2, 2, 0, 0, 1, 1, 0, 0, 0, 1],
           [0, 1, 0, 1, 0, 1, 0, 0, 0, 2, 2, 0, 1, 0, 1, 1, 0, 1, 0, 1],
           [0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1],
           [0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 4, 4, 4, 0, 1],
@@ -140,7 +140,7 @@ export default {
           [1, 0, 3, 3, 3, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0],
           [1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0],
           [1, 0, 1, 0, 1, 1, 0, 1, 0, 5, 5, 0, 0, 0, 1, 0, 1, 0, 1, 0],
-          [0, 0, 0, 0, 1, 1, 0, 0, 5, 5, 5, 5, 0, 1, 1, 0, 1, 0, 0, 0],
+          [1, 0, 0, 0, 1, 1, 0, 0, 5, 5, 5, 5, 0, 1, 1, 0, 1, 0, 0, 0],
         ],
       ],
       randomMapId: 2,
@@ -355,7 +355,7 @@ export default {
       this.initializePlayerPosition();
       window.addEventListener("keydown", this.keyDown);
       window.addEventListener("keyup", this.keyUp);
-      //this.game = window.setInterval(this.update, 20);
+      this.game = window.setInterval(this.update, 20);
     },
 
     keyDown(e) {
@@ -527,6 +527,22 @@ export default {
 
           break;
       }
+      if (possibleDirection.length == 0) {
+        switch (entity.movement) {
+          case "left":
+            possibleDirection.push("right");
+            break;
+          case "right":
+            possibleDirection.push("left");
+            break;
+          case "up":
+            possibleDirection.push("down");
+            break;
+          case "down":
+            possibleDirection.push("up");
+            break;
+        }
+      }
       entity.randomRouteCD = false;
       setTimeout(() => {
         entity.randomRouteCD = true;
@@ -680,7 +696,8 @@ export default {
         this.entitiesDistance(this.configPlayer, this.configGhost_2) <=
           this.configPlayer.radius * 2
       ) {
-        this.initializeEntityPosition();
+        this.initializeEnemyPosition();
+        this.initializePlayerPosition();
         this.$emit("play-effect", "WrongSound");
         this.$emit("add-record", [
           this.GameData.Options[this.GameData.Answer],
@@ -716,7 +733,8 @@ export default {
           ]);
           this.$emit("next-question");
         } else {
-          this.initializeEntityPosition();
+          this.initializeEnemyPosition();
+          this.initializePlayerPosition();
           this.$emit("play-effect", "WrongSound");
           this.$emit("add-record", [
             this.GameData.Options[this.GameData.Answer],
