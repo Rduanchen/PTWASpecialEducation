@@ -32,7 +32,7 @@
           <v-text :config="configOption[3]"></v-text>
         </v-layer>
         <v-layer>
-          <v-circle :config="configPlayer"></v-circle>
+          <v-shape :config="configPlayer"></v-shape>
           <v-circle :config="configGhost_1"></v-circle>
           <v-circle :config="configGhost_2"></v-circle>
         </v-layer>
@@ -95,6 +95,21 @@ export default {
       configPlayer: {
         fill: "yellow",
         stroke: "yellow",
+        sceneFunc: function (context, shape) {
+          context.beginPath();
+          //context.rotate(0.5 * Math.PI);
+          context.moveTo(0, 0);
+          context.arc(
+            0,
+            0,
+            shape.getAttr("radius"),
+            shape.getAttr("startRadians"),
+            shape.getAttr("endRadians")
+          );
+          context.lineTo(0, 0);
+          context.fillStrokeShape(shape);
+          context.closePath();
+        },
       },
       configGhost_1: {
         fill: "red",
@@ -119,19 +134,31 @@ export default {
           [4, 4, 4, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 5, 5, 5],
         ],
         [
-          [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-          [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-          [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-          [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-          [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-          [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-          [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-          [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-          [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-          [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+          [1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+          [1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 4, 4, 4, 0],
+          [1, 0, 2, 2, 2, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 4, 4, 4, 0],
+          [1, 0, 2, 2, 2, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0],
+          [0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 5, 5, 5, 0, 1],
+          [0, 3, 3, 3, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 5, 5, 5, 0, 1],
+          [0, 3, 3, 3, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1],
+          [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1],
+        ],
+        [
+          [0, 0, 0, 1, 0, 1, 1, 0, 2, 2, 2, 2, 0, 0, 1, 1, 0, 0, 0, 1],
+          [0, 1, 0, 1, 0, 1, 0, 0, 0, 2, 2, 0, 1, 0, 1, 1, 0, 1, 0, 1],
+          [0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1],
+          [0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 4, 4, 4, 0, 1],
+          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 4, 4, 4, 0, 1],
+          [1, 0, 3, 3, 3, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          [1, 0, 3, 3, 3, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0],
+          [1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0],
+          [1, 0, 1, 0, 1, 1, 0, 1, 0, 5, 5, 0, 0, 0, 1, 0, 1, 0, 1, 0],
+          [1, 0, 0, 0, 1, 1, 0, 0, 5, 5, 5, 5, 0, 1, 1, 0, 1, 0, 0, 0],
         ],
       ],
-      randomMapId: 0,
+      randomMapId: 2,
       genMap: [],
       safeMap: [],
       optionMap: [0, 0, 0, 0],
@@ -150,6 +177,9 @@ export default {
             y: 0,
           },
           movement: "idle",
+          startDegrees: 0,
+          endDegrees: 0,
+          animation: "open",
         },
         ghost_1: {
           tag: "ghost",
@@ -218,7 +248,7 @@ export default {
       this.configKonva.height = Math.floor(this.configKonva.width / 2);
     },
     generateMap() {
-      //this.randomMapId= Math.floor( Math.random()* 3);
+      this.randomMapId = Math.floor(Math.random() * this.map.length);
       this.laneWidth = Math.floor(this.configKonva.width * 0.05);
       this.configBg.width = this.laneWidth * 20 - 3;
       this.configBg.height = this.laneWidth * 10 - 3;
@@ -268,13 +298,68 @@ export default {
       }
     },
 
-    initializeEntityPosition() {
-      this.configPlayer.x = Math.floor(this.laneWidth * 9.5);
-      this.configPlayer.y = Math.floor(this.laneWidth * 3.5);
-      this.configGhost_1.x = Math.floor(this.laneWidth * 3.5);
-      this.configGhost_1.y = Math.floor(this.laneWidth * 1.5);
-      this.configGhost_2.x = Math.floor(this.laneWidth * 16.5);
-      this.configGhost_2.y = Math.floor(this.laneWidth * 8.5);
+    initializeEnemyPosition() {
+      for (var i = 0; i < 10; ++i) {
+        for (var j = 0; j < 20; ++j) {
+          if (j >= 8 && j <= 11) continue;
+          if (this.map[this.randomMapId][i][j] == 0) {
+            this.configGhost_1.x = Math.floor(this.laneWidth * (j + 0.5));
+            this.configGhost_1.y = Math.floor(this.laneWidth * (i + 0.5));
+            break;
+          }
+        }
+      }
+      for (var i = 9; i > -1; --i) {
+        for (var j = 19; j > -1; --j) {
+          if (j >= 8 && j <= 11) continue;
+          if (this.map[this.randomMapId][i][j] == 0) {
+            this.configGhost_2.x = Math.floor(this.laneWidth * (j + 0.5));
+            this.configGhost_2.y = Math.floor(this.laneWidth * (i + 0.5));
+            break;
+          }
+        }
+      }
+    },
+    initializePlayerPosition() {
+      var possiblePosition = [];
+      for (var i = 4; i < 6; ++i) {
+        for (var j = 9; j < 11; ++j) {
+          if (this.map[this.randomMapId][i][j] == 0) {
+            possiblePosition.push({ x: j, y: i });
+          }
+        }
+      }
+      if (possiblePosition[0]) {
+        var randomPosition = Math.floor(
+          Math.random() * possiblePosition.length
+        );
+        this.configPlayer.x = Math.floor(
+          this.laneWidth * (possiblePosition[randomPosition].x + 0.5)
+        );
+        this.configPlayer.y = Math.floor(
+          this.laneWidth * (possiblePosition[randomPosition].y + 0.5)
+        );
+        return 0;
+      }
+      for (var i = 3; i < 7; ++i) {
+        for (var j = 8; j < 12; ++j) {
+          if (this.map[this.randomMapId][i][j] == 0) {
+            possiblePosition.push({ x: j, y: i });
+          }
+        }
+      }
+      if (possiblePosition[0]) {
+        var randomPosition = Math.floor(
+          Math.random() * possiblePosition.length
+        );
+        this.configPlayer.x = Math.floor(
+          this.laneWidth * (possiblePosition[randomPosition].x + 0.5)
+        );
+        this.configPlayer.y = Math.floor(
+          this.laneWidth * (possiblePosition[randomPosition].y + 0.5)
+        );
+        return 0;
+      }
     },
     initializeEntityConfig() {
       this.configPlayer.radius = Math.floor(this.laneWidth * 0.35);
@@ -284,7 +369,8 @@ export default {
     bootGame() {
       this.printOptions();
       this.initializeEntityConfig();
-      this.initializeEntityPosition();
+      this.initializeEnemyPosition();
+      this.initializePlayerPosition();
       window.addEventListener("keydown", this.keyDown);
       window.addEventListener("keyup", this.keyUp);
       this.game = window.setInterval(this.update, 20);
@@ -338,6 +424,7 @@ export default {
         config: this.configGhost_2,
         entity: this.entityInfo.ghost_2,
       });
+      this.playerAnimation(this.entityInfo.player);
     },
 
     mapInxyGrid(config) {
@@ -458,6 +545,22 @@ export default {
           }
 
           break;
+      }
+      if (possibleDirection.length == 0) {
+        switch (entity.movement) {
+          case "left":
+            possibleDirection.push("right");
+            break;
+          case "right":
+            possibleDirection.push("left");
+            break;
+          case "up":
+            possibleDirection.push("down");
+            break;
+          case "down":
+            possibleDirection.push("up");
+            break;
+        }
       }
       entity.randomRouteCD = false;
       setTimeout(() => {
@@ -612,7 +715,8 @@ export default {
         this.entitiesDistance(this.configPlayer, this.configGhost_2) <=
           this.configPlayer.radius * 2
       ) {
-        this.initializeEntityPosition();
+        this.initializeEnemyPosition();
+        this.initializePlayerPosition();
         this.$emit("play-effect", "WrongSound");
         this.$emit("add-record", [
           this.GameData.Options[this.GameData.Answer],
@@ -648,7 +752,8 @@ export default {
           ]);
           this.$emit("next-question");
         } else {
-          this.initializeEntityPosition();
+          this.initializeEnemyPosition();
+          this.initializePlayerPosition();
           this.$emit("play-effect", "WrongSound");
           this.$emit("add-record", [
             this.GameData.Options[this.GameData.Answer],
@@ -678,6 +783,51 @@ export default {
     },
     moveByJoystick(direction) {
       this.entityInfo.player.movement = direction;
+    },
+
+    playerAnimation(entity) {
+      if (entity.animation == "open") {
+        entity.startDegrees += 3;
+        entity.endDegrees -= 3;
+        if (entity.startDegrees >= 45) {
+          entity.animation = "close";
+        }
+      } else if (entity.animation == "close") {
+        entity.startDegrees -= 3;
+        entity.endDegrees += 3;
+        if (entity.startDegrees <= 3) {
+          entity.animation = "open";
+        }
+      }
+      switch (entity.movement) {
+        case "idle":
+          this.configPlayer.startRadians = 0;
+          this.configPlayer.endRadians = 10;
+          break;
+        case "left":
+          this.configPlayer.startRadians =
+            ((entity.startDegrees + 180) * Math.PI) / 180;
+          this.configPlayer.endRadians =
+            ((entity.endDegrees + 180) * Math.PI) / 180;
+          break;
+        case "right":
+          this.configPlayer.startRadians =
+            (entity.startDegrees * Math.PI) / 180;
+          this.configPlayer.endRadians = (entity.endDegrees * Math.PI) / 180;
+          break;
+        case "up":
+          this.configPlayer.startRadians =
+            ((entity.startDegrees + 270) * Math.PI) / 180;
+          this.configPlayer.endRadians =
+            ((entity.endDegrees + 270) * Math.PI) / 180;
+          break;
+        case "down":
+          this.configPlayer.startRadians =
+            ((entity.startDegrees + 90) * Math.PI) / 180;
+          this.configPlayer.endRadians =
+            ((entity.endDegrees + 90) * Math.PI) / 180;
+          break;
+      }
     },
   },
 };
