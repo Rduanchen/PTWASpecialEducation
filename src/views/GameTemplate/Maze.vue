@@ -32,7 +32,7 @@
           <v-text :config="configOption[3]"></v-text>
         </v-layer>
         <v-layer>
-          <v-circle :config="configPlayer"></v-circle>
+          <v-shape :config="configPlayer"></v-shape>
           <v-circle :config="configGhost_1"></v-circle>
           <v-circle :config="configGhost_2"></v-circle>
         </v-layer>
@@ -95,6 +95,21 @@ export default {
       configPlayer: {
         fill: "yellow",
         stroke: "yellow",
+        sceneFunc: function (context, shape) {
+          context.beginPath();
+          //context.rotate(0.5 * Math.PI);
+          context.moveTo(0, 0);
+          context.arc(
+            0,
+            0,
+            shape.getAttr("radius"),
+            shape.getAttr("startRadians"),
+            shape.getAttr("endRadians")
+          );
+          context.lineTo(0, 0);
+          context.fillStrokeShape(shape);
+          context.closePath();
+        },
       },
       configGhost_1: {
         fill: "red",
@@ -162,6 +177,9 @@ export default {
             y: 0,
           },
           movement: "idle",
+          startDegrees: 0,
+          endDegrees: 0,
+          animation: "open",
         },
         ghost_1: {
           tag: "ghost",
@@ -406,6 +424,7 @@ export default {
         config: this.configGhost_2,
         entity: this.entityInfo.ghost_2,
       });
+      this.playerAnimation(this.entityInfo.player);
     },
 
     mapInxyGrid(config) {
@@ -764,6 +783,51 @@ export default {
     },
     moveByJoystick(direction) {
       this.entityInfo.player.movement = direction;
+    },
+
+    playerAnimation(entity) {
+      if (entity.animation == "open") {
+        entity.startDegrees += 3;
+        entity.endDegrees -= 3;
+        if (entity.startDegrees >= 45) {
+          entity.animation = "close";
+        }
+      } else if (entity.animation == "close") {
+        entity.startDegrees -= 3;
+        entity.endDegrees += 3;
+        if (entity.startDegrees <= 3) {
+          entity.animation = "open";
+        }
+      }
+      switch (entity.movement) {
+        case "idle":
+          this.configPlayer.startRadians = 0;
+          this.configPlayer.endRadians = 10;
+          break;
+        case "left":
+          this.configPlayer.startRadians =
+            ((entity.startDegrees + 180) * Math.PI) / 180;
+          this.configPlayer.endRadians =
+            ((entity.endDegrees + 180) * Math.PI) / 180;
+          break;
+        case "right":
+          this.configPlayer.startRadians =
+            (entity.startDegrees * Math.PI) / 180;
+          this.configPlayer.endRadians = (entity.endDegrees * Math.PI) / 180;
+          break;
+        case "up":
+          this.configPlayer.startRadians =
+            ((entity.startDegrees + 270) * Math.PI) / 180;
+          this.configPlayer.endRadians =
+            ((entity.endDegrees + 270) * Math.PI) / 180;
+          break;
+        case "down":
+          this.configPlayer.startRadians =
+            ((entity.startDegrees + 90) * Math.PI) / 180;
+          this.configPlayer.endRadians =
+            ((entity.endDegrees + 90) * Math.PI) / 180;
+          break;
+      }
     },
   },
 };
