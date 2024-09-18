@@ -30,6 +30,8 @@ export default {
 
   props: ["laneWidth", "position", "visible"],
 
+  emits: ["move"],
+
   mounted() {
     this.configBase.radius = Math.round(this.laneWidth * 1.5);
     this.configStick.radius = Math.round(this.laneWidth * 0.5);
