@@ -102,6 +102,8 @@ export default {
     },
   },
 
+  emits: ["play-effect", "add-record", "next-question"],
+
   beforeMount() {
     var gameWidth = document.getElementById("GameContainer").clientWidth;
     //var canvasCon = document.getElementById("canvasContainer");
@@ -175,23 +177,21 @@ export default {
           //this.configTemp.text = "SUCCESS";
           this.$emit("play-effect", "CorrectSound");
           this.$emit("add-record", [
-            this.GameData.Answer,
-            this.configCar.key,
+            this.GameData.Options[this.GameData.Answer],
+            this.GameData.Options[this.configCar.key],
             "正確",
           ]);
           this.$emit("next-question");
         } else {
           this.$emit("play-effect", "WrongSound");
           this.$emit("add-record", [
-            this.GameData.Answer,
-            this.configCar.key,
+            this.GameData.Options[this.GameData.Answer],
+            this.GameData.Options[this.configCar.key],
             "錯誤",
           ]);
           setTimeout(this.replay, 1000);
         }
-        //this.configTemp.visible = true;
       }
-      //alert("end");
     },
 
     replay() {
