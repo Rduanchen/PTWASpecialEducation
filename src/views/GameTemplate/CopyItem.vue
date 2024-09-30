@@ -1,14 +1,20 @@
 <template>
 <div class="outter-container">
-    <div class="container-title title">
-        <p class="title__text">{{ this.GameData.Title }}</p>
-    </div>
+    <!-- <div class="container-top"> -->
+        <div class="container-title title">
+            <p class="title__text">{{ this.GameData.Title }}</p>
+        </div>
+        <!-- <draggable
+            class="drag-container"
+            :group="{ name: 'items', pull: ()=> true, put: false }"
+        ></draggable>
+    </div> -->
     <div class="game-index">
         <div class="box-tar">
             <draggable
                 class="drag-container box"
                 :list="tarList"
-                :key="tarList.key"
+                item-key="ID"
                 group="items"
             >
                 <template #item="{ element }">
@@ -16,6 +22,7 @@
                         :is="element.Name"
                         :Data="element.Data"
                         :ID="element.ID"
+                        @click="deleteItem(index)"
                         class="list-group-item"
                     ></component>
                 </template>
@@ -33,6 +40,7 @@
                     @change="init"
                     :sort="false"
                     :key="sourceList.key"
+                    item-key="ID"
                 >
                     <template #item="{ element }">
                         <component
@@ -44,9 +52,7 @@
                     </template>
                 </draggable>
             </div>
-
-            <button class="button-basic tool-container">檢查答案</button>
-
+            <button class="button-basic tool-container" @click="checkAnswer()">檢查答案</button>
         </div>
     </div>
 </div>
@@ -54,37 +60,60 @@
 
 <script>
 import draggable from 'vuedraggable';
-import { getComponents } from '@/utilitys/get-components';
 import { defineAsyncComponent } from 'vue';
 import ImageContainer from '@/components/ImageContainer.vue';
+import draggableComponent from 'vuedraggable';
+import { fasWineGlassEmpty } from '@quasar/extras/fontawesome-v6';
 export default {
     name: 'CopyItem',
     components: {
         draggable,
-        ImageContainer
+        ImageContainer: ImageContainer,
+    },
+    props: {
+        GameData: {
+            type: Object,
+            required: true
+        },
+        GameConfig: {
+            type: Object,
+            required: false
+        },
+        id: {
+            type: String,
+            required: true
+        }
     },
     data() {
         return {
             // Your data properties go here
             id: 'Dev0105',
-            GameData: {
-                Title: "123456",
-                Questions: [
-                    "請放入五個糖果"
-                ],
-                Items: [{
-                    Name: "ImageContainer",
-                    Amount: 3,                    
-                    Data: {
-                        Src: "sugar.png",
-                        Alt: "糖果照片",
-                    }
-                }]
-            },
+            // GameData: {
+            //     Title: "123456",
+            //     Questions: [
+            //         "請放入五個糖果"
+            //     ],
+            //     Items: [{
+            //         Name: "ImageContainer",
+            //         Amount: 3,                    
+            //         Data: {
+            //             Src: "sugar.png",
+            //             Alt: "糖果照片",
+            //         }
+            //     },{
+            //         Name: "ImageContainer",
+            //         Amount: 3,                    
+            //         Data: {
+            //             Src: "apple.png",
+            //             Alt: "糖果照片",
+            //         }
+            //     }]
+            // },
             tarList: [
                 
             ],
             sourceList: [
+
             ]
         };
     },
@@ -106,10 +135,31 @@ export default {
                 });
             }
         },
+        deleteItem(item) {
+            this.tarList = this.tarList.filter((element) => {
+                return element.ID != item.ID;
+            });
+        },
         checkAnswer() {
+            let stack = {};
+            let isTrue = true;
             for(var i in this.tarList){
-                var item = this.tarList[i];
-                console.log(item);
+                if ( stack[this.tarList[i].item] == undefined ) {
+                    stack[this.tarList[i].item] = 1;
+                } else {
+                    stack[this.tarList[i].item] += 1;
+                }
+            }
+            for(var i in this.GameData.Items){
+                if ( stack[i] == undefined || stack[i] != this.GameData.Items[i].Amount ) {
+                    isTrue = false;
+                }
+            }
+            if ( isTrue ) {
+                this.$emit('next-question');
+                this.$emit('play-effect', 'CorrectSound');
+            } else {
+                this.$emit('play-effect', 'WrongSound')
             }
         }
     },
@@ -152,6 +202,9 @@ export default {
                 flex-direction: column;
                 align-items: start;
                 justify-content: center;
+                p {
+                    font-size: $text-medium;
+                }
             }
             .source {
                 flex: 3;

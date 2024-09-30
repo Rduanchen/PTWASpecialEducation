@@ -42,7 +42,7 @@
               <div class="item-frame" v-if="Show" :key="Refresh">
                 <div class="Charpter" v-for="items in this.ShowInfo[SelectedChapter].Section" v-if="this.ShowInfo">
                   <div>
-                      <h5 class="card-title">{{ items.Title }}</h5>
+                      <p class="card-title">{{ items.Title }}</p>
                       <div class="game-card__group">
                         <div class="card game-card" v-for="item in items.Games" @click="switchRouter({ name: 'Game', params: { id: item.id, Grade: this.ShowGrade, Subject: this.Subject ,GameName: item.Name} })">
                           <div class="card-body d-flex flex-column justify-content-between">
@@ -339,9 +339,6 @@ section{
 
 // 當尺寸小於 768px 時
 @media (max-width: 768px) {
-  .item-frame {
-    padding: 1.5rem 1rem !important;
-  }
   .game-card__group {
     grid-template-columns: 1fr !important;
   }
@@ -357,11 +354,9 @@ section{
   .side-bar {
     display: flex;
     flex-direction: column;
-    justify-content: stretch;
-    display: grid;
-    gap: 1vh;
     height: 90vh;
     background-color: $sub-color;
+    padding: $gap--small;
     button{
       width: 100%;
       background-color: $info-btn-bg;
@@ -374,7 +369,7 @@ section{
     }
     .Title{
       font-size: 1.5em;
-      margin: 1vh 0;
+      margin-bottom: $gap--tiny;
     }
     .ButtonContainer{
       display: grid;
@@ -392,20 +387,11 @@ section{
         background-color: $secondary-btn-hover-bg;
       }
     }
-    // overflow-y: scroll;
-    padding: 2vh 2vw;
-    // @media (pointer: fine) { 
-    //   -ms-overflow-style: none; /* IE/Edge */
-    //   &::-webkit-scrollbar {
-    //     display: none;
-    //   }
-    // }
   }
-  
   .item-frame{
     height: 90vh;
     overflow-y: scroll;
-    padding: 1.8rem 2rem;
+    padding: $gap--small;
     @media (pointer: fine) { 
       -ms-overflow-style: none; /* IE/Edge */
       &::-webkit-scrollbar {
@@ -417,7 +403,7 @@ section{
     }
     .card-title{
       font-size: 1.5em;
-      margin-bottom: 1.5vh;
+      margin-bottom: $gap--tiny;
     }
   }
 }
@@ -444,7 +430,7 @@ section{
     }
   }
   .game-card:hover {
-  transform: scale(1.05); /* 當滑鼠懸停時放大 5% */
+    transform: scale(1.05); /* 當滑鼠懸停時放大 5% */
   }
   @media (pointer: fine) { 
     -ms-overflow-style: none; /* IE/Edge */
