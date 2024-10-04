@@ -109,20 +109,22 @@
                   :Data="CorrectIncorrect"
                   v-if="ShowReply"
                 ></EffectWindow>
-                <component
-                  class="GameComponent111"
-                  v-if="GameType != 'SelfDefine'"
-                  v-bind:is="this.GameType"
-                  ref="GameComponent"
-                  :key="this.Nowlevel"
-                  :id="this.GameID"
-                  :GameData="this.GameData.Questions[this.Nowlevel - 1]"
-                  :GameConfig="this.GameConfig"
-                  @add-record="GameDataRecord"
-                  @play-effect="EffectPlayer"
-                  @next-question="NextQuestion"
-                >
-                </component>
+                <transition :name="transitionName" mode="out-in">
+                  <component
+                    class="GameComponent111"
+                    v-if="GameType != 'SelfDefine'"
+                    v-bind:is="this.GameType"
+                    ref="GameComponent"
+                    :key="this.Nowlevel"
+                    :id="this.GameID"
+                    :GameData="this.GameData.Questions[this.Nowlevel - 1]"
+                    :GameConfig="this.GameConfig"
+                    @add-record="GameDataRecord"
+                    @play-effect="EffectPlayer"
+                    @next-question="NextQuestion"
+                  >
+                  </component>
+                </transition>
 
                 <component
                   v-if="GameType == 'SelfDefine'"
@@ -171,13 +173,16 @@
             :HintInfo="HintInfo"
             :Hint="Hint"
             :download_data="download_data"
+            :levelAmount="this.GameData.Questions.length"
+            :reAppeareCode="questionOrder"
             @to-csv="ToCSV"
             @provide-hint="ProvideHint"
             @previous-question="PreviousQuestion"
             @next-question="NextQuestion"
             @start-game="StartGame"
             @reload-page="reloadPage"
-            @scratchSheet="scratchSheetVisible = true"
+            @scratch-sheet="() => {scratchSheetVisible = true}"
+            @reappear-code="reappearCode"
           >
             <template #hint>
               <hintbutton
@@ -193,28 +198,32 @@
 
           <!-- Modal -->
           <div
-            class="fade modal"
-            id="Calculator"
-            tabindex="-1"
-            aria-labelledby="exampleModalLabel"
-            aria-hidden="true"
-          >
-            <div class="modal-dialog modal-fullscreen">
-              <div
-                class="modal-content"
-                style="
-                  height: 100vh;
-                  width: 100vw;
-                  background-color: transparent;
-                "
-              >
-                <scratchSheet
-                  v-if="scratchSheetVisible == true"
-                  @closeSheet="scratchSheetVisible = false"
-                ></scratchSheet>
-              </div>
-            </div>
+  class="fade modal"
+  id="Calculator"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+  style="background: rgba(0, 0, 0, 0) !important;"
+>
+  <div class="modal-dialog modal-fullscreen">
+    <div
+      class="modal-content"
+      style="
+        height: 100vh;
+        width: 100vw;
+        background-color: rgba(0, 0, 0, 0) !important;
+        border: none;
+        box-shadow: none;
+      "
+    >
+      <scratchSheet
+        v-if="scratchSheetVisible == true"
+        @closeSheet="() => { closeSratSheet() }"
+      ></scratchSheet>
+    </div>
+  </div>
           </div>
+
 
           <!--FIXME teach -->
           <div
@@ -243,13 +252,20 @@
                     <p class="h1">ㄨㄚˊ，找不到教學影片~~~</p>
                     <img src="@/assets/images/game_images/elephant.gif" />
                   </div>
-                  <div id="havevideo" v-else>
+                  <div id="havevideo d-flex" v-else>
+                    <img
+                      :src="VideoSrc"
+                      class="img-fluid align-self-center"
+                      style="height: 70vh"
+                      v-if="isGif"
+                    />
                     <video
                       id="introvideo"
                       :src="VideoSrc"
                       controls="controls"
                       class="img-fluid"
                       style="height: 70vh"
+                      v-else
                     ></video>
                   </div>
                 </div>
@@ -357,18 +373,21 @@ import fetchJson from "@/utilitys/fetch-json.js";
 import * as Arr2CSV from "@/utilitys/array2csv.js";
 import loading from "@/components/loading.vue";
 import GameStartandOver from "@/components/GameStartandOver.vue";
-import scratchSheet from "@/components/scratchSheet.vue";
+import scratchSheet from "@/components/ScratchSheets.vue";
 import hintbutton from "@/components/hintbutton.vue";
 import * as ImportUrl from "@/utilitys/get_assets.js";
 import axios from "axios";
 import { defineAsyncComponent } from "vue";
-import { useFullscreen } from "@vueuse/core";
-import CompareGame from "./GameTemplate/CompareGame.vue";
+// import CompareGame from "./GameTemplate/CompareGame.vue";
 import EffectWindow from "@/components/EffectWindow.vue";
-import PairingGame from "./GameTemplate/PairingGame.vue";
-import WhackaMole from "./GameTemplate/WhackaMole.vue";
-import SelectGameMulti from "./GameTemplate/SelectGameMulti.vue";
-import CopyItem from "./GameTemplate/CopyItem.vue";
+// import PairingGame from "./GameTemplate/PairingGame.vue";
+// import WhackaMole from "./GameTemplate/WhackaMole.vue";
+// import SelectGameMulti from "./GameTemplate/SelectGameMulti.vue";
+// import CopyItem from "./GameTemplate/CopyItem.vue";
+import gameStore from '@/stores/game';
+import { mapWritableState } from "pinia";
+import { soundManager } from '@/utilitys/sound-manager.js';
+
 export default {
   data() {
     return {
@@ -413,10 +432,16 @@ export default {
       CorrectIncorrect: {
         Status: null,
       },
+      isPassLevel: [],
+      questionOrder : [],
+      questionCopy: [],
+      isGif: false,
+      transitionName: "slide-right",
       // SentData2ChildComponent: {},
     };
   },
   computed: {
+    ...mapWritableState(gameStore, ['gameCode']),
     selfdefinetemplate() {
       return defineAsyncComponent(() =>
         import(
@@ -442,43 +467,66 @@ export default {
         this.GameData = res.data;
         this.GameType = this.GameData.GameType;
         this.GameConfig = this.GameData.GameConfig;
+        this.questionCopy = this.GameData.Questions;
         this.InitHint();
         this.InitIntroVideo();
         this.Dataloaded = true;
-
-        //Radom Select Questions via level
-        let question = [];
-        var temp = [];
-        var checkcorrect = true;
-        for (var i in this.GameData.Questions) {
-          if (this.GameData.Questions[i].length != undefined) {
-            var num = this.GameData.Questions[i].length;
-            console.log("Num", num);
-            var rand = Math.floor(Math.random() * (num - 0 + 0));
-            console.log("Rand", rand);
-            question.push(this.GameData.Questions[i][rand]);
-          } else {
-            checkcorrect = false;
-            break;
-          }
-        }
-        if (checkcorrect) {
-          console.log(question);
-          this.GameData.Questions = question;
-        } else {
-          console.warn(
-            "Radom Select Questions via level Fail, this could be the question is not a array (Format Error)"
-          );
+        this.RamdonChoice();
+        for(var x in this.GameData.Questions){
+          this.isPassLevel.push(false);
         }
       } catch (error) {
         console.error("Fetch Game Data Error: ", error);
       }
     })();
+      console.log(this.gameCode);
+      soundManager.registerSound('Correct', `${ImportUrl.getSystemEffectAssets("CorrectAnswer.mp3")}`,false);
+      soundManager.registerSound('Wrong', `${ImportUrl.getSystemEffectAssets("WrongAnswer.mp3")}`,false);
+      soundManager.registerSound('FireWorkAnimation', `${ImportUrl.getSystemEffectAssets("harray.mp3")}`,false);
   },
   mounted() {
     this.FullScreen();
   },
   methods: {
+    RamdonChoice() {
+      //Radom Select Questions via level
+      let question = [];
+      var temp = [];
+      var checkcorrect = true;
+      let record = [];
+      for (var i in this.GameData.Questions) {
+        if (this.GameData.Questions[i].length != undefined) {
+          var num = this.GameData.Questions[i].length;
+          var rand = Math.floor(Math.random() * (num - 0 + 0));
+          console.log('rand',rand);
+          question.push(this.GameData.Questions[i][rand]);
+          record.push(rand);
+        } else {
+          checkcorrect = false;
+          break;
+        }
+      }
+      this.gameCode = record.toString().replaceAll(',','-');
+      if (checkcorrect) {
+        console.log(question);
+        this.GameData.Questions = question;
+      } else {
+        this.gameCode = 'origin'
+        console.warn(
+          "Radom Select Questions via level Fail, this could be the question is not a array (Format Error)"
+        );
+      }
+    },
+    reappearCode() {
+      if (this.gameCode == 'origin') return;
+      let reappear = this.gameCode.split('-');
+      let question = [];
+      reappear.forEach((element,index) => {
+        question.push(this.questionCopy[index][element]);
+      });
+      this.GameData.Questions = question;
+      this.questionOrder = this.gameCode;
+    },
     PauseIntroVideo() {
       try {
         let video = document.getElementById("introvideo");
@@ -486,25 +534,26 @@ export default {
       } catch {}
     },
     InitIntroVideo() {
-      try {
-        // this.VideoSrc = new URL(`../assets/Games/`+this.GameID+`/${this.GameData.introvideo}`, import.meta.url).href;
+      
+      this.introvideo = true;
+      //find is undefined in url
+      let patten = /undefined/;
+      let temp = ImportUrl.GamesGetAssetsFile( this.GameID,this.GameData.introvideo );
+      temp = temp.toString();
+      temp = patten.test(temp)?undefined:temp;
+      if (this.GameData.introvideo != undefined && temp) {
         this.VideoSrc = ImportUrl.GamesGetAssetsFile(
           this.GameID,
           this.GameData.introvideo
         );
-        this.introvideo = true;
-      } catch (error) {
-        this.introvideo = false;
-        // console.log("No Intro Video");
-        console.warn("No Intro Video:", error);
-      }
-      let patten = /\.mp4$/i;
-      if (patten.test(this.VideoSrc)) {
-        this.introvideo = true;
+      } else if (ImportUrl.getDefaultHintAssets(`${this.GameType}.gif`)) {
+        this.VideoSrc = ImportUrl.getDefaultHintAssets(`${this.GameType}.gif`);
+        this.isGif = true;
       } else {
         this.introvideo = false;
-        console.warn("The intro video is not a mp4 file");
+        console.warn("No Intro Video");
       }
+      
     },
     ChangeGameStatus(status) {
       //改變遊戲狀態
@@ -525,7 +574,8 @@ export default {
           this.Grade,
           this.Subject,
           data,
-          this.finaltime
+          this.finaltime,
+          this.gameCode
         );
         Arr2CSV.DownloadCSV(download, this.Name);
       } else {
@@ -536,7 +586,8 @@ export default {
           this.Subject,
           data,
           this.finaltime,
-          this.header
+          this.gameCode,
+          this.header,
         );
         Arr2CSV.DownloadCSV(download, this.Name);
       }
@@ -551,6 +602,10 @@ export default {
       this.totaltime = 0;
       this.finaltime = 0;
       this.download_data = [[]];
+      this.isPassLevel = [];
+      for(var x in this.GameData.Questions){
+        this.isPassLevel.push(false);
+      }
     },
     changelevel(change2level) {
       this.WrongTimes = 0;
@@ -558,6 +613,11 @@ export default {
         console.log("The level is out of range");
       } else {
         this.Nowlevel = change2level;
+        if (this.Nowlevel > change2level) {
+          this.transitionName = "slide-left";
+        } else if (this.Nowlevel < change2level) {
+          this.transitionName = "slide-right";
+        }
         this.pauseTimer();
         //FIXME 傳資料進入CSV
         this.resetTimer();
@@ -565,11 +625,37 @@ export default {
       }
     },
     NextQuestion() {
+      this.isPassLevel[this.Nowlevel-1] = true;
       this.WrongTimes = 0;
-      if (this.Nowlevel < this.GameData.TotalLevel) {
-        this.Nowlevel++;
-      } else {
+      let isDone = true;
+      for(var i in this.isPassLevel){
+        if(this.isPassLevel[i] == false){
+          isDone = false;
+          break;
+        }
+      }
+      let notFound = true;
+      for (var i = this.Nowlevel; i < this.GameData.Questions.length; i++) {
+        if (this.isPassLevel[i] == false) {
+          this.Nowlevel = i + 1;
+          this.transitionName = 'slide-left';
+          notFound = false;
+          break;
+        }
+      }
+      if (notFound) {
+        for (var i = 0; i < this.isPassLevel.length; i++) {
+          if (this.isPassLevel[i] == false) {
+            this.Nowlevel = i + 1;
+            this.transitionName = 'slide-left';
+            isDone = false;
+            break;
+          }
+        }
+      }
+      if(isDone){
         this.GameStatus = "Done";
+        soundManager.stopAllSounds();
         this.EffectPlayer("FireWorkAnimation");
         this.finaltime = this.totaltime;
       }
@@ -581,6 +667,7 @@ export default {
       this.WrongTimes = 0;
       if (this.Nowlevel > 1) {
         this.Nowlevel--;
+        this.transitionName = 'slide-right';
       }
       this.pauseTimer();
       //FIXME 傳資料進入CSV
@@ -630,44 +717,49 @@ export default {
       }
     },
     EffectPlayer(type) {
-      //播放音效
-      // console.log("Play Effect, type: "+type);
-      let EffectWindow = document.getElementById("CorrectIncorrect");
+      //播放音效    
       switch (type) {
         case "CorrectSound":
-          var sound = new Audio();
-          sound.src = ImportUrl.GetSystemEffectAssetsFile("CorrectAnswer.mp3");
+          // var sound = new Audio();
+          // sound.src = ImportUrl.GetSystemEffectAssetsFile("CorrectAnswer.mp3");
           // console.log(sound.src);
+
           this.EffectPlayer("CorrectAnimation");
-          sound.oncanplaythrough = function () {
-            sound.play();
-          };
+          soundManager.playSound(`Correct`, false);
+          // sound.oncanplaythrough = function () {
+          //   sound.play();
+          // };
           break;
         case "WrongSound":
           this.WrongTimes++;
-          var sound = new Audio();
-          sound.src = ImportUrl.GetSystemEffectAssetsFile("WrongAnswer.mp3");
+          // var sound = new Audio();
+          // sound.src = ImportUrl.GetSystemEffectAssetsFile("WrongAnswer.mp3");
           this.EffectPlayer("IncorrectAnimation");
-          sound.oncanplaythrough = function () {
-            sound.play();
-          };
+          soundManager.playSound(`Wrong`, false);
+          // sound.oncanplaythrough = function () {
+          //   sound.play();
+          // };
           break;
         case "FireWorkAnimation":
           this.EffectWindow = true;
-          // this.EffectSrc = new URL(`../assets/Effects/Firework.gif`, import.meta.url).href;
+          this.EffectSrc = new URL(`../assets/Effects/Firework.gif`, import.meta.url).href;
           var sound = new Audio();
           sound.src = ImportUrl.GetSystemEffectAssetsFile("harray.mp3");
+          soundManager.playSound(`FireWorkAnimation`, false);
           sound.oncanplaythrough = function () {
             sound.play();
           };
-          setInterval(() => {
+          setTimeout(() => {
             this.EffectWindow = false;
           }, 3000);
           break;
-        case "HarraySound":
+        case "HarraySound": //Wait for remove
+          // this.EffectPlayer("FireWorkAnimation");
+          console.warn("HarraySound is Deprecated, Please use FireWorkAnimation instead");
           var sound = new Audio();
-          // sound.src = ImportUrl.GetSystemAssetsFile("harray.mp3","effects");
+          sound.src = ImportUrl.GetSystemAssetsFile("harray.mp3","effects");
           sound.src = ImportUrl.GetSystemEffectAssetsFile("harray.mp3");
+          soundManager.playSound(`harray`, false);
           sound.oncanplaythrough = function () {
             sound.play();
           };
@@ -819,8 +911,15 @@ export default {
       } catch {}
     },
     PreviousPage() {
+      soundManager.stopAllSounds();
       this.ExitFullScreen();
-      this.$router.go(-1);
+      this.$router.replace({ path: `/GameSelect/${this.$route.params.Grade}`})
+    },
+    closeSratSheet() {
+      this.scratchSheetVisible = false;
+      var modal = document.getElementById("Calculator");
+      modal.classList.remove("show");
+      modal.style.display = "none";
     },
   },
   components: {
@@ -889,6 +988,7 @@ export default {
     NumberSearchGame: defineAsyncComponent(() =>
       import("@/views/GameTemplate/NumberSearchGame.vue")
     ),
+    Track: defineAsyncComponent(() => import("@/views/GameTemplate/Track.vue")),
     EffectWindow,
     SideBar: defineAsyncComponent(() =>
       import("@/components/GameSystem/SideBar.vue")
@@ -903,6 +1003,11 @@ export default {
 header {
   background-color: #f19c79;
   height: 10vh !important;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 .navbar {
   background-color: #f19c79;
@@ -994,12 +1099,20 @@ header {
 
 .Game_Component {
   width: 84vw !important;
+  max-height: 79vh;
+  // border: solid 1px #000;
   height: 79vh;
   display: flex;
   flex-direction: row;
   align-items: center;
   align-self: center;
   overflow-x: auto;
+  overflow-y: scroll;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 .content {
@@ -1020,5 +1133,32 @@ header {
 
 .Pointable {
   cursor: pointer;
+}
+
+
+.slide-left-enter-active,
+.slide-left-leave-active,
+.slide-right-enter-active,
+.slide-right-leave-active {
+  transition: all 0.5s ease;
+//   position: absolute;
+  width: 100%;
+}
+
+.slide-left-enter,
+.slide-right-leave-to {
+  transform: translateX(100%);
+}
+
+.slide-left-leave-to,
+.slide-right-enter {
+  transform: translateX(-100%);
+}
+
+.slide-left-enter-to,
+.slide-left-leave,
+.slide-right-enter-to,
+.slide-right-leave {
+  transform: translateX(0%);
 }
 </style>
