@@ -31,7 +31,7 @@
       <!-- Spacer between conveyor belt and answer buttons -->
       <!-- <div class="spacer"></div> -->
       <!-- Answer buttons or home page -->
-      <div class="box ratio-3" v-if="!showHomePage">
+      <div class="box ratio-3">
         <div class="button-container">
           <button v-for="(selection, index) in this.GameData.Question[
             currentQuestions[currentQuestionIndex]
@@ -41,11 +41,6 @@
           ]" @click="handleAnswer(index)">
             {{ selection }}
           </button>
-        </div>
-      </div>
-      <div class="box ratio-3" v-if="showHomePage">
-        <div class="button-container">
-          <button class="big-button" @click="startQuiz">開始遊戲</button>
         </div>
       </div>
     </div>
@@ -163,10 +158,7 @@ export default {
       this.currentQuestions = this.generateRandomOrder(
         this.GameData.Question.length
       );
-      setTimeout(() => {
-        this.pauseConveyor();
-        this.showHomePage = false;
-      });
+      this.pauseConveyor();
     },
     handleAnswer(selectedIndex) {
       var ansIndex =
@@ -252,6 +244,7 @@ export default {
   created() {
     soundManager.registerSound('trackBackgroundMusic', `${gameplayMusic}`, true);
     soundManager.registerSound('trackClickSound', `${clickSound}`, true);
+    this.startQuiz();
   }
 };
 </script>
