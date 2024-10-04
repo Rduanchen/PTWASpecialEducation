@@ -121,6 +121,7 @@ export default {
             (option) => option != this.GameData.True[i]
           );
           ans = true;
+          this.$emit("add-record", [this.GameData.True[i], option, "正確"]);
           break;
         }
       }
@@ -128,7 +129,10 @@ export default {
         this.$emit("play-effect", "CorrectSound");
         this.ansLeft--;
         if (this.ansLeft <= 0) this.$emit("next-question");
-      } else this.$emit("play-effect", "WrongSound");
+      } else {
+        this.$emit("play-effect", "WrongSound");
+        this.$emit("add-record", ["#", option, "錯誤"]);
+      }
     },
   },
 };
