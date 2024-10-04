@@ -1,5 +1,9 @@
 <template>
   <div class="container">
+    <div class="progress">
+      <div class="progress-bar" role="progressbar" :style="{ width: progressBarWidth }"
+        aria-valuenow="progressPercentage" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
     <div class="gameAndQuestion">
       <!-- Life bar section -->
       <!-- <div class="life-bar">
@@ -147,6 +151,12 @@ export default {
         whiteSpace: "nowrap",
       };
     },
+    progressPercentage() {
+      return (this.currentQuestionIndex / this.currentQuestions.length) * 100;
+    },
+    progressBarWidth() {
+      return `${this.progressPercentage}%`;
+    }
   },
   methods: {
     startQuiz() {
@@ -417,5 +427,19 @@ export default {
   .question-container {
     height: 80%;
   }
+}
+
+.progress {
+  width: 100%;
+  background-color: #f3f3f3;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.progress-bar {
+  height: 20px;
+  background-color: #4caf50;
+  transition: width 0.5s ease;
 }
 </style>
