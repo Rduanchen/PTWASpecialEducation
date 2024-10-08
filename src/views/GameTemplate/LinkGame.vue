@@ -18,7 +18,7 @@
               <v-circle
                 v-for="(Object, index) in DotLocation"
                 :key="index"
-                :config="{ x: Object.X, y: Object.Y, radius: 15, fill: 'black' }"
+                :config="{ x: Object.X, y: Object.Y, radius: 10, fill: 'black' }"
               ></v-circle>
             </v-layer>
             <v-layer ref="LineLayer">
