@@ -279,13 +279,8 @@
       CheckMouseAtTheDot(mouseX, mouseY) {
         for (var DotIndex in this.DotLocation) {
           let Dot = this.DotLocation[DotIndex];
-          let differenceRadius = 15;
-          if (
-            mouseX > Dot.X - differenceRadius &&
-            mouseX < Dot.X + differenceRadius &&
-            mouseY > Dot.Y - differenceRadius &&
-            mouseY < Dot.Y + differenceRadius
-          ) {
+          let differenceRadius = 25;
+          if (this.twoPointDistance(Dot.X,Dot.Y,mouseX,mouseY)<=differenceRadius) {
             return parseInt(DotIndex);
           }
         }
@@ -534,6 +529,9 @@
           }
         }
       },
+      twoPointDistance(x0,y0,x1,y1){
+        return Math.sqrt(Math.pow((x0 - x1), 2) + Math.pow((y0 - y1), 2));
+      }
     },
   };
   </script>
