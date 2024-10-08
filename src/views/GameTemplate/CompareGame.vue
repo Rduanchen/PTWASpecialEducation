@@ -66,7 +66,6 @@
     </div>
     <section class="OptionBar">
       <div class="Left">
-        <p class="OptionBarTitle">{{ this.GameData.OptionBarTitle }}</p>
         <draggable
           :list="this.Symbol"
           :sort="false"
@@ -232,14 +231,14 @@ export default {
         this.$emit("play-effect", "WrongSound");
         this.$emit("add-record", [
           this.GameData.Answer[0],
-          this.Answers[0],
+          this.Answers[0][0].tag,
           "錯誤",
         ]);
       } else {
         this.$emit("play-effect", "CorrectSound");
         this.$emit("add-record", [
           this.GameData.Answer[0],
-          this.Answers[0],
+          this.Answers[0][0].tag,
           "正確",
         ]);
         this.$emit("next-question");
@@ -365,9 +364,6 @@ export default {
   .Left {
     width: 60%;
     margin: 0 2rem;
-    .OptionBarTitle {
-      font-size: 1.4rem;
-    }
     .Options {
       display: flex;
       flex-direction: row;

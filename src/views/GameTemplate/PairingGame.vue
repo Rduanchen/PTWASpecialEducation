@@ -6,7 +6,7 @@
             <div class="DragElement">
                 <draggable :list="Selections" item-key="Tag" group="Answer" class="InnerComponent">
                     <template #item="{ element }">
-                        <div class=" dragable">
+                        <div class="dragable">
                             <component :is="element.Name" :Data="element.Data" :ID="this.id"></component>
                         </div>
                     </template>
@@ -36,6 +36,7 @@
 </template>
 <script>
 import { defineAsyncComponent } from 'vue';
+import { getComponents } from '@/utilitys/get-components';
 import draggable from 'vuedraggable';
 export default {
     name: 'PairingGame',
@@ -44,7 +45,7 @@ export default {
         ImageContainer: defineAsyncComponent(() => import('@/components/ImageContainer.vue')),
         ImageWithText: defineAsyncComponent(() => import('@/components/ImageWithText.vue')),
         TextOnly: defineAsyncComponent(() => import('@/components/TextOnly.vue')),
-        Clock: defineAsyncComponent(() => import('@/components/Clock.vue')),
+        Clock: getComponents('Clock'),
         Water: defineAsyncComponent(() => import('@/components/Water.vue')),        
     },
     props: {
@@ -134,6 +135,9 @@ export default {
 <style scoped>
 .dragable {
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .False{
     border: solid 3px red !important;
@@ -177,6 +181,8 @@ export default {
         border-radius: 15px;
         .DragElement{
             display: flex;
+            flex-direction: column;
+            align-items: center;
             .InnerComponent{
                 display: grid;
                 grid-template-rows: 1fr;

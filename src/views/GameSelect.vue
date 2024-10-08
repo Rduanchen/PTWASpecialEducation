@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="outter">
     <header>
       <nav class="container navbar navbar-expand-md sticky-top" style="width: 100%;">
         <a class="navbar-brand mt-2 mb-2 " href="#" alt="Home">
@@ -220,7 +220,7 @@ methods: {
     for(var i in Flist){
       for(var z in Flist[i].Section){
         for(var x in Flist[i].Section[z].Games){
-          if(Flist[i].Section[z].Games[x].id.includes(tar)){
+          if(Flist[i].Section[z].Games[x].id.includes(tar)){     
             if(!(finded_id.includes(Flist[i].Section[z].Games[x].id))){
               finded_id.push(Flist[i].Section[z].Games[x].id);
               let temp = Flist[i].Section[z].Games[x];
@@ -264,6 +264,7 @@ methods: {
     this.SearchInput = "";
   },
   switchRouter(to){
+    console.log(to);
     this.$router.push(to);
   }
 },
@@ -271,8 +272,14 @@ methods: {
 </script>
 
 <style lang="scss" scoped>
+
 header{
   background-color: $primary-color;
+  touch-action: none !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
 }
 .navbar {
   background-color: $primary-color;
@@ -352,6 +359,11 @@ section{
   display: grid;
   grid-template-columns: 2fr 10fr;
   .side-bar {
+    touch-action: none !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
     display: flex;
     flex-direction: column;
     height: 90vh;

@@ -138,7 +138,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped lang="scss">
 .gameContainer {
   width: 100%;
   overflow-x: hidden;
