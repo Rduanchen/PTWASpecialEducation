@@ -9,6 +9,10 @@
         </v-layer>
 
         <v-layer>
+          <v-circle v-for="target in configTarget" :config="target"></v-circle>
+        </v-layer>
+
+        <v-layer>
           <v-rect :config="configPlane" @dragmove="keepInBound"></v-rect>
         </v-layer>
       </v-stage>
@@ -50,9 +54,8 @@ export default {
         image: Background,
       },
 
-      game: true,
-
-      speed: 1,
+      configTarget: [],
+      targetTemplate: ["pink", "lightblue", "yellow"],
     };
   },
 
@@ -71,7 +74,12 @@ export default {
 
   beforeMount() {
     this.initializeScene();
+  },
+
+  mounted() {
+    this.targetSpawner();
     this.game = window.setInterval(this.update, 20);
+    this.spawner = window.setInterval(this.targetSpawner, 5000);
   },
 
   methods: {
@@ -85,7 +93,7 @@ export default {
       this.configBG_2.width = this.gameWidth;
       this.configBG_2.height = this.gameWidth / 2;
       this.configBG_2.x = this.gameWidth;
-      this.configPlane.height = this.gameWidth * 0.075;
+      this.configPlane.height = this.gameWidth * 0.1;
       this.configPlane.width = this.configPlane.height;
       this.configPlane.x = this.gameWidth * 0.05;
       this.configPlane.y =
@@ -93,6 +101,7 @@ export default {
     },
     update() {
       this.backgroundScroll();
+      this.moveTarget();
     },
     backgroundScroll() {
       this.configBG_1.x--;
@@ -111,8 +120,26 @@ export default {
       e.target.y(
         Math.min(e.target.y(), this.gameWidth * 0.5 - this.configPlane.height)
       );
+      this.configPlane.x = e.target.x();
+      this.configPlane.y = e.target.y();
     },
-    end() {},
+    targetSpawner() {
+      let targetType = Math.floor(Math.random() * this.targetTemplate.length);
+      let target = {};
+      target.radius = this.gameWidth * 0.05;
+      target.x = this.gameWidth * 1.1;
+      target.y =
+        Math.random() * (this.gameWidth * 0.5 - target.radius * 2) +
+        target.radius;
+      target.fill = this.targetTemplate[targetType];
+      target.stroke = this.targetTemplate[targetType];
+      this.configTarget.push(target);
+    },
+    moveTarget() {
+      for (let target in this.configTarget) {
+        this.configTarget[target].x--;
+      }
+    },
   },
 };
 </script>
