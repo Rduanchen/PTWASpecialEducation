@@ -4,11 +4,12 @@
       <h2>{{ GameData.Question }}</h2>
       <v-stage :config="configKonva">
         <v-layer>
-          <v-image :config="configBG"></v-image>
+          <v-image :config="configBG_1"></v-image>
+          <v-image :config="configBG_2"></v-image>
         </v-layer>
 
         <v-layer>
-          <v-rect :config="configPlane"></v-rect>
+          <v-rect :config="configPlane" @dragmove="keepInBound"></v-rect>
         </v-layer>
       </v-stage>
     </div>
@@ -35,9 +36,15 @@ export default {
       configPlane: {
         fill: "gray",
         stroke: "gray",
+        draggable: true,
       },
 
-      configBG: {
+      configBG_1: {
+        x: 0,
+        y: 0,
+        image: Background,
+      },
+      configBG_2: {
         x: 0,
         y: 0,
         image: Background,
@@ -63,38 +70,48 @@ export default {
   emits: ["play-effect", "add-record", "next-question"],
 
   beforeMount() {
-    this.gameWidth = document.getElementById("GameContainer").clientWidth;
-    this.configKonva.width = Math.floor(this.gameWidth * 0.8);
-    this.configKonva.height = Math.floor(this.configKonva.width / 2);
-    this.configBG.width = this.configKonva.width;
-    this.configBG.height = this.configKonva.height;
-    this.configPlane.height = Math.round(this.gameWidth * 0.075);
-    this.configPlane.width = this.configPlane.height;
+    this.initializeScene();
+    this.game = window.setInterval(this.update, 20);
   },
 
-  mounted() {},
-
   methods: {
-    input(e) {
-      //W = 38/87; A = 37/65; S = 40/83; D = 39/68
-      //console.log(e.keyCode);
-      switch (e.keyCode) {
-        case 38:
-        case 87:
-          this.move(1);
-          break;
-
-        case 40:
-        case 83:
-          this.move(-1);
-          break;
-
-        case 32:
-          this.move(0);
-          break;
-      }
+    initializeScene() {
+      this.gameWidth =
+        document.getElementById("GameContainer").clientWidth * 0.8;
+      this.configKonva.width = this.gameWidth;
+      this.configKonva.height = this.gameWidth / 2;
+      this.configBG_1.width = this.gameWidth;
+      this.configBG_1.height = this.gameWidth / 2;
+      this.configBG_2.width = this.gameWidth;
+      this.configBG_2.height = this.gameWidth / 2;
+      this.configBG_2.x = this.gameWidth;
+      this.configPlane.height = this.gameWidth * 0.075;
+      this.configPlane.width = this.configPlane.height;
+      this.configPlane.x = this.gameWidth * 0.05;
+      this.configPlane.y =
+        (this.gameWidth * 0.5 - this.configPlane.height) * 0.5;
     },
-    move(key) {},
+    update() {
+      this.backgroundScroll();
+    },
+    backgroundScroll() {
+      this.configBG_1.x--;
+      this.configBG_2.x--;
+      if (this.configBG_1.x <= -this.gameWidth)
+        this.configBG_1.x = this.gameWidth;
+      if (this.configBG_2.x <= -this.gameWidth)
+        this.configBG_2.x = this.gameWidth;
+    },
+    keepInBound(e) {
+      e.target.x(Math.max(e.target.x(), 0));
+      e.target.x(
+        Math.min(e.target.x(), this.gameWidth - this.configPlane.width)
+      );
+      e.target.y(Math.max(e.target.y(), 0));
+      e.target.y(
+        Math.min(e.target.y(), this.gameWidth * 0.5 - this.configPlane.height)
+      );
+    },
     end() {},
   },
 };
