@@ -78,6 +78,24 @@
                         "Name": "找找看",
                         "Description": "依照聲音指示",
                         "Img": "Dev0301.png"
+                    },
+                    {
+                        "id": "Dev0302",
+                        "Name": "輸送帶",
+                        "Description": "",
+                        "Img": ""
+                    },
+                    {
+                        "id": "Dev0303",
+                        "Name": "連連看",
+                        "Description": "",
+                        "Img": ""
+                    },
+                    {
+                        "id": "Dev0304",
+                        "Name": "計算板",
+                        "Description": "",
+                        "Img": ""
                     }
                 ]
             }

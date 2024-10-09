@@ -1,5 +1,9 @@
 <template>
   <div class="container">
+    <div class="progress">
+      <div class="progress-bar" role="progressbar" :style="{ width: progressBarWidth }"
+        aria-valuenow="progressPercentage" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
     <div class="gameAndQuestion">
       <!-- Life bar section -->
       <!-- <div class="life-bar">
@@ -31,7 +35,7 @@
       <!-- Spacer between conveyor belt and answer buttons -->
       <!-- <div class="spacer"></div> -->
       <!-- Answer buttons or home page -->
-      <div class="box ratio-3" v-if="!showHomePage">
+      <div class="box ratio-3">
         <div class="button-container">
           <button v-for="(selection, index) in this.GameData.Question[
             currentQuestions[currentQuestionIndex]
@@ -41,11 +45,6 @@
           ]" @click="handleAnswer(index)">
             {{ selection }}
           </button>
-        </div>
-      </div>
-      <div class="box ratio-3" v-if="showHomePage">
-        <div class="button-container">
-          <button class="big-button" @click="startQuiz">開始遊戲</button>
         </div>
       </div>
     </div>
@@ -152,6 +151,12 @@ export default {
         whiteSpace: "nowrap",
       };
     },
+    progressPercentage() {
+      return (this.currentQuestionIndex / this.currentQuestions.length) * 100;
+    },
+    progressBarWidth() {
+      return `${this.progressPercentage}%`;
+    }
   },
   methods: {
     startQuiz() {
@@ -163,10 +168,7 @@ export default {
       this.currentQuestions = this.generateRandomOrder(
         this.GameData.Question.length
       );
-      setTimeout(() => {
-        this.pauseConveyor();
-        this.showHomePage = false;
-      });
+      this.pauseConveyor();
     },
     handleAnswer(selectedIndex) {
       var ansIndex =
@@ -252,6 +254,7 @@ export default {
   created() {
     soundManager.registerSound('trackBackgroundMusic', `${gameplayMusic}`, true);
     soundManager.registerSound('trackClickSound', `${clickSound}`, true);
+    this.startQuiz();
   }
 };
 </script>
@@ -424,5 +427,19 @@ export default {
   .question-container {
     height: 80%;
   }
+}
+
+.progress {
+  width: 100%;
+  background-color: #f3f3f3;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.progress-bar {
+  height: 20px;
+  background-color: #4caf50;
+  transition: width 0.5s ease;
 }
 </style>
