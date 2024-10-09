@@ -8,12 +8,14 @@
         @touchend="touchEnd"
       >
         <v-layer>
-          <v-rect :config="configBg"></v-rect>
+          <v-rect :config="configBg" v-if="!isBgImage"></v-rect>
+          <v-image :config="configBgImage" v-if="isBgImage"></v-image>
         </v-layer>
 
         <v-layer>
           <safeArea
             v-for="i in safeMap"
+            v-if="!isBgImage"
             :x="i[0]"
             :y="i[1]"
             :width="laneWidth"
@@ -22,6 +24,7 @@
         <v-layer>
           <bounds
             v-for="i in genMap"
+            v-if="!isBgImage"
             :x="i[0]"
             :y="i[1]"
             :width="laneWidth"
@@ -51,9 +54,10 @@
 
 <script>
 import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
+import { getSystemAssets } from "@/utilitys/get_assets.js";
 import { Container } from "konva/lib/Container";
 import { defineAsyncComponent } from "vue";
-import map from "@/assets/Games/Dev02_Maze/map.json";
+import { map } from "@/assets/System/mazeMap/map.json";
 
 export default {
   components: {
@@ -77,6 +81,11 @@ export default {
         fill: "black",
         stroke: "black",
       },
+      configBgImage: {
+        x: 0,
+        y: 0,
+      },
+      isBgImage: true,
 
       configOption: [
         {
@@ -212,18 +221,33 @@ export default {
     generateMap() {
       this.randomMapId = Math.floor(Math.random() * map.length);
       this.laneWidth = Math.floor(this.configKonva.width * 0.05);
-      this.configBg.width = this.laneWidth * 20 - 3;
-      this.configBg.height = this.laneWidth * 10 - 3;
-      this.configBg.strokeWidth = Math.floor(this.laneWidth * 0.1);
-      for (var i = 0; i < 20; ++i) {
-        for (var j = 0; j < 10; ++j) {
-          if (map[this.randomMapId][j][i] == 1) {
-            this.genMap.push([this.laneWidth * i, this.laneWidth * j]);
-          } else if (map[this.randomMapId][j][i] != 0) {
-            this.safeMap.push([this.laneWidth * i, this.laneWidth * j]);
+      var mapBG = document.createElement("img");
+      mapBG.src = GamesGetAssetsFile(
+        "Dev02_Maze",
+        "map_" + this.randomMapId + ".jpg"
+      );
+      if (mapBG.src.includes("undefined")) {
+        this.isBgImage = false;
+      }
+      if (this.isBgImage) {
+        this.configBgImage.image = mapBG;
+        this.configBgImage.width = this.laneWidth * 20 - 3;
+        this.configBgImage.height = this.laneWidth * 10 - 3;
+      } else {
+        this.configBg.width = this.laneWidth * 20 - 3;
+        this.configBg.height = this.laneWidth * 10 - 3;
+        this.configBg.strokeWidth = Math.floor(this.laneWidth * 0.1);
+        for (var i = 0; i < 20; ++i) {
+          for (var j = 0; j < 10; ++j) {
+            if (map[this.randomMapId][j][i] == 1) {
+              this.genMap.push([this.laneWidth * i, this.laneWidth * j]);
+            } else if (map[this.randomMapId][j][i] != 0) {
+              this.safeMap.push([this.laneWidth * i, this.laneWidth * j]);
+            }
           }
         }
       }
+      console.log("bg:", this.isBgImage);
     },
 
     getOptionPosition() {
