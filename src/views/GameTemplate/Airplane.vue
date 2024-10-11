@@ -22,7 +22,7 @@
 
 <script>
 import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
-import { Container } from "konva/lib/Container";
+import { centerLocator } from "@/utilitys/centerLocator.js";
 import { defineAsyncComponent } from "vue";
 
 const Background = document.createElement("img");
@@ -41,6 +41,7 @@ export default {
         fill: "gray",
         stroke: "gray",
         draggable: true,
+        rotation: 0,
       },
 
       configBG_1: {
@@ -56,6 +57,8 @@ export default {
 
       configTarget: [],
       targetTemplate: ["pink", "lightblue", "yellow"],
+
+      speed: 2,
     };
   },
 
@@ -79,7 +82,7 @@ export default {
   mounted() {
     this.targetSpawner();
     this.game = window.setInterval(this.update, 20);
-    this.spawner = window.setInterval(this.targetSpawner, 5000);
+    this.spawner = window.setInterval(this.targetSpawner, 3000);
   },
 
   methods: {
@@ -102,10 +105,11 @@ export default {
     update() {
       this.backgroundScroll();
       this.moveTarget();
+      this.planeAnimation();
     },
     backgroundScroll() {
-      this.configBG_1.x--;
-      this.configBG_2.x--;
+      this.configBG_1.x -= this.speed;
+      this.configBG_2.x -= this.speed;
       if (this.configBG_1.x <= -this.gameWidth)
         this.configBG_1.x = this.gameWidth;
       if (this.configBG_2.x <= -this.gameWidth)
@@ -123,6 +127,7 @@ export default {
       this.configPlane.x = e.target.x();
       this.configPlane.y = e.target.y();
     },
+
     targetSpawner() {
       let targetType = Math.floor(Math.random() * this.targetTemplate.length);
       let target = {};
@@ -137,8 +142,28 @@ export default {
     },
     moveTarget() {
       for (let target in this.configTarget) {
-        this.configTarget[target].x--;
+        this.configTarget[target].x -= this.speed;
       }
+    },
+    planeAnimation() {
+      if (this.previousAltitude) {
+        if (
+          this.configPlane.y > this.previousAltitude &&
+          this.configPlane.rotation < 20
+        )
+          this.configPlane.rotation++;
+        else if (
+          this.configPlane.y < this.previousAltitude &&
+          this.configPlane.rotation > -20
+        )
+          this.configPlane.rotation--;
+        else {
+          if (this.configPlane.rotation > 0) this.configPlane.rotation--;
+          else if (this.configPlane.rotation < 0) this.configPlane.rotation++;
+        }
+      }
+      console.log(this.configPlane.rotation);
+      this.previousAltitude = this.configPlane.y;
     },
   },
 };
