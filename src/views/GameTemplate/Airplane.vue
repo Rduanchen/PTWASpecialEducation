@@ -22,7 +22,8 @@
 
 <script>
 import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
-import { centerLocator } from "@/utilitys/centerLocator.js";
+import { centerLocator } from "@/utilitys/canvasTools.js";
+import { distance } from "@/utilitys/canvasTools.js";
 import { defineAsyncComponent } from "vue";
 
 const Background = document.createElement("img");
@@ -106,6 +107,7 @@ export default {
       this.backgroundScroll();
       this.moveTarget();
       this.planeAnimation();
+      this.collisionDetect();
     },
     backgroundScroll() {
       this.configBG_1.x -= this.speed;
@@ -143,6 +145,8 @@ export default {
     moveTarget() {
       for (let target in this.configTarget) {
         this.configTarget[target].x -= this.speed;
+        if (this.configTarget[target].x < -this.configTarget[target].radius)
+          delete this.configTarget[target];
       }
     },
     planeAnimation() {
@@ -162,8 +166,22 @@ export default {
           else if (this.configPlane.rotation < 0) this.configPlane.rotation++;
         }
       }
-      console.log(this.configPlane.rotation);
       this.previousAltitude = this.configPlane.y;
+    },
+    collisionDetect() {
+      for (let target in this.configTarget) {
+        if (
+          distance(
+            centerLocator(this.configPlane),
+            this.configTarget[target]
+          ) <=
+            this.configTarget[target].radius * 2 &&
+          this.configTarget[target].opacity != 0.5
+        ) {
+          this.$emit("play-effect", "WrongSound");
+          this.configTarget[target].opacity = 0.5;
+        }
+      }
     },
   },
 };
