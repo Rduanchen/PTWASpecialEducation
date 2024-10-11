@@ -10,6 +10,7 @@
 
         <v-layer>
           <v-circle v-for="target in configTarget" :config="target"></v-circle>
+          <v-text v-for="option in optionsOnScreen" :config="option"></v-text>
         </v-layer>
 
         <v-layer>
@@ -22,8 +23,7 @@
 
 <script>
 import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
-import { centerLocator } from "@/utilitys/canvasTools.js";
-import { distance } from "@/utilitys/canvasTools.js";
+import * as canvasTools from "@/utilitys/canvasTools.js";
 import { defineAsyncComponent } from "vue";
 
 const Background = document.createElement("img");
@@ -57,6 +57,7 @@ export default {
       },
 
       configTarget: [],
+      optionsOnScreen: [],
       targetTemplate: ["pink", "lightblue", "yellow"],
 
       speed: 2,
@@ -171,8 +172,8 @@ export default {
     collisionDetect() {
       for (let target in this.configTarget) {
         if (
-          distance(
-            centerLocator(this.configPlane),
+          canvasTools.distance(
+            canvasTools.centerLocator(this.configPlane),
             this.configTarget[target]
           ) <=
             this.configTarget[target].radius * 2 &&
