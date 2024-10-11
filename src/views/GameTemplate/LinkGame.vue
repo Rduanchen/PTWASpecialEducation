@@ -6,23 +6,16 @@
           <v-stage
             :config="configStage"
             class="Stage"
+            ref="stage"
             @mousemove="MouseMove"
             @touchmove="MouseMove"
             @mouseup="MouseUpAtDot"
             @touchend="MouseUpAtDot"
+            @mousedown="MouseDown"
+            @touchstart="MouseDown"
           >
             <v-layer>
               <v-circle
-                @mousedown="
-                  (event) => {
-                    MouseDown(event, index);
-                  }
-                "
-                @touchstart="
-                  (event) => {
-                    MouseDown(event, index);
-                  }
-                "
                 v-for="(Object, index) in DotLocation"
                 :key="index"
                 :config="{ x: Object.X, y: Object.Y, radius: 10, fill: 'black' }"
@@ -193,25 +186,45 @@
       window.removeEventListener("resize", this.ReLinktheLine);
     },
     methods: {
-      MouseDown(e, index) {
-        // e is the event object, index is the index of the dot
+      // MouseDown(e, index) {
+      //   // e is the event object, index is the index of the dot
+      //   let Lined = this.CheckLined(index); // 確認該點是否已經連線，有則刪除
+      //   if (Lined[0]) {
+      //     this.Lines.splice(Lined[1], 1);
+      //     this.LinkedPoints.splice(Lined[1], 1);
+      //     this.$refs.LineLayer.getNode().draw();
+      //   }
+      //   this.NotFinished = false;
+      //   const MousePos = e.target.getStage().getPointerPosition();
+      //   this.OnDrawing = true;
+      //   this.MouseDownDotIndex = index;
+      //   this.OnDrawingLine = {
+      //     points: [MousePos.x, MousePos.y, MousePos.x, MousePos.y],
+      //     stroke: "black",
+      //     strokeWidth: this.LineWidth,
+      //     lineCap: "round",
+      //     lineJoin: "round",
+      //   };
+      // },
+      MouseDown(){
+        const MousePos = this.$refs.stage.getNode().getPointerPosition();
+        let index = this.CheckMouseAtTheDot(MousePos.x,MousePos.y);
         let Lined = this.CheckLined(index); // 確認該點是否已經連線，有則刪除
         if (Lined[0]) {
-          this.Lines.splice(Lined[1], 1);
-          this.LinkedPoints.splice(Lined[1], 1);
-          this.$refs.LineLayer.getNode().draw();
+          this.removeLine(Lined[1]);
         }
-        this.NotFinished = false;
-        const MousePos = e.target.getStage().getPointerPosition();
-        this.OnDrawing = true;
-        this.MouseDownDotIndex = index;
-        this.OnDrawingLine = {
-          points: [MousePos.x, MousePos.y, MousePos.x, MousePos.y],
-          stroke: "black",
-          strokeWidth: this.LineWidth,
-          lineCap: "round",
-          lineJoin: "round",
-        };
+        if(index != null){
+          this.NotFinished = false;
+          this.OnDrawing = true;
+          this.MouseDownDotIndex = index;
+          this.OnDrawingLine = {
+            points: [this.DotLocation[index].X, this.DotLocation[index].Y, this.DotLocation[index].X, this.DotLocation[index].Y],
+            stroke: "black",
+            strokeWidth: this.LineWidth,
+            lineCap: "round",
+            lineJoin: "round",
+          };
+        }
       },
       MouseMove(e) {
         if (this.OnDrawing) {
@@ -226,7 +239,11 @@
           const MousePos = e.target.getStage().getPointerPosition();
           this.OnDrawingLine.points.splice(2, 2, MousePos.x, MousePos.y);
           let DotIndex = this.CheckMouseAtTheDot(MousePos.x, MousePos.y);
-          if (DotIndex != false) {
+          let Lined = this.CheckLined(DotIndex); // 確認該點是否已經連線，有則刪除
+          if (Lined[0]) {
+            this.removeLine(Lined[1]);
+          }
+          if (DotIndex != null) {
             let LinkAble = this.CheckLinkAble(this.MouseDownDotIndex, DotIndex);
             // UP OK
             if (LinkAble) {
@@ -279,17 +296,12 @@
       CheckMouseAtTheDot(mouseX, mouseY) {
         for (var DotIndex in this.DotLocation) {
           let Dot = this.DotLocation[DotIndex];
-          let differenceRadius = 15;
-          if (
-            mouseX > Dot.X - differenceRadius &&
-            mouseX < Dot.X + differenceRadius &&
-            mouseY > Dot.Y - differenceRadius &&
-            mouseY < Dot.Y + differenceRadius
-          ) {
+          let differenceRadius = 25;
+          if (this.twoPointDistance(Dot.X,Dot.Y,mouseX,mouseY)<=differenceRadius) {
             return parseInt(DotIndex);
           }
         }
-        return false;
+        return null;
       },
       MappingDotIndexToAnswerIndex(DotIndex) {
         // This Program give each dot a index, from top to down, left to right, start from 0 to n
@@ -534,6 +546,14 @@
           }
         }
       },
+      twoPointDistance(x0,y0,x1,y1){
+        return Math.sqrt(Math.pow((x0 - x1), 2) + Math.pow((y0 - y1), 2));
+      },
+      removeLine(LinkedPoint){
+        this.Lines.splice(LinkedPoint, 1);
+        this.LinkedPoints.splice(LinkedPoint, 1);
+        this.$refs.LineLayer.getNode().draw();
+      }
     },
   };
   </script>
