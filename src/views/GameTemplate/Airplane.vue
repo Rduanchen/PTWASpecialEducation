@@ -10,7 +10,7 @@
 
         <v-layer>
           <v-circle v-for="target in configTarget" :config="target"></v-circle>
-          <v-text v-for="option in optionsOnScreen" :config="option"></v-text>
+          <v-text v-for="option in configOptions" :config="option"></v-text>
         </v-layer>
 
         <v-layer>
@@ -57,10 +57,13 @@ export default {
       },
 
       configTarget: [],
-      optionsOnScreen: [],
+      configOptions: [],
       targetTemplate: ["pink", "lightblue", "yellow"],
 
       speed: 2,
+
+      allOptions: [],
+      trueOptions: [],
     };
   },
 
@@ -79,6 +82,7 @@ export default {
 
   beforeMount() {
     this.initializeScene();
+    this.initializeOptions();
   },
 
   mounted() {
@@ -103,6 +107,10 @@ export default {
       this.configPlane.x = this.gameWidth * 0.05;
       this.configPlane.y =
         (this.gameWidth * 0.5 - this.configPlane.height) * 0.5;
+    },
+    initializeOptions() {
+      this.allOptions = this.GameData.True.concat(this.GameData.False);
+      this.trueOptions = this.GameData.True;
     },
     update() {
       this.backgroundScroll();
@@ -142,12 +150,25 @@ export default {
       target.fill = this.targetTemplate[targetType];
       target.stroke = this.targetTemplate[targetType];
       this.configTarget.push(target);
+
+      let option = canvasTools.offset(target, {
+        x: target.radius * -0.8,
+        y: target.radius * -0.3,
+      });
+      option.text =
+        this.allOptions[Math.floor(Math.random() * this.allOptions.length)];
+      option.fontSize = target.radius * 0.6;
+      this.configOptions.push(option);
     },
     moveTarget() {
-      for (let target in this.configTarget) {
-        this.configTarget[target].x -= this.speed;
-        if (this.configTarget[target].x < -this.configTarget[target].radius)
-          delete this.configTarget[target];
+      for (let i = 0; i < this.configTarget.length; ++i) {
+        this.configTarget[i].x -= this.speed;
+        this.configOptions[i].x =
+          this.configTarget[i].x - this.configTarget[i].radius * 0.8;
+        if (this.configTarget[i].x < -this.configTarget[i].radius) {
+          this.configTarget.splice(i, 1);
+          this.configOptions.splice(i, 1);
+        }
       }
     },
     planeAnimation() {
@@ -170,17 +191,36 @@ export default {
       this.previousAltitude = this.configPlane.y;
     },
     collisionDetect() {
-      for (let target in this.configTarget) {
+      for (let i = 0; i < this.configTarget.length; ++i) {
         if (
           canvasTools.distance(
-            canvasTools.centerLocator(this.configPlane),
-            this.configTarget[target]
+            canvasTools.center(this.configPlane),
+            this.configTarget[i]
           ) <=
-            this.configTarget[target].radius * 2 &&
-          this.configTarget[target].opacity != 0.5
+            this.configTarget[i].radius * 2 &&
+          this.configTarget[i].opacity != 0.5
         ) {
-          this.$emit("play-effect", "WrongSound");
-          this.configTarget[target].opacity = 0.5;
+          let checkAnswer = false;
+          this.configTarget[i].opacity = 0.5;
+          this.configOptions[i].visible = false;
+          for (let answer in this.GameData.True) {
+            if (this.GameData.True[answer] == this.configOptions[i].text)
+              checkAnswer = true;
+          }
+          if (checkAnswer) {
+            this.$emit("play-effect", "CorrectSound");
+            this.$emit("add-record", ["#", this.configOptions[i].text, "正確"]);
+            this.allOptions = this.allOptions.filter(
+              (option) => option != this.configOptions[i].text
+            );
+            this.trueOptions = this.trueOptions.filter(
+              (option) => option != this.configOptions[i].text
+            );
+          } else {
+            this.$emit("play-effect", "WrongSound");
+            this.$emit("add-record", ["#", this.configOptions[i].text, "錯誤"]);
+          }
+          if (this.trueOptions.length == 0) this.$emit("next-question");
         }
       }
     },
