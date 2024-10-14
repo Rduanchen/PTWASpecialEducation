@@ -1024,6 +1024,9 @@ export default {
     Airplane: defineAsyncComponent(() =>
       import("@/views/GameTemplate/Airplane.vue")
     ),
+    DragOnNumberLine: defineAsyncComponent(() =>
+      import("@/components/DragOnNumberLine.vue")
+    ), //for testing only
   },
 };
 </script>
