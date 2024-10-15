@@ -1025,7 +1025,7 @@ export default {
       import("@/views/GameTemplate/Airplane.vue")
     ),
     DragOnNumberLine: defineAsyncComponent(() =>
-      import("@/components/DragOnNumberLine.vue")
+      import("@/views/GameTemplate/NumberLineTester.vue")
     ), //for testing only
   },
 };
