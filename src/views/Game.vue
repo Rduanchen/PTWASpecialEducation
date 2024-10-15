@@ -1027,6 +1027,9 @@ export default {
     DragOnNumberLine: defineAsyncComponent(() =>
       import("@/views/GameTemplate/NumberLineTester.vue")
     ), //for testing only
+    BalloonShooting: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/BalloonShooting.vue")
+    ),
   },
 };
 </script>
