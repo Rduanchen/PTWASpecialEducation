@@ -1,13 +1,9 @@
 <template>
   <div class="gameContainer">
-    <div id="canvasContainer">
-      <h2>{{ GameData.Question }}</h2>
-      <v-stage :config="configKonva">
-        <v-layer>
-          <v-rect :config="configBG"></v-rect>
-        </v-layer>
-      </v-stage>
-    </div>
+    <numberLine
+      :config="configNumberLine"
+      @get_drag_position="drag"
+    ></numberLine>
   </div>
 </template>
 
@@ -16,15 +12,18 @@ import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
 import * as canvasTools from "@/utilitys/canvasTools.js";
 import { defineAsyncComponent } from "vue";
 export default {
-  components: {},
+  components: {
+    numberLine: defineAsyncComponent(() =>
+      import("@/components/DragOnNumberLine.vue")
+    ),
+  },
   data() {
     return {
-      configKonva: {},
-      configBG: {
-        x: 0,
-        y: 0,
-        fill: "gray",
-        stroke: "gray",
+      configNumberLine: {
+        spacing: 1,
+        max: 10,
+        min: 2,
+        init_pos: 3,
       },
     };
   },
@@ -44,20 +43,17 @@ export default {
 
   beforeMount() {
     this.initializeScene();
+    this.configNumberLine.image = GamesGetAssetsFile("MA3029", "RacingCar.png");
   },
 
   mounted() {},
 
   methods: {
-    initializeScene() {
-      this.gameWidth =
-        document.getElementById("GameContainer").clientWidth * 0.8;
-      this.configKonva.width = this.gameWidth;
-      this.configKonva.height = this.gameWidth / 2;
-      this.configBG.width = this.gameWidth;
-      this.configBG.height = this.gameWidth / 2;
-    },
+    initializeScene() {},
     update() {},
+    drag(x) {
+      console.log(x);
+    },
   },
 };
 </script>
