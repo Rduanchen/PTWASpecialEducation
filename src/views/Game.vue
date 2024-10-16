@@ -372,14 +372,14 @@
 import fetchJson from "@/utilitys/fetch-json.js";
 import * as Arr2CSV from "@/utilitys/array2csv.js";
 import loading from "@/components/loading.vue";
-import GameStartandOver from "@/components/GameStartandOver.vue";
+import GameStartandOver from "@/components/GameSystem/GameStartandOver.vue";
 import scratchSheet from "@/components/ScratchSheets.vue";
-import hintbutton from "@/components/hintbutton.vue";
+import hintbutton from "@/components/GameSystem/hintbutton.vue";
 import * as ImportUrl from "@/utilitys/get_assets.js";
 import axios from "axios";
 import { defineAsyncComponent } from "vue";
 // import CompareGame from "./GameTemplate/CompareGame.vue";
-import EffectWindow from "@/components/EffectWindow.vue";
+import EffectWindow from "@/components/GameSystem/EffectWindow.vue";
 // import PairingGame from "./GameTemplate/PairingGame.vue";
 // import WhackaMole from "./GameTemplate/WhackaMole.vue";
 // import SelectGameMulti from "./GameTemplate/SelectGameMulti.vue";
