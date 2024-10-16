@@ -1,7 +1,5 @@
 <template>
     <div class="">
-
-    
         <div>
             <canvas id="cvs" class="center" width="600" height="400" style="border: 1px solid #000" v-on:click="judge_position($event)"></canvas>
         </div>

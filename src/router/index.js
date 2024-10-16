@@ -80,11 +80,6 @@ const router = createRouter({
       component: () => import('@/components/DrawImage.vue'),
     },
     {
-      path: '/SVGtest',
-      name: 'SVGtest',
-      component: () => import('@/components/SVGtest.vue'),
-    },
-    {
       path: '/NumberBoard',
       name: 'NumberBoard',
       component: () => import('@/components/NumberBoard.vue'),
@@ -95,10 +90,6 @@ const router = createRouter({
       component: () => import('@/components/NumberLine.vue'),
     },
     {
-      path: '/TestParentNode',
-      name: 'TestParentNode',
-      component: () => import('@/components/TestParentNode.vue'),
-    },{
       path: '/PairingGame',
       name: 'PairingGame',
       component: () => import('@/views/GameTemplate/PairingGame.vue'),

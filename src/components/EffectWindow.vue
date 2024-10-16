@@ -11,9 +11,6 @@ export default {
     name: 'EffectWindow',
     data() {
         return {
-            // Data:{
-            //     Status: null
-            // },
             Src: ''
         };
     },
