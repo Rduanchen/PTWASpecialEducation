@@ -312,7 +312,7 @@
 </template>
 <script>
 import gameStore from '@/stores/game';
-import { mapState, mapWritableState } from 'pinia';
+import { mapWritableState } from 'pinia';
 
 export default {
   name: "SideBar",
