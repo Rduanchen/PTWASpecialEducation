@@ -9,54 +9,16 @@
       <div class="">
         <div class="Container">
           <div class="col-10 GameArea">
-            <div
-              class="row levelbutton d-sm-none d-md-block d-none d-sm-block"
-              v-if="GameStatus == 'Progressing'"
-            >
-              <div
-                class="d-grid gap-2 d-flex justify-content-center mb-3 levebar"
-              >
-                <button
-                  type="button"
-                  class="btn btn-primary flex-fill text-nowrap"
-                  disabled
-                >
-                  關卡
-                </button>
-                <div
-                  v-for="(i, key) in GameData.Questions"
-                  :key="key"
-                  class="grid-item flex-fill d-flex justify-content-between"
-                >
-                  <!-- <button type="button" class="btn btn-primary w-auto" @click="changelevel(key+1)">{{ key+1 }}</button> -->
-                  <button
-                    type="button"
-                    class="btn btn-success flex-fill"
-                    :class="{ active: Nowlevel == key + 1 }"
-                    @click="changelevel(key + 1)"
-                  >
-                    {{ key + 1 }}
-                  </button>
-                </div>
-                <button
-                  type="button"
-                  class="btn btn-primary flex-fill text-nowrap"
-                  disabled
-                  v-if="GameStatus == 'Progressing'"
-                >
-                  時間 : {{ time }}
-                </button>
-                <button
-                  type="button"
-                  class="btn btn-primary flex-fill text-nowrap"
-                  disabled
-                  v-if="GameStatus == 'Progressing'"
-                >
-                  總計時間 : {{ totaltime }}
-                </button>
-              </div>
-            </div>
-
+            <LevelAndTime
+              :time="time"
+              :totaltime="totaltime"
+              :questions="GameData.Questions"
+              :nowlevel="Nowlevel"
+              @pause-timer="pauseTimer"
+              @reset-timer="resetTimer"
+              @start-timer="startTimer"
+              @reset-wrong-timer="resetWrongTimes"
+            />
             <div class="row Game_Component">
               <!-- Dynamic import component -->
               <div
@@ -334,6 +296,7 @@ import * as Arr2CSV from "@/utilitys/array2csv.js";
 import loading from "@/components/loading.vue";
 import GameStartandOver from "@/components/GameSystem/GameStartandOver.vue";
 import Header from "@/components/GameSystem/header.vue";
+import LevelAndTime from "@/components/GameSystem/LevelAndTime.vue";
 import scratchSheet from "@/components/ScratchSheets.vue";
 import hintbutton from "@/components/GameSystem/hintbutton.vue";
 import * as ImportUrl from "@/utilitys/get_assets.js";
@@ -356,14 +319,12 @@ export default {
       introvideo: false,
       VideoSrc: "",
       GameType: "loading",
-      GameStatus: "NotStart", //遊戲狀態
       download_data: [[]], //下載的資料，格式為二維陣列。
       header: [],
       GameID: "",
       Subject: "",
       Grade: "",
       Name: "",
-      Nowlevel: 1,
       Subjects: {
         Math: "數學",
         Chinese: "國語",
@@ -397,12 +358,11 @@ export default {
       questionOrder : [],
       questionCopy: [],
       isGif: false,
-      transitionName: "slide-right",
       // SentData2ChildComponent: {},
     };
   },
   computed: {
-    ...mapWritableState(gameStore, ['gameCode']),
+    ...mapWritableState(gameStore, ['gameCode','transitionName','GameStatus','Nowlevel']),
     selfdefinetemplate() {
       return defineAsyncComponent(() =>
         import(
@@ -422,6 +382,8 @@ export default {
     this.Subject = this.$route.params.Subject;
     this.Grade = this.$route.params.Grade;
     this.Name = this.$route.params.GameName;
+    this.GameStatus = 'NotStart';
+    this.Nowlevel = 1;
     (async () => {
       try {
         let res = await fetchJson(`./Grade${this.Grade}/${this.GameID}.json`);
@@ -556,7 +518,7 @@ export default {
     reloadPage() {
       this.GameStatus = "NotStart";
       this.Nowlevel = 1;
-      this.WrongTimes = 0;
+      this.resetWrongTimes();
       this.pauseTimer();
       this.resetTimer();
       this.time = 0;
@@ -568,26 +530,9 @@ export default {
         this.isPassLevel.push(false);
       }
     },
-    changelevel(change2level) {
-      this.WrongTimes = 0;
-      if (change2level > this.GameConfig.TotalLevel || change2level < 1) {
-        console.log("The level is out of range");
-      } else {
-        this.Nowlevel = change2level;
-        if (this.Nowlevel > change2level) {
-          this.transitionName = "slide-left";
-        } else if (this.Nowlevel < change2level) {
-          this.transitionName = "slide-right";
-        }
-        this.pauseTimer();
-        //FIXME 傳資料進入CSV
-        this.resetTimer();
-        this.startTimer();
-      }
-    },
     NextQuestion() {
       this.isPassLevel[this.Nowlevel-1] = true;
-      this.WrongTimes = 0;
+      this.resetWrongTimes();
       let isDone = true;
       for(var i in this.isPassLevel){
         if(this.isPassLevel[i] == false){
@@ -625,7 +570,7 @@ export default {
       this.startTimer();
     },
     PreviousQuestion() {
-      this.WrongTimes = 0;
+      this.resetWrongTimes();
       if (this.Nowlevel > 1) {
         this.Nowlevel--;
         this.transitionName = 'slide-right';
@@ -882,12 +827,16 @@ export default {
       modal.classList.remove("show");
       modal.style.display = "none";
     },
+    resetWrongTimes() {
+      this.WrongTimes = 0;
+    }
   },
   components: {
     hintbutton,
     scratchSheet,
     GameStartandOver,
     Header,
+    LevelAndTime,
     loading,
     LinkGame: defineAsyncComponent(() =>
       import("@/views/GameTemplate/LinkGame.vue")
