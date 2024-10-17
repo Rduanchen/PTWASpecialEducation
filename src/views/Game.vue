@@ -934,12 +934,6 @@ export default {
   max-width: 100%;
   height: auto; /* 保持圖片的比例 */
 }
-.levebar {
-  // overflow-x: scroll;
-  &::-webkit-scrollbar {
-    display: none;
-  }
-}
 
 //btn, container, row, col
 
