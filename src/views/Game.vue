@@ -534,12 +534,14 @@ export default {
       this.isPassLevel[this.Nowlevel-1] = true;
       this.resetWrongTimes();
       let isDone = true;
+      //看有沒有沒答題的問題
       for(var i in this.isPassLevel){
         if(this.isPassLevel[i] == false){
           isDone = false;
           break;
         }
       }
+      //找到哪一題沒有回答(從現在這的level以後)
       let notFound = true;
       for (var i = this.Nowlevel; i < this.GameData.Questions.length; i++) {
         if (this.isPassLevel[i] == false) {
@@ -549,6 +551,7 @@ export default {
           break;
         }
       }
+      //找到哪一題沒有回答(從第一題開始)
       if (notFound) {
         for (var i = 0; i < this.isPassLevel.length; i++) {
           if (this.isPassLevel[i] == false) {
@@ -616,10 +619,12 @@ export default {
         console.log("Default Game Data Record: " + record);
       }
       try {
+        if (!Array.isArray(this.download_data[this.Nowlevel - 1])) {
+          this.download_data[this.Nowlevel - 1] = [];
+        }
         this.download_data[this.Nowlevel - 1].push(record);
       } catch (error) {
-        this.download_data.push([]);
-        this.download_data[this.Nowlevel - 1].push(record);
+        console.error("Error in pushing record: ", error);
       }
     },
     EffectPlayer(type) {
