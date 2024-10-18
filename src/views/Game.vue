@@ -533,36 +533,7 @@ export default {
     NextQuestion() {
       this.isPassLevel[this.Nowlevel-1] = true;
       this.resetWrongTimes();
-      let isDone = true;
-      //看有沒有沒答題的問題
-      for(var i in this.isPassLevel){
-        if(this.isPassLevel[i] == false){
-          isDone = false;
-          break;
-        }
-      }
-      //找到哪一題沒有回答(從現在這的level以後)
-      let notFound = true;
-      for (var i = this.Nowlevel; i < this.GameData.Questions.length; i++) {
-        if (this.isPassLevel[i] == false) {
-          this.Nowlevel = i + 1;
-          this.transitionName = 'slide-left';
-          notFound = false;
-          break;
-        }
-      }
-      //找到哪一題沒有回答(從第一題開始)
-      if (notFound) {
-        for (var i = 0; i < this.isPassLevel.length; i++) {
-          if (this.isPassLevel[i] == false) {
-            this.Nowlevel = i + 1;
-            this.transitionName = 'slide-left';
-            isDone = false;
-            break;
-          }
-        }
-      }
-      if(isDone){
+      if(this.checkUnansweredQuestions()){
         this.GameStatus = "Done";
         soundManager.stopAllSounds();
         this.EffectPlayer("FireWorkAnimation");
@@ -571,6 +542,41 @@ export default {
       this.pauseTimer();
       this.resetTimer();
       this.startTimer();
+    },
+    checkUnansweredQuestions() {
+      const totalQuestions = this.GameData.Questions.length;
+      let allQuestionsAnswered = true;
+
+      // 檢查是否有未回答的問題
+      if (this.isAnyQuestionUnanswered()) {
+        allQuestionsAnswered = false;
+
+        // 嘗試從當前等級以後尋找未回答的問題
+        if (!this.findNextUnansweredQuestion(this.Nowlevel, totalQuestions)) {
+          
+          // 如果找不到且當前是最後一題，則允許回到之前的未答題目
+          if (this.Nowlevel === totalQuestions) {
+            this.findNextUnansweredQuestion(0, totalQuestions);
+          }
+        }
+      }
+
+      return allQuestionsAnswered;
+    },
+
+    isAnyQuestionUnanswered() {
+      return this.isPassLevel.some((answered) => !answered);
+    },
+
+    findNextUnansweredQuestion(startLevel, totalQuestions) {
+      for (let i = startLevel; i < totalQuestions; i++) {
+        if (!this.isPassLevel[i]) {
+          this.Nowlevel = i + 1;
+          this.transitionName = 'slide-left';
+          return true;
+        }
+      }
+      return false;
     },
     PreviousQuestion() {
       this.resetWrongTimes();
