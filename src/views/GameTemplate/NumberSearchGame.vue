@@ -104,7 +104,7 @@ export default {
       const questionNum = this.randomQuestionOrder[this.questionNum];
       if (this.checkAnswer(questionNum, mousePos.x, mousePos.y)) {
         this.addCircle(questionNum);
-        this.answerCorrectly(questionNum);
+        this.handleCorrectAnswer(questionNum);
         this.nextQuestion();
       } else {
         this.$emit("play-effect", "WrongSound");
@@ -135,7 +135,7 @@ export default {
         posY <= obj.yRange[1] + tolerance
       );
     },
-    answerCorrectly(questionNum) {
+    handleCorrectAnswer(questionNum) {
       this.rightAnswerCount++;
       this.correctlyAnsweredQuestions[this.questionNum] = 1;
       this.$emit("play-effect", "CorrectSound");
