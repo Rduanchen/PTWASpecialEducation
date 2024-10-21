@@ -51,16 +51,9 @@ export default {
         stroke: "gray",
       },
       configScope: {
-        stroke: "red",
+        stroke: "white",
       },
-      configCross: [
-        {
-          stroke: "red",
-        },
-        {
-          stroke: "red",
-        },
-      ],
+      configCross: [{}, {}, {}, {}],
 
       configBalloon: [],
       configOptions: [],
@@ -68,6 +61,7 @@ export default {
 
       speed: 2,
       isAiming: false,
+      readyToShoot: false,
 
       allOptions: [],
       trueOptions: [],
@@ -106,7 +100,9 @@ export default {
       this.configKonva.height = this.gameWidth / 2;
       this.configBG.width = this.gameWidth;
       this.configBG.height = this.gameWidth / 2;
-      this.configScope.radius = this.gameWidth * 0.08;
+      for (let i = 0; i < 4; ++i) {
+        this.configCross[i].stroke = "white";
+      }
     },
     initializeOptions() {
       this.allOptions = this.GameData.True.concat(this.GameData.False);
@@ -114,6 +110,7 @@ export default {
     },
     update() {
       this.moveBalloon();
+      if (this.isAiming) this.aimAnimation();
     },
 
     balloonSpawner() {
@@ -149,36 +146,67 @@ export default {
     },
     aimStart() {
       this.isAiming = true;
-      clearInterval(this.game);
-      clearInterval(this.spawner);
-      this.game = window.setInterval(this.update, 20 * 5);
-      this.spawner = window.setInterval(this.balloonSpawner, 1000 * 5);
+      this.readyToShoot = false;
+      this.configScope.radius = this.gameWidth * 0.12;
+      this.configScope.stroke = "white";
+      this.drawCross();
+      this.speed = 0.4;
     },
     aimMove(e) {
       this.aimPosition = e.target.getStage().getPointerPosition();
-      let x = this.aimPosition.x,
-        y = this.aimPosition.y,
-        radius = this.configScope.radius;
-      this.configScope.x = x;
-      this.configScope.y = y;
-      this.configCross[0].points = [x, y + radius, x, y - radius];
-      this.configCross[1].points = [x + radius, y, x - radius, y];
+      this.configScope.x = e.target.getStage().getPointerPosition().x;
+      this.configScope.y = e.target.getStage().getPointerPosition().y;
+    },
+    aimAnimation() {
+      this.drawCross();
+      if (this.configScope.radius > this.gameWidth * 0.08) {
+        this.configScope.radius -= this.gameWidth * 0.003;
+      } else {
+        this.readyToShoot = true;
+        this.configScope.stroke = "red";
+      }
+    },
+    drawCross() {
+      let offset1 = this.configScope.radius,
+        offset2 = this.configScope.radius - this.gameWidth * 0.08;
+      let pointOffset1 = [
+        { x: 0, y: -offset1 },
+        { x: 0, y: offset1 },
+        { x: -offset1, y: 0 },
+        { x: offset1, y: 0 },
+      ];
+      let pointOffset2 = [
+        { x: 0, y: -offset2 },
+        { x: 0, y: offset2 },
+        { x: -offset2, y: 0 },
+        { x: offset2, y: 0 },
+      ];
+      for (let i = 0; i < 4; ++i) {
+        this.configCross[i].points = [
+          canvasTools.offset(this.configScope, pointOffset1[i]).x,
+          canvasTools.offset(this.configScope, pointOffset1[i]).y,
+          canvasTools.offset(this.configScope, pointOffset2[i]).x,
+          canvasTools.offset(this.configScope, pointOffset2[i]).y,
+        ];
+        if (this.readyToShoot) this.configCross[i].stroke = "red";
+        else this.configCross[i].stroke = "white";
+      }
     },
     shoot() {
       this.isAiming = false;
-      clearInterval(this.game);
-      clearInterval(this.spawner);
-      this.game = window.setInterval(this.update, 20);
-      this.spawner = window.setInterval(this.balloonSpawner, 1000);
-      for (let i = 0; i < this.configBalloon.length; ++i) {
-        if (
-          canvasTools.distance(this.aimPosition, this.configBalloon[i]) <=
-          this.configBalloon[i].radius
-        ) {
-          this.checkAnswer(this.configOptions[i].text);
-          this.configBalloon.splice(i, 1);
-          this.configOptions.splice(i, 1);
-          break;
+      this.speed = 2;
+
+      if (this.readyToShoot) {
+        for (let i = 0; i < this.configBalloon.length; ++i) {
+          if (
+            canvasTools.distance(this.aimPosition, this.configBalloon[i]) <=
+            this.configBalloon[i].radius
+          ) {
+            this.checkAnswer(this.configOptions[i].text);
+            this.configBalloon.splice(i, 1);
+            this.configOptions.splice(i, 1);
+            break;
+          }
         }
       }
     },
