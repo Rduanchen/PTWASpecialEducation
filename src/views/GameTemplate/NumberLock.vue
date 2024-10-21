@@ -1,19 +1,19 @@
 <template>
-<div class="OutterContainer">
-    <div class="description ">
-        <p>{{ this.GameData.QuestionWord }}</p>
+    <div class="OutterContainer">
+        <div class="description ">
+            <p>{{ this.GameData.QuestionWord }}</p>
+        </div>
+        <div class="GameWindows">
+            <component :is="GameData.SlotComponentName" :Data="GameData.Data" :ID="this.ID" @ReplyAnswer="Reply"></component>
+        </div>
+        <div class="NumberPad" v-if="ShowPad">
+            <VirtualNumPad @virtualpadinput-Input="Input" @virtualpadinput-delete="Delete" @virtualpadinput-pop="Pop"></VirtualNumPad>
+        </div>
+        <div class="Submit">
+            <button @click="CheckAnswer">送出答案</button>
+        </div>
+        {{NowSelect}}
     </div>
-    <div class="GameWindows">
-        <component :is="GameData.SlotComponentName" :Data="GameData.Data" :ID="this.ID" @ReplyAnswer="Reply"></component>
-    </div>
-    <div class="NumberPad" v-if="ShowPad">
-        <VirtualNumPad @virtualpadinput-Input="Input" @virtualpadinput-delete="Delete" @virtualpadinput-pop="Pop"></VirtualNumPad>
-    </div>
-    <div class="Submit">
-        <button @click="CheckAnswer">送出答案</button>
-    </div>
-    {{NowSelect}}
-</div>
 </template>
 
 <script>
