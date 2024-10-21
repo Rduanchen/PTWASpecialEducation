@@ -84,6 +84,7 @@
                   @download-record="ToCSV"
                   @restart="reloadPage"
                   @previous-page="PreviousPage"
+                  @open-teaching-modal="loadMediaForModal"
                 ></GameStartandOver>
               </div>
             </div>
@@ -112,7 +113,7 @@
                 v-if="
                   GameStatus == 'Progressing' && this.Hint['Type'] != 'Method'
                 "
-                @provide-hint="ProvideHint()"
+                @open-teaching-modal="loadMediaForModal"
               >
               </hintbutton>
             </template>
@@ -146,141 +147,33 @@
   </div>
           </div>
 
-
-          <!--FIXME teach -->
-          <div
-            class="fade modal"
-            id="exampleModal"
-            tabindex="-1"
-            aria-labelledby="exampleModalLabel"
-            aria-hidden="true"
-          >
-            <div class="modal-dialog modal-xl">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h1 class="modal-title fs-5" id="exampleModalLabel">
-                    不會玩嗎?請看教學影片:
-                  </h1>
-                  <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                    @click="PauseIntroVideo()"
-                  ></button>
-                </div>
-                <div class="modal-body justify-content-center">
-                  <div id="novideo" v-if="introvideo == false">
-                    <p class="h1">ㄨㄚˊ，找不到教學影片~~~</p>
-                    <img src="@/assets/images/game_images/elephant.gif" />
-                  </div>
-                  <div id="havevideo d-flex" v-else>
-                    <img
-                      :src="VideoSrc"
-                      class="img-fluid align-self-center"
-                      style="height: 70vh"
-                      v-if="isGif"
-                    />
-                    <video
-                      id="introvideo"
-                      :src="VideoSrc"
-                      controls="controls"
-                      class="img-fluid"
-                      style="height: 70vh"
-                      v-else
-                    ></video>
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button
-                    type="button"
-                    class="btn btn-secondary"
-                    data-bs-dismiss="modal"
-                    @click="PauseIntroVideo()"
-                  >
-                    我知道了!
-                  </button>
-                </div>
+          <div v-if="showModal" class="mediaModal-overlay" @click.self="closeMediaModal">
+            <div class="mediaModal-container">
+              <div class="mediaModal-header">
+                <h1 class="mediaModal-title">{{ modalTitle }}</h1>
               </div>
-            </div>
-          </div>
-
-          <!-- Hint app -->
-          <div
-            class="fade modal"
-            id="hint"
-            tabindex="-1"
-            aria-labelledby="exampleModalLabel"
-            aria-hidden="true"
-          >
-            <div class="modal-dialog modal-xl">
-              <div class="modal-content" style="height: 90vh">
-                <!-- <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">這是提示</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                  </div> -->
-                <div class="modal-body d-flex justify-content-center">
-                  <!-- <p>Hello</p>
-                    {{ this.Hint['Type'] }} -->
-                  <div
-                    class="content Type-None"
-                    v-if="this.Hint['Type'] == 'None'"
-                  >
-                    <p class="h1">喔喔，沒有提供相關的資源</p>
-                    <img
-                      src="@/assets/images/game_images/elephant.gif"
-                      class=""
-                    />
-                  </div>
-                  <div
-                    class="content Type-Level"
-                    v-if="this.Hint['Type'] == 'Level'"
-                    :key="this.TotalLevel"
-                  >
-                    <p class="h1">這是關卡提示</p>
-                    <video
-                      id="Hint-video"
-                      :src="this.Hint['Data']['FilePath']"
-                      controls="controls"
-                      class="img-fluid"
-                      v-if="this.Hint.Data.SourceType == 'video'"
-                    ></video>
-                    <img
-                      :src="this.Hint['Data']['FilePath']"
-                      class="img-fluid"
-                      v-if="this.Hint.Data.SourceType == 'image'"
-                    />
-                  </div>
-                  <div
-                    class="content Type-Single"
-                    v-if="this.Hint['Type'] == 'Single'"
-                  >
-                    <p class="h1">這是單一提示</p>
-                    <video
-                      id="Hint-video"
-                      :src="this.Hint['Data']['FilePath']"
-                      controls="controls"
-                      class="img-fluid"
-                      v-if="this.Hint.Data.SourceType == 'video'"
-                    ></video>
-                    <img
-                      :src="this.Hint['Data']['FilePath']"
-                      class="img-fluid"
-                      v-if="this.Hint.Data.SourceType == 'image'"
-                    />
-                  </div>
-                  <!-- //FIXME video 自動暫停 -->
-                </div>
-                <div class="modal-footer">
-                  <button
-                    type="button"
-                    class="btn btn-secondary"
-                    data-bs-dismiss="modal"
-                    @click="PauseHintVideo()"
-                  >
-                    我知道了!
-                  </button>
-                </div>
+              <div class="mediaModal-body">
+                <p class="mediaModal-content">{{ modalContent }}</p>
+                <video
+                  v-if="mediaType === 'video'"
+                  :src="mediaSrc"
+                  controls
+                  autoplay
+                  class="media-content"
+                ></video>
+                <img
+                  v-else-if="mediaType === 'image'"
+                  :src="mediaSrc"
+                  class="media-content"
+                />
+                <img
+                  v-else
+                  src="@/assets/images/game_images/elephant.gif"
+                  class="media-content"
+                />
+              </div>
+              <div class="mediaModal-footer">
+                <button type="button" @click="closeMediaModal">我知道了!</button>
               </div>
             </div>
           </div>
@@ -358,6 +251,11 @@ export default {
       questionOrder : [],
       questionCopy: [],
       isGif: false,
+      showModal:false,
+      modalTitle:"",
+      mediaType:"none",
+      mediaSrc:"",
+      modalContent: '',
       // SentData2ChildComponent: {},
     };
   },
@@ -392,7 +290,7 @@ export default {
         this.GameConfig = this.GameData.GameConfig;
         this.questionCopy = this.GameData.Questions;
         this.InitHint();
-        this.InitIntroVideo();
+        // this.InitIntroVideo();
         this.Dataloaded = true;
         this.RamdonChoice();
         for(var x in this.GameData.Questions){
@@ -456,27 +354,88 @@ export default {
         video.pause();
       } catch {}
     },
-    InitIntroVideo() {
-      
-      this.introvideo = true;
-      //find is undefined in url
-      let patten = /undefined/;
-      let temp = ImportUrl.GamesGetAssetsFile( this.GameID,this.GameData.introvideo );
-      temp = temp.toString();
-      temp = patten.test(temp)?undefined:temp;
-      if (this.GameData.introvideo != undefined && temp) {
-        this.VideoSrc = ImportUrl.GamesGetAssetsFile(
-          this.GameID,
-          this.GameData.introvideo
-        );
-      } else if (ImportUrl.getDefaultHintAssets(`${this.GameType}.gif`)) {
-        this.VideoSrc = ImportUrl.getDefaultHintAssets(`${this.GameType}.gif`);
-        this.isGif = true;
-      } else {
-        this.introvideo = false;
-        console.warn("No Intro Video");
+    loadMediaForModal(contentType) {
+      let mediaSource = null;
+
+      if (contentType === 'hint') {
+        this.modalTitle = '需要提示嗎?';
+        this.modalContent = '以下是遊戲的提示內容。';
+        mediaSource = this.fetchHintMedia();
+      } else if (contentType === 'teach') {
+        this.modalTitle = '不會玩嗎?請看教學影片:';
+        this.modalContent = '以下是遊戲的教學內容。';
+        mediaSource = this.fetchIntroVideo();
       }
-      
+
+      if (mediaSource) {
+        this.mediaSrc = mediaSource.filePath;
+        this.mediaType = mediaSource.sourceType === 'video' ? 'video' : 'image';
+      } else {
+        this.modalContent = '喔喔，沒有提供相關的資源';
+        this.mediaType = 'none';
+        console.warn('No media available for content type:', contentType);
+      }
+      this.openMediaModal();
+    },
+
+    fetchHintMedia() {
+      let hintType = this.Hint.Type;
+      let filePath, sourceType;
+
+      try {
+        if (hintType === 'Level') {
+          filePath = this.GameData.Hint.Data[this.Nowlevel - 1].FilePath;
+          sourceType = this.GameData.Hint.Data[this.Nowlevel - 1].SourceType;
+          this.modalContent = '這是關卡提示';
+        } else if (hintType === 'Single') {
+          this.modalContent = '這是單一提示';
+          filePath = this.GameData.Hint.Data.FilePath;
+          sourceType = this.GameData.Hint.Data.SourceType;
+        }
+        
+        return {
+          filePath: ImportUrl.GamesGetAssetsFile(this.GameID, filePath),
+          sourceType
+        };
+      } catch {
+        console.warn('Missing data in Hint, type:', hintType);
+        return null;
+      }
+    },
+
+    fetchIntroVideo() {
+      let introFilePath;
+      let pattern = /undefined/;
+
+      try {
+        introFilePath = ImportUrl.GamesGetAssetsFile(this.GameID, this.GameData.introvideo).toString();
+        if (pattern.test(introFilePath) || this.GameData.introvideo === undefined) {
+          throw new Error("Invalid intro video URL");
+        }
+        return {
+          filePath: introFilePath,
+          sourceType: 'video'
+        };
+      } catch {
+        console.warn('No Intro Video');
+        
+        // Check for default GIF as fallback
+        let defaultGif = ImportUrl.getDefaultHintAssets(`${this.GameType}.gif`);
+        if (defaultGif) {
+          return {
+            filePath: defaultGif,
+            sourceType: 'image'
+          };
+        } else {
+          return null;
+        }
+      }
+    },
+    openMediaModal() {
+      this.showModal = true;
+    },
+    closeMediaModal() {
+      this.showModal = false;
     },
     ChangeGameStatus(status) {
       //改變遊戲狀態
@@ -772,55 +731,6 @@ export default {
         );
       }
     },
-    ProvideHint() {
-      let hint_type = this.Hint["Type"];
-      switch (hint_type) {
-        case "Level":
-          try {
-            let temp = this.GameData.Hint.Data[this.Nowlevel - 1].FilePath;
-            temp = this.GameData.Hint.Data[this.Nowlevel - 1].SourceType;
-            this.Hint.Data.FilePath = ImportUrl.GamesGetAssetsFile(
-              this.GameID,
-              this.GameData.Hint.Data[this.Nowlevel - 1].FilePath
-            );
-            this.Hint.Data.SourceType =
-              this.GameData.Hint.Data[this.Nowlevel - 1].SourceType;
-            // this.Hint["Data"] = this.GameData.Hint.Data[this.Nowlevel-1];
-            // this.Hint["Data"]['FilePath'] = ImportUrl.GamesGetAssetsFile(this.GameID,this.GameData.Hint.Data[this.Nowlevel-1].FilePath);
-          } catch {
-            // console.log("Missing data in Hint, type: Level");
-            console.warn("Missing data in Hint, type: Level");
-            this.Hint["Type"] = "None";
-          }
-          break;
-        case "Single":
-          try {
-            let temp = this.GameData.Hint.Data.FilePath;
-            temp = this.GameData.Hint.Data.SourceType;
-            this.Hint.Data.FilePath = ImportUrl.GamesGetAssetsFile(
-              this.GameID,
-              this.GameData.Hint.Data.FilePath
-            );
-            this.Hint.Data.SourceType = this.GameData.Hint.Data.SourceType;
-          } catch {
-            // console.log("Missing data in Hint, type: Single");
-            console.warn("Missing data in Hint, type: Single");
-            this.Hint["Type"] = "None";
-          }
-          break;
-        case "None":
-          this.Hint["Type"] = "None";
-          break;
-        case "Method":
-          this.$refs.GameComponent.CallHint(this.Nowlevel, this.GameData.Hint);
-          this.Hint["Type"] = "Method";
-          break;
-        default:
-          // console.log("No hint in this game");
-          console.warn("No hint in this game");
-          this.Hint["Type"] = "None";
-      }
-    },
     PauseHintVideo() {
       try {
         let video = document.getElementById("Hint-video");
@@ -1044,5 +954,96 @@ export default {
 .slide-right-enter-to,
 .slide-right-leave {
   transform: translateX(0%);
+}
+
+.mediaModal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.mediaModal-container {
+  background: #fff;
+  border-radius: 10px;
+  width: 80%;
+  height: 90%;
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow: auto;
+  padding: 20px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.mediaModal-header {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.mediaModal-title {
+  font-size: 2rem;
+  text-align: start;
+  margin: 0;
+}
+
+.mediaModal-body {
+  width: 100%;
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  flex-grow: 1; 
+}
+
+.mediaModal-footer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.media-content {
+  max-width: 100%;
+  max-height: 100%;
+  min-width: 300px;
+  min-height: 200px;
+  object-fit: contain;
+  flex-grow: 1;
+}
+
+button {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: #5a6268;
+}
+
+img.media-content {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.mediaModal-content {
+  margin: 0;
+  font-size: 1.5rem;
 }
 </style>
