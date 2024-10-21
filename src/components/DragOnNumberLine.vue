@@ -30,9 +30,6 @@ import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
 import * as canvasTools from "@/utilitys/canvasTools.js";
 import { defineAsyncComponent } from "vue";
 
-//const image = document.createElement("img");
-//image.src = GamesGetAssetsFile("MA3029", "RacingCar.png");
-
 export default {
   components: {},
   data() {
@@ -44,14 +41,6 @@ export default {
         fill: "gray",
         stroke: "gray",
         visible: false,
-      },
-      configCircle: {
-        fill: "green",
-        stroke: "green",
-        draggable: true,
-      },
-      configImage: {
-        draggable: true,
       },
 
       configNumberLine: [],
@@ -65,16 +54,14 @@ export default {
     };
   },
 
-  props: ["config"], //{spacing, max, min, image, init_pos}
+  props: ["Data", "ID"], //{spacing, max, min, image, init_pos}
 
-  emits: ["get_drag_position"],
+  emits: ["getDragPosition"],
 
   beforeMount() {
     this.initializeScene();
     this.initializeNumberLine();
   },
-
-  mounted() {},
 
   methods: {
     initializeScene() {
@@ -123,13 +110,9 @@ export default {
     drawNumberLine() {
       this.intervalLength =
         (this.gameWidth * 0.9) /
-        ((this.config.max - this.config.min) / this.config.spacing + 1);
+        ((this.Data.max - this.Data.min) / this.Data.spacing + 1);
       let tempX = this.gameWidth * 0.05 + this.intervalLength * 0.5;
-      for (
-        let i = this.config.min;
-        i <= this.config.max;
-        i += this.config.spacing
-      ) {
+      for (let i = this.Data.min; i <= this.Data.max; i += this.Data.spacing) {
         let line = {};
         line.stroke = "black";
         line.points = [
@@ -146,9 +129,9 @@ export default {
     drawNumbers() {
       this.numberY = this.gameWidth * 0.175;
       for (
-        let i = this.config.min, j = 0;
-        i <= this.config.max;
-        i += this.config.spacing, ++j
+        let i = this.Data.min, j = 0;
+        i <= this.Data.max;
+        i += this.Data.spacing, ++j
       ) {
         let number = {};
         let offset;
@@ -164,53 +147,62 @@ export default {
       }
     },
     drawDraggable() {
-      let initX = 0;
-      if (this.config.init_pos) {
-        for (
-          let i = this.config.min;
-          i <= this.config.max;
-          i += this.config.spacing, ++initX
-        ) {
-          if (i == this.config.init_pos) break;
-        }
-      }
+      let initId = 0;
+      if (this.Data.init_pos) initId = this.getInitialPositionId();
 
-      if (this.config.image.includes("undefined")) {
+      if (GamesGetAssetsFile(this.ID, this.Data.image).includes("undefined"))
         this.isImage = false;
-        this.circleY = this.gameWidth * 0.075;
-        this.configCircle.radius = this.intervalLength * 0.5;
-        this.configCircle.x = this.numberX[initX];
-        this.configCircle.y = this.circleY;
-        this.configCircle.dragBoundFunc = this.horizontalBound;
-      } else {
-        const draggableImage = document.createElement("img");
-        draggableImage.src = this.config.image;
 
-        this.configImage.image = draggableImage;
-        this.configImage.width = this.intervalLength;
-        this.configImage.height = this.intervalLength;
-        this.imageY = this.gameWidth * 0.075 - this.intervalLength * 0.5;
-        this.configImage.x = this.numberX[initX] - this.intervalLength * 0.5;
-        this.configImage.y = this.imageY;
-        this.configImage.dragBoundFunc = this.horizontalBound;
+      let configDraggable = {
+        x: this.numberX[initId],
+        y: this.gameWidth * 0.075,
+        draggable: true,
+        dragBoundFunc: this.horizontalBound,
+      };
+
+      if (this.isImage) {
+        const draggableImage = new window.Image();
+        draggableImage.src = GamesGetAssetsFile(this.ID, this.Data.image);
+        configDraggable.image = draggableImage;
+        configDraggable.width = this.intervalLength;
+        configDraggable.height = this.intervalLength;
+        configDraggable.x = canvasTools.corner(configDraggable).x;
+        configDraggable.y = canvasTools.corner(configDraggable).y;
+        this.configImage = configDraggable;
+      } else {
+        configDraggable.radius = this.intervalLength * 0.5;
+        configDraggable.fill = "green";
+        configDraggable.stroke = "green";
+        this.configCircle = configDraggable;
       }
     },
-    handleDragmove(e) {
-      this.configCircle.x = e.target.x();
-      this.configCircle.y = e.target.y();
+    getInitialPositionId() {
+      let initId = 0;
+      for (
+        let i = this.Data.min;
+        i <= this.Data.max;
+        i += this.Data.spacing, ++initId
+      ) {
+        if (i == this.Data.init_pos) return initId;
+      }
     },
     handleDragend(e) {
       let snapTo,
         distance = 999,
         output,
         dragendPosition;
-      if (this.isImage)
-        dragendPosition = e.target.x() + this.intervalLength * 0.5;
-      else dragendPosition = e.target.x();
+      if (this.isImage) {
+        this.configImage.x = e.target.x();
+        dragendPosition = canvasTools.center(this.configImage).x;
+      } else {
+        this.configCircle.x = e.target.x();
+        dragendPosition = this.configCircle.x;
+      }
+
       for (
-        let i = this.config.min, j = 0;
-        i <= this.config.max;
-        i += this.config.spacing, ++j
+        let i = this.Data.min, j = 0;
+        i <= this.Data.max;
+        i += this.Data.spacing, ++j
       ) {
         if (Math.abs(dragendPosition - this.numberX[j]) < distance) {
           distance = Math.abs(dragendPosition - this.numberX[j]);
@@ -218,25 +210,25 @@ export default {
           output = i;
         }
       }
-      if (this.isImage) this.configImage.x = snapTo - this.intervalLength * 0.5;
-      else this.configCircle.x = snapTo;
 
-      this.$emit("get_drag_position", output);
+      if (this.isImage) e.target.x(snapTo - this.configImage.width * 0.5);
+      else this.configCircle.x = e.target.x(snapTo);
+
+      this.$emit("getDragPosition", output);
     },
     horizontalBound(pos) {
       if (this.isImage) {
         return {
           x: pos.x,
-          y: this.imageY,
+          y: this.configImage.y,
         };
       } else {
         return {
           x: pos.x,
-          y: this.circleY,
+          y: this.configCircle.y,
         };
       }
     },
-    update() {},
   },
 };
 </script>

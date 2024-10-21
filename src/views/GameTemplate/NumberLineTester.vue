@@ -1,8 +1,9 @@
 <template>
   <div class="gameContainer">
     <numberLine
-      :config="configNumberLine"
-      @get_drag_position="drag"
+      :Data="configNumberLine"
+      :ID="id"
+      @getDragPosition="drag"
     ></numberLine>
   </div>
 </template>
@@ -23,8 +24,10 @@ export default {
         spacing: 1,
         max: 10,
         min: 2,
-        init_pos: 3,
+        init_pos: 5,
+        image: "RacingCar.png",
       },
+      id: "MA3029",
     };
   },
 
@@ -43,7 +46,6 @@ export default {
 
   beforeMount() {
     this.initializeScene();
-    this.configNumberLine.image = GamesGetAssetsFile("MA3029", "RacingCar.png");
   },
 
   mounted() {},
