@@ -26,7 +26,7 @@
 <script>
 export default {
     name: 'HintButton',
-    emits: ['provide-hint'],
+    emits: ['open-teaching-modal'],
     data() {
         return {
             showhint: false,
@@ -63,7 +63,8 @@ export default {
             }catch{}
         },
         gethint() {
-            this.$emit('provide-hint');
+            const mediaType = 'hint';
+            this.$emit('open-teaching-modal', mediaType);
         },
         updated_hint_status() {
             let temp = (this.HintInfo.MaxWrongTimes - this.HintInfo.WrongTimes) > 0 ? this.HintInfo.MaxWrongTimes - this.HintInfo.WrongTimes: 0;

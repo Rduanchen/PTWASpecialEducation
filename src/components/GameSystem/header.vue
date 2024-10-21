@@ -67,6 +67,9 @@ header {
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
+    display: block;
+    position: relative;
+    z-index: 1000; 
 }
 
 .navbar {
