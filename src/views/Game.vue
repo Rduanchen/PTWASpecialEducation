@@ -120,7 +120,7 @@
           </SideBar>
 
           <scratchSheet v-if="scratchSheetVisible" @closeSheet="closeSratSheet"></scratchSheet>
-          
+
           <MediaModal
             :showMediaModal="showMediaModal"
             :modalTitle="modalTitle"
@@ -246,7 +246,7 @@ export default {
         // this.InitIntroVideo();
         this.Dataloaded = true;
         this.RamdonChoice();
-        for(var x in this.GameData.Questions){
+        for(let x in this.GameData.Questions){
           this.isPassLevel.push(false);
         }
       } catch (error) {
@@ -265,13 +265,13 @@ export default {
     RamdonChoice() {
       //Radom Select Questions via level
       let question = [];
-      var temp = [];
-      var checkcorrect = true;
+      let temp = [];
+      let checkcorrect = true;
       let record = [];
-      for (var i in this.GameData.Questions) {
+      for (let i in this.GameData.Questions) {
         if (this.GameData.Questions[i].length != undefined) {
-          var num = this.GameData.Questions[i].length;
-          var rand = Math.floor(Math.random() * (num - 0 + 0));
+          let num = this.GameData.Questions[i].length;
+          let rand = Math.floor(Math.random() * (num - 0 + 0));
           console.log('rand',rand);
           question.push(this.GameData.Questions[i][rand]);
           record.push(rand);
@@ -438,7 +438,7 @@ export default {
       this.finaltime = 0;
       this.download_data = [[]];
       this.isPassLevel = [];
-      for(var x in this.GameData.Questions){
+      for(let x in this.GameData.Questions){
         this.isPassLevel.push(false);
       }
     },
@@ -546,6 +546,7 @@ export default {
       }
     },
     EffectPlayer(type) {
+      let sound;
       //播放音效    
       switch (type) {
         case "CorrectSound":
@@ -572,7 +573,7 @@ export default {
         case "FireWorkAnimation":
           this.EffectWindow = true;
           this.EffectSrc = new URL(`../assets/Effects/Firework.gif`, import.meta.url).href;
-          var sound = new Audio();
+          sound = new Audio();
           sound.src = ImportUrl.GetSystemEffectAssetsFile("harray.mp3");
           soundManager.playSound(`FireWorkAnimation`, false);
           sound.oncanplaythrough = function () {
@@ -585,7 +586,7 @@ export default {
         case "HarraySound": //Wait for remove
           // this.EffectPlayer("FireWorkAnimation");
           console.warn("HarraySound is Deprecated, Please use FireWorkAnimation instead");
-          var sound = new Audio();
+          sound = new Audio();
           sound.src = ImportUrl.GetSystemAssetsFile("harray.mp3","effects");
           sound.src = ImportUrl.GetSystemEffectAssetsFile("harray.mp3");
           soundManager.playSound(`harray`, false);
@@ -697,7 +698,7 @@ export default {
     },
     closeSratSheet() {
       this.scratchSheetVisible = false;
-      var modal = document.getElementById("Calculator");
+      let modal = document.getElementById("Calculator");
       modal.classList.remove("show");
       modal.style.display = "none";
     },
