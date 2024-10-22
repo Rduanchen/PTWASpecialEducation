@@ -10,15 +10,9 @@
         <v-circle
           v-if="!isImage"
           :config="configCircle"
-          @dragmove="handleDragmove"
           @dragend="handleDragend"
         ></v-circle>
-        <v-image
-          v-if="isImage"
-          :config="configImage"
-          @dragmove="handleDragmove"
-          @dragend="handleDragend"
-        >
+        <v-image v-if="isImage" :config="configImage" @dragend="handleDragend">
         </v-image>
       </v-layer>
     </v-stage>
