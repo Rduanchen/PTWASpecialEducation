@@ -146,14 +146,8 @@ import MediaModal from '@/components/GameSystem/MediaModal.vue';
 import scratchSheet from "@/components/ScratchSheets.vue";
 import hintbutton from "@/components/GameSystem/hintbutton.vue";
 import * as ImportUrl from "@/utilitys/get_assets.js";
-import axios from "axios";
 import { defineAsyncComponent } from "vue";
-// import CompareGame from "./GameTemplate/CompareGame.vue";
 import EffectWindow from "@/components/GameSystem/EffectWindow.vue";
-// import PairingGame from "./GameTemplate/PairingGame.vue";
-// import WhackaMole from "./GameTemplate/WhackaMole.vue";
-// import SelectGameMulti from "./GameTemplate/SelectGameMulti.vue";
-// import CopyItem from "./GameTemplate/CopyItem.vue";
 import gameStore from '@/stores/game';
 import { mapWritableState } from "pinia";
 import { soundManager } from '@/utilitys/sound-manager.js';
@@ -540,29 +534,16 @@ export default {
       }
     },
     EffectPlayer(type) {
-      let sound;
-      //播放音效    
+      let sound;  
       switch (type) {
         case "CorrectSound":
-          // var sound = new Audio();
-          // sound.src = ImportUrl.GetSystemEffectAssetsFile("CorrectAnswer.mp3");
-          // console.log(sound.src);
-
           this.EffectPlayer("CorrectAnimation");
           soundManager.playSound(`Correct`, false);
-          // sound.oncanplaythrough = function () {
-          //   sound.play();
-          // };
           break;
         case "WrongSound":
           this.WrongTimes++;
-          // var sound = new Audio();
-          // sound.src = ImportUrl.GetSystemEffectAssetsFile("WrongAnswer.mp3");
           this.EffectPlayer("IncorrectAnimation");
           soundManager.playSound(`Wrong`, false);
-          // sound.oncanplaythrough = function () {
-          //   sound.play();
-          // };
           break;
         case "FireWorkAnimation":
           this.EffectWindow = true;
@@ -578,7 +559,6 @@ export default {
           }, 3000);
           break;
         case "HarraySound": //Wait for remove
-          // this.EffectPlayer("FireWorkAnimation");
           console.warn("HarraySound is Deprecated, Please use FireWorkAnimation instead");
           sound = new Audio();
           sound.src = ImportUrl.GetSystemAssetsFile("harray.mp3","effects");
