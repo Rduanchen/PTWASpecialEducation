@@ -16,8 +16,9 @@ export function distance(object_1, object_2){
 }
 
 export function shuffleOptions(array){
-    let shuffled = array;
-    for (let i = array.length - 1; i > 0; i--) {
+    let shuffled = [];
+    for (let item in array) shuffled.push(array[item]);
+    for (let i = shuffled.length - 1; i > 0; i--) {
         let j = Math.floor(Math.random() * (i + 1));
         [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
       }
