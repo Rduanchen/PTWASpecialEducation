@@ -12,22 +12,25 @@
         </v-layer>
 
         <v-layer>
-          <v-image
-            v-for="passage in configPassage"
-            :config="passage"
-            @mousedown="moveOnClick"
-            @touchstart="moveOnClick"
-          ></v-image>
+          <v-image v-for="passage in configPassage" :config="passage"></v-image>
           <v-text v-for="option in configOption" :config="option"></v-text>
         </v-layer>
       </v-stage>
     </div>
     <div id="btnContainer">
-      <img :src="upBtn" class="controlBtn" @click="move('up')" />
+      <img :src="upBtn" class="controlBtn" @click="getCurrentOptionId('up')" />
       <br />
-      <img :src="rightBtn" class="controlBtn" @click="move('right')" />
+      <img
+        :src="rightBtn"
+        class="controlBtn"
+        @click="getCurrentOptionId('right')"
+      />
       <br />
-      <img :src="downBtn" class="controlBtn" @click="move('down')" />
+      <img
+        :src="downBtn"
+        class="controlBtn"
+        @click="getCurrentOptionId('down')"
+      />
     </div>
   </div>
 </template>
@@ -52,6 +55,9 @@ export default {
       configCar: {},
 
       speed: 1,
+      canMove: true,
+      movement: "idle",
+      currentOptionId: 0,
 
       upBtn: getSystemAssets("arrowUp.jpg", "racingCar"),
       rightBtn: getSystemAssets("arrowRight.jpg", "racingCar"),
@@ -74,6 +80,7 @@ export default {
 
   beforeMount() {
     this.options = canvasTools.shuffleOptions(this.GameData.Options);
+    this.currentOptionId = Math.floor(Math.random() * this.options.length);
     this.initializeScene();
     window.addEventListener("keydown", this.input);
   },
@@ -135,23 +142,17 @@ export default {
       this.configCar.width = this.laneWidth * 0.8;
       this.carOffset = { x: this.laneWidth * 0.2, y: this.laneWidth * 0.1 };
       this.configCar.x = canvasTools.offset(
-        this.configPassage[0],
+        this.configPassage[this.currentOptionId],
         this.carOffset
       ).x;
       this.configCar.y = canvasTools.offset(
-        this.configPassage[0],
+        this.configPassage[this.currentOptionId],
         this.carOffset
       ).y;
     },
     update() {
-      this.passageX -= this.speed;
-      for (let passage in this.configPassage)
-        this.configPassage[passage].x = this.passageX;
-      for (let option in this.configOption)
-        this.configOption[option].x = canvasTools.offset(
-          this.configPassage[0],
-          this.optionOffset
-        ).x;
+      this.movePassage();
+      this.moveCar();
       /*
       if (this.configPassage.x <= -Math.floor(this.l * 1.2)) {
         this.$emit("end");
@@ -161,44 +162,96 @@ export default {
         setTimeout(this.replay, 1000);
       }*/
     },
+    movePassage() {
+      this.passageX -= this.speed;
+      for (let passage in this.configPassage)
+        this.configPassage[passage].x = this.passageX;
+      for (let option in this.configOption)
+        this.configOption[option].x = canvasTools.offset(
+          this.configPassage[0],
+          this.optionOffset
+        ).x;
+    },
+    moveCar() {
+      switch (this.movement) {
+        case "up":
+          if (
+            this.configCar.y >
+            canvasTools.offset(
+              this.configPassage[this.currentOptionId],
+              this.carOffset
+            ).y
+          ) {
+            this.configCar.y -= this.speed * 4;
+            this.configCar.rotation = -10;
+          } else {
+            this.configCar.rotation = 0;
+            this.canMove = true;
+            this.movement = "idle";
+          }
+          break;
+        case "down":
+          if (
+            this.configCar.y <
+            canvasTools.offset(
+              this.configPassage[this.currentOptionId],
+              this.carOffset
+            ).y
+          ) {
+            this.configCar.y += this.speed * 4;
+            this.configCar.rotation = 10;
+          } else {
+            this.configCar.rotation = 0;
+            this.canMove = true;
+            this.movement = "idle";
+          }
+          break;
+      }
+    },
     input(e) {
       //W = 38/87; A = 37/65; S = 40/83; D = 39/68
       //console.log(e.keyCode);
       switch (e.keyCode) {
         case 38:
         case 87:
-          this.move(1);
+          this.getCurrentOptionId("up");
           break;
 
         case 40:
         case 83:
-          this.move(-1);
+          this.getCurrentOptionId("down");
           break;
 
         case 32:
-          this.move(0);
+          this.getCurrentOptionId("right");
           break;
       }
     },
-    move(direction) {
-      switch (direction) {
-        case "up":
-          this.configCar.key--;
-          if (this.configCar.key <= 0) this.configCar.key = 0;
-          break;
-        case "down":
-          this.configCar.key++;
-          if (this.configCar.key >= this.options)
-            this.configCar.key = this.options - 1;
-          break;
-        case "right":
-          this.speed = 10;
-          window.removeEventListener("keydown", this.input);
+    getCurrentOptionId(direction) {
+      if (this.canMove) {
+        switch (direction) {
+          case "up":
+            this.currentOptionId--;
+            if (this.currentOptionId < 0) this.currentOptionId = 0;
+            else {
+              this.movement = "up";
+              this.canMove = false;
+            }
+            break;
+          case "down":
+            this.currentOptionId++;
+            if (this.currentOptionId > this.options.length - 1)
+              this.currentOptionId = this.options.length - 1;
+            else {
+              this.movement = "down";
+              this.canMove = false;
+            }
+            break;
+          case "right":
+            this.speed = 10;
+            this.canMove = false;
+        }
       }
-      this.configCar.y =
-        this.map[this.configCar.key][1] +
-        this.laneWidth / 2 -
-        this.configCar.height / 2;
     },
     end() {
       if (this.game) {
@@ -228,14 +281,6 @@ export default {
       this.game = true;
       this.speed = 1;
       window.addEventListener("keydown", this.input);
-    },
-
-    moveOnClick(Y) {
-      this.configCar.key = Y / this.laneWidth;
-      this.configCar.y =
-        this.map[this.configCar.key][1] +
-        this.laneWidth / 2 -
-        this.configCar.height / 2;
     },
   },
 };
