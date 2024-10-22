@@ -12,6 +12,7 @@
         </v-layer>
 
         <v-layer>
+          <!--TODO: seperate tunnel from passage-->
           <v-image v-for="passage in configPassage" :config="passage"></v-image>
           <v-text v-for="option in configOption" :config="option"></v-text>
         </v-layer>
@@ -153,24 +154,20 @@ export default {
     update() {
       this.movePassage();
       this.moveCar();
-      /*
-      if (this.configPassage.x <= -Math.floor(this.l * 1.2)) {
-        this.$emit("end");
-        this.configPassage.x = 0;
-        //this.speed = 1;
-        clearInterval(this.Update);
-        setTimeout(this.replay, 1000);
-      }*/
     },
     movePassage() {
-      this.passageX -= this.speed;
-      for (let passage in this.configPassage)
-        this.configPassage[passage].x = this.passageX;
-      for (let option in this.configOption)
-        this.configOption[option].x = canvasTools.offset(
-          this.configPassage[0],
-          this.optionOffset
-        ).x;
+      if (this.passageX < this.gameWidth * -1.2) {
+        this.checkAnswer();
+      } else {
+        this.passageX -= this.speed;
+        for (let passage in this.configPassage)
+          this.configPassage[passage].x = this.passageX;
+        for (let option in this.configOption)
+          this.configOption[option].x = canvasTools.offset(
+            this.configPassage[0],
+            this.optionOffset
+          ).x;
+      }
     },
     moveCar() {
       switch (this.movement) {
@@ -253,34 +250,33 @@ export default {
         }
       }
     },
-    end() {
-      if (this.game) {
-        this.game = false;
-        if (this.configCar.key == this.ans) {
-          //this.configTemp.text = "SUCCESS";
-          this.$emit("play-effect", "CorrectSound");
-          this.$emit("add-record", [
-            this.GameData.Options[this.GameData.Answer],
-            this.GameData.Options[this.configCar.key],
-            "正確",
-          ]);
-          this.$emit("next-question");
-        } else {
-          this.$emit("play-effect", "WrongSound");
-          this.$emit("add-record", [
-            this.GameData.Options[this.GameData.Answer],
-            this.GameData.Options[this.configCar.key],
-            "錯誤",
-          ]);
-          setTimeout(this.replay, 1000);
-        }
+    checkAnswer() {
+      if (
+        this.options[this.currentOptionId] ==
+        this.GameData.Options[this.GameData.Answer]
+      ) {
+        this.$emit("play-effect", "CorrectSound");
+        this.$emit("add-record", [
+          this.GameData.Options[this.GameData.Answer],
+          this.options[this.currentOptionId],
+          "正確",
+        ]);
+        this.$emit("next-question");
+      } else {
+        this.$emit("play-effect", "WrongSound");
+        this.$emit("add-record", [
+          this.GameData.Options[this.GameData.Answer],
+          this.options[this.currentOptionId],
+          "錯誤",
+        ]);
+        this.replay();
       }
     },
 
     replay() {
-      this.game = true;
+      this.passageX = 0;
       this.speed = 1;
-      window.addEventListener("keydown", this.input);
+      this.canMove = true;
     },
   },
 };
