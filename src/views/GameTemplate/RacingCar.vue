@@ -5,6 +5,7 @@
       <v-stage :config="configKonva">
         <v-layer>
           <v-rect :config="configBG"></v-rect>
+          <v-image v-for="passage in configPassage" :config="passage"></v-image>
         </v-layer>
 
         <v-layer>
@@ -12,8 +13,7 @@
         </v-layer>
 
         <v-layer>
-          <!--TODO: seperate tunnel from passage-->
-          <v-image v-for="passage in configPassage" :config="passage"></v-image>
+          <v-image v-for="tunnel in configTunnel" :config="tunnel"></v-image>
           <v-text v-for="option in configOption" :config="option"></v-text>
         </v-layer>
       </v-stage>
@@ -52,6 +52,7 @@ export default {
         stroke: "gray",
       },
       configPassage: [],
+      configTunnel: [],
       configOption: [],
       configCar: {},
 
@@ -101,6 +102,7 @@ export default {
       this.configBG.width = this.gameWidth;
       this.configBG.height = this.gameWidth / 2;
       this.drawPassage();
+      this.drawTunnel();
       this.drawOptions();
       this.drawCar();
     },
@@ -118,6 +120,24 @@ export default {
           image: passageImg,
         };
         this.configPassage.push(passage);
+      }
+    },
+    drawTunnel() {
+      const tunnelImg = new window.Image();
+      tunnelImg.src = getSystemAssets("Tunnel.png", "racingCar");
+      this.tunnelOffset = {
+        x: this.gameWidth,
+        y: 0,
+      };
+      for (var i = 0; i < this.options.length; i++) {
+        let tunnel = {
+          x: canvasTools.offset(this.configPassage[i], this.tunnelOffset).x,
+          y: this.laneWidth * i,
+          width: this.laneWidth * 2,
+          height: this.laneWidth,
+          image: tunnelImg,
+        };
+        this.configTunnel.push(tunnel);
       }
     },
     drawOptions() {
@@ -162,6 +182,11 @@ export default {
         this.passageX -= this.speed;
         for (let passage in this.configPassage)
           this.configPassage[passage].x = this.passageX;
+        for (let tunnel in this.configTunnel)
+          this.configTunnel[tunnel].x = canvasTools.offset(
+            this.configPassage[0],
+            this.tunnelOffset
+          ).x;
         for (let option in this.configOption)
           this.configOption[option].x = canvasTools.offset(
             this.configPassage[0],
