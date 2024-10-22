@@ -301,12 +301,6 @@ export default {
       this.GameData.Questions = question;
       this.questionOrder = this.gameCode;
     },
-    PauseIntroVideo() {
-      try {
-        let video = document.getElementById("introvideo");
-        video.pause();
-      } catch {}
-    },
     loadMediaForModal(contentType) {
       let mediaSource = null;
 
