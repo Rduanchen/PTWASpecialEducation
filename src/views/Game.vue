@@ -119,16 +119,8 @@
             </template>
           </SideBar>
 
-          <!-- Modal -->
-          <div
-            v-if="scratchSheetVisible"
-            class="scratchsheet-overlay"
-          >
-            <div class="scratchsheet-modal">
-              <scratchSheet @closeSheet="closeSratSheet"></scratchSheet>
-            </div>
-          </div>
-
+          <scratchSheet v-if="scratchSheetVisible" @closeSheet="closeSratSheet"></scratchSheet>
+          
           <MediaModal
             :showMediaModal="showMediaModal"
             :modalTitle="modalTitle"
@@ -918,27 +910,4 @@ export default {
   transform: translateX(0%);
 }
 
-.scratchsheet-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0); /* 背景半透明 */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000; /* 保持在頂層 */
-}
-
-.custom-modal {
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0); /* 背景透明 */
-  border: none;
-  box-shadow: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 </style>
