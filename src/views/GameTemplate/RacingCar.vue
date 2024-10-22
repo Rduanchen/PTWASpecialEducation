@@ -4,7 +4,7 @@
       <h2>{{ GameData.Question }}</h2>
       <v-stage :config="configKonva">
         <v-layer>
-          <v-rect :config="configLane"></v-rect>
+          <v-rect :config="configBG"></v-rect>
         </v-layer>
 
         <v-layer>
@@ -12,82 +12,50 @@
         </v-layer>
 
         <v-layer>
-          <passage
-            v-for="i in map"
-            :Y="i[1]"
-            :w="laneWidth"
-            :l="configKonva.width"
-            :option="GameData.Options[i[0]]"
-            :speed="speed"
-            @end="end"
-            @onClick="moveOnClick"
-          >
-          </passage>
+          <v-image
+            v-for="passage in configPassage"
+            :config="passage"
+            @mousedown="moveOnClick"
+            @touchstart="moveOnClick"
+          ></v-image>
+          <v-text v-for="option in configOption" :config="option"></v-text>
         </v-layer>
       </v-stage>
     </div>
     <div id="btnContainer">
-      <img :src="upBtn" class="controlBtn" @click="move(1)" />
+      <img :src="upBtn" class="controlBtn" @click="move('up')" />
       <br />
-      <img :src="rightBtn" class="controlBtn" @click="move(0)" />
+      <img :src="rightBtn" class="controlBtn" @click="move('right')" />
       <br />
-      <img :src="downBtn" class="controlBtn" @click="move(-1)" />
+      <img :src="downBtn" class="controlBtn" @click="move('down')" />
     </div>
   </div>
 </template>
 
 <script>
-import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
-import { Container } from "konva/lib/Container";
+import { getSystemAssets } from "@/utilitys/get_assets.js";
+import * as canvasTools from "@/utilitys/canvasTools.js";
 import { defineAsyncComponent } from "vue";
 
-const carImg = document.createElement("img");
-carImg.src = GamesGetAssetsFile("MA3029", "RacingCar.png");
-
 export default {
-  components: {
-    //lane: defineAsyncComponent(() => import("@/components/lane.vue")),
-    passage: defineAsyncComponent(() => import("@/components/passage.vue")),
-  },
   data() {
     return {
-      configKonva: {
-        width: 1000,
-        height: 500,
-      },
-
-      configCar: {
-        image: carImg,
-        x: 50,
-        y: 0,
-        width: 150,
-        height: 150,
-        key: 0,
-      },
-
-      configLane: {
+      configKonva: {},
+      configBG: {
         x: 0,
         y: 0,
-        width: 1000,
-        height: 500,
         fill: "gray",
         stroke: "gray",
       },
-
-      map: [
-        [0, 0, false],
-        //[225, false],
-      ],
-
-      laneWidth: 0,
-
-      game: true,
+      configPassage: [],
+      configOption: [],
+      configCar: {},
 
       speed: 1,
 
-      upBtn: GamesGetAssetsFile("MA3029", "arrowUp.jpg"),
-      rightBtn: GamesGetAssetsFile("MA3029", "arrowRight.jpg"),
-      downBtn: GamesGetAssetsFile("MA3029", "arrowDown.jpg"),
+      upBtn: getSystemAssets("arrowUp.jpg", "racingCar"),
+      rightBtn: getSystemAssets("arrowRight.jpg", "racingCar"),
+      downBtn: getSystemAssets("arrowDown.jpg", "racingCar"),
     };
   },
 
@@ -105,36 +73,94 @@ export default {
   emits: ["play-effect", "add-record", "next-question"],
 
   beforeMount() {
-    var gameWidth = document.getElementById("GameContainer").clientWidth;
-    //var canvasCon = document.getElementById("canvasContainer");
-    this.configKonva.width = Math.floor(gameWidth * 0.8);
-    this.configKonva.height = Math.floor(this.configKonva.width / 2);
-    this.configLane.width = this.configKonva.width;
-    this.configLane.height = this.configKonva.height;
-
-    this.options = this.GameData.Options.length;
-    this.ans = this.GameData.Answer;
-    //console.log(this.GameData.Options.length);
-
+    this.options = canvasTools.shuffleOptions(this.GameData.Options);
+    this.initializeScene();
     window.addEventListener("keydown", this.input);
-    this.laneWidth = Math.floor(this.configKonva.height / this.options);
-    for (var i = 1; i < this.options; i++) {
-      //console.log(i);
-      this.map.push([i, this.laneWidth * i, false]);
-    }
-    this.map[this.ans][2] = true;
-    this.configCar.height = Math.floor(this.laneWidth * 0.8);
-    this.configCar.width = this.configCar.height;
-    this.configCar.y = this.laneWidth / 2 - this.configCar.height / 2;
-    //this.randomPassage();
   },
 
   mounted() {
     var btnCon = document.getElementById("btnContainer");
     btnCon.style.height = this.configKonva.height + "px";
+    this.game = window.setInterval(this.update, 20);
   },
 
   methods: {
+    initializeScene() {
+      this.gameWidth =
+        document.getElementById("GameContainer").clientWidth * 0.8;
+      this.configKonva.width = this.gameWidth;
+      this.configKonva.height = this.gameWidth / 2;
+      this.configBG.width = this.gameWidth;
+      this.configBG.height = this.gameWidth / 2;
+      this.drawPassage();
+      this.drawOptions();
+      this.drawCar();
+    },
+    drawPassage() {
+      const passageImg = new window.Image();
+      passageImg.src = getSystemAssets("Passage.png", "racingCar");
+      this.laneWidth = this.gameWidth / 2 / this.options.length;
+      this.passageX = 0;
+      for (var i = 0; i < this.options.length; i++) {
+        let passage = {
+          x: 0,
+          y: this.laneWidth * i,
+          width: this.gameWidth * 2.225,
+          height: this.laneWidth,
+          image: passageImg,
+        };
+        this.configPassage.push(passage);
+      }
+    },
+    drawOptions() {
+      this.optionOffset = {
+        x: this.gameWidth * 1.05,
+        y: this.gameWidth * 0.04,
+      };
+      for (var i = 0; i < this.options.length; i++) {
+        let option = {
+          x: canvasTools.offset(this.configPassage[i], this.optionOffset).x,
+          y: canvasTools.offset(this.configPassage[i], this.optionOffset).y,
+          fontSize: this.gameWidth * 0.05,
+          text: this.options[i],
+        };
+        this.configOption.push(option);
+      }
+    },
+    drawCar() {
+      const carImg = new window.Image();
+      carImg.src = getSystemAssets("RacingCar.png", "racingCar");
+      this.configCar.image = carImg;
+      this.configCar.height = this.laneWidth * 0.8;
+      this.configCar.width = this.laneWidth * 0.8;
+      this.carOffset = { x: this.laneWidth * 0.2, y: this.laneWidth * 0.1 };
+      this.configCar.x = canvasTools.offset(
+        this.configPassage[0],
+        this.carOffset
+      ).x;
+      this.configCar.y = canvasTools.offset(
+        this.configPassage[0],
+        this.carOffset
+      ).y;
+    },
+    update() {
+      this.passageX -= this.speed;
+      for (let passage in this.configPassage)
+        this.configPassage[passage].x = this.passageX;
+      for (let option in this.configOption)
+        this.configOption[option].x = canvasTools.offset(
+          this.configPassage[0],
+          this.optionOffset
+        ).x;
+      /*
+      if (this.configPassage.x <= -Math.floor(this.l * 1.2)) {
+        this.$emit("end");
+        this.configPassage.x = 0;
+        //this.speed = 1;
+        clearInterval(this.Update);
+        setTimeout(this.replay, 1000);
+      }*/
+    },
     input(e) {
       //W = 38/87; A = 37/65; S = 40/83; D = 39/68
       //console.log(e.keyCode);
@@ -154,17 +180,21 @@ export default {
           break;
       }
     },
-    move(key) {
-      if (key == 1) this.configCar.key--;
-      else if (key == -1) this.configCar.key++;
-      else if (key == 0) {
-        this.speed = 10;
-        window.removeEventListener("keydown", this.input);
+    move(direction) {
+      switch (direction) {
+        case "up":
+          this.configCar.key--;
+          if (this.configCar.key <= 0) this.configCar.key = 0;
+          break;
+        case "down":
+          this.configCar.key++;
+          if (this.configCar.key >= this.options)
+            this.configCar.key = this.options - 1;
+          break;
+        case "right":
+          this.speed = 10;
+          window.removeEventListener("keydown", this.input);
       }
-      if (this.configCar.key <= 0) this.configCar.key = 0;
-      else if (this.configCar.key >= this.options)
-        this.configCar.key = this.options - 1;
-      //console.log(this.configCar.key);
       this.configCar.y =
         this.map[this.configCar.key][1] +
         this.laneWidth / 2 -
