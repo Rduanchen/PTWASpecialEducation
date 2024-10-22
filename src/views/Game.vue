@@ -121,30 +121,12 @@
 
           <!-- Modal -->
           <div
-  class="fade modal"
-  id="Calculator"
-  tabindex="-1"
-  aria-labelledby="exampleModalLabel"
-  aria-hidden="true"
-  style="background: rgba(0, 0, 0, 0) !important;"
->
-  <div class="modal-dialog modal-fullscreen">
-    <div
-      class="modal-content"
-      style="
-        height: 100vh;
-        width: 100vw;
-        background-color: rgba(0, 0, 0, 0) !important;
-        border: none;
-        box-shadow: none;
-      "
-    >
-      <scratchSheet
-        v-if="scratchSheetVisible == true"
-        @closeSheet="() => { closeSratSheet() }"
-      ></scratchSheet>
-    </div>
-  </div>
+            v-if="scratchSheetVisible"
+            class="scratchsheet-overlay"
+          >
+            <div class="scratchsheet-modal">
+              <scratchSheet @closeSheet="closeSratSheet"></scratchSheet>
+            </div>
           </div>
 
           <div v-if="showModal" class="mediaModal-overlay" @click.self="closeMediaModal">
@@ -1045,5 +1027,29 @@ img.media-content {
 .mediaModal-content {
   margin: 0;
   font-size: 1.5rem;
+}
+
+.scratchsheet-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0); /* 背景半透明 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* 保持在頂層 */
+}
+
+.custom-modal {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0); /* 背景透明 */
+  border: none;
+  box-shadow: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
