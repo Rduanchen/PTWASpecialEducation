@@ -205,7 +205,26 @@ export default {
       this.configDenominatorNumber.text = this.denominator;
       this.configDenominatorNumber.fontSize = this.gameWidth * 0.05;
     },
-    adjustNumber(e) {},
+    adjustNumber(e) {
+      switch (e.target.attrs.operator) {
+        case "numeratorMinus":
+          this.numerator--;
+          break;
+        case "numeratorPlus":
+          this.numerator++;
+          break;
+        case "denominatorMinus":
+          this.denominator--;
+          break;
+        case "denominatorPlus":
+          this.denominator++;
+          break;
+      }
+      this.configNumeratorNumber.text = this.numerator;
+      this.configDenominatorNumber.text = this.denominator;
+      this.configCircleNumerator.endRadians =
+        Math.PI * (2 / this.numerator - 0.5);
+    },
   },
 };
 </script>
