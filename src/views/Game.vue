@@ -537,22 +537,16 @@ export default {
       switch (type) {
         case "CorrectSound":
           this.EffectPlayer("CorrectAnimation");
-          soundManager.playSound(`Correct`, false);
+          soundManager.playSoundImmediately(`Correct`);
           break;
         case "WrongSound":
           this.WrongTimes++;
           this.EffectPlayer("IncorrectAnimation");
-          soundManager.playSound(`Wrong`, false);
+          soundManager.playSoundImmediately(`Wrong`);
           break;
         case "FireWorkAnimation":
           this.EffectWindow = true;
-          this.EffectSrc = new URL(`../assets/Effects/Firework.gif`, import.meta.url).href;
-          sound = new Audio();
-          sound.src = ImportUrl.GetSystemEffectAssetsFile("harray.mp3");
-          soundManager.playSound(`FireWorkAnimation`, false);
-          sound.oncanplaythrough = function () {
-            sound.play();
-          };
+          soundManager.playSoundImmediately(`FireWorkAnimation`);
           setTimeout(() => {
             this.EffectWindow = false;
           }, 3000);
