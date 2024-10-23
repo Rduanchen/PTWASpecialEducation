@@ -98,19 +98,13 @@ export default {
     playNumberSound() {
       const number = this.randomQuestionOrder[this.questionNum];
       soundManager.playSound(`${number}`, false, false);
-      // var numSound = new Audio();
-      // numSound.src = getSystemAssets(`${number}.mp3`, "read-numbers");
-      // numSound.oncanplaythrough = function () {
-      //   numSound.play();
-      // };
-      // console.log(number);
     },
     handleMouseClick() {
       const mousePos = this.$refs.stage.getNode().getPointerPosition();
       const questionNum = this.randomQuestionOrder[this.questionNum];
       if (this.checkAnswer(questionNum, mousePos.x, mousePos.y)) {
         this.addCircle(questionNum);
-        this.answerCorrectly(questionNum);
+        this.handleCorrectAnswer(questionNum);
         this.nextQuestion();
       } else {
         this.$emit("play-effect", "WrongSound");
@@ -141,10 +135,9 @@ export default {
         posY <= obj.yRange[1] + tolerance
       );
     },
-    answerCorrectly(questionNum) {
+    handleCorrectAnswer(questionNum) {
       this.rightAnswerCount++;
       this.correctlyAnsweredQuestions[this.questionNum] = 1;
-      // soundManager.playSound('correct', true);
       this.$emit("play-effect", "CorrectSound");
       this.$emit("add-record", [questionNum, questionNum, "正確"]);
     },
@@ -178,11 +171,12 @@ export default {
       return "空白處";
     },
     nextQuestion() {
+      const delayTime = 500;
       this.questionNum++;
       if (this.gameOver()) {
         setTimeout(() => {
           this.$emit("next-question", true);
-        }, 500);
+        }, delayTime);
       }
       else {
         this.skipAnsweredQuestions();
@@ -215,7 +209,8 @@ export default {
   },
   computed: {
     progressPercentage() {
-      return (this.rightAnswerCount / this.GameData.ObjNum) * 100;
+      const percentageFactor = 100;
+      return (this.rightAnswerCount / this.GameData.ObjNum) * percentageFactor;
     },
     progressBarWidth() {
       return `${this.progressPercentage}%`;
