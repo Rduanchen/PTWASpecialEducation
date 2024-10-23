@@ -99,7 +99,6 @@
             :levelAmount="this.GameData.Questions.length"
             :reAppeareCode="questionOrder"
             @to-csv="ToCSV"
-            @provide-hint="ProvideHint"
             @previous-question="PreviousQuestion"
             @next-question="NextQuestion"
             @start-game="StartGame"

@@ -372,9 +372,6 @@ export default {
     toCSV(data) {
       this.$emit("to-csv", data);
     },
-    provideHint() {
-      this.$emit("provide-hint");
-    },
     scratchSheet() {
       this.$emit("scratch-sheet");
     },
