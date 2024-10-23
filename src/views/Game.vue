@@ -394,6 +394,7 @@ import EffectWindow from "@/components/EffectWindow.vue";
 import gameStore from "@/stores/game";
 import { mapWritableState } from "pinia";
 import { soundManager } from "@/utilitys/sound-manager.js";
+import DragFraction from "../components/DragFraction.vue";
 
 export default {
   data() {
@@ -1030,6 +1031,9 @@ export default {
     BalloonShooting: defineAsyncComponent(() =>
       import("@/views/GameTemplate/BalloonShooting.vue")
     ),
+    DragFraction: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/DragFractionTester.vue")
+    ), //for testing only
   },
 };
 </script>

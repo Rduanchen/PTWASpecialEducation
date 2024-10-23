@@ -80,6 +80,12 @@
                         "Name": "數線拖拉測試",
                         "Description": "#",
                         "Img": "MA3011.png"
+                    },
+                    {
+                        "id": "Dev02_DragFraction",
+                        "Name": "分數拖拉測試",
+                        "Description": "#",
+                        "Img": "MA3011.png"
                     }
                 ]
             }
