@@ -14,14 +14,13 @@
                 <div class="container sticky-top d-flex justify-content-end" style="--bs-breadcrumb-divider: '>'">
                     <ol class="breadcrumb mb-0">
                         <li class="breadcrumb-item">
-                            <i class="bi bi-house"></i><a href="#"> 主頁</a>
+                            <img src="@/assets/images/game_header/home.png"><a href="#"> 主頁</a>
                         </li>
                         <li class="breadcrumb-item" aria-current="page" @click="PreviousPage">
-                            <i class="bi bi-book-half"></i>
-                            <a>{{ grade }} 年級 {{ subject }}</a>
+                            <img src="@/assets/images/game_header/math.png"><a>{{ grade }} 年級 {{ subject }}</a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
-                            <i class="bi bi-pen"></i><a> {{ gameName }}</a>
+                            <img src="@/assets/images/game_header/game.png"><a> {{ gameName }}</a>
                         </li>
                     </ol>
                 </div>
@@ -98,5 +97,12 @@ header {
     color: #fff; /* 替換為你想要的顏色 */
     font-size: 1.2em;
   }
+}
+
+.breadcrumb-item > img{
+    height: 90%;
+    max-width: 40px;
+    max-height: 40px;
+    margin-right: 4px;
 }
 </style>
