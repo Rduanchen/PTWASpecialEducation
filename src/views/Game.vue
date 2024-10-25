@@ -4,7 +4,8 @@
       :grade="this.Grade"
       :gameName="this.Name"
       :subject="Subjects[Subject]"
-      @previous-page="PreviousPage" />
+      @previous-page="PreviousPage"
+    />
     <section>
       <div class="">
         <div class="Container">
@@ -99,7 +100,6 @@
             :levelAmount="this.GameData.Questions.length"
             :reAppeareCode="questionOrder"
             @to-csv="ToCSV"
-            @provide-hint="ProvideHint"
             @previous-question="PreviousQuestion"
             @next-question="NextQuestion"
             @start-game="StartGame"
@@ -154,7 +154,11 @@
               </div>
             </div>
           </div>
-          <div v-if="showModal" class="mediaModal-overlay" @click.self="closeMediaModal">
+          <div
+            v-if="showModal"
+            class="mediaModal-overlay"
+            @click.self="closeMediaModal"
+          >
             <div class="mediaModal-container">
               <div class="mediaModal-header">
                 <h1 class="mediaModal-title">{{ modalTitle }}</h1>
@@ -180,7 +184,9 @@
                 />
               </div>
               <div class="mediaModal-footer">
-                <button type="button" @click="closeMediaModal">我知道了!</button>
+                <button type="button" @click="closeMediaModal">
+                  我知道了!
+                </button>
               </div>
             </div>
           </div>
@@ -259,16 +265,21 @@ export default {
       questionOrder: [],
       questionCopy: [],
       isGif: false,
-      showModal:false,
-      modalTitle:"",
-      mediaType:"none",
-      mediaSrc:"",
-      modalContent: '',
+      showModal: false,
+      modalTitle: "",
+      mediaType: "none",
+      mediaSrc: "",
+      modalContent: "",
       // SentData2ChildComponent: {},
     };
   },
   computed: {
-    ...mapWritableState(gameStore, ['gameCode','transitionName','GameStatus','Nowlevel']),
+    ...mapWritableState(gameStore, [
+      "gameCode",
+      "transitionName",
+      "GameStatus",
+      "Nowlevel",
+    ]),
     selfdefinetemplate() {
       return defineAsyncComponent(() =>
         import(
@@ -288,7 +299,7 @@ export default {
     this.Subject = this.$route.params.Subject;
     this.Grade = this.$route.params.Grade;
     this.Name = this.$route.params.GameName;
-    this.GameStatus = 'NotStart';
+    this.GameStatus = "NotStart";
     this.Nowlevel = 1;
     (async () => {
       try {
@@ -377,23 +388,23 @@ export default {
     loadMediaForModal(contentType) {
       let mediaSource = null;
 
-      if (contentType === 'hint') {
-        this.modalTitle = '需要提示嗎?';
-        this.modalContent = '以下是遊戲的提示內容。';
+      if (contentType === "hint") {
+        this.modalTitle = "需要提示嗎?";
+        this.modalContent = "以下是遊戲的提示內容。";
         mediaSource = this.fetchHintMedia();
-      } else if (contentType === 'teach') {
-        this.modalTitle = '不會玩嗎?請看教學影片:';
-        this.modalContent = '以下是遊戲的教學內容。';
+      } else if (contentType === "teach") {
+        this.modalTitle = "不會玩嗎?請看教學影片:";
+        this.modalContent = "以下是遊戲的教學內容。";
         mediaSource = this.fetchIntroVideo();
       }
 
       if (mediaSource) {
         this.mediaSrc = mediaSource.filePath;
-        this.mediaType = mediaSource.sourceType === 'video' ? 'video' : 'image';
+        this.mediaType = mediaSource.sourceType === "video" ? "video" : "image";
       } else {
-        this.modalContent = '喔喔，沒有提供相關的資源';
-        this.mediaType = 'none';
-        console.warn('No media available for content type:', contentType);
+        this.modalContent = "喔喔，沒有提供相關的資源";
+        this.mediaType = "none";
+        console.warn("No media available for content type:", contentType);
       }
       this.openMediaModal();
     },
@@ -403,22 +414,22 @@ export default {
       let filePath, sourceType;
 
       try {
-        if (hintType === 'Level') {
+        if (hintType === "Level") {
           filePath = this.GameData.Hint.Data[this.Nowlevel - 1].FilePath;
           sourceType = this.GameData.Hint.Data[this.Nowlevel - 1].SourceType;
-          this.modalContent = '這是關卡提示';
-        } else if (hintType === 'Single') {
-          this.modalContent = '這是單一提示';
+          this.modalContent = "這是關卡提示";
+        } else if (hintType === "Single") {
+          this.modalContent = "這是單一提示";
           filePath = this.GameData.Hint.Data.FilePath;
           sourceType = this.GameData.Hint.Data.SourceType;
         }
-        
+
         return {
           filePath: ImportUrl.GamesGetAssetsFile(this.GameID, filePath),
-          sourceType
+          sourceType,
         };
       } catch {
-        console.warn('Missing data in Hint, type:', hintType);
+        console.warn("Missing data in Hint, type:", hintType);
         return null;
       }
     },
@@ -428,23 +439,29 @@ export default {
       let pattern = /undefined/;
 
       try {
-        introFilePath = ImportUrl.GamesGetAssetsFile(this.GameID, this.GameData.introvideo).toString();
-        if (pattern.test(introFilePath) || this.GameData.introvideo === undefined) {
+        introFilePath = ImportUrl.GamesGetAssetsFile(
+          this.GameID,
+          this.GameData.introvideo
+        ).toString();
+        if (
+          pattern.test(introFilePath) ||
+          this.GameData.introvideo === undefined
+        ) {
           throw new Error("Invalid intro video URL");
         }
         return {
           filePath: introFilePath,
-          sourceType: 'video'
+          sourceType: "video",
         };
       } catch {
-        console.warn('No Intro Video');
-        
+        console.warn("No Intro Video");
+
         // Check for default GIF as fallback
         let defaultGif = ImportUrl.getDefaultHintAssets(`${this.GameType}.gif`);
         if (defaultGif) {
           return {
             filePath: defaultGif,
-            sourceType: 'image'
+            sourceType: "image",
           };
         } else {
           return null;
@@ -510,9 +527,9 @@ export default {
       }
     },
     NextQuestion() {
-      this.isPassLevel[this.Nowlevel-1] = true;
+      this.isPassLevel[this.Nowlevel - 1] = true;
       this.resetWrongTimes();
-      if(this.checkUnansweredQuestions()){
+      if (this.checkUnansweredQuestions()) {
         this.GameStatus = "Done";
         soundManager.stopAllSounds();
         this.EffectPlayer("FireWorkAnimation");
@@ -532,7 +549,6 @@ export default {
 
         // 嘗試從當前等級以後尋找未回答的問題
         if (!this.findNextUnansweredQuestion(this.Nowlevel, totalQuestions)) {
-          
           // 如果找不到且當前是最後一題，則允許回到之前的未答題目
           if (this.Nowlevel === totalQuestions) {
             this.findNextUnansweredQuestion(0, totalQuestions);
@@ -551,7 +567,7 @@ export default {
       for (let i = startLevel; i < totalQuestions; i++) {
         if (!this.isPassLevel[i]) {
           this.Nowlevel = i + 1;
-          this.transitionName = 'slide-left';
+          this.transitionName = "slide-left";
           return true;
         }
       }
@@ -775,7 +791,7 @@ export default {
     },
     resetWrongTimes() {
       this.WrongTimes = 0;
-    }
+    },
   },
   components: {
     hintbutton,
@@ -1040,7 +1056,7 @@ export default {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  flex-grow: 1; 
+  flex-grow: 1;
 }
 
 .mediaModal-footer {
