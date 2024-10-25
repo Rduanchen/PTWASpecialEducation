@@ -91,7 +91,9 @@ export default {
     this.initializeScene();
   },
 
-  mounted() {},
+  mounted() {
+    window.setInterval(this.update, 20);
+  },
 
   methods: {
     initializeScene() {
@@ -111,7 +113,32 @@ export default {
       this.drawArrow();
       this.drawNumber();
     },
-    update() {},
+    update() {
+      this.configCircleNumerator.endRadians = this.circleAnimation(
+        this.configCircleNumerator.endRadians,
+        (Math.PI * 2) / this.numerator
+      );
+      for (let i = 0; i < this.configCircleDenominator.length; ++i) {
+        if (this.fill[i] > 0) {
+          this.configCircleDenominator[i].circle.visible = true;
+          this.configCircleDenominator[i].circle.endRadians =
+            this.circleAnimation(
+              this.configCircleDenominator[i].circle.endRadians,
+              Math.PI * 2 * this.fill[i]
+            );
+        }
+      }
+    },
+    circleAnimation(currentRadians, targetRadians) {
+      if (Math.abs(currentRadians - targetRadians) < 0.02) {
+        currentRadians = targetRadians;
+      } else if (currentRadians < targetRadians) {
+        currentRadians += 0.02;
+      } else if (currentRadians > targetRadians) {
+        currentRadians -= 0.02;
+      }
+      return currentRadians;
+    },
 
     drawCircleNumerator() {
       this.numeratorPos.x = this.gameWidth * 0.875;
@@ -270,7 +297,6 @@ export default {
     drawAfterAdjusted() {
       this.configNumeratorNumber.text = this.numerator;
       this.configDenominatorNumber.text = this.denominator;
-      this.configCircleNumerator.endRadians = (Math.PI * 2) / this.numerator;
       this.configCircleDenominator[0].slice.slices = this.denominator;
       if (this.numerator == 2) {
         this.configArrow[0].fill = "#505050";
