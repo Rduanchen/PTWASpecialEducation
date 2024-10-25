@@ -1,3 +1,5 @@
+import { right } from "@popperjs/core"
+
 export function center(object){
     return {x: object.x + object.width/2, y: object.y + object.height/2}
 }
@@ -23,4 +25,16 @@ export function shuffleOptions(array){
         [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
       }
     return shuffled;
+}
+
+export function isInBound(object, boundaries){
+    //boundaries={up, down, left, right}
+    if (
+        object.y < boundaries.up ||
+        object.y > boundaries.down ||
+        object.x < boundaries.left ||
+        object.x > boundaries.right
+      )
+        return false;
+    else return true;
 }
