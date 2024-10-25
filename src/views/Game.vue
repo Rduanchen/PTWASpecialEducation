@@ -4,7 +4,7 @@
       :grade="this.Grade"
       :gameName="this.Name"
       :subject="Subjects[Subject]"
-      @previous-page="PreviousPage" />
+      @previous-page="previousPage" />
     <section>
       <div class="">
         <div class="Container">
@@ -41,9 +41,9 @@
                     :id="this.GameID"
                     :GameData="this.GameData.Questions[this.Nowlevel - 1]"
                     :GameConfig="this.GameConfig"
-                    @add-record="GameDataRecord"
-                    @play-effect="EffectPlayer"
-                    @next-question="NextQuestion"
+                    @add-record="gameDataRecord"
+                    @play-effect="effectPlayer"
+                    @next-question="nextQuestion"
                   >
                   </component>
                 </transition>
@@ -55,18 +55,18 @@
                   :id="this.GameID"
                   :GameData="this.GameData.Questions[this.Nowlevel - 1]"
                   :GameConfig="this.GameConfig"
-                  :EnviromerntInfo="GetAllInfo()"
-                  @get-info="GetAllInfo"
-                  @add-record="GameDataRecord"
+                  :EnviromerntInfo="getAllInfo()"
+                  @get-info="getAllInfo"
+                  @add-record="gameDataRecord"
                   @download-data="ToCSV"
-                  @config-header="ConfigHeader"
-                  @play-effect="EffectPlayer"
-                  @next-question="NextQuestion"
-                  @previous-question="PreviousQuestion"
+                  @config-header="configHeader"
+                  @play-effect="effectPlayer"
+                  @next-question="nextQuestion"
+                  @previous-question="previousQuestion"
                   @change-level="changelevel"
-                  @start-game="StartGame"
+                  @start-game="startGame"
                   @reload-page="reloadPage"
-                  @change-status="ChangeGameStatus"
+                  @change-status="changeGameStatus"
                   @timer-start="startTimer"
                   @timer-pause="pauseTimer"
                   @timer-reset="resetTimer"
@@ -80,10 +80,10 @@
                   :intro="GameData.IntroText"
                   :GameName="Name"
                   :key="this.Dataloaded"
-                  @start-game="StartGame"
+                  @start-game="startGame"
                   @download-record="ToCSV"
                   @restart="reloadPage"
-                  @previous-page="PreviousPage"
+                  @previous-page="previousPage"
                   @open-teaching-modal="loadMediaForModal"
                 ></GameStartandOver>
               </div>
@@ -93,22 +93,22 @@
             class="SideBar col-2"
             v-if="Dataloaded"
             :GameStatus="GameStatus"
-            :HintInfo="HintInfo"
+            :HintInfo="hintInfo"
             :Hint="Hint"
             :download_data="download_data"
             :levelAmount="this.GameData.Questions.length"
             :reAppeareCode="questionOrder"
             @to-csv="ToCSV"
-            @previous-question="PreviousQuestion"
-            @next-question="NextQuestion"
-            @start-game="StartGame"
+            @previous-question="previousQuestion"
+            @next-question="nextQuestion"
+            @start-game="startGame"
             @reload-page="reloadPage"
             @scratch-sheet="() => {scratchSheetVisible = true}"
             @reappear-code="reappearCode"
           >
             <template #hint>
               <hintbutton
-                :HintInfo="HintInfo"
+                :HintInfo="hintInfo"
                 v-if="
                   GameStatus == 'Progressing' && this.Hint['Type'] != 'Method'
                 "
@@ -214,7 +214,7 @@ export default {
         )
       );
     },
-    HintInfo() {
+    hintInfo() {
       return {
         WrongTimes: this.WrongTimes,
         MaxWrongTimes: this.MaxWrongTimes,
@@ -235,10 +235,10 @@ export default {
         this.GameType = this.GameData.GameType;
         this.GameConfig = this.GameData.GameConfig;
         this.questionCopy = this.GameData.Questions;
-        this.InitHint();
+        this.initHint();
         // this.InitIntroVideo();
         this.Dataloaded = true;
-        this.RamdonChoice();
+        this.randomChoice();
         for(let x in this.GameData.Questions){
           this.isPassLevel.push(false);
         }
@@ -252,10 +252,10 @@ export default {
       soundManager.registerSound('FireWorkAnimation', `${ImportUrl.getSystemEffectAssets("harray.mp3")}`,false);
   },
   mounted() {
-    this.FullScreen();
+    this.fullScreen();
   },
   methods: {
-    RamdonChoice() {
+    randomChoice() {
       //Radom Select Questions via level
       let question = [];
       let temp = [];
@@ -377,15 +377,14 @@ export default {
     closeMediaModal() {
       this.showMediaModal = false;
     },
-    ChangeGameStatus(status) {
-      //改變遊戲狀態
+    changeGameStatus(status) {
       this.GameStatus = status;
     },
-    StartGame() {
+    startGame() {
       this.GameStatus = "Progressing";
       this.startTimer();
     },
-    ConfigHeader(arr) {
+    configHeader(arr) {
       this.header = arr;
     },
     ToCSV(data = this.download_data, defaultheader = true) {
@@ -429,13 +428,13 @@ export default {
         this.isPassLevel.push(false);
       }
     },
-    NextQuestion() {
+    nextQuestion() {
       this.isPassLevel[this.Nowlevel-1] = true;
       this.resetWrongTimes();
       if(this.checkUnansweredQuestions()){
         this.GameStatus = "Done";
         soundManager.stopAllSounds();
-        this.EffectPlayer("FireWorkAnimation");
+        this.effectPlayer("FireWorkAnimation");
         this.finaltime = this.totaltime;
       }
       this.pauseTimer();
@@ -477,7 +476,7 @@ export default {
       }
       return false;
     },
-    PreviousQuestion() {
+    previousQuestion() {
       this.resetWrongTimes();
       if (this.Nowlevel > 1) {
         this.Nowlevel--;
@@ -506,7 +505,7 @@ export default {
       this.pauseTimer();
       this.time = 0;
     },
-    GameDataRecord(data, SelfDefine = false) {
+    gameDataRecord(data, SelfDefine = false) {
       //紀錄遊戲資料
       // default ["正確答案","學生作答答案","是否正確","作答秒數(關卡)","作答秒數(總時間)"]
       // data格式[正確答案,學生作答答案,是否正確]
@@ -532,16 +531,16 @@ export default {
         console.error("Error in pushing record: ", error);
       }
     },
-    EffectPlayer(type) {
+    effectPlayer(type) {
       let sound;  
       switch (type) {
         case "CorrectSound":
-          this.EffectPlayer("CorrectAnimation");
+          this.effectPlayer("CorrectAnimation");
           soundManager.playSoundImmediately(`Correct`);
           break;
         case "WrongSound":
           this.WrongTimes++;
-          this.EffectPlayer("IncorrectAnimation");
+          this.effectPlayer("IncorrectAnimation");
           soundManager.playSoundImmediately(`Wrong`);
           break;
         case "FireWorkAnimation":
@@ -577,7 +576,7 @@ export default {
           break;
       }
     },
-    FullScreen() {
+    fullScreen() {
       try {
         let elem = document.documentElement;
         if (elem.requestFullscreen) {
@@ -592,7 +591,7 @@ export default {
       } catch (error) {}
       // window.removeEventListener('mousemove', this.FullScreen);
     },
-    ExitFullScreen() {
+    exitFullScreen() {
       try {
         if (document.exitFullscreen) {
           document.exitFullscreen();
@@ -607,7 +606,7 @@ export default {
         console.warn("Exit Full Screen Error: ", error);
       }
     },
-    GetAllInfo() {
+    getAllInfo() {
       return {
         Subject: this.Subject,
         Grade: this.Grade,
@@ -626,7 +625,7 @@ export default {
     },
     //hint app
 
-    InitHint() {
+    initHint() {
       // 紀錄提示種類，有則設定hint_type為提示種類，沒有則設定hint_type為None
       // console.log(this.GameData.Hint)
       let hint_exist = false;
@@ -652,15 +651,9 @@ export default {
         );
       }
     },
-    PauseHintVideo() {
-      try {
-        let video = document.getElementById("Hint-video");
-        video.pause();
-      } catch {}
-    },
-    PreviousPage() {
+    previousPage() {
       soundManager.stopAllSounds();
-      this.ExitFullScreen();
+      this.exitFullScreen();
       this.$router.replace({ path: `/GameSelect/${this.$route.params.Grade}`})
     },
     closeSratSheet() {
