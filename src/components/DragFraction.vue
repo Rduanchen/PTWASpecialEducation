@@ -16,6 +16,7 @@
         <v-layer
           v-for="denominator in configCircleDenominator"
           :draggable="true"
+          @dragend="denominatorDragEnd"
         >
           <v-circle :config="denominator.frame"></v-circle>
           <v-shape :config="denominator.circle"></v-shape>
@@ -60,11 +61,13 @@ export default {
         stroke: "#4C5B3A",
       },
       numeratorPos: {},
+      denominatorPos: {},
       configCircleDenominator: [],
 
       configArrow: [],
       configNumeratorNumber: {},
       configDenominatorNumber: {},
+      fill: [],
 
       numerator: 3,
       denominator: 3,
@@ -111,30 +114,33 @@ export default {
     update() {},
 
     drawCircleNumerator() {
+      this.numeratorPos.x = this.gameWidth * 0.875;
+      this.numeratorPos.y = this.gameHeight * 0.2;
       this.configCircleNumerator.radius = this.gameWidth * 0.075;
-      this.configCircleNumerator.x = this.gameWidth * 0.875;
-      this.configCircleNumerator.y = this.gameHeight * 0.2;
+      this.configCircleNumerator.x = this.numeratorPos.x;
+      this.configCircleNumerator.y = this.numeratorPos.y;
       this.configCircleNumerator.startRadians = 0;
       this.configCircleNumerator.endRadians = (Math.PI * 2) / this.numerator;
       this.configCircleNumerator.sceneFunc = this.circleSceneFunc;
-      this.numeratorPos.x = this.configCircleNumerator.x;
-      this.numeratorPos.y = this.configCircleNumerator.y;
     },
     drawCircleDenominator() {
+      this.denominatorPos.x = this.gameWidth * 0.875;
+      this.denominatorPos.y = this.gameHeight * 0.7;
       let denominator = {};
       let frame = {
         radius: this.gameWidth * 0.075,
-        x: this.gameWidth * 0.875,
-        y: this.gameHeight * 0.7,
+        x: this.denominatorPos.x,
+        y: this.denominatorPos.y,
         fill: "white",
         stroke: "white",
       };
       let circle = {
+        visible: false,
         radius: this.gameWidth * 0.075,
         startRadians: 0,
-        endRadians: Math.PI,
-        x: this.gameWidth * 0.875,
-        y: this.gameHeight * 0.7,
+        endRadians: 0,
+        x: this.denominatorPos.x,
+        y: this.denominatorPos.y,
         fill: "#4C5B3A",
         stroke: "#4C5B3A",
         sceneFunc: this.circleSceneFunc,
@@ -143,13 +149,14 @@ export default {
       denominator.circle = circle;
       denominator.slice = this.drawCircleSlice();
       this.configCircleDenominator.push(denominator);
+      this.fill.push(0.3);
     },
     drawCircleSlice() {
       let slice = {
         radius: this.gameWidth * 0.075,
         stroke: "black",
-        x: this.gameWidth * 0.875,
-        y: this.gameHeight * 0.7,
+        x: this.denominatorPos.x,
+        y: this.denominatorPos.y,
         sceneFunc: this.circleSliceSceneFunc,
         slices: this.denominator,
       };
@@ -295,6 +302,17 @@ export default {
     numeratorDragEnd(e) {
       e.target.x(this.numeratorPos.x);
       e.target.y(this.numeratorPos.y);
+    },
+    denominatorDragEnd(e) {
+      let id = e.target.index - 2;
+      let boundaries = {};
+
+      if (this.configCircleDenominator[id].circle.x > this.gameWidth * 0.75) {
+        console.log(e.target.position());
+        console.log(e.target.absolutePosition());
+        e.target.x(0);
+        e.target.y(0);
+      }
     },
   },
 };
