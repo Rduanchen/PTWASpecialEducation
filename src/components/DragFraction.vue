@@ -12,17 +12,14 @@
             :config="configCircleNumerator"
             @dragend="numeratorDragEnd"
           ></v-shape>
-          <v-circle
-            v-for="denominator in configCircleDenominator"
-            :config="denominator"
-          ></v-circle>
-          <v-circle
-            v-for="frame in configCircleFrame"
-            :config="frame"
-          ></v-circle>
         </v-layer>
-        <v-layer v-for="slice in configCircleSlice">
-          <v-line v-for="line in slice" :config="line"></v-line>
+        <v-layer
+          v-for="denominator in configCircleDenominator"
+          :draggable="true"
+        >
+          <v-circle :config="denominator.frame"></v-circle>
+          <v-shape :config="denominator.circle"></v-shape>
+          <v-shape :config="denominator.slice"></v-shape>
         </v-layer>
 
         <v-layer>
@@ -64,8 +61,6 @@ export default {
       },
       numeratorPos: {},
       configCircleDenominator: [],
-      configCircleFrame: [],
-      configCircleSlice: [],
 
       configArrow: [],
       configNumeratorNumber: {},
@@ -119,26 +114,51 @@ export default {
       this.configCircleNumerator.radius = this.gameWidth * 0.075;
       this.configCircleNumerator.x = this.gameWidth * 0.875;
       this.configCircleNumerator.y = this.gameHeight * 0.2;
-      this.configCircleNumerator.startRadians = Math.PI * 1.5;
-      this.configCircleNumerator.endRadians =
-        Math.PI * (2 / this.numerator - 0.5);
+      this.configCircleNumerator.startRadians = 0;
+      this.configCircleNumerator.endRadians = (Math.PI * 2) / this.numerator;
       this.configCircleNumerator.sceneFunc = this.circleSceneFunc;
       this.numeratorPos.x = this.configCircleNumerator.x;
       this.numeratorPos.y = this.configCircleNumerator.y;
     },
     drawCircleDenominator() {
-      let denominator = {
+      let denominator = {};
+      let frame = {
         radius: this.gameWidth * 0.075,
+        x: this.gameWidth * 0.875,
+        y: this.gameHeight * 0.7,
+        fill: "white",
+        stroke: "white",
+      };
+      let circle = {
+        radius: this.gameWidth * 0.075,
+        startRadians: 0,
+        endRadians: Math.PI,
         x: this.gameWidth * 0.875,
         y: this.gameHeight * 0.7,
         fill: "#4C5B3A",
         stroke: "#4C5B3A",
+        sceneFunc: this.circleSceneFunc,
       };
+      denominator.frame = frame;
+      denominator.circle = circle;
+      denominator.slice = this.drawCircleSlice();
       this.configCircleDenominator.push(denominator);
+    },
+    drawCircleSlice() {
+      let slice = {
+        radius: this.gameWidth * 0.075,
+        stroke: "black",
+        x: this.gameWidth * 0.875,
+        y: this.gameHeight * 0.7,
+        sceneFunc: this.circleSliceSceneFunc,
+        slices: this.denominator,
+      };
+      return slice;
     },
     circleSceneFunc(context, shape) {
       context.beginPath();
       context.moveTo(0, 0);
+      context.rotate(Math.PI * -0.5);
       context.arc(
         0,
         0,
@@ -148,6 +168,18 @@ export default {
       );
       context.lineTo(0, 0);
       context.fillStrokeShape(shape);
+      context.closePath();
+    },
+    circleSliceSceneFunc(context, shape) {
+      context.beginPath();
+      context.setLineDash([5, 5]);
+      for (let i = 0; i < shape.getAttr("slices"); ++i) {
+        context.moveTo(0, 0);
+        context.lineTo(0, -shape.getAttr("radius"));
+        context.moveTo(0, 0);
+        context.rotate((Math.PI * 2) / shape.getAttr("slices"));
+      }
+      context.stroke();
       context.closePath();
     },
 
@@ -231,8 +263,8 @@ export default {
     drawAfterAdjusted() {
       this.configNumeratorNumber.text = this.numerator;
       this.configDenominatorNumber.text = this.denominator;
-      this.configCircleNumerator.endRadians =
-        Math.PI * (2 / this.numerator - 0.5);
+      this.configCircleNumerator.endRadians = (Math.PI * 2) / this.numerator;
+      this.configCircleDenominator[0].slice.slices = this.denominator;
       if (this.numerator == 2) {
         this.configArrow[0].fill = "#505050";
         this.configArrow[0].stroke = "#505050";
