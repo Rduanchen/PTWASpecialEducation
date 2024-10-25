@@ -8,7 +8,10 @@
         </v-layer>
 
         <v-layer>
-          <v-shape :config="configCircleNumerator"></v-shape>
+          <v-shape
+            :config="configCircleNumerator"
+            @dragend="numeratorDragEnd"
+          ></v-shape>
           <v-circle
             v-for="denominator in configCircleDenominator"
             :config="denominator"
@@ -46,19 +49,20 @@ export default {
     return {
       configKonva: {},
       configBG: {
-        fill: "lightgray",
-        stroke: "lightgray",
+        fill: "#DDF0FF",
+        stroke: "#DDF0FF",
       },
       configSideBar: {
-        fill: "gray",
-        stroke: "gray",
+        fill: "#84919B",
+        stroke: "#84919B",
       },
 
       configCircleNumerator: {
         draggable: true,
-        fill: "navy",
-        stroke: "navy",
+        fill: "#4C5B3A",
+        stroke: "#4C5B3A",
       },
+      numeratorPos: {},
       configCircleDenominator: [],
       configCircleFrame: [],
       configCircleSlice: [],
@@ -67,8 +71,8 @@ export default {
       configNumeratorNumber: {},
       configDenominatorNumber: {},
 
-      numerator: 2,
-      denominator: 2,
+      numerator: 3,
+      denominator: 3,
     };
   },
 
@@ -119,14 +123,16 @@ export default {
       this.configCircleNumerator.endRadians =
         Math.PI * (2 / this.numerator - 0.5);
       this.configCircleNumerator.sceneFunc = this.circleSceneFunc;
+      this.numeratorPos.x = this.configCircleNumerator.x;
+      this.numeratorPos.y = this.configCircleNumerator.y;
     },
     drawCircleDenominator() {
       let denominator = {
         radius: this.gameWidth * 0.075,
         x: this.gameWidth * 0.875,
         y: this.gameHeight * 0.7,
-        fill: "navy",
-        stroke: "navy",
+        fill: "#4C5B3A",
+        stroke: "#4C5B3A",
       };
       this.configCircleDenominator.push(denominator);
     },
@@ -170,8 +176,8 @@ export default {
       ];
       for (let pos in arrowPosition) {
         let arrow = {
-          stroke: "brown",
-          fill: "brown",
+          stroke: "#BA3F38",
+          fill: "#BA3F38",
           length: this.gameWidth * 0.05,
           sceneFunc: this.arrowSceneFunc,
         };
@@ -208,22 +214,55 @@ export default {
     adjustNumber(e) {
       switch (e.target.attrs.operator) {
         case "numeratorMinus":
-          this.numerator--;
+          if (this.numerator > 2) this.numerator--;
           break;
         case "numeratorPlus":
-          this.numerator++;
+          if (this.numerator < 12) this.numerator++;
           break;
         case "denominatorMinus":
-          this.denominator--;
+          if (this.denominator > 2) this.denominator--;
           break;
         case "denominatorPlus":
-          this.denominator++;
+          if (this.denominator < 12) this.denominator++;
           break;
       }
+      this.drawAfterAdjusted();
+    },
+    drawAfterAdjusted() {
       this.configNumeratorNumber.text = this.numerator;
       this.configDenominatorNumber.text = this.denominator;
       this.configCircleNumerator.endRadians =
         Math.PI * (2 / this.numerator - 0.5);
+      if (this.numerator == 2) {
+        this.configArrow[0].fill = "#505050";
+        this.configArrow[0].stroke = "#505050";
+      } else if (this.numerator == 12) {
+        this.configArrow[1].fill = "#505050";
+        this.configArrow[1].stroke = "#505050";
+      } else {
+        this.configArrow[0].fill = "#BA3F38";
+        this.configArrow[0].stroke = "#BA3F38";
+        this.configArrow[1].fill = "#BA3F38";
+        this.configArrow[1].stroke = "#BA3F38";
+      }
+
+      if (this.denominator == 2) {
+        this.configArrow[2].fill = "#505050";
+        this.configArrow[2].stroke = "#505050";
+      } else if (this.denominator == 12) {
+        this.configArrow[3].fill = "#505050";
+        this.configArrow[3].stroke = "#505050";
+      } else {
+        this.configArrow[2].fill = "#BA3F38";
+        this.configArrow[2].stroke = "#BA3F38";
+        this.configArrow[3].fill = "#BA3F38";
+        this.configArrow[3].stroke = "#BA3F38";
+      }
+    },
+
+    numeratorDragEnd(e) {
+      e.target.x(this.numeratorPos.x);
+      e.target.y(this.numeratorPos.y);
     },
   },
 };
