@@ -295,81 +295,126 @@ export default {
       this.questionOrder = this.gameCode;
     },
     loadMediaForModal(contentType) {
-      let mediaSource = null;
-
-      if (contentType === 'hint') {
-        this.modalTitle = '需要提示嗎?';
-        this.modalContent = '以下是遊戲的提示內容。';
-        mediaSource = this.fetchHintMedia();
-      } else if (contentType === 'teach') {
-        this.modalTitle = '不會玩嗎?請看教學影片:';
-        this.modalContent = '以下是遊戲的教學內容。';
-        mediaSource = this.fetchIntroVideo();
-      }
+      this.setModalContent(contentType);
+      const mediaSource = this.getMediaSource(contentType);
 
       if (mediaSource) {
-        this.mediaSrc = mediaSource.filePath;
-        this.mediaType = mediaSource.sourceType === 'video' ? 'video' : 'image';
+        this.setMediaSource(mediaSource);
       } else {
-        this.modalContent = '喔喔，沒有提供相關的資源';
-        this.mediaType = 'none';
-        console.warn('No media available for content type:', contentType);
+        this.handleMissingMedia();
       }
+
       this.openMediaModal();
     },
 
-    fetchHintMedia() {
-      let hintType = this.Hint.Type;
-      let filePath, sourceType;
-
-      try {
-        if (hintType === 'Level') {
-          filePath = this.GameData.Hint.Data[this.Nowlevel - 1].FilePath;
-          sourceType = this.GameData.Hint.Data[this.Nowlevel - 1].SourceType;
-          this.modalContent = '這是關卡提示';
-        } else if (hintType === 'Single') {
-          this.modalContent = '這是單一提示';
-          filePath = this.GameData.Hint.Data.FilePath;
-          sourceType = this.GameData.Hint.Data.SourceType;
+    setModalContent(contentType) {
+      const contentMap = {
+        'hint': {
+          title: '需要提示嗎?',
+          content: '以下是遊戲的提示內容。',
+          hintType: this.Hint.Type
+        },
+        'teach': {
+          title: '不會玩嗎?請看教學影片:',
+          content: '以下是遊戲的教學內容。',
+          hintType: null
         }
-        
+      };
+
+      if (contentMap[contentType]) {
+        this.modalTitle = contentMap[contentType].title;
+        this.modalContent = contentMap[contentType].content;
+
+        if (contentType === 'hint' && contentMap[contentType].hintType) {
+          this.setHintMediaContent(contentMap[contentType].hintType);
+        }
+      }
+    },
+
+    setHintMediaContent(hintType) {
+      if (hintType === 'Level') {
+        this.modalContent = '這是關卡提示';
+      } else if (hintType === 'Single') {
+        this.modalContent = '這是單一提示';
+      }
+    },
+
+    getMediaSource(contentType) {
+      if (contentType === 'hint') {
+        return this.fetchHintMedia();
+      } else if (contentType === 'teach') {
+        return this.fetchIntroVideo();
+      }
+      return null;
+    },
+
+    setMediaSource(mediaSource) {
+      this.mediaSrc = mediaSource.filePath;
+      this.mediaType = mediaSource.sourceType === 'video' ? 'video' : 'image';
+    },
+
+    handleMissingMedia() {
+      this.modalContent = '喔喔，沒有提供相關的資源';
+      this.mediaType = 'none';
+      console.warn('No media available for the selected content type.');
+    },
+
+    fetchHintMedia() {
+      try {
+        const { filePath, sourceType } = this.getHintMediaData();
         return {
           filePath: ImportUrl.GamesGetAssetsFile(this.GameID, filePath),
           sourceType
         };
       } catch {
-        console.warn('Missing data in Hint, type:', hintType);
+        console.warn('Missing data in Hint, type:', this.Hint.Type);
         return null;
       }
     },
 
-    fetchIntroVideo() {
-      let introFilePath;
-      let pattern = /undefined/;
+    getHintMediaData() {
+      const hintType = this.Hint.Type;
+      if (hintType === 'Level') {
+        return {
+          filePath: this.GameData.Hint.Data[this.Nowlevel - 1].FilePath,
+          sourceType: this.GameData.Hint.Data[this.Nowlevel - 1].SourceType
+        };
+      } else if (hintType === 'Single') {
+        return {
+          filePath: this.GameData.Hint.Data.FilePath,
+          sourceType: this.GameData.Hint.Data.SourceType
+        };
+      }
+      throw new Error('Invalid hint type');
+    },
 
+    fetchIntroVideo() {
       try {
-        introFilePath = ImportUrl.GamesGetAssetsFile(this.GameID, this.GameData.introvideo).toString();
-        if (pattern.test(introFilePath) || this.GameData.introvideo === undefined) {
-          throw new Error("Invalid intro video URL");
-        }
+        const introFilePath = this.getIntroVideoFilePath();
         return {
           filePath: introFilePath,
           sourceType: 'video'
         };
       } catch {
-        console.warn('No Intro Video');
-        
-        // Check for default GIF as fallback
-        let defaultGif = ImportUrl.getDefaultHintAssets(`${this.GameType}.gif`);
-        if (defaultGif) {
-          return {
-            filePath: defaultGif,
-            sourceType: 'image'
-          };
-        } else {
-          return null;
-        }
+        return this.getFallbackMedia();
       }
+    },
+
+    getIntroVideoFilePath() {
+      const introFilePath = ImportUrl.GamesGetAssetsFile(this.GameID, this.GameData.introvideo).toString();
+      if (!introFilePath || introFilePath.includes('undefined')) {
+        throw new Error('Invalid intro video URL');
+      }
+      return introFilePath;
+    },
+
+    getFallbackMedia() {
+      const defaultGif = ImportUrl.getDefaultHintAssets(`${this.GameType}.gif`);
+      if (defaultGif) {
+        return { filePath: defaultGif, sourceType: 'image' };
+      }
+      console.warn('No Intro Video and no default GIF available');
+      return null;
     },
     openMediaModal() {
       this.showMediaModal = true;
