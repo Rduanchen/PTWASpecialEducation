@@ -104,7 +104,11 @@
             @next-question="NextQuestion"
             @start-game="StartGame"
             @reload-page="reloadPage"
-            @scratch-sheet="() => {scratchSheetVisible = true}"
+            @scratch-sheet="
+              () => {
+                scratchSheetVisible = true;
+              }
+            "
             @reappear-code="reappearCode"
           >
             <template #hint>
@@ -121,32 +125,35 @@
 
           <!-- Modal -->
           <div
-  class="fade modal"
-  id="Calculator"
-  tabindex="-1"
-  aria-labelledby="exampleModalLabel"
-  aria-hidden="true"
-  style="background: rgba(0, 0, 0, 0) !important;"
->
-  <div class="modal-dialog modal-fullscreen">
-    <div
-      class="modal-content"
-      style="
-        height: 100vh;
-        width: 100vw;
-        background-color: rgba(0, 0, 0, 0) !important;
-        border: none;
-        box-shadow: none;
-      "
-    >
-      <scratchSheet
-        v-if="scratchSheetVisible == true"
-        @closeSheet="() => { closeSratSheet() }"
-      ></scratchSheet>
-    </div>
-  </div>
+            class="fade modal"
+            id="Calculator"
+            tabindex="-1"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+            style="background: rgba(0, 0, 0, 0) !important"
+          >
+            <div class="modal-dialog modal-fullscreen">
+              <div
+                class="modal-content"
+                style="
+                  height: 100vh;
+                  width: 100vw;
+                  background-color: rgba(0, 0, 0, 0) !important;
+                  border: none;
+                  box-shadow: none;
+                "
+              >
+                <scratchSheet
+                  v-if="scratchSheetVisible == true"
+                  @closeSheet="
+                    () => {
+                      closeSratSheet();
+                    }
+                  "
+                ></scratchSheet>
+              </div>
+            </div>
           </div>
-
           <div v-if="showModal" class="mediaModal-overlay" @click.self="closeMediaModal">
             <div class="mediaModal-container">
               <div class="mediaModal-header">
@@ -201,9 +208,10 @@ import EffectWindow from "@/components/GameSystem/EffectWindow.vue";
 // import WhackaMole from "./GameTemplate/WhackaMole.vue";
 // import SelectGameMulti from "./GameTemplate/SelectGameMulti.vue";
 // import CopyItem from "./GameTemplate/CopyItem.vue";
-import gameStore from '@/stores/game';
+import gameStore from "@/stores/game";
 import { mapWritableState } from "pinia";
-import { soundManager } from '@/utilitys/sound-manager.js';
+import { soundManager } from "@/utilitys/sound-manager.js";
+import DragFraction from "../components/DragFraction.vue";
 
 export default {
   data() {
@@ -248,7 +256,7 @@ export default {
         Status: null,
       },
       isPassLevel: [],
-      questionOrder : [],
+      questionOrder: [],
       questionCopy: [],
       isGif: false,
       showModal:false,
@@ -293,17 +301,29 @@ export default {
         // this.InitIntroVideo();
         this.Dataloaded = true;
         this.RamdonChoice();
-        for(var x in this.GameData.Questions){
+        for (var x in this.GameData.Questions) {
           this.isPassLevel.push(false);
         }
       } catch (error) {
         console.error("Fetch Game Data Error: ", error);
       }
     })();
-      console.log(this.gameCode);
-      soundManager.registerSound('Correct', `${ImportUrl.getSystemEffectAssets("CorrectAnswer.mp3")}`,false);
-      soundManager.registerSound('Wrong', `${ImportUrl.getSystemEffectAssets("WrongAnswer.mp3")}`,false);
-      soundManager.registerSound('FireWorkAnimation', `${ImportUrl.getSystemEffectAssets("harray.mp3")}`,false);
+    console.log(this.gameCode);
+    soundManager.registerSound(
+      "Correct",
+      `${ImportUrl.getSystemEffectAssets("CorrectAnswer.mp3")}`,
+      false
+    );
+    soundManager.registerSound(
+      "Wrong",
+      `${ImportUrl.getSystemEffectAssets("WrongAnswer.mp3")}`,
+      false
+    );
+    soundManager.registerSound(
+      "FireWorkAnimation",
+      `${ImportUrl.getSystemEffectAssets("harray.mp3")}`,
+      false
+    );
   },
   mounted() {
     this.FullScreen();
@@ -319,7 +339,7 @@ export default {
         if (this.GameData.Questions[i].length != undefined) {
           var num = this.GameData.Questions[i].length;
           var rand = Math.floor(Math.random() * (num - 0 + 0));
-          console.log('rand',rand);
+          console.log("rand", rand);
           question.push(this.GameData.Questions[i][rand]);
           record.push(rand);
         } else {
@@ -327,22 +347,22 @@ export default {
           break;
         }
       }
-      this.gameCode = record.toString().replaceAll(',','-');
+      this.gameCode = record.toString().replaceAll(",", "-");
       if (checkcorrect) {
         console.log(question);
         this.GameData.Questions = question;
       } else {
-        this.gameCode = 'origin'
+        this.gameCode = "origin";
         console.warn(
           "Radom Select Questions via level Fail, this could be the question is not a array (Format Error)"
         );
       }
     },
     reappearCode() {
-      if (this.gameCode == 'origin') return;
-      let reappear = this.gameCode.split('-');
+      if (this.gameCode == "origin") return;
+      let reappear = this.gameCode.split("-");
       let question = [];
-      reappear.forEach((element,index) => {
+      reappear.forEach((element, index) => {
         question.push(this.questionCopy[index][element]);
       });
       this.GameData.Questions = question;
@@ -469,7 +489,7 @@ export default {
           data,
           this.finaltime,
           this.gameCode,
-          this.header,
+          this.header
         );
         Arr2CSV.DownloadCSV(download, this.Name);
       }
@@ -485,7 +505,7 @@ export default {
       this.finaltime = 0;
       this.download_data = [[]];
       this.isPassLevel = [];
-      for(var x in this.GameData.Questions){
+      for (var x in this.GameData.Questions) {
         this.isPassLevel.push(false);
       }
     },
@@ -541,7 +561,7 @@ export default {
       this.resetWrongTimes();
       if (this.Nowlevel > 1) {
         this.Nowlevel--;
-        this.transitionName = 'slide-right';
+        this.transitionName = "slide-right";
       }
       this.pauseTimer();
       //FIXME 傳資料進入CSV
@@ -593,7 +613,7 @@ export default {
       }
     },
     EffectPlayer(type) {
-      //播放音效    
+      //播放音效
       switch (type) {
         case "CorrectSound":
           // var sound = new Audio();
@@ -618,7 +638,10 @@ export default {
           break;
         case "FireWorkAnimation":
           this.EffectWindow = true;
-          this.EffectSrc = new URL(`../assets/Effects/Firework.gif`, import.meta.url).href;
+          this.EffectSrc = new URL(
+            `../assets/Effects/Firework.gif`,
+            import.meta.url
+          ).href;
           var sound = new Audio();
           sound.src = ImportUrl.GetSystemEffectAssetsFile("harray.mp3");
           soundManager.playSound(`FireWorkAnimation`, false);
@@ -631,9 +654,11 @@ export default {
           break;
         case "HarraySound": //Wait for remove
           // this.EffectPlayer("FireWorkAnimation");
-          console.warn("HarraySound is Deprecated, Please use FireWorkAnimation instead");
+          console.warn(
+            "HarraySound is Deprecated, Please use FireWorkAnimation instead"
+          );
           var sound = new Audio();
-          sound.src = ImportUrl.GetSystemAssetsFile("harray.mp3","effects");
+          sound.src = ImportUrl.GetSystemAssetsFile("harray.mp3", "effects");
           sound.src = ImportUrl.GetSystemEffectAssetsFile("harray.mp3");
           soundManager.playSound(`harray`, false);
           sound.oncanplaythrough = function () {
@@ -740,7 +765,7 @@ export default {
     PreviousPage() {
       soundManager.stopAllSounds();
       this.ExitFullScreen();
-      this.$router.replace({ path: `/GameSelect/${this.$route.params.Grade}`})
+      this.$router.replace({ path: `/GameSelect/${this.$route.params.Grade}` });
     },
     closeSratSheet() {
       this.scratchSheetVisible = false;
@@ -828,6 +853,18 @@ export default {
     CopyItem: defineAsyncComponent(() =>
       import("@/views/GameTemplate/CopyItem.vue")
     ),
+    Airplane: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/Airplane.vue")
+    ),
+    DragOnNumberLine: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/NumberLineTester.vue")
+    ), //for testing only
+    BalloonShooting: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/BalloonShooting.vue")
+    ),
+    DragFraction: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/DragFractionTester.vue")
+    ), //for testing only
   },
 };
 </script>
@@ -929,13 +966,12 @@ export default {
   cursor: pointer;
 }
 
-
 .slide-left-enter-active,
 .slide-left-leave-active,
 .slide-right-enter-active,
 .slide-right-leave-active {
   transition: all 0.5s ease;
-//   position: absolute;
+  //   position: absolute;
   width: 100%;
 }
 
@@ -955,7 +991,6 @@ export default {
 .slide-right-leave {
   transform: translateX(0%);
 }
-
 .mediaModal-overlay {
   position: fixed;
   top: 0;

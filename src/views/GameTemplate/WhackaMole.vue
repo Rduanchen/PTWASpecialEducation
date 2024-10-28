@@ -3,7 +3,7 @@
     <h2>{{ GameData.Question }}</h2>
     <v-stage :config="configKonva">
       <v-layer>
-        <v-rect :config="configBg"></v-rect>
+        <v-image :config="configBG"></v-image>
       </v-layer>
       <v-layer>
         <mole
@@ -24,13 +24,14 @@
           :Y="i[2]"
           :width="configKonva.width"
         ></hole>
+        <v-image v-for="hole in configHole" :config="hole"></v-image>
       </v-layer>
     </v-stage>
   </div>
 </template>
 
 <script>
-import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
+import { getSystemAssets } from "@/utilitys/get_assets.js";
 import { defineAsyncComponent } from "vue";
 
 export default {
@@ -40,19 +41,8 @@ export default {
   },
   data() {
     return {
-      configKonva: {
-        width: 1000,
-        height: 500,
-      },
-
-      configBg: {
-        x: 0,
-        y: 0,
-        width: 1000,
-        height: 500,
-        fill: "darkgray",
-        stroke: "darkgray",
-      },
+      configKonva: {},
+      configBG: {},
 
       map: [
         [0, 375, 150, ""],
@@ -75,8 +65,7 @@ export default {
     },
   },
   beforeMount() {
-    var gameWidth = document.getElementById("GameContainer").clientWidth;
-    this.configKonva.width = Math.floor(gameWidth * 0.8);
+    this.initializeScene();
     for (var i = 0; i < 5; ++i) {
       this.map[i][1] = Math.floor(
         (this.configKonva.width * this.map[i][1]) / 1000
@@ -88,15 +77,23 @@ export default {
   },
 
   mounted() {
-    this.configKonva.height = Math.floor(this.configKonva.width / 2);
-    this.configBg.width = this.configKonva.width;
-    this.configBg.height = this.configKonva.height;
     this.true = this.GameData.True;
     this.false = this.GameData.False;
     this.ansLeft = this.true.length;
   },
 
   methods: {
+    initializeScene() {
+      this.gameWidth =
+        document.getElementById("GameContainer").clientWidth * 0.8;
+      this.configKonva.width = this.gameWidth;
+      this.configKonva.height = this.gameWidth / 2;
+      const bgImg = new window.Image();
+      bgImg.src = getSystemAssets("dirt.jpg", "whackAMole");
+      this.configBG.image = bgImg;
+      this.configBG.width = this.gameWidth;
+      this.configBG.height = this.gameWidth;
+    },
     giveOption(id) {
       this.map[id][3] = this.randomOption();
       //console.log(this.randomOption());
