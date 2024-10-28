@@ -157,6 +157,14 @@ const router = createRouter({
       path: '/FindItemGameMaker',
       name: 'FindItemGameMaker',
       component: () => import('@/components/FindItemGameMaker.vue'),
+    },
+    {
+      path: '/NumberLineWithBlank',
+      component: () => import('@/components/NumberLineWithBlank.vue'),
+    },
+    {
+      path: '/3031',
+      component: () => import('@/views/PrivateTemplate/Grade3/MA3031.vue'),
     }
   ]
 });
