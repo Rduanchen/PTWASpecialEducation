@@ -80,11 +80,6 @@ const router = createRouter({
       component: () => import('@/components/DrawImage.vue'),
     },
     {
-      path: '/SVGtest',
-      name: 'SVGtest',
-      component: () => import('@/components/SVGtest.vue'),
-    },
-    {
       path: '/NumberBoard',
       name: 'NumberBoard',
       component: () => import('@/components/NumberBoard.vue'),
@@ -95,10 +90,6 @@ const router = createRouter({
       component: () => import('@/components/NumberLine.vue'),
     },
     {
-      path: '/TestParentNode',
-      name: 'TestParentNode',
-      component: () => import('@/components/TestParentNode.vue'),
-    },{
       path: '/PairingGame',
       name: 'PairingGame',
       component: () => import('@/views/GameTemplate/PairingGame.vue'),
@@ -151,11 +142,30 @@ const router = createRouter({
       path: '/SelectGameMulti',
       name: 'SelectGameMulti',
       component: () => import('@/views/GameTemplate/SelectGameMulti.vue'),
-    },{
+    },
+    {
       path: '/Track',
       name: 'Track',
       component: () => import('@/views/GameTemplate/Track.vue'),
     },
+    {
+      path: '/CopyItem',
+      name: 'CopyItem',
+      component: () => import('@/views/GameTemplate/CopyItem.vue'),
+    },
+    {
+      path: '/FindItemGameMaker',
+      name: 'FindItemGameMaker',
+      component: () => import('@/components/FindItemGameMaker.vue'),
+    },
+    {
+      path: '/NumberLineWithBlank',
+      component: () => import('@/components/NumberLineWithBlank.vue'),
+    },
+    {
+      path: '/3031',
+      component: () => import('@/views/PrivateTemplate/Grade3/MA3031.vue'),
+    }
   ]
 });
 router.beforeEach((to, from, next) => {
