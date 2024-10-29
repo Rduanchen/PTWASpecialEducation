@@ -1,94 +1,96 @@
 <template>
-  <div class="sheet-container">
-    <div class="canvas-container" ref="con">
-      <canvas
-        ref="canvas"
-        @mousedown="handleMouseDown"
-        @mousemove="handleMouseMove"
-        @mouseup="handleMouseUp"
-        @mouseleave="handleMouseUp"
-        @touchstart="handleTouchStart"
-        @touchmove="handleTouchMove"
-        @touchend="handleTouchEnd"
-      >
-      </canvas>
-    </div>
-
-    <div class="option-menu">
-      <div class="option-container">
-        <div class="btn-title">筆刷大小</div>
-        <div class="brush-size-option">
-          <!--&#9679-->
-          <button @click="changeLineWidth(5)" style="font-size: 10px">
-            &#9679
-          </button>
-          <button @click="changeLineWidth(10)" style="font-size: 20px">
-            &#9679
-          </button>
-          <button @click="changeLineWidth(15)" style="font-size: 30px">
-            &#9679
-          </button>
-        </div>
-      </div>
-      <div class="option-container">
-        <div class="btn-title">顏色選盤</div>
-        <div class="color-option">
-          <button
-            class="black-btn"
-            @click.prevent="setcolor('#000000')"
-            @touchend="this.brushColor = '#000000'"
-          >
-            黑色
-          </button>
-          <button
-            class="white-btn"
-            @click.prevent="setcolor('#ffffff')"
-            @touchend="this.brushColor = '#ffffff'"
-          >
-            白色
-          </button>
-          <button
-            class="green-btn"
-            @click="setcolor('#09814A')"
-            @touchend="this.brushColor = '#09814A'"
-          >
-            綠色
-          </button>
-          <button
-            class="red-btn"
-            @click="setcolor('#F13030')"
-            @touchstart="this.brushColor = '#F13030'"
-          >
-            紅色
-          </button>
-          <button
-            class="blue-btn"
-            @click="setcolor('#0D21A1')"
-            @touchend="this.brushColor = '#0D21A1'"
-          >
-            藍色
-          </button>
-          <button
-            class="yellow-btn"
-            @click="setcolor('#FFD166')"
-            @touchend="this.brushColor = '#FFD166'"
-          >
-            黃色
-          </button>
-        </div>
+  <div class="scratchsheet-overlay">
+    <div class="sheet-container">
+      <div class="canvas-container" ref="con">
+        <canvas
+          ref="canvas"
+          @mousedown="handleMouseDown"
+          @mousemove="handleMouseMove"
+          @mouseup="handleMouseUp"
+          @mouseleave="handleMouseUp"
+          @touchstart="handleTouchStart"
+          @touchmove="handleTouchMove"
+          @touchend="handleTouchEnd"
+        >
+        </canvas>
       </div>
 
-      <div class="operation-option">
-        <button @click="clearCanvas" @touchend="clearCanvas">清空</button>
+      <div class="option-menu">
+        <div class="option-container">
+          <div class="btn-title">筆刷大小</div>
+          <div class="brush-size-option">
+            <!--&#9679-->
+            <button @click="changeLineWidth(5)" style="font-size: 10px">
+              &#9679
+            </button>
+            <button @click="changeLineWidth(10)" style="font-size: 20px">
+              &#9679
+            </button>
+            <button @click="changeLineWidth(15)" style="font-size: 30px">
+              &#9679
+            </button>
+          </div>
+        </div>
+        <div class="option-container">
+          <div class="btn-title">顏色選盤</div>
+          <div class="color-option">
+            <button
+              class="black-btn"
+              @click.prevent="setcolor('#000000')"
+              @touchend="this.brushColor = '#000000'"
+            >
+              黑色
+            </button>
+            <button
+              class="white-btn"
+              @click.prevent="setcolor('#ffffff')"
+              @touchend="this.brushColor = '#ffffff'"
+            >
+              白色
+            </button>
+            <button
+              class="green-btn"
+              @click="setcolor('#09814A')"
+              @touchend="this.brushColor = '#09814A'"
+            >
+              綠色
+            </button>
+            <button
+              class="red-btn"
+              @click="setcolor('#F13030')"
+              @touchstart="this.brushColor = '#F13030'"
+            >
+              紅色
+            </button>
+            <button
+              class="blue-btn"
+              @click="setcolor('#0D21A1')"
+              @touchend="this.brushColor = '#0D21A1'"
+            >
+              藍色
+            </button>
+            <button
+              class="yellow-btn"
+              @click="setcolor('#FFD166')"
+              @touchend="this.brushColor = '#FFD166'"
+            >
+              黃色
+            </button>
+          </div>
+        </div>
+
+        <div class="operation-option">
+          <button @click="clearCanvas" @touchend="clearCanvas">清空</button>
+        </div>
+        <button
+          class="exit-btn"
+          @click="closeCanvas"
+          @touchend="closeCanvas"
+          data-bs-dismiss="modal"
+        >
+          關閉
+        </button>
       </div>
-      <button
-        class="exit-btn"
-        @click="closeCanvas"
-        @touchend="closeCanvas"
-        data-bs-dismiss="modal"
-      >
-        關閉
-      </button>
     </div>
   </div>
 </template>
@@ -238,10 +240,29 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.scratchsheet-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0); /* 背景半透明 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* 保持在頂層 */
+}
+
 .sheet-container {
   height: 100vh;
   width: 100vw;
   display: flex;
+  background-color: rgba(0, 0, 0, 0); /* 背景透明 */
+  border: none;
+  box-shadow: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .canvas-container {
   width: 85%;

@@ -4,7 +4,7 @@
       :grade="this.Grade"
       :gameName="this.Name"
       :subject="Subjects[Subject]"
-      @previous-page="PreviousPage" />
+      @previous-page="previousPage" />
     <section>
       <div class="">
         <div class="Container">
@@ -41,9 +41,9 @@
                     :id="this.GameID"
                     :GameData="this.GameData.Questions[this.Nowlevel - 1]"
                     :GameConfig="this.GameConfig"
-                    @add-record="GameDataRecord"
-                    @play-effect="EffectPlayer"
-                    @next-question="NextQuestion"
+                    @add-record="gameDataRecord"
+                    @play-effect="effectPlayer"
+                    @next-question="nextQuestion"
                   >
                   </component>
                 </transition>
@@ -55,18 +55,18 @@
                   :id="this.GameID"
                   :GameData="this.GameData.Questions[this.Nowlevel - 1]"
                   :GameConfig="this.GameConfig"
-                  :EnviromerntInfo="GetAllInfo()"
-                  @get-info="GetAllInfo"
-                  @add-record="GameDataRecord"
+                  :EnviromerntInfo="getAllInfo()"
+                  @get-info="getAllInfo"
+                  @add-record="gameDataRecord"
                   @download-data="ToCSV"
-                  @config-header="ConfigHeader"
-                  @play-effect="EffectPlayer"
-                  @next-question="NextQuestion"
-                  @previous-question="PreviousQuestion"
+                  @config-header="configHeader"
+                  @play-effect="effectPlayer"
+                  @next-question="nextQuestion"
+                  @previous-question="previousQuestion"
                   @change-level="changelevel"
-                  @start-game="StartGame"
+                  @start-game="startGame"
                   @reload-page="reloadPage"
-                  @change-status="ChangeGameStatus"
+                  @change-status="changeGameStatus"
                   @timer-start="startTimer"
                   @timer-pause="pauseTimer"
                   @timer-reset="resetTimer"
@@ -80,10 +80,10 @@
                   :intro="GameData.IntroText"
                   :GameName="Name"
                   :key="this.Dataloaded"
-                  @start-game="StartGame"
+                  @start-game="startGame"
                   @download-record="ToCSV"
                   @restart="reloadPage"
-                  @previous-page="PreviousPage"
+                  @previous-page="previousPage"
                   @open-teaching-modal="loadMediaForModal"
                 ></GameStartandOver>
               </div>
@@ -93,16 +93,15 @@
             class="SideBar col-2"
             v-if="Dataloaded"
             :GameStatus="GameStatus"
-            :HintInfo="HintInfo"
+            :HintInfo="hintInfo"
             :Hint="Hint"
             :download_data="download_data"
             :levelAmount="this.GameData.Questions.length"
             :reAppeareCode="questionOrder"
             @to-csv="ToCSV"
-            @provide-hint="ProvideHint"
-            @previous-question="PreviousQuestion"
-            @next-question="NextQuestion"
-            @start-game="StartGame"
+            @previous-question="previousQuestion"
+            @next-question="nextQuestion"
+            @start-game="startGame"
             @reload-page="reloadPage"
             @scratch-sheet="
               () => {
@@ -113,7 +112,7 @@
           >
             <template #hint>
               <hintbutton
-                :HintInfo="HintInfo"
+                :HintInfo="hintInfo"
                 v-if="
                   GameStatus == 'Progressing' && this.Hint['Type'] != 'Method'
                 "
@@ -123,67 +122,17 @@
             </template>
           </SideBar>
 
-          <!-- Modal -->
-          <div
-            class="fade modal"
-            id="Calculator"
-            tabindex="-1"
-            aria-labelledby="exampleModalLabel"
-            aria-hidden="true"
-            style="background: rgba(0, 0, 0, 0) !important"
-          >
-            <div class="modal-dialog modal-fullscreen">
-              <div
-                class="modal-content"
-                style="
-                  height: 100vh;
-                  width: 100vw;
-                  background-color: rgba(0, 0, 0, 0) !important;
-                  border: none;
-                  box-shadow: none;
-                "
-              >
-                <scratchSheet
-                  v-if="scratchSheetVisible == true"
-                  @closeSheet="
-                    () => {
-                      closeSratSheet();
-                    }
-                  "
-                ></scratchSheet>
-              </div>
-            </div>
-          </div>
-          <div v-if="showModal" class="mediaModal-overlay" @click.self="closeMediaModal">
-            <div class="mediaModal-container">
-              <div class="mediaModal-header">
-                <h1 class="mediaModal-title">{{ modalTitle }}</h1>
-              </div>
-              <div class="mediaModal-body">
-                <p class="mediaModal-content">{{ modalContent }}</p>
-                <video
-                  v-if="mediaType === 'video'"
-                  :src="mediaSrc"
-                  controls
-                  autoplay
-                  class="media-content"
-                ></video>
-                <img
-                  v-else-if="mediaType === 'image'"
-                  :src="mediaSrc"
-                  class="media-content"
-                />
-                <img
-                  v-else
-                  src="@/assets/images/game_images/elephant.gif"
-                  class="media-content"
-                />
-              </div>
-              <div class="mediaModal-footer">
-                <button type="button" @click="closeMediaModal">我知道了!</button>
-              </div>
-            </div>
-          </div>
+
+          <scratchSheet v-if="scratchSheetVisible" @closeSheet="closeSratSheet"></scratchSheet>
+
+          <MediaModal
+            :showMediaModal="showMediaModal"
+            :modalTitle="modalTitle"
+            :modalContent="modalContent"
+            :mediaSrc="mediaSrc"
+            :mediaType="mediaType"
+            @closeModal="closeMediaModal"
+          />
         </div>
       </div>
     </section>
@@ -197,18 +146,13 @@ import loading from "@/components/loading.vue";
 import GameStartandOver from "@/components/GameSystem/GameStartandOver.vue";
 import Header from "@/components/GameSystem/header.vue";
 import LevelAndTime from "@/components/GameSystem/LevelAndTime.vue";
+import MediaModal from '@/components/GameSystem/MediaModal.vue';
 import scratchSheet from "@/components/ScratchSheets.vue";
 import hintbutton from "@/components/GameSystem/hintbutton.vue";
 import * as ImportUrl from "@/utilitys/get_assets.js";
-import axios from "axios";
 import { defineAsyncComponent } from "vue";
-// import CompareGame from "./GameTemplate/CompareGame.vue";
 import EffectWindow from "@/components/GameSystem/EffectWindow.vue";
-// import PairingGame from "./GameTemplate/PairingGame.vue";
-// import WhackaMole from "./GameTemplate/WhackaMole.vue";
-// import SelectGameMulti from "./GameTemplate/SelectGameMulti.vue";
-// import CopyItem from "./GameTemplate/CopyItem.vue";
-import gameStore from "@/stores/game";
+import gameStore from '@/stores/game';
 import { mapWritableState } from "pinia";
 import { soundManager } from "@/utilitys/sound-manager.js";
 import DragFraction from "../components/DragFraction.vue";
@@ -259,7 +203,7 @@ export default {
       questionOrder: [],
       questionCopy: [],
       isGif: false,
-      showModal:false,
+      showMediaModal:false,
       modalTitle:"",
       mediaType:"none",
       mediaSrc:"",
@@ -276,7 +220,7 @@ export default {
         )
       );
     },
-    HintInfo() {
+    hintInfo() {
       return {
         WrongTimes: this.WrongTimes,
         MaxWrongTimes: this.MaxWrongTimes,
@@ -297,11 +241,11 @@ export default {
         this.GameType = this.GameData.GameType;
         this.GameConfig = this.GameData.GameConfig;
         this.questionCopy = this.GameData.Questions;
-        this.InitHint();
+        this.initHint();
         // this.InitIntroVideo();
         this.Dataloaded = true;
-        this.RamdonChoice();
-        for (var x in this.GameData.Questions) {
+        this.randomChoice();
+        for(let x in this.GameData.Questions){
           this.isPassLevel.push(false);
         }
       } catch (error) {
@@ -326,20 +270,20 @@ export default {
     );
   },
   mounted() {
-    this.FullScreen();
+    this.fullScreen();
   },
   methods: {
-    RamdonChoice() {
+    randomChoice() {
       //Radom Select Questions via level
       let question = [];
-      var temp = [];
-      var checkcorrect = true;
+      let temp = [];
+      let checkcorrect = true;
       let record = [];
-      for (var i in this.GameData.Questions) {
+      for (let i in this.GameData.Questions) {
         if (this.GameData.Questions[i].length != undefined) {
-          var num = this.GameData.Questions[i].length;
-          var rand = Math.floor(Math.random() * (num - 0 + 0));
-          console.log("rand", rand);
+          let num = this.GameData.Questions[i].length;
+          let rand = Math.floor(Math.random() * (num - 0 + 0));
+          console.log('rand',rand);
           question.push(this.GameData.Questions[i][rand]);
           record.push(rand);
         } else {
@@ -368,104 +312,142 @@ export default {
       this.GameData.Questions = question;
       this.questionOrder = this.gameCode;
     },
-    PauseIntroVideo() {
-      try {
-        let video = document.getElementById("introvideo");
-        video.pause();
-      } catch {}
-    },
     loadMediaForModal(contentType) {
-      let mediaSource = null;
-
-      if (contentType === 'hint') {
-        this.modalTitle = '需要提示嗎?';
-        this.modalContent = '以下是遊戲的提示內容。';
-        mediaSource = this.fetchHintMedia();
-      } else if (contentType === 'teach') {
-        this.modalTitle = '不會玩嗎?請看教學影片:';
-        this.modalContent = '以下是遊戲的教學內容。';
-        mediaSource = this.fetchIntroVideo();
-      }
+      this.setModalContent(contentType);
+      const mediaSource = this.getMediaSource(contentType);
 
       if (mediaSource) {
-        this.mediaSrc = mediaSource.filePath;
-        this.mediaType = mediaSource.sourceType === 'video' ? 'video' : 'image';
+        this.setMediaSource(mediaSource);
       } else {
-        this.modalContent = '喔喔，沒有提供相關的資源';
-        this.mediaType = 'none';
-        console.warn('No media available for content type:', contentType);
+        this.handleMissingMedia();
       }
+
       this.openMediaModal();
     },
 
-    fetchHintMedia() {
-      let hintType = this.Hint.Type;
-      let filePath, sourceType;
-
-      try {
-        if (hintType === 'Level') {
-          filePath = this.GameData.Hint.Data[this.Nowlevel - 1].FilePath;
-          sourceType = this.GameData.Hint.Data[this.Nowlevel - 1].SourceType;
-          this.modalContent = '這是關卡提示';
-        } else if (hintType === 'Single') {
-          this.modalContent = '這是單一提示';
-          filePath = this.GameData.Hint.Data.FilePath;
-          sourceType = this.GameData.Hint.Data.SourceType;
+    setModalContent(contentType) {
+      const contentMap = {
+        'hint': {
+          title: '需要提示嗎?',
+          content: '以下是遊戲的提示內容。',
+          hintType: this.Hint.Type
+        },
+        'teach': {
+          title: '不會玩嗎?請看教學影片:',
+          content: '以下是遊戲的教學內容。',
+          hintType: null
         }
-        
+      };
+
+      if (contentMap[contentType]) {
+        this.modalTitle = contentMap[contentType].title;
+        this.modalContent = contentMap[contentType].content;
+
+        if (contentType === 'hint' && contentMap[contentType].hintType) {
+          this.setHintMediaContent(contentMap[contentType].hintType);
+        }
+      }
+    },
+
+    setHintMediaContent(hintType) {
+      if (hintType === 'Level') {
+        this.modalContent = '這是關卡提示';
+      } else if (hintType === 'Single') {
+        this.modalContent = '這是單一提示';
+      }
+    },
+
+    getMediaSource(contentType) {
+      if (contentType === 'hint') {
+        return this.fetchHintMedia();
+      } else if (contentType === 'teach') {
+        return this.fetchIntroVideo();
+      }
+      return null;
+    },
+
+    setMediaSource(mediaSource) {
+      this.mediaSrc = mediaSource.filePath;
+      this.mediaType = mediaSource.sourceType === 'video' ? 'video' : 'image';
+    },
+
+    handleMissingMedia() {
+      this.modalContent = '喔喔，沒有提供相關的資源';
+      this.mediaType = 'none';
+      console.warn('No media available for the selected content type.');
+    },
+
+    fetchHintMedia() {
+      try {
+        const { filePath, sourceType } = this.getHintMediaData();
         return {
           filePath: ImportUrl.GamesGetAssetsFile(this.GameID, filePath),
           sourceType
         };
       } catch {
-        console.warn('Missing data in Hint, type:', hintType);
+        console.warn('Missing data in Hint, type:', this.Hint.Type);
         return null;
       }
     },
 
-    fetchIntroVideo() {
-      let introFilePath;
-      let pattern = /undefined/;
+    getHintMediaData() {
+      const hintType = this.Hint.Type;
+      if (hintType === 'Level') {
+        return {
+          filePath: this.GameData.Hint.Data[this.Nowlevel - 1].FilePath,
+          sourceType: this.GameData.Hint.Data[this.Nowlevel - 1].SourceType
+        };
+      } else if (hintType === 'Single') {
+        return {
+          filePath: this.GameData.Hint.Data.FilePath,
+          sourceType: this.GameData.Hint.Data.SourceType
+        };
+      }
+      throw new Error('Invalid hint type');
+    },
 
+    fetchIntroVideo() {
       try {
-        introFilePath = ImportUrl.GamesGetAssetsFile(this.GameID, this.GameData.introvideo).toString();
-        if (pattern.test(introFilePath) || this.GameData.introvideo === undefined) {
-          throw new Error("Invalid intro video URL");
-        }
+        const introFilePath = this.getIntroVideoFilePath();
         return {
           filePath: introFilePath,
           sourceType: 'video'
         };
       } catch {
-        console.warn('No Intro Video');
-        
-        // Check for default GIF as fallback
-        let defaultGif = ImportUrl.getDefaultHintAssets(`${this.GameType}.gif`);
-        if (defaultGif) {
-          return {
-            filePath: defaultGif,
-            sourceType: 'image'
-          };
-        } else {
-          return null;
-        }
+        return this.getFallbackMedia();
       }
     },
+
+    getIntroVideoFilePath() {
+      const introFilePath = ImportUrl.GamesGetAssetsFile(this.GameID, this.GameData.introvideo).toString();
+      if (!introFilePath || introFilePath.includes('undefined')) {
+        throw new Error('Invalid intro video URL');
+      }
+      return introFilePath;
+    },
+
+    getFallbackMedia() {
+      const defaultGif = ImportUrl.getDefaultHintAssets(`${this.GameType}.gif`);
+      if (defaultGif) {
+        return { filePath: defaultGif, sourceType: 'image' };
+      }
+      console.warn('No Intro Video and no default GIF available');
+      return null;
+    },
     openMediaModal() {
-      this.showModal = true;
+      this.showMediaModal = true;
     },
     closeMediaModal() {
-      this.showModal = false;
+      this.showMediaModal = false;
     },
-    ChangeGameStatus(status) {
-      //改變遊戲狀態
+    changeGameStatus(status) {
       this.GameStatus = status;
     },
-    StartGame() {
+    startGame() {
       this.GameStatus = "Progressing";
       this.startTimer();
     },
-    ConfigHeader(arr) {
+    configHeader(arr) {
       this.header = arr;
     },
     ToCSV(data = this.download_data, defaultheader = true) {
@@ -505,17 +487,17 @@ export default {
       this.finaltime = 0;
       this.download_data = [[]];
       this.isPassLevel = [];
-      for (var x in this.GameData.Questions) {
+      for(let x in this.GameData.Questions){
         this.isPassLevel.push(false);
       }
     },
-    NextQuestion() {
+    nextQuestion() {
       this.isPassLevel[this.Nowlevel-1] = true;
       this.resetWrongTimes();
       if(this.checkUnansweredQuestions()){
         this.GameStatus = "Done";
         soundManager.stopAllSounds();
-        this.EffectPlayer("FireWorkAnimation");
+        this.effectPlayer("FireWorkAnimation");
         this.finaltime = this.totaltime;
       }
       this.pauseTimer();
@@ -557,7 +539,7 @@ export default {
       }
       return false;
     },
-    PreviousQuestion() {
+    previousQuestion() {
       this.resetWrongTimes();
       if (this.Nowlevel > 1) {
         this.Nowlevel--;
@@ -586,7 +568,7 @@ export default {
       this.pauseTimer();
       this.time = 0;
     },
-    GameDataRecord(data, SelfDefine = false) {
+    gameDataRecord(data, SelfDefine = false) {
       //紀錄遊戲資料
       // default ["正確答案","學生作答答案","是否正確","作答秒數(關卡)","作答秒數(總時間)"]
       // data格式[正確答案,學生作答答案,是否正確]
@@ -612,53 +594,29 @@ export default {
         console.error("Error in pushing record: ", error);
       }
     },
-    EffectPlayer(type) {
-      //播放音效
+    effectPlayer(type) {
+      let sound;  
       switch (type) {
         case "CorrectSound":
-          // var sound = new Audio();
-          // sound.src = ImportUrl.GetSystemEffectAssetsFile("CorrectAnswer.mp3");
-          // console.log(sound.src);
-
-          this.EffectPlayer("CorrectAnimation");
-          soundManager.playSound(`Correct`, false);
-          // sound.oncanplaythrough = function () {
-          //   sound.play();
-          // };
+          this.effectPlayer("CorrectAnimation");
+          soundManager.playSoundImmediately(`Correct`);
           break;
         case "WrongSound":
           this.WrongTimes++;
-          // var sound = new Audio();
-          // sound.src = ImportUrl.GetSystemEffectAssetsFile("WrongAnswer.mp3");
-          this.EffectPlayer("IncorrectAnimation");
-          soundManager.playSound(`Wrong`, false);
-          // sound.oncanplaythrough = function () {
-          //   sound.play();
-          // };
+          this.effectPlayer("IncorrectAnimation");
+          soundManager.playSoundImmediately(`Wrong`);
           break;
         case "FireWorkAnimation":
           this.EffectWindow = true;
-          this.EffectSrc = new URL(
-            `../assets/Effects/Firework.gif`,
-            import.meta.url
-          ).href;
-          var sound = new Audio();
-          sound.src = ImportUrl.GetSystemEffectAssetsFile("harray.mp3");
-          soundManager.playSound(`FireWorkAnimation`, false);
-          sound.oncanplaythrough = function () {
-            sound.play();
-          };
+          soundManager.playSoundImmediately(`FireWorkAnimation`);
           setTimeout(() => {
             this.EffectWindow = false;
           }, 3000);
           break;
         case "HarraySound": //Wait for remove
-          // this.EffectPlayer("FireWorkAnimation");
-          console.warn(
-            "HarraySound is Deprecated, Please use FireWorkAnimation instead"
-          );
-          var sound = new Audio();
-          sound.src = ImportUrl.GetSystemAssetsFile("harray.mp3", "effects");
+          console.warn("HarraySound is Deprecated, Please use FireWorkAnimation instead");
+          sound = new Audio();
+          sound.src = ImportUrl.GetSystemAssetsFile("harray.mp3","effects");
           sound.src = ImportUrl.GetSystemEffectAssetsFile("harray.mp3");
           soundManager.playSound(`harray`, false);
           sound.oncanplaythrough = function () {
@@ -681,7 +639,7 @@ export default {
           break;
       }
     },
-    FullScreen() {
+    fullScreen() {
       try {
         let elem = document.documentElement;
         if (elem.requestFullscreen) {
@@ -696,7 +654,7 @@ export default {
       } catch (error) {}
       // window.removeEventListener('mousemove', this.FullScreen);
     },
-    ExitFullScreen() {
+    exitFullScreen() {
       try {
         if (document.exitFullscreen) {
           document.exitFullscreen();
@@ -711,7 +669,7 @@ export default {
         console.warn("Exit Full Screen Error: ", error);
       }
     },
-    GetAllInfo() {
+    getAllInfo() {
       return {
         Subject: this.Subject,
         Grade: this.Grade,
@@ -730,7 +688,7 @@ export default {
     },
     //hint app
 
-    InitHint() {
+    initHint() {
       // 紀錄提示種類，有則設定hint_type為提示種類，沒有則設定hint_type為None
       // console.log(this.GameData.Hint)
       let hint_exist = false;
@@ -756,20 +714,14 @@ export default {
         );
       }
     },
-    PauseHintVideo() {
-      try {
-        let video = document.getElementById("Hint-video");
-        video.pause();
-      } catch {}
-    },
-    PreviousPage() {
+    previousPage() {
       soundManager.stopAllSounds();
-      this.ExitFullScreen();
-      this.$router.replace({ path: `/GameSelect/${this.$route.params.Grade}` });
+      this.exitFullScreen();
+      this.$router.replace({ path: `/GameSelect/${this.$route.params.Grade}`})
     },
     closeSratSheet() {
       this.scratchSheetVisible = false;
-      var modal = document.getElementById("Calculator");
+      let modal = document.getElementById("Calculator");
       modal.classList.remove("show");
       modal.style.display = "none";
     },
@@ -783,6 +735,7 @@ export default {
     GameStartandOver,
     Header,
     LevelAndTime,
+    MediaModal,
     loading,
     LinkGame: defineAsyncComponent(() =>
       import("@/views/GameTemplate/LinkGame.vue")

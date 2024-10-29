@@ -97,7 +97,7 @@ export default {
   methods: {
     playNumberSound() {
       const number = this.randomQuestionOrder[this.questionNum];
-      soundManager.playSound(`${number}`, false, false);
+      soundManager.scheduleSoundPlayback(`${number}`);
     },
     handleMouseClick() {
       const mousePos = this.$refs.stage.getNode().getPointerPosition();
