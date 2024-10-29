@@ -321,7 +321,8 @@ export default {
     drawAfterAdjusted() {
       this.configNumeratorNumber.text = this.numerator;
       this.configDenominatorNumber.text = this.denominator;
-      this.configCircleDenominator.slice[0].slices = this.denominator;
+      this.configCircleDenominator.slice[this.fill.length - 1].slices =
+        this.denominator;
       if (this.numerator == 2) {
         this.configArrow[0].fill = "#505050";
         this.configArrow[0].stroke = "#505050";
@@ -350,8 +351,25 @@ export default {
     },
 
     numeratorDragEnd(e) {
+      this.addFill(e.target.position());
       e.target.x(this.numeratorSnapTo.x);
       e.target.y(this.numeratorSnapTo.y);
+    },
+    addFill(position) {
+      for (let i = 0; i < this.fill.length; ++i) {
+        if (this.configCircleDenominator.circle[i].visible) {
+          if (
+            canvasTools.distance(
+              position,
+              this.configCircleDenominator.circle[i]
+            ) <= this.configCircleNumerator.radius
+          ) {
+            if (this.fill[i] + 1 / this.numerator <= 1)
+              this.fill[i] += 1 / this.numerator;
+            break;
+          }
+        }
+      }
     },
     denominatorDragMove(e) {
       let id = e.target.attrs.name;
