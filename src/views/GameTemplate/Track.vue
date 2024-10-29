@@ -206,7 +206,6 @@ export default {
         this.remainingLives -= 1;
         this.wrongAnswerIndex = selectedIndex;
         this.$emit("play-effect", "WrongSound");
-        // this.playSound(this.wrongSound, this.wrongSoundVolume);
       }
       setTimeout(() => {
         this.pauseConveyor();
@@ -216,10 +215,10 @@ export default {
       this.isPaused = true;
     },
     playCkickSound() {
-      soundManager.playSound('trackClickSound', true,false);
+      soundManager.playSoundImmediately('trackClickSound', true,false);
     },
     playBackgroundMusic() {
-      soundManager.playSound('trackBackgroundMusic', true,true);
+      soundManager.playSoundLoop('trackBackgroundMusic', true,true);
     },
     toggleMute() {
       this.isMuted = !this.isMuted;
