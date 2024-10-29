@@ -26,16 +26,6 @@ const router = createRouter({
       component:()=>import("@/views/Game.vue"),
     },
     {
-      path:"/Link",
-      name:"Link",
-      component:()=>import("@/components/link.vue"),
-    },
-    {
-      path:"/countertest",
-      name:"countertest",
-      component:()=>import("@/components/countertest.vue"),
-    },
-    {
       path:"/CoulorBarChart",
       name:"CoulorBarChart",
       component:()=>import("@/components/CoulorBarChart.vue"),
