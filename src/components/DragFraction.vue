@@ -9,27 +9,58 @@
 
         <v-layer>
           <v-circle
+            v-if="Data.shape == 'circle'"
             v-for="frame in configCircleDenominator.frame"
             :config="frame"
             @dragmove="denominatorDragMove"
             @dragend="denominatorDragEnd"
           ></v-circle>
           <v-shape
+            v-if="Data.shape == 'circle'"
             v-for="circle in configCircleDenominator.circle"
             :config="circle"
             @dragmove="denominatorDragMove"
             @dragend="denominatorDragEnd"
           ></v-shape>
           <v-shape
+            v-if="Data.shape == 'circle'"
             v-for="slice in configCircleDenominator.slice"
             :config="slice"
           ></v-shape>
+
+          <v-rect
+            v-if="Data.shape == 'rect'"
+            v-for="frame in configRectDenominator.frame"
+            :config="frame"
+            @dragmove="denominatorDragMove"
+            @dragend="denominatorDragEnd"
+          ></v-rect>
+          <v-rect
+            v-if="Data.shape == 'rect'"
+            v-for="rect in configRectDenominator.rect"
+            :config="rect"
+            @dragmove="denominatorDragMove"
+            @dragend="denominatorDragEnd"
+          ></v-rect>
+          <v-shape
+            v-if="Data.shape == 'rect'"
+            v-for="slice in configRectDenominator.slice"
+            :config="slice"
+          ></v-shape>
         </v-layer>
+
         <v-layer>
           <v-shape
+            v-if="Data.shape == 'circle'"
             :config="configCircleNumerator"
             @dragend="numeratorDragEnd"
           ></v-shape>
+
+          <v-rect
+            v-if="Data.shape == 'rect'"
+            :config="configRectNumerator"
+            @dragend="numeratorDragEnd"
+          ></v-rect>
         </v-layer>
 
         <v-layer>
@@ -64,16 +95,28 @@ export default {
         stroke: "#84919B",
       },
 
+      numeratorSnapTo: {},
+      denominatorSnapTo: {},
+
       configCircleNumerator: {
         draggable: true,
         fill: "#4C5B3A",
         stroke: "#4C5B3A",
       },
-      numeratorSnapTo: {},
-      denominatorSnapTo: {},
       configCircleDenominator: {
         frame: [],
         circle: [],
+        slice: [],
+      },
+
+      configRectNumerator: {
+        draggable: true,
+        fill: "#4C5B3A",
+        stroke: "#4C5B3A",
+      },
+      configRectDenominator: {
+        frame: [],
+        rect: [],
         slice: [],
       },
 
@@ -87,16 +130,7 @@ export default {
     };
   },
 
-  props: {
-    GameData: {
-      type: Object,
-      required: true,
-    },
-    GameConfig: {
-      type: Object,
-      required: true,
-    },
-  },
+  props: ["Data", "ID"],
 
   emits: ["play-effect", "add-record", "next-question"],
 
@@ -105,7 +139,8 @@ export default {
   },
 
   mounted() {
-    window.setInterval(this.update, 20);
+    if (this.Data.shape == "circle") window.setInterval(this.circleUpdate, 20);
+    if (this.Data.shape == "rect") window.setInterval(this.rectUpdate, 20);
   },
 
   methods: {
@@ -120,14 +155,23 @@ export default {
       this.configSideBar.width = this.gameWidth * 0.25;
       this.configSideBar.height = this.gameHeight;
       this.configSideBar.x = this.gameWidth * 0.75;
-      this.drawCircleNumerator();
-      this.drawCircleDenominator();
+      this.numeratorSnapTo.x = this.gameWidth * 0.875;
+      this.numeratorSnapTo.y = this.gameHeight * 0.2;
+      this.denominatorSnapTo.x = this.gameWidth * 0.875;
+      this.denominatorSnapTo.y = this.gameHeight * 0.7;
+      if (this.Data.shape == "circle") {
+        this.drawCircleNumerator();
+        this.drawCircleDenominator();
+      } else if (this.Data.shape == "rect") {
+        this.drawRectNumerator();
+        //this.drawRectDenominator();
+      }
 
       this.drawArrow();
       this.drawNumber();
       this.drawBoundaries();
     },
-    update() {
+    circleUpdate() {
       this.configCircleNumerator.endRadians = this.circleAnimation(
         this.configCircleNumerator.endRadians,
         (Math.PI * 2) / this.numerator
@@ -152,10 +196,7 @@ export default {
       }
       return currentRadians;
     },
-
     drawCircleNumerator() {
-      this.numeratorSnapTo.x = this.gameWidth * 0.875;
-      this.numeratorSnapTo.y = this.gameHeight * 0.2;
       this.configCircleNumerator.radius = this.gameWidth * 0.075;
       this.configCircleNumerator.x = this.numeratorSnapTo.x;
       this.configCircleNumerator.y = this.numeratorSnapTo.y;
@@ -164,8 +205,6 @@ export default {
       this.configCircleNumerator.sceneFunc = this.circleSceneFunc;
     },
     drawCircleDenominator() {
-      this.denominatorSnapTo.x = this.gameWidth * 0.875;
-      this.denominatorSnapTo.y = this.gameHeight * 0.7;
       let frame = {
         radius: this.gameWidth * 0.075,
         x: this.denominatorSnapTo.x,
@@ -220,6 +259,95 @@ export default {
       context.closePath();
     },
     circleSliceSceneFunc(context, shape) {
+      context.beginPath();
+      context.setLineDash([5, 5]);
+      for (let i = 0; i < shape.getAttr("slices"); ++i) {
+        context.moveTo(0, 0);
+        context.lineTo(0, -shape.getAttr("radius"));
+        context.moveTo(0, 0);
+        context.rotate((Math.PI * 2) / shape.getAttr("slices"));
+      }
+      context.stroke();
+      context.closePath();
+    },
+
+    rectUpdate() {
+      this.configRectNumerator.width = this.rectAnimation(
+        this.configRectNumerator.width,
+        (this.gameWidth * 0.2) / this.numerator
+      );
+      /*for (let i = 0; i < this.fill.length; ++i) {
+        if (this.fill[i] > 0) {
+          this.configCircleDenominator.circle[i].endRadians =
+            this.rectAnimation(
+              this.configCircleDenominator.circle[i].endRadians,
+              Math.PI * 2 * this.fill[i]
+            );
+        }
+      }*/
+    },
+    rectAnimation(currentWidth, targetWidth) {
+      if (Math.abs(currentWidth - targetWidth) < 1) {
+        currentWidth = targetWidth;
+      } else if (currentWidth < targetWidth) {
+        currentWidth += 1;
+      } else if (currentWidth > targetWidth) {
+        currentWidth -= 1;
+      }
+      return currentWidth;
+    },
+    drawRectNumerator() {
+      this.configRectNumerator.height = this.gameHeight * 0.15;
+      this.configRectNumerator.width = this.gameWidth * 0.2;
+      this.configRectNumerator.x = this.numeratorSnapTo.x;
+      this.configRectNumerator.y = this.numeratorSnapTo.y;
+      this.numeratorSnapTo = canvasTools.corner(this.configRectNumerator);
+      this.configRectNumerator.x = this.numeratorSnapTo.x;
+      this.configRectNumerator.y = this.numeratorSnapTo.y;
+      this.configRectNumerator.width = (this.gameWidth * 0.2) / this.numerator;
+    },
+    drawRectDenominator() {
+      this.denominatorSnapTo.x = this.gameWidth * 0.875;
+      this.denominatorSnapTo.y = this.gameHeight * 0.7;
+      let frame = {
+        radius: this.gameWidth * 0.075,
+        x: this.denominatorSnapTo.x,
+        y: this.denominatorSnapTo.y,
+        fill: "white",
+        stroke: "white",
+        draggable: true,
+        name: this.fill.length,
+      };
+      let circle = {
+        visible: false,
+        radius: this.gameWidth * 0.075,
+        startRadians: 0,
+        endRadians: 0,
+        x: this.denominatorSnapTo.x,
+        y: this.denominatorSnapTo.y,
+        fill: "#4C5B3A",
+        stroke: "#4C5B3A",
+        sceneFunc: this.circleSceneFunc,
+        draggable: true,
+        name: this.fill.length,
+      };
+      this.configCircleDenominator.frame.push(frame);
+      this.configCircleDenominator.circle.push(circle);
+      this.configCircleDenominator.slice.push(this.drawCircleSlice());
+      this.fill.push(0);
+    },
+    drawRectSlice() {
+      let slice = {
+        radius: this.gameWidth * 0.075,
+        stroke: "black",
+        x: this.denominatorSnapTo.x,
+        y: this.denominatorSnapTo.y,
+        sceneFunc: this.circleSliceSceneFunc,
+        slices: this.denominator,
+      };
+      return slice;
+    },
+    rectSliceSceneFunc(context, shape) {
       context.beginPath();
       context.setLineDash([5, 5]);
       for (let i = 0; i < shape.getAttr("slices"); ++i) {
@@ -293,13 +421,16 @@ export default {
       this.configDenominatorNumber.fontSize = this.gameWidth * 0.05;
     },
     drawBoundaries() {
-      let radius = this.configCircleNumerator.radius;
-      this.boundaries = {
-        up: radius,
-        down: this.gameHeight - radius,
-        left: radius,
-        right: this.gameWidth * 0.75 - radius,
-      };
+      if (this.Data.shape == "circle") {
+        let radius = this.configCircleNumerator.radius;
+        this.boundaries = {
+          up: radius,
+          down: this.gameHeight - radius,
+          left: radius,
+          right: this.gameWidth * 0.75 - radius,
+        };
+      } else if (this.Data.shape == "rect") {
+      }
     },
     adjustNumber(e) {
       switch (e.target.attrs.operator) {
@@ -321,8 +452,12 @@ export default {
     drawAfterAdjusted() {
       this.configNumeratorNumber.text = this.numerator;
       this.configDenominatorNumber.text = this.denominator;
-      this.configCircleDenominator.slice[this.fill.length - 1].slices =
-        this.denominator;
+      if (this.Data.shape == "circle") {
+        this.configCircleDenominator.slice[this.fill.length - 1].slices =
+          this.denominator;
+      } else if (this.Data.shape == "rect") {
+      }
+
       if (this.numerator == 2) {
         this.configArrow[0].fill = "#505050";
         this.configArrow[0].stroke = "#505050";
@@ -388,8 +523,7 @@ export default {
     },
     denominatorDragEnd(e) {
       let id = e.target.attrs.name;
-      if (this.configCircleDenominator.circle[id].visible) {
-      } else {
+      if (!this.configCircleDenominator.circle[id].visible) {
         if (canvasTools.isInBound(e.target.position(), this.boundaries)) {
           this.drawCircleDenominator();
           this.configCircleDenominator.circle[id].visible = true;
