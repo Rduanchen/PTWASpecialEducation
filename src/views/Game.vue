@@ -103,7 +103,11 @@
             @next-question="nextQuestion"
             @start-game="startGame"
             @reload-page="reloadPage"
-            @scratch-sheet="() => {scratchSheetVisible = true}"
+            @scratch-sheet="
+              () => {
+                scratchSheetVisible = true;
+              }
+            "
             @reappear-code="reappearCode"
           >
             <template #hint>
@@ -117,6 +121,7 @@
               </hintbutton>
             </template>
           </SideBar>
+
 
           <scratchSheet v-if="scratchSheetVisible" @closeSheet="closeSratSheet"></scratchSheet>
 
@@ -149,7 +154,8 @@ import { defineAsyncComponent } from "vue";
 import EffectWindow from "@/components/GameSystem/EffectWindow.vue";
 import gameStore from '@/stores/game';
 import { mapWritableState } from "pinia";
-import { soundManager } from '@/utilitys/sound-manager.js';
+import { soundManager } from "@/utilitys/sound-manager.js";
+import DragFraction from "../components/DragFraction.vue";
 
 export default {
   data() {
@@ -194,7 +200,7 @@ export default {
         Status: null,
       },
       isPassLevel: [],
-      questionOrder : [],
+      questionOrder: [],
       questionCopy: [],
       isGif: false,
       showMediaModal:false,
@@ -246,10 +252,22 @@ export default {
         console.error("Fetch Game Data Error: ", error);
       }
     })();
-      console.log(this.gameCode);
-      soundManager.registerSound('Correct', `${ImportUrl.getSystemEffectAssets("CorrectAnswer.mp3")}`,false);
-      soundManager.registerSound('Wrong', `${ImportUrl.getSystemEffectAssets("WrongAnswer.mp3")}`,false);
-      soundManager.registerSound('FireWorkAnimation', `${ImportUrl.getSystemEffectAssets("harray.mp3")}`,false);
+    console.log(this.gameCode);
+    soundManager.registerSound(
+      "Correct",
+      `${ImportUrl.getSystemEffectAssets("CorrectAnswer.mp3")}`,
+      false
+    );
+    soundManager.registerSound(
+      "Wrong",
+      `${ImportUrl.getSystemEffectAssets("WrongAnswer.mp3")}`,
+      false
+    );
+    soundManager.registerSound(
+      "FireWorkAnimation",
+      `${ImportUrl.getSystemEffectAssets("harray.mp3")}`,
+      false
+    );
   },
   mounted() {
     this.fullScreen();
@@ -273,22 +291,22 @@ export default {
           break;
         }
       }
-      this.gameCode = record.toString().replaceAll(',','-');
+      this.gameCode = record.toString().replaceAll(",", "-");
       if (checkcorrect) {
         console.log(question);
         this.GameData.Questions = question;
       } else {
-        this.gameCode = 'origin'
+        this.gameCode = "origin";
         console.warn(
           "Radom Select Questions via level Fail, this could be the question is not a array (Format Error)"
         );
       }
     },
     reappearCode() {
-      if (this.gameCode == 'origin') return;
-      let reappear = this.gameCode.split('-');
+      if (this.gameCode == "origin") return;
+      let reappear = this.gameCode.split("-");
       let question = [];
-      reappear.forEach((element,index) => {
+      reappear.forEach((element, index) => {
         question.push(this.questionCopy[index][element]);
       });
       this.GameData.Questions = question;
@@ -453,7 +471,7 @@ export default {
           data,
           this.finaltime,
           this.gameCode,
-          this.header,
+          this.header
         );
         Arr2CSV.DownloadCSV(download, this.Name);
       }
@@ -525,7 +543,7 @@ export default {
       this.resetWrongTimes();
       if (this.Nowlevel > 1) {
         this.Nowlevel--;
-        this.transitionName = 'slide-right';
+        this.transitionName = "slide-right";
       }
       this.pauseTimer();
       //FIXME 傳資料進入CSV
@@ -788,6 +806,18 @@ export default {
     CopyItem: defineAsyncComponent(() =>
       import("@/views/GameTemplate/CopyItem.vue")
     ),
+    Airplane: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/Airplane.vue")
+    ),
+    DragOnNumberLine: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/NumberLineTester.vue")
+    ), //for testing only
+    BalloonShooting: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/BalloonShooting.vue")
+    ),
+    DragFraction: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/DragFractionTester.vue")
+    ), //for testing only
   },
 };
 </script>
@@ -889,13 +919,12 @@ export default {
   cursor: pointer;
 }
 
-
 .slide-left-enter-active,
 .slide-left-leave-active,
 .slide-right-enter-active,
 .slide-right-leave-active {
   transition: all 0.5s ease;
-//   position: absolute;
+  //   position: absolute;
   width: 100%;
 }
 
@@ -915,5 +944,94 @@ export default {
 .slide-right-leave {
   transform: translateX(0%);
 }
+.mediaModal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
 
+.mediaModal-container {
+  background: #fff;
+  border-radius: 10px;
+  width: 80%;
+  height: 90%;
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow: auto;
+  padding: 20px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.mediaModal-header {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.mediaModal-title {
+  font-size: 2rem;
+  text-align: start;
+  margin: 0;
+}
+
+.mediaModal-body {
+  width: 100%;
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  flex-grow: 1; 
+}
+
+.mediaModal-footer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.media-content {
+  max-width: 100%;
+  max-height: 100%;
+  min-width: 300px;
+  min-height: 200px;
+  object-fit: contain;
+  flex-grow: 1;
+}
+
+button {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: #5a6268;
+}
+
+img.media-content {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.mediaModal-content {
+  margin: 0;
+  font-size: 1.5rem;
+}
 </style>
