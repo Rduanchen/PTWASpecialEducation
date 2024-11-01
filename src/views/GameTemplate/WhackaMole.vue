@@ -5,6 +5,8 @@
       <v-layer>
         <v-image :config="configBG"></v-image>
       </v-layer>
+
+      <!--TO BE REPLACED-->
       <v-layer>
         <mole
           v-for="i in map"
@@ -24,7 +26,17 @@
           :Y="i[2]"
           :width="configKonva.width"
         ></hole>
-        <v-image v-for="hole in configHole" :config="hole"></v-image>
+      </v-layer>
+      <!--TO BE REPLACED-->
+
+      <v-layer>
+        <v-image v-for="board in configObjects.board" :config="board"></v-image>
+        <v-text
+          v-for="option in configObjects.option"
+          :config="option"
+        ></v-text>
+        <v-image v-for="mole in configObjects.mole" :config="mole"></v-image>
+        <v-image v-for="hole in configObjects.hole" :config="hole"></v-image>
       </v-layer>
     </v-stage>
   </div>
@@ -32,10 +44,12 @@
 
 <script>
 import { getSystemAssets } from "@/utilitys/get_assets.js";
+import * as canvasTools from "@/utilitys/canvasTools.js";
 import { defineAsyncComponent } from "vue";
 
 export default {
   components: {
+    //TO BE REPLACED
     hole: defineAsyncComponent(() => import("@/components/moleHole.vue")),
     mole: defineAsyncComponent(() => import("@/components/mole.vue")),
   },
@@ -43,14 +57,14 @@ export default {
     return {
       configKonva: {},
       configBG: {},
-
-      map: [
-        [0, 375, 150, ""],
-        [1, 625, 150, ""],
-        [2, 250, 350, ""],
-        [3, 500, 350, ""],
-        [4, 750, 350, ""],
-      ],
+      configObjects: {
+        position: [],
+        board: [],
+        option: [],
+        mole: [],
+        hole: [],
+      },
+      images: {},
     };
   },
 
@@ -66,21 +80,10 @@ export default {
   },
   beforeMount() {
     this.initializeScene();
-    for (var i = 0; i < 5; ++i) {
-      this.map[i][1] = Math.floor(
-        (this.configKonva.width * this.map[i][1]) / 1000
-      );
-      this.map[i][2] = Math.floor(
-        (this.configKonva.width * this.map[i][2]) / 1000
-      );
-    }
+    this.initializeOption();
   },
 
-  mounted() {
-    this.true = this.GameData.True;
-    this.false = this.GameData.False;
-    this.ansLeft = this.true.length;
-  },
+  mounted() {},
 
   methods: {
     initializeScene() {
@@ -88,26 +91,76 @@ export default {
         document.getElementById("GameContainer").clientWidth * 0.8;
       this.configKonva.width = this.gameWidth;
       this.configKonva.height = this.gameWidth / 2;
-      const bgImg = new window.Image();
-      bgImg.src = getSystemAssets("dirt.jpg", "whackAMole");
-      this.configBG.image = bgImg;
+      this.setImages();
+      this.drawBG();
+      this.setOffsets();
+      this.spawnMole();
+    },
+    setImages() {
+      this.images.bg = new window.Image();
+      this.images.bg.src = getSystemAssets("background.png", "whackAMole");
+      this.images.board = new window.Image();
+      this.images.board.src = getSystemAssets("answerBoard.png", "whackAMole");
+      this.images.hole = new window.Image();
+      this.images.hole.src = getSystemAssets("hole.png", "whackAMole");
+      this.images.holeup = new window.Image();
+      this.images.holeup.src = getSystemAssets("holeup.png", "whackAMole");
+      this.images.mole = new window.Image();
+      this.images.mole.src = getSystemAssets("mole.png", "whackAMole");
+    },
+    drawBG() {
+      this.configBG.image = this.images.bg;
       this.configBG.width = this.gameWidth;
       this.configBG.height = this.gameWidth;
     },
-    giveOption(id) {
-      this.map[id][3] = this.randomOption();
-      //console.log(this.randomOption());
+    setOffsets() {
+      this.boardOffset = {
+        x: 0,
+        y: -this.gameWidth * 0.04,
+      };
+      this.moleOffset = {
+        x: 0,
+        y: this.gameWidth * 0.05,
+      };
     },
+    spawnMole() {
+      let position = {
+        x: this.gameWidth * 0.1,
+        y: this.gameWidth * 0.1,
+      };
+      this.configObjects.position.push(position);
 
-    randomOption() {
-      var trueOptions = this.true.length;
-      var falseOptions = this.false.length;
-      var optionId = Math.floor(Math.random() * (trueOptions + falseOptions));
-      if (optionId < trueOptions) {
-        return this.true[optionId];
-      } else {
-        return this.false[optionId - trueOptions];
-      }
+      let board = {
+        visible: false,
+        x: position.x,
+        y: canvasTools.offset(position, this.boardOffset).y,
+        width: this.gameWidth * 0.1,
+        height: this.gameWidth * 0.05,
+        image: this.images.board,
+      };
+      this.configObjects.board.push(board);
+
+      let mole = {
+        x: position.x,
+        y: canvasTools.offset(position, this.moleOffset).y,
+        width: this.gameWidth * 0.1,
+        height: this.gameWidth * 0.1,
+        image: this.images.mole,
+      };
+      this.configObjects.mole.push(mole);
+
+      let hole = {
+        x: position.x,
+        y: position.y,
+        width: this.gameWidth * 0.1,
+        height: this.gameWidth * 0.1,
+        image: this.images.hole,
+      };
+      this.configObjects.hole.push(hole);
+    },
+    initializeOption() {
+      this.allOptions = this.GameData.True.concat(this.GameData.False);
+      this.trueOptions = this.GameData.True;
     },
 
     answer(option) {
