@@ -12,61 +12,6 @@
                         "Img": "MA3011.png"
                     }
                 ]
-            },
-            {
-                "Title": "使用錢幣",
-                "Games": [
-                    {
-                        "id": "MA3014",
-                        "Name": "數到10000",
-                        "Description": "將數字連連看",
-                        "Img": "MA3014.png"
-                    }
-                ]
-            },
-            {
-                "Title": "比大小",
-                "Games": [
-                    {
-                        "id": "MA3016",
-                        "Name": "比大小",
-                        "Description": "將數字比比看",
-                        "Img": "MA3016.png"
-                    }
-                ]
-            },
-            {
-                "Title": "整數數線",
-                "Games": [
-                    {
-                        "id": "MA3017",
-                        "Name": "數線上的空格",
-                        "Description": "請點擊數線上的空格，並使用數字鍵盤填入正確的數字。",
-                        "Img": "MA3017.png"
-                    },
-                    {
-                        "id": "MA3018",
-                        "Name": "數線應用",
-                        "Description": "拖曳數線上的小鴨以回答答案",
-                        "Img": "MA3018.png"
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        "Title": "2-四位數加減",
-        "Section": [
-            {
-                "Title": "四位數的加法",
-                "Games": [
-                    {
-                        "id": "MA3021",
-                        "Name": "三、四位數的加法(計算+應用)",
-                        "Description": "透過直視計算板，將題目加加看",
-                        "Img": "MA3021.png"
-                    }   
-                ]
             }
         ]
     },

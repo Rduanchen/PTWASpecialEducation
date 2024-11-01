@@ -1,10 +1,11 @@
 {
-    "id":"MA_Pub_07",
+    "id":"MA4004",
+    "introvideo": "src",
     "TotalLevel": 5,
     "GameType" : "CompareGame",
     "IntroText": {
         "Type": "PlainText",
-        "Content": "請比較兩邊的定位版中的數字大小，並拖曳>、<或=到框框中"
+        "Content": "數學不好的哥哥打算買運動相關的用品，請聰明的你幫哥哥算出總共要花多少錢"
     },
     "GameConfig": {
         "CustomeSymbol": true,
@@ -12,12 +13,14 @@
         "WithImage": false,
         "CheckAnswerMode": "Button"
     },
+    
     "Questions": [
         [
             {
                 "QuestionText": "數字比大小",
-                "Description": "把>、<或=拖曳到框框中",
-                "SlotComponentVerifycation": false,
+                "Description": "數字比大小",
+                "SlotComponentVerifycation": true,
+                "OptionBarTitle": "在口裡填入>、<或=",
                 "Datas": [
                     [
                         {
@@ -40,8 +43,9 @@
             },
             {
                 "QuestionText": "數字比大小",
-                "Description": "把>、<或=拖曳到框框中",
-                "SlotComponentVerifycation": false,
+                "Description": "數字比大小",
+                "SlotComponentVerifycation": true,
+                "OptionBarTitle": "在口裡填入>、<或=",
                 "Datas": [
                     [
                         {
@@ -64,8 +68,9 @@
             },
             {
                 "QuestionText": "數字比大小",
-                "Description": "把>、<或=拖曳到框框中",
-                "SlotComponentVerifycation": false,
+                "Description": "數字比大小",
+                "SlotComponentVerifycation": true,
+                "OptionBarTitle": "在口裡填入>、<或=",
                 "Datas": [
                     [
                         {
@@ -90,9 +95,9 @@
         [
             {
                 "QuestionText": "數字比大小",
-                "Description": "把>、<或=拖曳到框框中",
-                "SlotComponentVerifycation": false,
-                "OptionBarTitle": "把>、<或=拖曳到框框中",
+                "Description": "數字比大小",
+                "SlotComponentVerifycation": true,
+                "OptionBarTitle": "在口裡填入>、<或=",
                 "Datas": [
                     [
                         {
@@ -116,7 +121,8 @@
             {
                 "QuestionText": "數字比大小",
                 "Description": "數字比大小",
-                "SlotComponentVerifycation": false,
+                "SlotComponentVerifycation": true,
+                "OptionBarTitle": "在口裡填入>、<或=",
                 "Datas": [
                     [
                         {
@@ -139,8 +145,9 @@
             },
             {
                 "QuestionText": "數字比大小",
-                "Description": "把>、<或=拖曳到框框中",
-                "SlotComponentVerifycation": false,
+                "Description": "數字比大小",
+                "SlotComponentVerifycation": true,
+                "OptionBarTitle": "在口裡填入>、<或=",
                 "Datas": [
                     [
                         {
@@ -165,8 +172,9 @@
         [
             {
                 "QuestionText": "數字比大小",
-                "Description": "把>、<或=拖曳到框框中",
-                "SlotComponentVerifycation": false,
+                "Description": "數字比大小",
+                "SlotComponentVerifycation": true,
+                "OptionBarTitle": "在口裡填入>、<或=",
                 "Datas": [
                     [
                         {
@@ -189,8 +197,9 @@
             },
             {
                 "QuestionText": "數字比大小",
-                "Description": "把>、<或=拖曳到框框中",
-                "SlotComponentVerifycation": false,
+                "Description": "數字比大小",
+                "SlotComponentVerifycation": true,
+                "OptionBarTitle": "在口裡填入>、<或=",
                 "Datas": [
                     [
                         {
@@ -213,8 +222,9 @@
             },
             {
                 "QuestionText": "數字比大小",
-                "Description": "把>、<或=拖曳到框框中",
-                "SlotComponentVerifycation": false,
+                "Description": "數字比大小",
+                "SlotComponentVerifycation": true,
+                "OptionBarTitle": "在口裡填入>、<或=",
                 "Datas": [
                     [
                         {
@@ -239,8 +249,9 @@
         [
             {
                 "QuestionText": "數字比大小",
-                "Description": "把>、<或=拖曳到框框中",
-                "SlotComponentVerifycation": false,
+                "Description": "數字比大小",
+                "SlotComponentVerifycation": true,
+                "OptionBarTitle": "在口裡填入>、<或=",
                 "Datas": [
                     [
                         {
@@ -263,8 +274,9 @@
             },
             {
                 "QuestionText": "數字比大小",
-                "Description": "把>、<或=拖曳到框框中",
-                "SlotComponentVerifycation": false,
+                "Description": "數字比大小",
+                "SlotComponentVerifycation": true,
+                "OptionBarTitle": "在口裡填入>、<或=",
                 "Datas": [
                     [
                         {
@@ -287,8 +299,9 @@
             },
             {
                 "QuestionText": "數字比大小",
-                "Description": "把>、<或=拖曳到框框中",
-                "SlotComponentVerifycation": false,
+                "Description": "數字比大小",
+                "SlotComponentVerifycation": true,
+                "OptionBarTitle": "在口裡填入>、<或=",
                 "Datas": [
                     [
                         {
@@ -313,8 +326,9 @@
         [
             {
                 "QuestionText": "數字比大小",
-                "Description": "把>、<或=拖曳到框框中",
-                "SlotComponentVerifycation": false,
+                "Description": "數字比大小",
+                "SlotComponentVerifycation": true,
+                "OptionBarTitle": "在口裡填入>、<或=",
                 "Datas": [
                     [
                         {
@@ -337,8 +351,9 @@
             },
             {
                 "QuestionText": "數字比大小",
-                "Description": "把>、<或=拖曳到框框中",
-                "SlotComponentVerifycation": false,
+                "Description": "數字比大小",
+                "SlotComponentVerifycation": true,
+                "OptionBarTitle": "在口裡填入>、<或=",
                 "Datas": [
                     [
                         {
@@ -361,8 +376,9 @@
             },
             {
                 "QuestionText": "數字比大小",
-                "Description": "把>、<或=拖曳到框框中",
-                "SlotComponentVerifycation": false,
+                "Description": "數字比大小",
+                "SlotComponentVerifycation": true,
+                "OptionBarTitle": "在口裡填入>、<或=",
                 "Datas": [
                     [
                         {

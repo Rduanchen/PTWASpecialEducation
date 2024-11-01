@@ -23,3 +23,11 @@ button {
     @extend .button-basic;
     border: none;
 }
+
+.button--animation {
+    @extend .button-border;
+    &:hover {
+        transform: scale($transform-scale);
+        transition: $transition-time;
+    }
+}
