@@ -1,5 +1,3 @@
-import { right } from "@popperjs/core"
-
 export function center(object){
     return {x: object.x + object.width/2, y: object.y + object.height/2}
 }
@@ -37,4 +35,11 @@ export function isInBound(object, boundaries){
       )
         return false;
     else return true;
+}
+
+export function randomPosition(boundaries){
+    return {
+        x: Math.random()*(boundaries.right-boundaries.left)+boundaries.left,
+        y: Math.random()*(boundaries.down-boundaries.up)+boundaries.up,
+    }
 }
