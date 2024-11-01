@@ -61,7 +61,6 @@ export default {
         position: [],
         status: [],
         cropPercent: [],
-        burrow: [],
         board: [],
         option: [],
         mole: [],
@@ -170,9 +169,7 @@ export default {
         image: this.images.hole,
       };
       this.configObjects.hole.push(hole);
-      this.configObjects.burrow.push(
-        window.setInterval(this.burrowAnimation, 200, id)
-      );
+      window.setTimeout(this.burrowAnimation, 200, id);
       let nextSpawn = Math.random() * 2000 + 1000;
       window.setTimeout(this.spawnMole, nextSpawn);
     },
@@ -232,18 +229,20 @@ export default {
     burrowAnimation(id) {
       if (this.configObjects.hole[id].image == this.images.hole) {
         this.configObjects.hole[id].image = this.images.holeup;
+        window.setTimeout(this.burrowAnimation, 200, id);
       } else if (this.configObjects.hole[id].image == this.images.holeup) {
         this.configObjects.hole[id].image = this.images.hole;
         switch (this.configObjects.status[id]) {
           case "burrow":
             this.configObjects.status[id] = "burrowOnce";
+            window.setTimeout(this.burrowAnimation, 200, id);
             break;
           case "burrowOnce":
             this.configObjects.status[id] = "burrowTwice";
+            window.setTimeout(this.burrowAnimation, 200, id);
             break;
           case "burrowTwice":
             this.configObjects.status[id] = "up";
-            window.clearInterval(this.configObjects.burrow[id]);
             break;
         }
       }
@@ -261,7 +260,7 @@ export default {
     },
     destory(i) {
       for (let object in this.configObjects) {
-        this.configObjects[object].splice(i, 1);
+        this.configObjects[object][i] = null;
       }
     },
 
