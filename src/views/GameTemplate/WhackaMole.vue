@@ -141,10 +141,16 @@ export default {
       this.configObjects.board.push(board);
 
       let mole = {
+        crop: {
+          x: 0,
+          y: 0,
+          width: this.images.mole.width,
+          height: this.images.mole.height * 0.25,
+        },
         x: position.x,
         y: canvasTools.offset(position, this.moleOffset).y,
         width: this.gameWidth * 0.1,
-        height: this.gameWidth * 0.1,
+        height: this.gameWidth * 0.025,
         image: this.images.mole,
       };
       this.configObjects.mole.push(mole);
