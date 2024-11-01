@@ -4,7 +4,6 @@
       <h2>{{ GameData.Question }}</h2>
       <v-stage :config="configKonva">
         <v-layer>
-          <v-rect :config="configBG"></v-rect>
           <v-image v-for="passage in configPassage" :config="passage"></v-image>
         </v-layer>
 
@@ -46,12 +45,6 @@ export default {
   data() {
     return {
       configKonva: {},
-      configBG: {
-        x: 0,
-        y: 0,
-        fill: "gray",
-        stroke: "gray",
-      },
       configPassage: [],
       configTunnel: [],
       configOption: [],
@@ -101,8 +94,6 @@ export default {
         document.getElementById("GameContainer").clientWidth * 0.8;
       this.configKonva.width = this.gameWidth;
       this.configKonva.height = this.gameWidth / 2;
-      this.configBG.width = this.gameWidth;
-      this.configBG.height = this.gameWidth / 2;
       this.drawPassage();
       this.drawTunnel();
       this.drawOptions();
