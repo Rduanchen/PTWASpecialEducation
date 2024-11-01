@@ -123,9 +123,9 @@ export default {
 
       this.boundaries = {
         up: this.gameWidth * 0.08,
-        down: this.gameWidth * 0.36,
+        down: this.gameWidth * 0.33,
         left: this.gameWidth * 0.01,
-        right: this.gameWidth * 0.85,
+        right: this.gameWidth * 0.83,
       };
     },
     drawBG() {
@@ -135,10 +135,7 @@ export default {
     },
     spawnMole() {
       let id = this.configObjects.position.length;
-      let position = {
-        x: this.boundaries.left,
-        y: this.boundaries.up,
-      };
+      let position = canvasTools.randomPosition(this.boundaries);
       this.configObjects.position.push(position);
       this.configObjects.status.push("burrow");
 
@@ -176,6 +173,8 @@ export default {
       this.configObjects.burrow.push(
         window.setInterval(this.burrowAnimation, 200, id)
       );
+      let nextSpawn = Math.random() * 2000 + 1000;
+      window.setTimeout(this.spawnMole, nextSpawn);
     },
 
     initializeOption() {
