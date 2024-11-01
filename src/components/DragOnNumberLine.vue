@@ -48,9 +48,9 @@ export default {
     };
   },
 
-  props: ["Data", "ID"], //{spacing, max, min, image, init_pos}
+  props: ["Data", "ID"], //{spacing, max, min, image, init_pos, finalPositon}
 
-  emits: ["getDragPosition"],
+  emits: ["ReplyAnswer"],
 
   beforeMount() {
     this.initializeScene();
@@ -144,8 +144,11 @@ export default {
       let initId = 0;
       if (this.Data.init_pos) initId = this.getInitialPositionId();
 
-      if (GamesGetAssetsFile(this.ID, this.Data.image).includes("undefined"))
+      if (GamesGetAssetsFile(this.ID, this.Data.image).includes("undefined")) {
         this.isImage = false;
+        console.log("No image found");
+        console.log(this.ID, this.Data.image);
+      }
 
       let configDraggable = {
         x: this.numberX[initId],
@@ -208,7 +211,15 @@ export default {
       if (this.isImage) e.target.x(snapTo - this.configImage.width * 0.5);
       else this.configCircle.x = e.target.x(snapTo);
 
-      this.$emit("getDragPosition", output);
+      this.checkAnswer(output);
+    },
+    checkAnswer(output) {
+      console.log(output, this.Data.finalPosition);
+      if (output == this.Data.finalPosition) {
+        this.$emit("ReplyAnswer", true);
+      } else {
+        this.$emit("ReplyAnswer", false);
+      }
     },
     horizontalBound(pos) {
       if (this.isImage) {
