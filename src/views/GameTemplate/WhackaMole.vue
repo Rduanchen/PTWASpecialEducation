@@ -46,6 +46,7 @@
 import { getSystemAssets } from "@/utilitys/get_assets.js";
 import * as canvasTools from "@/utilitys/canvasTools.js";
 import { defineAsyncComponent } from "vue";
+import { position } from "html2canvas/dist/types/css/property-descriptors/position";
 
 export default {
   components: {
@@ -67,6 +68,8 @@ export default {
         hole: [],
       },
       images: {},
+
+      startId: 0,
     };
   },
 
@@ -179,7 +182,7 @@ export default {
       this.trueOptions = this.GameData.True;
     },
     update() {
-      for (let i = 0; i < this.configObjects.position.length; ++i) {
+      for (let i = this.startId; i < this.configObjects.position.length; ++i) {
         this.moleAnimation(i);
       }
     },
@@ -262,6 +265,7 @@ export default {
       for (let object in this.configObjects) {
         this.configObjects[object][i] = null;
       }
+      this.startId++;
     },
 
     answer(option) {
