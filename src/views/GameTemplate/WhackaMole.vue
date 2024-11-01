@@ -114,18 +114,18 @@ export default {
 
       this.boardOffset = {
         x: 0,
-        y: -this.gameWidth * 0.04,
+        y: -this.gameWidth * 0.064,
       };
       this.moleOffset = {
         x: 0,
-        y: this.gameWidth * 0.05,
+        y: this.gameWidth * 0.08,
       };
 
       this.boundaries = {
-        up: this.gameWidth * 0.05,
-        down: this.gameWidth * 0.39,
+        up: this.gameWidth * 0.08,
+        down: this.gameWidth * 0.36,
         left: this.gameWidth * 0.01,
-        right: this.gameWidth * 0.89,
+        right: this.gameWidth * 0.85,
       };
     },
     drawBG() {
@@ -135,19 +135,22 @@ export default {
     },
     spawnMole() {
       let id = this.configObjects.position.length;
-      let position = canvasTools.randomPosition(this.boundaries);
+      let position = {
+        x: this.boundaries.left,
+        y: this.boundaries.up,
+      };
       this.configObjects.position.push(position);
       this.configObjects.status.push("burrow");
 
-      let cropPercent = 25;
+      let cropPercent = 15;
       this.configObjects.cropPercent.push(cropPercent);
 
       let board = {
         visible: false,
         x: position.x,
         y: canvasTools.offset(position, this.boardOffset).y,
-        width: this.gameWidth * 0.1,
-        height: this.gameWidth * 0.05,
+        width: this.gameWidth * 0.16,
+        height: this.gameWidth * 0.08,
         image: this.images.board,
       };
       this.configObjects.board.push(board);
@@ -155,8 +158,8 @@ export default {
       let mole = {
         x: position.x,
         y: canvasTools.offset(position, this.moleOffset).y,
-        width: this.gameWidth * 0.1,
-        height: this.gameWidth * 0.001 * cropPercent,
+        width: this.gameWidth * 0.16,
+        height: this.gameWidth * 0.0016 * cropPercent,
         image: this.images.mole,
       };
       mole.crop = this.crop(cropPercent).crop;
@@ -165,8 +168,8 @@ export default {
       let hole = {
         x: position.x,
         y: position.y,
-        width: this.gameWidth * 0.1,
-        height: this.gameWidth * 0.1,
+        width: this.gameWidth * 0.16,
+        height: this.gameWidth * 0.16,
         image: this.images.hole,
       };
       this.configObjects.hole.push(hole);
@@ -174,6 +177,7 @@ export default {
         window.setInterval(this.burrowAnimation, 200, id)
       );
     },
+
     initializeOption() {
       this.allOptions = this.GameData.True.concat(this.GameData.False);
       this.trueOptions = this.GameData.True;
@@ -187,7 +191,7 @@ export default {
       if (this.configObjects.status[i] == "up") {
         this.configObjects.mole[i].y--;
         if (this.configObjects.cropPercent[i] < 100) {
-          this.configObjects.cropPercent[i] += 1.5;
+          this.configObjects.cropPercent[i] += 1.2;
           this.configObjects.mole[i].crop = this.crop(
             this.configObjects.cropPercent[i]
           ).crop;
@@ -206,7 +210,7 @@ export default {
       } else if (this.configObjects.status[i] == "down") {
         this.configObjects.mole[i].y++;
         if (this.configObjects.cropPercent[i] > 0) {
-          this.configObjects.cropPercent[i] -= 1.5;
+          this.configObjects.cropPercent[i] -= 1.2;
           this.configObjects.mole[i].crop = this.crop(
             this.configObjects.cropPercent[i]
           ).crop;
@@ -221,7 +225,7 @@ export default {
           this.configObjects.status[i] = "hold";
           window.setTimeout(() => {
             this.configObjects.status[i] = "up";
-            //this.destory(i);
+            this.destory(i);
           }, 1000);
         }
       }
@@ -253,7 +257,7 @@ export default {
           width: this.images.mole.width,
           height: this.images.mole.height * 0.01 * cropPercent,
         },
-        height: this.gameWidth * 0.001 * cropPercent,
+        height: this.gameWidth * 0.0016 * cropPercent,
       };
     },
     destory(i) {
