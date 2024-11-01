@@ -59,6 +59,9 @@ export default {
       configBG: {},
       configObjects: {
         position: [],
+        status: [],
+        cropPercent: [],
+        burrow: [],
         board: [],
         option: [],
         mole: [],
@@ -83,7 +86,9 @@ export default {
     this.initializeOption();
   },
 
-  mounted() {},
+  mounted() {
+    this.game = window.setInterval(this.update, 20);
+  },
 
   methods: {
     initializeScene() {
@@ -124,11 +129,16 @@ export default {
       };
     },
     spawnMole() {
+      let id = this.configObjects.position.length;
       let position = {
         x: this.gameWidth * 0.1,
         y: this.gameWidth * 0.1,
       };
       this.configObjects.position.push(position);
+      this.configObjects.status.push("burrow");
+
+      let cropPercent = 25;
+      this.configObjects.cropPercent.push(cropPercent);
 
       let board = {
         visible: false,
@@ -141,18 +151,13 @@ export default {
       this.configObjects.board.push(board);
 
       let mole = {
-        crop: {
-          x: 0,
-          y: 0,
-          width: this.images.mole.width,
-          height: this.images.mole.height * 0.25,
-        },
         x: position.x,
         y: canvasTools.offset(position, this.moleOffset).y,
         width: this.gameWidth * 0.1,
-        height: this.gameWidth * 0.025,
+        height: this.gameWidth * 0.001 * cropPercent,
         image: this.images.mole,
       };
+      mole.crop = this.crop(cropPercent).crop;
       this.configObjects.mole.push(mole);
 
       let hole = {
@@ -163,10 +168,95 @@ export default {
         image: this.images.hole,
       };
       this.configObjects.hole.push(hole);
+      this.configObjects.burrow.push(
+        window.setInterval(this.burrowAnimation, 200, id)
+      );
     },
     initializeOption() {
       this.allOptions = this.GameData.True.concat(this.GameData.False);
       this.trueOptions = this.GameData.True;
+    },
+    update() {
+      for (let i = 0; i < this.configObjects.position.length; ++i) {
+        this.moleAnimation(i);
+      }
+    },
+    moleAnimation(i) {
+      if (this.configObjects.status[i] == "up") {
+        this.configObjects.mole[i].y--;
+        if (this.configObjects.cropPercent[i] < 100) {
+          this.configObjects.cropPercent[i] += 1.5;
+          this.configObjects.mole[i].crop = this.crop(
+            this.configObjects.cropPercent[i]
+          ).crop;
+          this.configObjects.mole[i].height = this.crop(
+            this.configObjects.cropPercent[i]
+          ).height;
+        }
+        if (this.configObjects.mole[i].y < this.configObjects.position[i].y) {
+          this.configObjects.board[i].visible = true;
+          this.configObjects.status[i] = "hold";
+          window.setTimeout(() => {
+            this.configObjects.board[i].visible = false;
+            this.configObjects.status[i] = "down";
+          }, 2000);
+        }
+      } else if (this.configObjects.status[i] == "down") {
+        this.configObjects.mole[i].y++;
+        if (this.configObjects.cropPercent[i] > 0) {
+          this.configObjects.cropPercent[i] -= 1.5;
+          this.configObjects.mole[i].crop = this.crop(
+            this.configObjects.cropPercent[i]
+          ).crop;
+          this.configObjects.mole[i].height = this.crop(
+            this.configObjects.cropPercent[i]
+          ).height;
+        }
+        if (
+          this.configObjects.mole[i].y >
+          canvasTools.offset(this.configObjects.position[i], this.moleOffset).y
+        ) {
+          this.configObjects.status[i] = "hold";
+          window.setTimeout(() => {
+            this.destory(i);
+          }, 1000);
+        }
+      }
+    },
+    burrowAnimation(id) {
+      if (this.configObjects.hole[id].image == this.images.hole) {
+        this.configObjects.hole[id].image = this.images.holeup;
+      } else if (this.configObjects.hole[id].image == this.images.holeup) {
+        this.configObjects.hole[id].image = this.images.hole;
+        switch (this.configObjects.status[id]) {
+          case "burrow":
+            this.configObjects.status[id] = "burrowOnce";
+            break;
+          case "burrowOnce":
+            this.configObjects.status[id] = "burrowTwice";
+            break;
+          case "burrowTwice":
+            this.configObjects.status[id] = "up";
+            window.clearInterval(this.configObjects.burrow[id]);
+            break;
+        }
+      }
+    },
+    crop(cropPercent) {
+      return {
+        crop: {
+          x: 0,
+          y: 0,
+          width: this.images.mole.width,
+          height: this.images.mole.height * 0.01 * cropPercent,
+        },
+        height: this.gameWidth * 0.001 * cropPercent,
+      };
+    },
+    destory(i) {
+      for (let object in this.configObjects) {
+        this.configObjects[object].splice(i, 1);
+      }
     },
 
     answer(option) {
