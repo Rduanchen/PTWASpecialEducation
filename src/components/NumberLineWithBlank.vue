@@ -3,19 +3,65 @@
     <v-stage :config="configKonva">
       <v-layer>
         <v-line v-for="line in configNumberLine" :config="line"></v-line>
-        <v-circle v-for="circle in configCircle" :config="circle"></v-circle>
+        <!-- <v-circle v-for="circle in configCircle" :config="circle"></v-circle> -->
         <v-text v-for="number in configNumber" :config="number"></v-text>
+        <v-rect
+          v-for="(rect, id) in configRect"
+          :config="{
+            x: rect.x,
+            y: rect.y,
+            width: rect.width,
+            height: rect.height,
+            fill: rect.fill,
+            cornerRadius: rect.conerRadius,
+            stroke: this.rectClickedList[id] ? 'blue' : 'black',
+            strokeWidth: this.rectClickedList[id] ? 3 : 1,
+          }"
+          @click="rectClicked(id)"
+          @touchstart="rectClicked(id)"
+        ></v-rect>
       </v-layer>
     </v-stage>
+    <div
+      class="virtualNumpad-modal"
+      v-if="virtualNumpadSwitch"
+      @click="this.virtualNumpadSwitch = false"
+      @touchstart="this.virtualNumpadSwitch = false"
+    >
+      <div class="modal__body" @click.stop @touchstart.stop>
+        <p>請輸入數字</p>
+        <VirtualNumpad @submit="updateRactNumber"></VirtualNumpad>
+        <button
+          @click="this.virtualNumpadSwitch = false"
+          @touchstart="this.virtualNumpadSwitch = false"
+          class="button__close-modal"
+        >
+          關閉視窗
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
 import { defineAsyncComponent } from "vue";
-
 export default {
-  components: {},
+  components: {
+    VirtualNumpad: defineAsyncComponent(() =>
+      import("@/components/VirtualNumPad.vue")
+    ),
+  },
+  props: {
+    Data: {
+      type: Object,
+      required: true,
+    },
+    ID: {
+      type: String,
+      required: true,
+    },
+  },
   data() {
     return {
       configKonva: {},
@@ -32,20 +78,19 @@ export default {
       configNumber: [],
       numberX: [],
 
+      virtualNumpadSwitch: false,
+
+      configRect: [],
+      isClickRectID: undefined,
+      rectClickedList: [],
+      rectPadding: 5,
+
+      blankContent: [],
+
       startNum: 0,
       endNum: 300,
 
       isImage: true,
-
-      config: {
-        spacing: 50,
-        max: 300,
-        min: 0,
-        init_pos: 0,
-        blank_pos: {
-          200: 1,
-        },
-      },
     };
   },
 
@@ -55,6 +100,10 @@ export default {
   mounted() {
     this.initializeScene();
     this.initializeNumberLine();
+    window.addEventListener("resize", () => {
+      this.initializeScene();
+      this.initializeNumberLine();
+    });
   },
   methods: {
     initializeScene() {
@@ -101,13 +150,9 @@ export default {
     drawNumberLine() {
       this.intervalLength =
         (this.gameWidth * 0.9) /
-        ((this.config.max - this.config.min) / this.config.spacing + 1);
+        ((this.Data.max - this.Data.min) / this.Data.spacing + 1);
       let tempX = this.gameWidth * 0.05 + this.intervalLength * 0.5;
-      for (
-        let i = this.config.min;
-        i <= this.config.max;
-        i += this.config.spacing
-      ) {
+      for (let i = this.Data.min; i <= this.Data.max; i += this.Data.spacing) {
         let line = {};
         line.stroke = "black";
         line.points = [
@@ -123,10 +168,12 @@ export default {
     },
     drawNumbers() {
       this.numberY = this.gameWidth * 0.175;
+      let rectID = 0;
+      let numberID = 0;
       for (
-        let i = this.config.min, j = 0;
-        i <= this.config.max;
-        i += this.config.spacing, ++j
+        let i = this.Data.min, j = 0;
+        i <= this.Data.max;
+        i += this.Data.spacing, ++j
       ) {
         let number = {};
         let offset;
@@ -136,14 +183,26 @@ export default {
           offset =
             Math.ceil(Math.log(i + 1) / Math.log(10)) * this.gameWidth * 0.0085;
 
-        if (this.config.blank_pos[i]) {
-          number.text = this.config.blank_pos[i];
-          this.configCircle.push({
-            x: this.numberX[j],
-            y: this.numberY,
-            radius: this.gameWidth * 0.01,
-            fill: "black",
-          });
+        if (this.Data.blank_pos.find((element) => element == i)) {
+          this.rectClickedList.push(false);
+          let rect = {};
+          rect.x = this.numberX[j] - offset - this.rectPadding; //Magic Number Inside
+          rect.y = this.numberY - this.rectPadding; //Magic Number Inside
+          rect.width =
+            this.gameWidth *
+              0.02 *
+              (Math.floor(Math.log10(Math.abs(this.Data.max))) + 1) + // Calculate the number of digits
+            this.rectPadding; //Magic Number Inside
+          rect.height = this.gameWidth * 0.03 + this.rectPadding; //Magic Number Inside
+          rect.fill = "rgba(255, 255, 255, 0)";
+          rect.conerRadius = 15;
+          rect.textID = numberID;
+
+          this.configRect.push(rect);
+          number.text = "";
+          this.blankContent.push("");
+
+          rectID++;
         } else {
           number.text = i;
         }
@@ -151,8 +210,72 @@ export default {
         number.x = this.numberX[j] - offset;
         number.y = this.numberY;
         this.configNumber.push(number);
+        numberID++;
       }
+    },
+    rectClicked(id) {
+      this.isClickRectID = id;
+      this.rectDeselcted();
+      this.rectClickedList[id] = true;
+      this.virtualNumpadSwitch = true;
+    },
+    rectDeselcted() {
+      for (let i in this.rectClickedList) {
+        this.rectClickedList[i] = false;
+      }
+    },
+    updateRactNumber(num) {
+      if (this.isClickRectID == undefined) return;
+      this.configNumber[this.configRect[this.isClickRectID].textID].text = num;
+      this.blankContent[this.isClickRectID] = num;
+      this.virtualNumpadSwitch = false;
+      this.checkAnswer();
+    },
+    checkAnswer() {
+      let isCorrect = true;
+      for (let i in this.blankContent) {
+        if (this.blankContent[i] == "") return false;
+        if (this.blankContent[i] != this.Data.blank_pos[i]) return false;
+      }
+      isCorrect == true
+        ? this.$emit("ReplyAnswer", true)
+        : this.$emit("ReplyAnswer", false);
     },
   },
 };
 </script>
+<style scoped lang="scss">
+.gameContainer {
+  width: 100%;
+  height: 100%;
+}
+.virtualNumpad-modal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: $gap--small;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  .modal__body {
+    display: flex;
+    flex-direction: column;
+    gap: $gap--small;
+    width: 50%;
+    background-color: white;
+    padding: $gap--small;
+    border-radius: $border-radius;
+    .button__close-modal {
+      @extend .button--animation;
+      width: 100%;
+      background-color: $error-color;
+      min-height: 40px;
+    }
+  }
+}
+</style>
