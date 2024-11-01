@@ -46,7 +46,6 @@
 import { getSystemAssets } from "@/utilitys/get_assets.js";
 import * as canvasTools from "@/utilitys/canvasTools.js";
 import { defineAsyncComponent } from "vue";
-import { position } from "html2canvas/dist/types/css/property-descriptors/position";
 
 export default {
   components: {
@@ -137,7 +136,7 @@ export default {
     },
     spawnMole() {
       let id = this.configObjects.position.length;
-      let position = canvasTools.randomPosition(this.boundaries);
+      let position = this.positionWithoutOverlap();
       this.configObjects.position.push(position);
       this.configObjects.status.push("burrow");
 
@@ -175,6 +174,24 @@ export default {
       window.setTimeout(this.burrowAnimation, 200, id);
       let nextSpawn = Math.random() * 2000 + 1000;
       window.setTimeout(this.spawnMole, nextSpawn);
+    },
+    positionWithoutOverlap() {
+      do {
+        var overlap = false;
+        var position = canvasTools.randomPosition(this.boundaries);
+        for (
+          let i = this.startId;
+          i < this.configObjects.position.length;
+          ++i
+        ) {
+          if (
+            canvasTools.distance(position, this.configObjects.hole[i]) <
+            this.gameWidth * 0.2
+          )
+            overlap = true;
+        }
+      } while (overlap);
+      return position;
     },
 
     initializeOption() {
