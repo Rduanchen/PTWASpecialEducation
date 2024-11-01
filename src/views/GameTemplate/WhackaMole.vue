@@ -96,12 +96,11 @@ export default {
         document.getElementById("GameContainer").clientWidth * 0.8;
       this.configKonva.width = this.gameWidth;
       this.configKonva.height = this.gameWidth / 2;
-      this.setImages();
+      this.setAttributes();
       this.drawBG();
-      this.setOffsets();
       this.spawnMole();
     },
-    setImages() {
+    setAttributes() {
       this.images.bg = new window.Image();
       this.images.bg.src = getSystemAssets("background.png", "whackAMole");
       this.images.board = new window.Image();
@@ -112,13 +111,7 @@ export default {
       this.images.holeup.src = getSystemAssets("holeup.png", "whackAMole");
       this.images.mole = new window.Image();
       this.images.mole.src = getSystemAssets("mole.png", "whackAMole");
-    },
-    drawBG() {
-      this.configBG.image = this.images.bg;
-      this.configBG.width = this.gameWidth;
-      this.configBG.height = this.gameWidth;
-    },
-    setOffsets() {
+
       this.boardOffset = {
         x: 0,
         y: -this.gameWidth * 0.04,
@@ -127,13 +120,22 @@ export default {
         x: 0,
         y: this.gameWidth * 0.05,
       };
+
+      this.boundaries = {
+        up: this.gameWidth * 0.05,
+        down: this.gameWidth * 0.39,
+        left: this.gameWidth * 0.01,
+        right: this.gameWidth * 0.89,
+      };
+    },
+    drawBG() {
+      this.configBG.image = this.images.bg;
+      this.configBG.width = this.gameWidth;
+      this.configBG.height = this.gameWidth;
     },
     spawnMole() {
       let id = this.configObjects.position.length;
-      let position = {
-        x: this.gameWidth * 0.1,
-        y: this.gameWidth * 0.1,
-      };
+      let position = canvasTools.randomPosition(this.boundaries);
       this.configObjects.position.push(position);
       this.configObjects.status.push("burrow");
 
@@ -218,7 +220,8 @@ export default {
         ) {
           this.configObjects.status[i] = "hold";
           window.setTimeout(() => {
-            this.destory(i);
+            this.configObjects.status[i] = "up";
+            //this.destory(i);
           }, 1000);
         }
       }
