@@ -6,29 +6,6 @@
         <v-image :config="configBG"></v-image>
       </v-layer>
 
-      <!--TO BE REPLACED-->
-      <v-layer>
-        <mole
-          v-for="i in map"
-          :X="i[1]"
-          :Y="i[2]"
-          :width="configKonva.width"
-          :moleId="i[0]"
-          :option="i[3]"
-          @showSign="giveOption"
-          @whacked="answer"
-        ></mole>
-      </v-layer>
-      <v-layer>
-        <hole
-          v-for="i in map"
-          :X="i[1]"
-          :Y="i[2]"
-          :width="configKonva.width"
-        ></hole>
-      </v-layer>
-      <!--TO BE REPLACED-->
-
       <v-layer>
         <v-image v-for="board in configObjects.board" :config="board"></v-image>
         <v-text
@@ -53,11 +30,6 @@ import * as canvasTools from "@/utilitys/canvasTools.js";
 import { defineAsyncComponent } from "vue";
 
 export default {
-  components: {
-    //TO BE REPLACED
-    hole: defineAsyncComponent(() => import("@/components/moleHole.vue")),
-    mole: defineAsyncComponent(() => import("@/components/mole.vue")),
-  },
   data() {
     return {
       configKonva: {},
