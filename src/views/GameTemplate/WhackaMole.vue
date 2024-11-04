@@ -35,7 +35,12 @@
           v-for="option in configObjects.option"
           :config="option"
         ></v-text>
-        <v-image v-for="mole in configObjects.mole" :config="mole"></v-image>
+        <v-image
+          v-for="mole in configObjects.mole"
+          :config="mole"
+          @click="whacked"
+          @touch="whacked"
+        ></v-image>
         <v-image v-for="hole in configObjects.hole" :config="hole"></v-image>
       </v-layer>
     </v-stage>
@@ -67,6 +72,7 @@ export default {
         hole: [],
       },
       images: {},
+      offsets: {},
 
       startId: 0,
     };
@@ -112,14 +118,23 @@ export default {
       this.images.holeup.src = getSystemAssets("holeup.png", "whackAMole");
       this.images.mole = new window.Image();
       this.images.mole.src = getSystemAssets("mole.png", "whackAMole");
+      this.images.moleWhacked = new window.Image();
+      this.images.moleWhacked.src = getSystemAssets(
+        "moleWhacked.png",
+        "whackAMole"
+      );
 
-      this.boardOffset = {
+      this.offsets.board = {
         x: 0,
         y: -this.gameWidth * 0.064,
       };
-      this.moleOffset = {
+      this.offsets.mole = {
         x: 0,
         y: this.gameWidth * 0.08,
+      };
+      this.offsets.hole = {
+        x: 0,
+        y: this.gameWidth * 0.07,
       };
 
       this.boundaries = {
@@ -146,7 +161,7 @@ export default {
       let board = {
         visible: false,
         x: position.x,
-        y: canvasTools.offset(position, this.boardOffset).y,
+        y: canvasTools.offset(position, this.offsets.board).y,
         width: this.gameWidth * 0.16,
         height: this.gameWidth * 0.08,
         image: this.images.board,
@@ -154,8 +169,9 @@ export default {
       this.configObjects.board.push(board);
 
       let mole = {
+        id: id.toString(),
         x: position.x,
-        y: canvasTools.offset(position, this.moleOffset).y,
+        y: canvasTools.offset(position, this.offsets.mole).y,
         width: this.gameWidth * 0.16,
         height: this.gameWidth * 0.0016 * cropPercent,
         image: this.images.mole,
@@ -165,7 +181,7 @@ export default {
 
       let hole = {
         x: position.x,
-        y: position.y,
+        y: canvasTools.offset(position, this.offsets.hole).y,
         width: this.gameWidth * 0.16,
         height: this.gameWidth * 0.16,
         image: this.images.hole,
@@ -185,7 +201,7 @@ export default {
           ++i
         ) {
           if (
-            canvasTools.distance(position, this.configObjects.hole[i]) <
+            canvasTools.distance(position, this.configObjects.position[i]) <
             this.gameWidth * 0.2
           )
             overlap = true;
@@ -203,45 +219,45 @@ export default {
         this.moleAnimation(i);
       }
     },
-    moleAnimation(i) {
-      if (this.configObjects.status[i] == "up") {
-        this.configObjects.mole[i].y--;
-        if (this.configObjects.cropPercent[i] < 100) {
-          this.configObjects.cropPercent[i] += 1.2;
-          this.configObjects.mole[i].crop = this.crop(
-            this.configObjects.cropPercent[i]
+    moleAnimation(id) {
+      if (this.configObjects.status[id] == "up") {
+        this.configObjects.mole[id].y--;
+        if (this.configObjects.cropPercent[id] < 100) {
+          this.configObjects.cropPercent[id] += 1.2;
+          this.configObjects.mole[id].crop = this.crop(
+            this.configObjects.cropPercent[id]
           ).crop;
-          this.configObjects.mole[i].height = this.crop(
-            this.configObjects.cropPercent[i]
+          this.configObjects.mole[id].height = this.crop(
+            this.configObjects.cropPercent[id]
           ).height;
         }
-        if (this.configObjects.mole[i].y < this.configObjects.position[i].y) {
-          this.configObjects.board[i].visible = true;
-          this.configObjects.status[i] = "hold";
+        if (this.configObjects.mole[id].y < this.configObjects.position[id].y) {
+          this.configObjects.board[id].visible = true;
+          this.configObjects.status[id] = "hold";
           window.setTimeout(() => {
-            this.configObjects.board[i].visible = false;
-            this.configObjects.status[i] = "down";
+            this.configObjects.board[id].visible = false;
+            this.configObjects.status[id] = "down";
           }, 2000);
         }
-      } else if (this.configObjects.status[i] == "down") {
-        this.configObjects.mole[i].y++;
-        if (this.configObjects.cropPercent[i] > 0) {
-          this.configObjects.cropPercent[i] -= 1.2;
-          this.configObjects.mole[i].crop = this.crop(
-            this.configObjects.cropPercent[i]
+      } else if (this.configObjects.status[id] == "down") {
+        this.configObjects.mole[id].y++;
+        if (this.configObjects.cropPercent[id] > 0) {
+          this.configObjects.cropPercent[id] -= 1.2;
+          this.configObjects.mole[id].crop = this.crop(
+            this.configObjects.cropPercent[id]
           ).crop;
-          this.configObjects.mole[i].height = this.crop(
-            this.configObjects.cropPercent[i]
+          this.configObjects.mole[id].height = this.crop(
+            this.configObjects.cropPercent[id]
           ).height;
         }
         if (
-          this.configObjects.mole[i].y >
-          canvasTools.offset(this.configObjects.position[i], this.moleOffset).y
+          this.configObjects.mole[id].y >
+          canvasTools.offset(this.configObjects.position[id], this.offsets.mole)
+            .y
         ) {
-          this.configObjects.status[i] = "hold";
+          this.configObjects.status[id] = "hold";
           window.setTimeout(() => {
-            this.configObjects.status[i] = "up";
-            this.destory(i);
+            this.destory(id);
           }, 1000);
         }
       }
@@ -249,9 +265,14 @@ export default {
     burrowAnimation(id) {
       if (this.configObjects.hole[id].image == this.images.hole) {
         this.configObjects.hole[id].image = this.images.holeup;
+        this.configObjects.hole[id].y = this.configObjects.position[id].y;
         window.setTimeout(this.burrowAnimation, 200, id);
       } else if (this.configObjects.hole[id].image == this.images.holeup) {
         this.configObjects.hole[id].image = this.images.hole;
+        this.configObjects.hole[id].y = canvasTools.offset(
+          this.configObjects.position[id],
+          this.offsets.hole
+        ).y;
         switch (this.configObjects.status[id]) {
           case "burrow":
             this.configObjects.status[id] = "burrowOnce";
@@ -283,6 +304,19 @@ export default {
         this.configObjects[object][i] = null;
       }
       this.startId++;
+    },
+    whacked(e) {
+      let id = e.target.attrs.id;
+      console.log(this.configObjects.status[id]);
+      if (this.configObjects.mole[id].image == this.images.mole) {
+        this.configObjects.status[id] = "hold";
+        this.configObjects.mole[id].image = this.images.moleWhacked;
+        window.setTimeout(() => {
+          this.configObjects.mole[id].image = this.images.mole;
+          this.configObjects.status[id] = "down";
+          this.configObjects.board[id].visible = false;
+        }, 500);
+      }
     },
 
     answer(option) {

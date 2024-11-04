@@ -22,7 +22,7 @@ export default {
     return {
       configFraction: {
         verifyOption: "answer",
-        shape: "circle",
+        shape: "rect",
       },
       id: "MA3029",
     };
