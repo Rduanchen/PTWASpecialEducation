@@ -303,7 +303,10 @@ export default {
       for (let object in this.configObjects) {
         this.configObjects[object][i] = null;
       }
-      this.startId++;
+      for (let i = this.startId; i < this.configObjects.position.length; ++i) {
+        this.startId = i;
+        if (this.configObjects.position[i] != null) break;
+      }
     },
     whacked(e) {
       let id = e.target.attrs.id;
