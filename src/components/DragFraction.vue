@@ -155,13 +155,10 @@ export default {
       this.configSideBar.width = this.gameWidth * 0.25;
       this.configSideBar.height = this.gameHeight;
       this.configSideBar.x = this.gameWidth * 0.75;
-      this.numeratorSnapTo.x = this.gameWidth * 0.875;
-      this.numeratorSnapTo.y = this.gameHeight * 0.2;
-      this.denominatorSnapTo.x = this.gameWidth * 0.875;
-      this.denominatorSnapTo.y = this.gameHeight * 0.7;
+      this.setSnapTo();
+
       if (this.Data.shape == "circle") {
-        this.drawCircleNumerator();
-        this.drawCircleDenominator();
+        this.drawCircles();
       } else if (this.Data.shape == "rect") {
         this.drawRectNumerator();
         //this.drawRectDenominator();
@@ -170,6 +167,16 @@ export default {
       this.drawArrow();
       this.drawNumber();
       this.drawBoundaries();
+    },
+    setSnapTo() {
+      this.numeratorSnapTo.x = this.gameWidth * 0.875;
+      this.numeratorSnapTo.y = this.gameHeight * 0.2;
+      this.denominatorSnapTo.x = this.gameWidth * 0.875;
+      this.denominatorSnapTo.y = this.gameHeight * 0.7;
+    },
+    drawCircles() {
+      this.drawCircleNumerator();
+      this.drawCircleDenominator();
     },
     circleUpdate() {
       this.configCircleNumerator.endRadians = this.circleAnimation(
@@ -212,7 +219,7 @@ export default {
         fill: "white",
         stroke: "white",
         draggable: true,
-        name: this.fill.length,
+        name: this.fill.length.toString(),
       };
       let circle = {
         visible: false,
@@ -225,7 +232,7 @@ export default {
         stroke: "#4C5B3A",
         sceneFunc: this.circleSceneFunc,
         draggable: true,
-        name: this.fill.length,
+        name: this.fill.length.toString(),
       };
       this.configCircleDenominator.frame.push(frame);
       this.configCircleDenominator.circle.push(circle);
@@ -316,7 +323,7 @@ export default {
         fill: "white",
         stroke: "white",
         draggable: true,
-        name: this.fill.length,
+        name: this.fill.length.toString(),
       };
       let circle = {
         visible: false,
@@ -329,7 +336,7 @@ export default {
         stroke: "#4C5B3A",
         sceneFunc: this.circleSceneFunc,
         draggable: true,
-        name: this.fill.length,
+        name: this.fill.length.toString(),
       };
       this.configCircleDenominator.frame.push(frame);
       this.configCircleDenominator.circle.push(circle);
