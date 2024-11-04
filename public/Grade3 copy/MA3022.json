@@ -135,7 +135,7 @@
             "Datas": [
                 [
                     {
-                        "Name" : "MoneyGenerator",
+                        "Name" : "Generator",
                         "Data": {
                             "Thousands": 10,
                             "FiveHundreds": 1,
