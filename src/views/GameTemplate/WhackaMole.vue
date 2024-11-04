@@ -128,6 +128,10 @@ export default {
         x: 0,
         y: -this.gameWidth * 0.064,
       };
+      this.offsets.option = {
+        x: this.gameWidth * 0.04,
+        y: -this.gameWidth * 0.04,
+      };
       this.offsets.mole = {
         x: 0,
         y: this.gameWidth * 0.08,
@@ -167,6 +171,14 @@ export default {
         image: this.images.board,
       };
       this.configObjects.board.push(board);
+
+      let option = {
+        visible: false,
+        x: canvasTools.offset(position, this.offsets.option).x,
+        y: canvasTools.offset(position, this.offsets.option).y,
+        fontSize: this.gameWidth * 0.04,
+      };
+      this.configObjects.option.push(option);
 
       let mole = {
         id: id.toString(),
@@ -233,9 +245,12 @@ export default {
         }
         if (this.configObjects.mole[id].y < this.configObjects.position[id].y) {
           this.configObjects.board[id].visible = true;
+          this.configObjects.option[id].visible = true;
+          this.configObjects.option[id].text = this.getOption();
           this.configObjects.status[id] = "hold";
           window.setTimeout(() => {
             this.configObjects.board[id].visible = false;
+            this.configObjects.option[id].visible = false;
             this.configObjects.status[id] = "down";
           }, 2000);
         }
@@ -310,7 +325,7 @@ export default {
     },
     whacked(e) {
       let id = e.target.attrs.id;
-      console.log(this.configObjects.status[id]);
+      this.checkAnswer(id);
       if (this.configObjects.mole[id].image == this.images.mole) {
         this.configObjects.status[id] = "hold";
         this.configObjects.mole[id].image = this.images.moleWhacked;
@@ -318,30 +333,53 @@ export default {
           this.configObjects.mole[id].image = this.images.mole;
           this.configObjects.status[id] = "down";
           this.configObjects.board[id].visible = false;
+          this.configObjects.option[id].visible = false;
         }, 500);
       }
     },
-
-    answer(option) {
-      var ans = false;
-      for (let i in this.GameData.True) {
-        if (option == this.GameData.True[i]) {
-          this.true = this.true.filter(
-            (option) => option != this.GameData.True[i]
-          );
-          ans = true;
-          this.$emit("add-record", [this.GameData.True[i], option, "正確"]);
-          break;
-        }
+    getOption() {
+      return this.allOptions[
+        Math.floor(Math.random() * this.allOptions.length)
+      ];
+    },
+    checkAnswer(id) {
+      let isCorrect = false;
+      for (let answer in this.GameData.True) {
+        if (this.GameData.True[answer] == this.configObjects.option[id].text)
+          isCorrect = true;
       }
-      if (ans) {
+      if (isCorrect) {
         this.$emit("play-effect", "CorrectSound");
-        this.ansLeft--;
-        if (this.ansLeft <= 0) this.$emit("next-question");
+        this.$emit("add-record", [
+          this.printCorrectAnswers(),
+          this.configObjects.option[id].text,
+          "正確",
+        ]);
+        this.allOptions = this.allOptions.filter(
+          (option) => option != this.configObjects.option[id].text
+        );
+        this.trueOptions = this.trueOptions.filter(
+          (option) => option != this.configObjects.option[id].text
+        );
+      } else if (this.configObjects.option[id].text == null) {
+        this.$emit("play-effect", "WrongSound");
+        this.$emit("add-record", [
+          this.printCorrectAnswers(),
+          "未展示答案",
+          "錯誤",
+        ]);
       } else {
         this.$emit("play-effect", "WrongSound");
-        this.$emit("add-record", ["#", option, "錯誤"]);
+        this.$emit("add-record", [
+          this.printCorrectAnswers(),
+          this.configObjects.option[id].text,
+          "錯誤",
+        ]);
       }
+      if (this.trueOptions.length == 0) this.$emit("next-question");
+    },
+    printCorrectAnswers() {
+      return this.GameData.Question.concat(":", this.GameData.True.join("/"));
     },
   },
 };
