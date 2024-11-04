@@ -8,9 +8,18 @@
             <h4 v-else>無介紹文字</h4>
         </div>
         <div class="buttons">
-            <button class="btn btn-primary" v-on:click="StartGame();MakeReadText('','',stop=true)">開始遊戲</button>
-            <button class="btn btn-primary" v-on:click="MakeReadText(GameName,ShowContent)">朗讀</button>
-            <button class="btn btn-primary" @click="openTeachingMediaModal">教學影片</button>
+            <button class="btn btn-primary" v-on:click="StartGame();MakeReadText('','',stop=true)">
+                <img src="@/assets/images/game_images/start-game.png">
+                開始遊戲
+            </button>
+            <button class="btn btn-primary" v-on:click="MakeReadText(GameName,ShowContent)"><img src="">
+                <img src="@/assets/images/game_images/read-aloud.png">
+                朗讀
+            </button>
+            <button class="btn btn-primary" @click="openTeachingMediaModal">
+                <img src="@/assets/images/game_images/tutorial-video.png">
+                教學影片
+            </button>
         </div>
         
     </div>
@@ -131,8 +140,15 @@ export default {
                 height: 4rem;
                 font-size: x-large;
                 border-radius: 1rem;
+                padding: 0.2rem;
             }
         }
     }
+}
+
+.buttons img {
+    height: 80%;
+    max-width: 40px;
+    max-height: 40px;
 }
 </style>
