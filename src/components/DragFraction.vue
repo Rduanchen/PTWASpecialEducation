@@ -353,6 +353,7 @@ export default {
         name: this.fill.length.toString(),
       };
       let circle = {
+        strokeEnabled: false,
         visible: false,
         radius: this.circleRadius,
         startRadians: 0,
@@ -360,7 +361,6 @@ export default {
         x: this.denominatorSnapTo.x,
         y: this.denominatorSnapTo.y,
         fill: "#4C5B3A",
-        stroke: "#4C5B3A",
         sceneFunc: this.circleSceneFunc,
         draggable: true,
         name: this.fill.length.toString(),
@@ -524,13 +524,13 @@ export default {
         name: this.fill.length.toString(),
       };
       let rect = {
+        strokeEnabled: false,
         visible: false,
         width: 0,
         height: this.rectAttr.height,
         x: this.denominatorSnapTo.x,
         y: this.denominatorSnapTo.y,
         fill: "#4C5B3A",
-        stroke: "#4C5B3A",
         draggable: true,
         name: this.fill.length.toString(),
       };
