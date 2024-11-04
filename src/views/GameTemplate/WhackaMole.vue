@@ -212,6 +212,7 @@ export default {
           i < this.configObjects.position.length;
           ++i
         ) {
+          if (this.configObjects.position[i] == null) continue;
           if (
             canvasTools.distance(position, this.configObjects.position[i]) <
             this.gameWidth * 0.2
