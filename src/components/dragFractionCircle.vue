@@ -1,4 +1,12 @@
 <template>
+  <bin
+    :config="configBin"
+    @getBinPos="
+      (e) => {
+        this.binPosition = e;
+      }
+    "
+  ></bin>
   <v-circle
     v-for="frame in configDenominator.frame"
     :config="frame"
@@ -21,7 +29,9 @@ import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
 import * as canvasTools from "@/utilitys/canvasTools.js";
 import { defineAsyncComponent } from "vue";
 export default {
-  components: {},
+  components: {
+    bin: defineAsyncComponent(() => import("@/components/interactiveBin.vue")),
+  },
   data() {
     return {
       numeratorSnapTo: {},
@@ -37,6 +47,10 @@ export default {
         circle: [],
         slice: [],
       },
+      configBin: {
+        open: false,
+      },
+      binPosition: {},
 
       fill: [],
     };
@@ -72,6 +86,7 @@ export default {
     initialize() {
       this.drawNumerator();
       this.drawDenominator();
+      this.drawBin();
     },
     update() {
       this.configNumerator.endRadians = this.animation(
@@ -131,12 +146,6 @@ export default {
         draggable: true,
         name: this.fill.length.toString(),
       };
-      this.configDenominator.frame.push(frame);
-      this.configDenominator.circle.push(circle);
-      this.configDenominator.slice.push(this.drawSlice());
-      this.fill.push(0);
-    },
-    drawSlice() {
       let slice = {
         radius: this.radius,
         stroke: "black",
@@ -145,7 +154,15 @@ export default {
         sceneFunc: this.sliceSceneFunc,
         slices: this.denominator,
       };
-      return slice;
+      this.configDenominator.frame.push(frame);
+      this.configDenominator.circle.push(circle);
+      this.configDenominator.slice.push(slice);
+      this.fill.push(0);
+    },
+    drawBin() {
+      this.configBin.x = this.gameWidth * 0.01;
+      this.configBin.y = this.gameHeight * 0.8;
+      this.configBin.width = this.gameWidth * 0.15;
     },
     circleSceneFunc(context, shape) {
       context.beginPath();
@@ -188,6 +205,15 @@ export default {
       this.configDenominator.circle[id].y = e.target.y();
       this.configDenominator.slice[id].x = e.target.x();
       this.configDenominator.slice[id].y = e.target.y();
+
+      if (
+        canvasTools.distance(e.target.position(), this.binPosition) <
+        this.gameWidth * 0.05
+      ) {
+        this.configBin.open = true;
+      } else {
+        this.configBin.open = false;
+      }
     },
     denominatorDragEnd(e) {
       let id = e.target.attrs.name;
@@ -201,9 +227,17 @@ export default {
           this.configDenominator.slice[id].y = this.denominatorSnapTo.y;
         }
       }
+      if (
+        canvasTools.distance(e.target.position(), this.binPosition) <
+        this.gameWidth * 0.05
+      ) {
+        this.configBin.open = false;
+        this.destory(id);
+      }
     },
     numeratorDragEnd(e) {
       for (let i = 0; i < this.fill.length; ++i) {
+        if (this.configDenominator.circle[i] == null) continue;
         if (this.configDenominator.circle[i].visible) {
           if (
             canvasTools.distance(
@@ -221,6 +255,13 @@ export default {
       }
       e.target.x(this.numeratorSnapTo.x);
       e.target.y(this.numeratorSnapTo.y);
+    },
+    destory(id) {
+      for (let object in this.configDenominator) {
+        this.configDenominator[object][id] = null;
+      }
+      this.fill[id] = 0;
+      this.$emit("addFill", this.fill);
     },
   },
 };
