@@ -90,8 +90,7 @@ export default {
 
   methods: {
     initializeScene() {
-      this.gameWidth =
-        document.getElementById("GameContainer").clientWidth * 0.5;
+      this.gameWidth = document.getElementById("GameContainer").clientWidth;
       this.gameHeight = this.gameWidth * 0.75;
       this.configKonva.width = this.gameWidth;
       this.configKonva.height = this.gameHeight;
