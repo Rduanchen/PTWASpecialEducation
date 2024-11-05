@@ -39,8 +39,7 @@ export default {
   },
 
   beforeUpdate() {
-    console.log(":3");
-    if (Math.floor(Math.random() * 1) == 0) {
+    if (Math.floor(Math.random() * 10) == 0) {
       this.cat = true;
     } else this.cat = false;
   },
