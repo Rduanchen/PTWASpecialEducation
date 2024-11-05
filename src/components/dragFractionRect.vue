@@ -1,22 +1,19 @@
 <template>
-  <v-layer>
-    <v-rect
-      v-for="frame in configDenominator.frame"
-      :config="frame"
-      @dragmove="denominatorDragMove"
-      @dragend="denominatorDragEnd"
-    ></v-rect>
-    <v-rect
-      v-for="rect in configDenominator.rect"
-      :config="rect"
-      @dragmove="denominatorDragMove"
-      @dragend="denominatorDragEnd"
-    ></v-rect>
-    <v-shape v-for="slice in configDenominator.slice" :config="slice"></v-shape>
-  </v-layer>
-  <v-layer>
-    <v-rect :config="configNumerator" @dragend="numeratorDragEnd"></v-rect>
-  </v-layer>
+  <v-rect
+    v-for="frame in configDenominator.frame"
+    :config="frame"
+    @dragmove="denominatorDragMove"
+    @dragend="denominatorDragEnd"
+  ></v-rect>
+  <v-rect
+    v-for="rect in configDenominator.rect"
+    :config="rect"
+    @dragmove="denominatorDragMove"
+    @dragend="denominatorDragEnd"
+  ></v-rect>
+  <v-shape v-for="slice in configDenominator.slice" :config="slice"></v-shape>
+
+  <v-rect :config="configNumerator" @dragend="numeratorDragEnd"></v-rect>
 </template>
 
 <script>
@@ -40,19 +37,22 @@ export default {
         rect: [],
         slice: [],
       },
+
+      fill: [],
     };
   },
 
-  props: ["fill", "gameWidth", "gameHeight", "numerator", "denominator"],
+  props: ["gameWidth", "gameHeight", "numerator", "denominator"],
 
   emits: ["addFill"],
 
   beforeMount() {
+    this.setAttributes();
     this.initialize();
   },
 
   mounted() {
-    window.setInterval(this.rectUpdate, 20);
+    window.setInterval(this.update, 20);
   },
 
   methods: {
@@ -69,7 +69,7 @@ export default {
       });
       this.denominatorSnapTo = canvasTools.corner({
         x: this.gameWidth * 0.875,
-        y: this.gameHeight * 0.2,
+        y: this.gameHeight * 0.7,
         width: this.rectAttr.width,
         height: this.rectAttr.height,
       });
@@ -89,7 +89,8 @@ export default {
         this.configNumerator.width,
         this.rectAttr.width / this.numerator
       );
-      for (let i = 0; i < this.fill.length; ++i) {
+      let i;
+      for (i = 0; i < this.fill.length; ++i) {
         if (this.fill[i] > 0) {
           this.configDenominator.rect[i].width = this.animation(
             this.configDenominator.rect[i].width,
@@ -97,6 +98,8 @@ export default {
           );
         }
       }
+      if (this.configDenominator.slice[i - 1].slices != this.denominator)
+        this.configDenominator.slice[i - 1].slices = this.denominator;
     },
     animation(currentWidth, targetWidth) {
       if (Math.abs(currentWidth - targetWidth) < 1) {
@@ -114,7 +117,7 @@ export default {
       this.configNumerator.x = this.numeratorSnapTo.x;
       this.configNumerator.y = this.numeratorSnapTo.y;
     },
-    drawRectDenominator() {
+    drawDenominator() {
       let frame = {
         width: this.rectAttr.width,
         height: this.rectAttr.height,
@@ -192,7 +195,7 @@ export default {
         }
       }
     },
-    addFill(position) {
+    numeratorDragEnd(e) {
       for (let i = 0; i < this.fill.length; ++i) {
         if (this.configDenominator.rect[i].visible) {
           let range = {
@@ -201,13 +204,18 @@ export default {
             left: this.configDenominator.rect[i].x,
             right: this.configDenominator.rect[i].x + this.rectAttr.width,
           };
-          if (canvasTools.isInBound(position, range)) {
+          if (
+            canvasTools.isInBound(canvasTools.center(e.target.attrs), range)
+          ) {
             if (this.fill[i] + 1 / this.numerator <= 1)
               this.fill[i] += 1 / this.numerator;
+            this.$emit("addFill", this.fill);
             break;
           }
         }
       }
+      e.target.x(this.numeratorSnapTo.x);
+      e.target.y(this.numeratorSnapTo.y);
     },
   },
 };

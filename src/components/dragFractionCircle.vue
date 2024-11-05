@@ -1,22 +1,19 @@
 <template>
-  <v-layer>
-    <v-circle
-      v-for="frame in configDenominator.frame"
-      :config="frame"
-      @dragmove="denominatorDragMove"
-      @dragend="denominatorDragEnd"
-    ></v-circle>
-    <v-shape
-      v-for="circle in configDenominator.circle"
-      :config="circle"
-      @dragmove="denominatorDragMove"
-      @dragend="denominatorDragEnd"
-    ></v-shape>
-    <v-shape v-for="slice in configDenominator.slice" :config="slice"></v-shape>
-  </v-layer>
-  <v-layer>
-    <v-shape :config="configNumerator" @dragend="numeratorDragEnd"></v-shape>
-  </v-layer>
+  <v-circle
+    v-for="frame in configDenominator.frame"
+    :config="frame"
+    @dragmove="denominatorDragMove"
+    @dragend="denominatorDragEnd"
+  ></v-circle>
+  <v-shape
+    v-for="circle in configDenominator.circle"
+    :config="circle"
+    @dragmove="denominatorDragMove"
+    @dragend="denominatorDragEnd"
+  ></v-shape>
+  <v-shape v-for="slice in configDenominator.slice" :config="slice"></v-shape>
+
+  <v-shape :config="configNumerator" @dragend="numeratorDragEnd"></v-shape>
 </template>
 
 <script>
@@ -40,14 +37,17 @@ export default {
         circle: [],
         slice: [],
       },
+
+      fill: [],
     };
   },
 
-  props: ["fill", "gameWidth", "gameHeight", "numerator", "denominator"],
+  props: ["gameWidth", "gameHeight", "numerator", "denominator"],
 
   emits: ["addFill"],
 
   beforeMount() {
+    this.setAttributes();
     this.initialize();
   },
 
@@ -78,7 +78,8 @@ export default {
         this.configNumerator.endRadians,
         (Math.PI * 2) / this.numerator
       );
-      for (let i = 0; i < this.fill.length; ++i) {
+      let i;
+      for (i = 0; i < this.fill.length; ++i) {
         if (this.fill[i] > 0) {
           this.configDenominator.circle[i].endRadians = this.animation(
             this.configDenominator.circle[i].endRadians,
@@ -86,6 +87,8 @@ export default {
           );
         }
       }
+      if (this.configDenominator.slice[i - 1].slices != this.denominator)
+        this.configDenominator.slice[i - 1].slices = this.denominator;
     },
     animation(currentRadians, targetRadians) {
       if (Math.abs(currentRadians - targetRadians) < 0.02) {
@@ -105,7 +108,7 @@ export default {
       this.configNumerator.endRadians = (Math.PI * 2) / this.numerator;
       this.configNumerator.sceneFunc = this.circleSceneFunc;
     },
-    drawCircleDenominator() {
+    drawDenominator() {
       let frame = {
         radius: this.radius,
         x: this.denominatorSnapTo.x,
@@ -199,19 +202,25 @@ export default {
         }
       }
     },
-    addFill(position) {
+    numeratorDragEnd(e) {
       for (let i = 0; i < this.fill.length; ++i) {
         if (this.configDenominator.circle[i].visible) {
           if (
-            canvasTools.distance(position, this.configDenominator.circle[i]) <=
-            this.radius
+            canvasTools.distance(
+              e.target.position(),
+              this.configDenominator.circle[i]
+            ) <= this.radius
           ) {
-            if (this.fill[i] + 1 / this.numerator <= 1)
+            if (this.fill[i] + 1 / this.numerator <= 1) {
               this.fill[i] += 1 / this.numerator;
+              this.$emit("addFill", this.fill);
+            }
             break;
           }
         }
       }
+      e.target.x(this.numeratorSnapTo.x);
+      e.target.y(this.numeratorSnapTo.y);
     },
   },
 };
