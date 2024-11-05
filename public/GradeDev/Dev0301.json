@@ -5,116 +5,24 @@
     "Questions": [
         [
             {
-                "Title": "拿出正確的錢幣",
+                "title": "拿出正確的錢幣",
+                "amount": 123,
                 "upperComponent": {
                     "Name": "ImageContainer",
-                    "Amount": 123,
                     "Data": {
                         "Src": "fan123.png",
                         "Alt": ""
                     }
                 },
-                "Items": [
-                    {
-                        "Name": "MoneyDisplay",
-                        "Data": {
-                            "denomination": 1
-                        }
-                    },
-                    {
-                        "Name": "MoneyDisplay",
-                        "Data": {
-                            "denomination": 5
-                        }
-                    },
-                    {
-                        "Name": "MoneyDisplay",
-                        "Data": {
-                            "denomination": 10
-                        }
-                    },
-                    {
-                        "Name": "MoneyDisplay",
-                        "Data": {
-                            "denomination": 50
-                        }
-                    },
-                    {
-                        "Name": "MoneyDisplay",
-                        "Data": {
-                            "denomination": 100
-                        }
-                    },
-                    {
-                        "Name": "MoneyDisplay",
-                        "Data": {
-                            "denomination": 500
-                        }
-                    },
-                    {
-                        "Name": "MoneyDisplay",
-                        "Data": {
-                            "denomination": 1000
-                        }
-                    }
-                ]
-            }
-        ],
-        [
-            {
-                "Title": "拿出正確的錢幣",
-                "upperComponent": {
-                    "Name": "ImageContainer",
-                    "Amount": 123,
-                    "Data": {
-                        "Src": "fan123.png",
-                        "Alt": ""
-                    }
-                },
-                "Items": [
-                    {
-                        "Name": "MoneyDisplay",
-                        "Data": {
-                            "denomination": 1
-                        }
-                    },
-                    {
-                        "Name": "MoneyDisplay",
-                        "Data": {
-                            "denomination": 5
-                        }
-                    },
-                    {
-                        "Name": "MoneyDisplay",
-                        "Data": {
-                            "denomination": 10
-                        }
-                    },
-                    {
-                        "Name": "MoneyDisplay",
-                        "Data": {
-                            "denomination": 50
-                        }
-                    },
-                    {
-                        "Name": "MoneyDisplay",
-                        "Data": {
-                            "denomination": 100
-                        }
-                    },
-                    {
-                        "Name": "MoneyDisplay",
-                        "Data": {
-                            "denomination": 500
-                        }
-                    },
-                    {
-                        "Name": "MoneyDisplay",
-                        "Data": {
-                            "denomination": 1000
-                        }
-                    }
-                ]
+                "Items": {
+                    "1": "true",
+                    "5": "true",
+                    "10": "true",
+                    "50": "true",
+                    "100": "true",
+                    "500": "true",
+                    "1000": "true"
+                }
             }
         ]
     ]

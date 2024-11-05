@@ -1,7 +1,7 @@
 <template>
     <div class="game">
         <div class="game__target-section">
-            <h1 class="game__title">{{ GameData.Title }}</h1>
+            <h1 class="game__title">{{ GameData.title }}</h1>
             <draggable
                 class="game__drop-area"
                 :list="answerList"
@@ -24,11 +24,13 @@
             </div>
 
             <draggable
+                v-show="!isTrashMode"
                 :list="dragList"
                 :group="dragGroupForClone"
                 class="game__drag-area"
-                :class="{ 'game__drag-area--trash-mode': isTrashMode }"
                 item-key="dragItemId"
+                @touchend="stopTrashMode"
+                @mouseup="stopTrashMode"
             >
                 <template #item="{ element }">
                     <div> <!-- 這裡的div刪了就沒辦法將錢拖曳到drop-area -->
@@ -38,9 +40,9 @@
             </draggable>
 
             <draggable
+                v-show="isTrashMode"
                 :group="dragGroupForDelete"
-                class="game__delete-area"
-                :class="{ 'game__delete-area--trash-mode': isTrashMode }"
+                class="game__delete-area--trash-mode"
                 item-key="dragItemId"
             >
                 <template #item="{ element }">
@@ -64,7 +66,7 @@ export default {
         ImageContainer: getComponents("ImageContainer"),
         MoneyDisplay: getComponents("MoneyDisplay"),
     },
-    emits: ['add-record', 'play-effect', 'nextQuestion', 'CorrectSound', 'WrongSound'],
+    emits: ['add-record', 'play-effect', 'next-question', 'WrongSound'],
     data() {
         return {
             dragList: [],
@@ -74,7 +76,7 @@ export default {
             slotData: null,
             dragGroup: { name: 'money', pull: true, put: true },
             dragGroupForClone: { name: 'money', pull: 'clone', put: false },
-            dragGroupForDelete: { name: 'money', pull: false, put: true }
+            dragGroupForDelete: { name: 'money', pull: false, put: true },
         };
     },
     props: {
@@ -85,18 +87,25 @@ export default {
         id: {
             type: String,
             required: true
-        }
+        },
+        GameConfige: {
+            type: Object,
+            required: true
+        },
     },
     methods: {
         init() {
-            this.dragList = this.GameData.Items.map((item, index) => ({
-                name: item.Name,
-                Data: item.Data,
-                dragItemId: `item-${index}`
+            const componentName = "MoneyDisplay"
+            let denominationAvailability = this.GameData.Items;
+            let availableDenominations = Object.keys(denominationAvailability).filter(key => denominationAvailability[key] === "true").map(Number);
+            this.dragList = availableDenominations.map((item, index) => ({
+                name: componentName,
+                Data: { denomination: item },
+                dragItemId: `denomination-${index}`
             }));
         },
         handleSubmit(){
-            const correctAnswer = this.GameData.upperComponent.Amount;
+            const correctAnswer = this.GameData.amount;
             const userAnswer = this.sumMoney();
             let isAnswerRight = this.checkAnswer(correctAnswer,userAnswer);
             if (isAnswerRight) {
@@ -132,8 +141,11 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "@/scss/_variables.scss";
-@import "@/scss/main.scss";
+.game-section {
+    display: flex;
+    flex-direction: column;
+    gap: $gap--tiny;
+}
 
 .game {
     display: flex;
@@ -141,17 +153,13 @@ export default {
     gap: $gap--small;
 }
 
-.game > div {
-    display: flex;
-    flex-direction: column;
-    gap: $gap--tiny;
-}
-
 .game__target-section {
+    @extend .game-section; 
     width: 70%;
 }
 
 .game__action-section {
+    @extend .game-section;
     width: 28%;
 }
 
@@ -175,6 +183,7 @@ export default {
 }
 
 .game__drag-area {
+    height: 45vh;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(4, 9vh);
@@ -183,22 +192,12 @@ export default {
 }
 
 .game__quation {
-    height: 25%;
-}
-
-.game__drag-area--trash-mode {
-    display: none;
-}
-
-.game__delete-area {
-    display: none;
+    height: 20vh;
 }
 
 .game__delete-area--trash-mode {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(4, 10vh);
-    gap: 0.5rem;
+    display: block;
+    height: 45vh;
     padding: $padding--small;
     background-color: red;
     background-image: url('@/assets/Games/Dev0301/delete.png');
@@ -208,6 +207,6 @@ export default {
 }
 
 .game__submit-button{
-    height: 2.7rem;
+    height: 2.5rem;
 }
 </style>
