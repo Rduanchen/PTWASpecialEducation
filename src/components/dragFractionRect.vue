@@ -1,31 +1,21 @@
 <template>
   <v-layer>
     <v-rect
-      v-if="Data.shape == 'rect'"
-      v-for="frame in configRectDenominator.frame"
+      v-for="frame in configDenominator.frame"
       :config="frame"
-      @dragmove="rectDenominatorDragMove"
-      @dragend="rectDenominatorDragEnd"
+      @dragmove="denominatorDragMove"
+      @dragend="denominatorDragEnd"
     ></v-rect>
     <v-rect
-      v-if="Data.shape == 'rect'"
-      v-for="rect in configRectDenominator.rect"
+      v-for="rect in configDenominator.rect"
       :config="rect"
-      @dragmove="rectDenominatorDragMove"
-      @dragend="rectDenominatorDragEnd"
+      @dragmove="denominatorDragMove"
+      @dragend="denominatorDragEnd"
     ></v-rect>
-    <v-shape
-      v-if="Data.shape == 'rect'"
-      v-for="slice in configRectDenominator.slice"
-      :config="slice"
-    ></v-shape>
+    <v-shape v-for="slice in configDenominator.slice" :config="slice"></v-shape>
   </v-layer>
   <v-layer>
-    <v-rect
-      v-if="Data.shape == 'rect'"
-      :config="configRectNumerator"
-      @dragend="numeratorDragEnd"
-    ></v-rect>
+    <v-rect :config="configNumerator" @dragend="numeratorDragEnd"></v-rect>
   </v-layer>
 </template>
 
@@ -40,12 +30,12 @@ export default {
       numeratorSnapTo: {},
       denominatorSnapTo: {},
 
-      configRectNumerator: {
+      configNumerator: {
         draggable: true,
         fill: "#4C5B3A",
         stroke: "#4C5B3A",
       },
-      configRectDenominator: {
+      configDenominator: {
         frame: [],
         rect: [],
         slice: [],
@@ -53,76 +43,62 @@ export default {
     };
   },
 
-  props: {
-    GameData: {
-      type: Object,
-      required: true,
-    },
-    GameConfig: {
-      type: Object,
-      required: true,
-    },
+  props: ["fill", "gameWidth", "gameHeight", "numerator", "denominator"],
+
+  emits: ["addFill"],
+
+  beforeMount() {
+    this.initialize();
   },
 
-  emits: ["play-effect", "add-record", "next-question"],
-
-  beforeMount() {},
-
   mounted() {
-    if (this.Data.shape == "rect") window.setInterval(this.rectUpdate, 20);
+    window.setInterval(this.rectUpdate, 20);
   },
 
   methods: {
     setAttributes() {
-      this.numeratorSnapTo.x = this.gameWidth * 0.875;
-      this.numeratorSnapTo.y = this.gameHeight * 0.2;
-      this.denominatorSnapTo.x = this.gameWidth * 0.875;
-      this.denominatorSnapTo.y = this.gameHeight * 0.7;
-    },
-    drawRects() {
       this.rectAttr = {
         width: this.gameWidth * 0.2,
         height: this.gameHeight * 0.15,
       };
+      this.numeratorSnapTo = canvasTools.corner({
+        x: this.gameWidth * 0.875,
+        y: this.gameHeight * 0.2,
+        width: this.rectAttr.width,
+        height: this.rectAttr.height,
+      });
+      this.denominatorSnapTo = canvasTools.corner({
+        x: this.gameWidth * 0.875,
+        y: this.gameHeight * 0.2,
+        width: this.rectAttr.width,
+        height: this.rectAttr.height,
+      });
       this.boundaries = {
         up: 0,
         down: this.gameHeight - this.rectAttr.height,
         left: 0,
         right: this.gameWidth * 0.75 - this.rectAttr.width,
       };
-      this.adjustSnapTo();
-      this.drawRectNumerator();
-      this.drawRectDenominator();
     },
-    adjustSnapTo() {
-      this.numeratorSnapTo = canvasTools.corner({
-        x: this.numeratorSnapTo.x,
-        y: this.numeratorSnapTo.y,
-        width: this.rectAttr.width,
-        height: this.rectAttr.height,
-      });
-      this.denominatorSnapTo = canvasTools.corner({
-        x: this.denominatorSnapTo.x,
-        y: this.denominatorSnapTo.y,
-        width: this.rectAttr.width,
-        height: this.rectAttr.height,
-      });
+    initialize() {
+      this.drawNumerator();
+      this.drawDenominator();
     },
-    rectUpdate() {
-      this.configRectNumerator.width = this.rectAnimation(
-        this.configRectNumerator.width,
-        (this.gameWidth * 0.2) / this.numerator
+    update() {
+      this.configNumerator.width = this.animation(
+        this.configNumerator.width,
+        this.rectAttr.width / this.numerator
       );
       for (let i = 0; i < this.fill.length; ++i) {
         if (this.fill[i] > 0) {
-          this.configRectDenominator.rect[i].width = this.rectAnimation(
-            this.configRectDenominator.rect[i].width,
+          this.configDenominator.rect[i].width = this.animation(
+            this.configDenominator.rect[i].width,
             this.rectAttr.width * this.fill[i]
           );
         }
       }
     },
-    rectAnimation(currentWidth, targetWidth) {
+    animation(currentWidth, targetWidth) {
       if (Math.abs(currentWidth - targetWidth) < 1) {
         currentWidth = targetWidth;
       } else if (currentWidth < targetWidth) {
@@ -132,11 +108,11 @@ export default {
       }
       return currentWidth;
     },
-    drawRectNumerator() {
-      this.configRectNumerator.width = this.rectAttr.width / this.numerator;
-      this.configRectNumerator.height = this.rectAttr.height;
-      this.configRectNumerator.x = this.numeratorSnapTo.x;
-      this.configRectNumerator.y = this.numeratorSnapTo.y;
+    drawNumerator() {
+      this.configNumerator.width = this.rectAttr.width / this.numerator;
+      this.configNumerator.height = this.rectAttr.height;
+      this.configNumerator.x = this.numeratorSnapTo.x;
+      this.configNumerator.y = this.numeratorSnapTo.y;
     },
     drawRectDenominator() {
       let frame = {
@@ -160,24 +136,24 @@ export default {
         draggable: true,
         name: this.fill.length.toString(),
       };
-      this.configRectDenominator.frame.push(frame);
-      this.configRectDenominator.rect.push(rect);
-      this.configRectDenominator.slice.push(this.drawRectSlice());
+      this.configDenominator.frame.push(frame);
+      this.configDenominator.rect.push(rect);
+      this.configDenominator.slice.push(this.drawSlice());
       this.fill.push(0);
     },
-    drawRectSlice() {
+    drawSlice() {
       let slice = {
         width: this.rectAttr.width,
         height: this.rectAttr.height,
         stroke: "black",
         x: this.denominatorSnapTo.x,
         y: this.denominatorSnapTo.y,
-        sceneFunc: this.rectSliceSceneFunc,
+        sceneFunc: this.sliceSceneFunc,
         slices: this.denominator,
       };
       return slice;
     },
-    rectSliceSceneFunc(context, shape) {
+    sliceSceneFunc(context, shape) {
       context.beginPath();
       context.setLineDash([5, 5]);
       let sliceWidth = shape.getAttr("width") / shape.getAttr("slices");
@@ -188,42 +164,42 @@ export default {
       context.stroke();
       context.closePath();
     },
-    rectDenominatorDragMove(e) {
+    denominatorDragMove(e) {
       let id = e.target.attrs.name;
-      if (this.configRectDenominator.rect[id].visible) {
+      if (this.configDenominator.rect[id].visible) {
         e.target.x(Math.max(e.target.x(), this.boundaries.left));
         e.target.x(Math.min(e.target.x(), this.boundaries.right));
         e.target.y(Math.max(e.target.y(), this.boundaries.up));
         e.target.y(Math.min(e.target.y(), this.boundaries.down));
       }
-      this.configRectDenominator.frame[id].x = e.target.x();
-      this.configRectDenominator.frame[id].y = e.target.y();
-      this.configRectDenominator.rect[id].x = e.target.x();
-      this.configRectDenominator.rect[id].y = e.target.y();
-      this.configRectDenominator.slice[id].x = e.target.x();
-      this.configRectDenominator.slice[id].y = e.target.y();
+      this.configDenominator.frame[id].x = e.target.x();
+      this.configDenominator.frame[id].y = e.target.y();
+      this.configDenominator.rect[id].x = e.target.x();
+      this.configDenominator.rect[id].y = e.target.y();
+      this.configDenominator.slice[id].x = e.target.x();
+      this.configDenominator.slice[id].y = e.target.y();
     },
-    rectDenominatorDragEnd(e) {
+    denominatorDragEnd(e) {
       let id = e.target.attrs.name;
-      if (!this.configRectDenominator.rect[id].visible) {
+      if (!this.configDenominator.rect[id].visible) {
         if (canvasTools.isInBound(e.target.position(), this.boundaries)) {
-          this.drawRectDenominator();
-          this.configRectDenominator.rect[id].visible = true;
+          this.drawDenominator();
+          this.configDenominator.rect[id].visible = true;
         } else {
           e.target.position(this.denominatorSnapTo);
-          this.configRectDenominator.slice[id].x = this.denominatorSnapTo.x;
-          this.configRectDenominator.slice[id].y = this.denominatorSnapTo.y;
+          this.configDenominator.slice[id].x = this.denominatorSnapTo.x;
+          this.configDenominator.slice[id].y = this.denominatorSnapTo.y;
         }
       }
     },
-    addRectFill(position) {
+    addFill(position) {
       for (let i = 0; i < this.fill.length; ++i) {
-        if (this.configRectDenominator.rect[i].visible) {
+        if (this.configDenominator.rect[i].visible) {
           let range = {
-            up: this.configRectDenominator.rect[i].y,
-            down: this.configRectDenominator.rect[i].y + this.rectAttr.height,
-            left: this.configRectDenominator.rect[i].x,
-            right: this.configRectDenominator.rect[i].x + this.rectAttr.width,
+            up: this.configDenominator.rect[i].y,
+            down: this.configDenominator.rect[i].y + this.rectAttr.height,
+            left: this.configDenominator.rect[i].x,
+            right: this.configDenominator.rect[i].x + this.rectAttr.width,
           };
           if (canvasTools.isInBound(position, range)) {
             if (this.fill[i] + 1 / this.numerator <= 1)
