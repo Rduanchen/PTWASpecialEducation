@@ -7,13 +7,15 @@
                 :list="answerList"
                 :group="dragGroup"
                 item-key="dragItemId"
-                @mousedown="startTrashMode"
-                @touchstart="startTrashMode"
-                @touchend="stopTrashMode"
-                @mouseup="stopTrashMode"
+                @end="stopTrashMode"
             >
                 <template #item="{ element }">
-                    <component :is="element.name" :Data="element.Data" />
+                    <component
+                        :is="element.name"
+                        :Data="element.Data"
+                        @touchstart="startTrashMode"
+                        @mousedown="startTrashMode"
+                    />
                 </template>
             </draggable>
         </div>
@@ -29,8 +31,7 @@
                 :group="dragGroupForClone"
                 class="game__drag-area"
                 item-key="dragItemId"
-                @touchend="stopTrashMode"
-                @mouseup="stopTrashMode"
+                @end="stopTrashMode"
             >
                 <template #item="{ element }">
                     <div> <!-- 這裡的div刪了就沒辦法將錢拖曳到drop-area -->
@@ -44,6 +45,7 @@
                 :group="dragGroupForDelete"
                 class="game__delete-area--trash-mode"
                 item-key="dragItemId"
+                @add="stopTrashMode"
             >
                 <template #item="{ element }">
                     <!-- Empty content for delete area -->
@@ -136,7 +138,9 @@ export default {
         this.init();
         this.slotComponent = this.GameData.upperComponent.Name;
         this.slotData = this.GameData.upperComponent.Data;
-    }
+    },
+    mounted() {
+    },
 };
 </script>
 
@@ -200,7 +204,7 @@ export default {
     height: 45vh;
     padding: $padding--small;
     background-color: red;
-    background-image: url('@/assets/Games/Dev0301/delete.png');
+    background-image: url('@/assets/System/icon/delete.png');
     background-repeat: no-repeat;
     background-position: center;
     background-size: 30%;
