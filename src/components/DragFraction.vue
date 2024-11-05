@@ -6,20 +6,20 @@
           <v-rect :config="configBG"></v-rect>
           <v-rect :config="configSideBar"></v-rect>
         </v-layer>
-        <circle
+        <circleFraction
           v-if="Data.shape == 'circle'"
           :fill="fill"
           :gameWidth="gameWidth"
           :gameHeight="gameHeight"
           @addFill="addFill"
-        ></circle>
-        <rect
+        ></circleFraction>
+        <rectFraction
           v-if="Data.shape == 'rect'"
           :fill="fill"
           :gameWidth="gameWidth"
           :gameHeight="gameHeight"
           @addFill="addFill"
-        ></rect>
+        ></rectFraction>
 
         <v-layer>
           <v-shape
@@ -41,10 +41,10 @@ import * as canvasTools from "@/utilitys/canvasTools.js";
 import { defineAsyncComponent } from "vue";
 export default {
   components: {
-    circle: defineAsyncComponent(() =>
+    circleFraction: defineAsyncComponent(() =>
       import("@/components/dragFractionCircle.vue")
     ),
-    rect: defineAsyncComponent(() =>
+    rectFraction: defineAsyncComponent(() =>
       import("@/components/dragFractionRect.vue")
     ),
   },
@@ -97,7 +97,6 @@ export default {
       this.configSideBar.x = this.gameWidth * 0.75;
       this.drawArrow();
       this.drawNumber();
-      this.drawBoundaries();
     },
 
     drawArrow() {
