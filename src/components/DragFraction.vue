@@ -6,20 +6,25 @@
           <v-rect :config="configBG"></v-rect>
           <v-rect :config="configSideBar"></v-rect>
         </v-layer>
-        <circleFraction
-          v-if="Data.shape == 'circle'"
-          :fill="fill"
-          :gameWidth="gameWidth"
-          :gameHeight="gameHeight"
-          @addFill="addFill"
-        ></circleFraction>
-        <rectFraction
-          v-if="Data.shape == 'rect'"
-          :fill="fill"
-          :gameWidth="gameWidth"
-          :gameHeight="gameHeight"
-          @addFill="addFill"
-        ></rectFraction>
+        <v-layer v-if="Data.shape == 'circle'">
+          <circleFraction
+            :gameWidth="gameWidth"
+            :gameHeight="gameHeight"
+            :numerator="numerator"
+            :denominator="denominator"
+            @addFill="addFill"
+          ></circleFraction>
+        </v-layer>
+
+        <v-layer v-if="Data.shape == 'rect'">
+          <rectFraction
+            :gameWidth="gameWidth"
+            :gameHeight="gameHeight"
+            :numerator="numerator"
+            :denominator="denominator"
+            @addFill="addFill"
+          ></rectFraction>
+        </v-layer>
 
         <v-layer>
           <v-shape
@@ -75,7 +80,7 @@ export default {
 
   props: ["Data", "ID"],
 
-  emits: ["play-effect", "add-record", "next-question"],
+  emits: ["getAnswer"],
 
   beforeMount() {
     this.initializeScene();
@@ -179,11 +184,6 @@ export default {
     drawAfterAdjusted() {
       this.configNumeratorNumber.text = this.numerator;
       this.configDenominatorNumber.text = this.denominator;
-      if (this.Data.shape == "circle") {
-        this.configCircleDenominator.slice[this.fill.length - 1].slices =
-          this.denominator;
-      } else if (this.Data.shape == "rect") {
-      }
 
       if (this.numerator == 2) {
         this.configArrow[0].fill = "#505050";
@@ -211,11 +211,21 @@ export default {
         this.configArrow[3].stroke = "#BA3F38";
       }
     },
-    numeratorDragEnd(e) {
-      if (this.Data.shape == "circle") this.addCircleFill(e.target.position());
-      else if (this.Data.shape == "rect") this.addRectFill(e.target.position());
-      e.target.x(this.numeratorSnapTo.x);
-      e.target.y(this.numeratorSnapTo.y);
+    addFill(fill) {
+      let total = 0;
+      for (let fraction in fill) {
+        total += fill[fraction];
+      }
+      if (this.Data.verifyOption == "answer") {
+        let answer = this.Data.answer.numerator / this.Data.answer.denominator;
+        if (answer.toFixed(2) == total.toFixed(2)) {
+          this.$emit("getAnswer", true);
+        } else {
+          this.$emit("getAnswer", false);
+        }
+      } else if (this.Data.verifyOption == "value") {
+        this.$emit("getAnswer", total.toFixed(2));
+      }
     },
   },
 };
