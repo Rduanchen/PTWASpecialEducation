@@ -818,6 +818,9 @@ export default {
     DragFraction: defineAsyncComponent(() =>
       import("@/views/GameTemplate/DragFractionTester.vue")
     ), //for testing only
+    CopyItemMulti: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/CopyItemMulti.vue")
+    ),
   },
 };
 </script>
