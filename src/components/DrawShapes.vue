@@ -1,7 +1,12 @@
 <template>
   <div class="gameContainer">
     <div id="canvasContainer">
-      <v-stage :config="configKonva">
+      <v-stage
+        :config="configKonva"
+        @mousedown="drawNewLine"
+        @mousemove="moveLine"
+        @mouseup="stopDrawing"
+      >
         <v-layer>
           <v-line
             v-for="points in configGrid"
@@ -46,6 +51,9 @@ export default {
       configLine: [],
       configGivenPoint: [],
       points: [],
+      links: [],
+
+      drawing: false,
     };
   },
 
@@ -106,17 +114,18 @@ export default {
       }
     },
     drawGiven() {
-      for (let point in this.Data.givenPoints) {
+      for (let point in this.points) {
         this.configGivenPoint.push({
-          x: this.gridPos.x[this.Data.givenPoints[point][0]],
-          y: this.gridPos.y[this.Data.givenPoints[point][1]],
+          x: this.gridPos.x[this.points[point][0]],
+          y: this.gridPos.y[this.points[point][1]],
           radius: this.configKonva.width * 0.01,
           stroke: "brown",
           fill: "white",
         });
       }
-      if (this.Data.givenPoints.length > 1) {
-        for (let i = 0; i < this.Data.givenPoints.length - 1; ++i) {
+      if (this.points.length > 1) {
+        for (let i = 0; i < this.points.length - 1; ++i) {
+          this.links.push([i, i + 1]);
           this.configLine.push({
             points: [
               this.configGivenPoint[i].x,
@@ -129,7 +138,65 @@ export default {
         }
       }
     },
-    update() {},
+    drawNewLine(e) {
+      this.drawing = true;
+      let id = this.points.length;
+
+      this.points.push(
+        this.getClosestPoint(e.target.getStage().getPointerPosition())
+      );
+      this.configLine.push({
+        points: [
+          this.gridPos.x[this.points[id][0]],
+          this.gridPos.y[this.points[id][1]],
+          e.target.getStage().getPointerPosition().x,
+          e.target.getStage().getPointerPosition().y,
+        ],
+        stroke: "green",
+      });
+    },
+    moveLine(e) {
+      if (this.drawing) {
+        let id = this.configLine.length - 1;
+        this.configLine[id].points = [
+          this.gridPos.x[this.points[id][0]],
+          this.gridPos.y[this.points[id][1]],
+          e.target.getStage().getPointerPosition().x,
+          e.target.getStage().getPointerPosition().y,
+        ];
+      }
+    },
+    stopDrawing(e) {
+      let id = this.configLine.length - 1;
+      let getPoint = this.getClosestPoint(
+        e.target.getStage().getPointerPosition()
+      );
+      this.drawing = false;
+      this.configLine[id].points = [
+        this.gridPos.x[this.points[id][0]],
+        this.gridPos.y[this.points[id][1]],
+        this.gridPos.x[getPoint[0]],
+        this.gridPos.y[getPoint[1]],
+      ];
+    },
+    getClosestPoint(pos) {
+      let x, y;
+      let distance = 999;
+      for (let i = 0; i <= this.ratio.width; ++i) {
+        if (Math.abs(pos.x - this.gridPos.x[i]) < distance) {
+          x = i;
+          distance = Math.abs(pos.x - this.gridPos.x[i]);
+        }
+      }
+      distance = 999;
+      for (let i = 0; i <= this.ratio.height; ++i) {
+        if (Math.abs(pos.y - this.gridPos.y[i]) < distance) {
+          y = i;
+          distance = Math.abs(pos.y - this.gridPos.y[i]);
+        }
+      }
+      return [x, y];
+    },
   },
 };
 </script>

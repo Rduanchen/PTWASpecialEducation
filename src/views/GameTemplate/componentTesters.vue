@@ -10,15 +10,22 @@
     <dragFraction
       :Data="configFraction"
       :ID="id"
-      @getAnswer="drag"
+      @getAnswer="printAns"
     ></dragFraction>
   </div>
   <div v-if="tester == 'numberLine'">
     <numberLine
       :Data="configNumberLine"
       :ID="id"
-      @getDragPosition="drag"
+      @getDragPosition="printAns"
     ></numberLine>
+  </div>
+  <div v-if="tester == 'drawShapes'">
+    <drawShapes
+      :Data="configDrawShapes"
+      :ID="id"
+      @getAnswer="printAns"
+    ></drawShapes>
   </div>
 </template>
 
@@ -33,6 +40,9 @@ export default {
     ),
     numberLine: defineAsyncComponent(() =>
       import("@/components/DragOnNumberLine.vue")
+    ),
+    drawShapes: defineAsyncComponent(() =>
+      import("@/components/DrawShapes.vue")
     ),
   },
   data() {
@@ -53,16 +63,18 @@ export default {
         init_pos: 5,
         image: "RacingCar.png",
       },
+      configDrawShapes: {
+        //bgRatio: [],
+        /*givenPoints: [
+          [2, 2],
+          [2, 5],
+        ],*/
+      },
       id: "MA3029",
     };
   },
-
-  props: {},
-
-  emits: ["play-effect", "add-record", "next-question"],
-
   methods: {
-    drag(x) {
+    printAns(x) {
       console.log(x);
     },
   },
