@@ -158,7 +158,6 @@ import EffectWindow from "@/components/GameSystem/EffectWindow.vue";
 import gameStore from "@/stores/game";
 import { mapWritableState } from "pinia";
 import { soundManager } from "@/utilitys/sound-manager.js";
-import DragFraction from "../components/DragFraction.vue";
 
 export default {
   data() {
@@ -821,15 +820,12 @@ export default {
     Airplane: defineAsyncComponent(() =>
       import("@/views/GameTemplate/Airplane.vue")
     ),
-    DragOnNumberLine: defineAsyncComponent(() =>
-      import("@/views/GameTemplate/NumberLineTester.vue")
+    ComponentTesters: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/componentTesters.vue")
     ), //for testing only
     BalloonShooting: defineAsyncComponent(() =>
       import("@/views/GameTemplate/BalloonShooting.vue")
     ),
-    DragFraction: defineAsyncComponent(() =>
-      import("@/views/GameTemplate/DragFractionTester.vue")
-    ), //for testing only
   },
 };
 </script>

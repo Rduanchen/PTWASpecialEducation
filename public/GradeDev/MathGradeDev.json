@@ -76,14 +76,8 @@
                         "Img": "MA3011.png"
                     },
                     {
-                        "id": "Dev02_DragOnNumberLine",
-                        "Name": "數線拖拉測試",
-                        "Description": "#",
-                        "Img": "MA3011.png"
-                    },
-                    {
-                        "id": "Dev02_DragFraction",
-                        "Name": "分數拖拉測試",
+                        "id": "Dev02_ComponentTesters",
+                        "Name": "元件測試",
                         "Description": "#",
                         "Img": "MA3011.png"
                     }

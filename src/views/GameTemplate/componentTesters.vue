@@ -1,5 +1,19 @@
 <template>
-  <div class="gameContainer">
+  <div>
+    <select @change="(event) => (tester = event.target.value)">
+      <option>numberLine</option>
+      <option>fraction</option>
+      <option selected>drawShapes</option>
+    </select>
+  </div>
+  <div v-if="tester == 'fraction'">
+    <dragFraction
+      :Data="configFraction"
+      :ID="id"
+      @getAnswer="drag"
+    ></dragFraction>
+  </div>
+  <div v-if="tester == 'numberLine'">
     <numberLine
       :Data="configNumberLine"
       :ID="id"
@@ -14,12 +28,24 @@ import * as canvasTools from "@/utilitys/canvasTools.js";
 import { defineAsyncComponent } from "vue";
 export default {
   components: {
+    dragFraction: defineAsyncComponent(() =>
+      import("@/components/DragFraction.vue")
+    ),
     numberLine: defineAsyncComponent(() =>
       import("@/components/DragOnNumberLine.vue")
     ),
   },
   data() {
     return {
+      tester: "drawShapes",
+      configFraction: {
+        verifyOption: "answer",
+        shape: "circle",
+        answer: {
+          numerator: 1,
+          denominator: 4,
+        },
+      },
       configNumberLine: {
         spacing: 1,
         max: 10,
@@ -31,28 +57,11 @@ export default {
     };
   },
 
-  props: {
-    GameData: {
-      type: Object,
-      required: true,
-    },
-    GameConfig: {
-      type: Object,
-      required: true,
-    },
-  },
+  props: {},
 
   emits: ["play-effect", "add-record", "next-question"],
 
-  beforeMount() {
-    this.initializeScene();
-  },
-
-  mounted() {},
-
   methods: {
-    initializeScene() {},
-    update() {},
     drag(x) {
       console.log(x);
     },
