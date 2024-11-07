@@ -194,6 +194,29 @@ export default {
       }
       return { x: x, y: y };
     },
+    slope(line) {
+      let point1 = {
+          x: line.points[0],
+          y: line.points[1],
+        },
+        point2 = {
+          x: line.points[2],
+          y: line.points[3],
+        };
+      if (point1.x == point2.x) return "vertical";
+      else return (point1.y - point2.y) / (point1.x - point2.x);
+    },
+    isParallel(line1, line2) {
+      if (this.slope(line1) == this.slope(line2)) return true;
+      else return false;
+    },
+    isPerpendicular(line1, line2) {
+      if (this.slope(line1) == "vertical" || this.slope(line2) == "vertical") {
+        if (this.slope(line1) == 0 || this.slope(line2) == 0) return true;
+        else return false;
+      } else if (this.slope(line1) * this.slope(line2) == -1) return true;
+      else return false;
+    },
   },
 };
 </script>
