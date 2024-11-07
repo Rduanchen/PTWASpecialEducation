@@ -50,10 +50,9 @@ export default {
       configGrid: [],
       configLine: [],
       configGivenPoint: [],
-      points: [],
-      links: [],
 
       drawing: false,
+      currentPoint: {},
     };
   },
 
@@ -66,9 +65,6 @@ export default {
     this.initializeScene();
     this.setGrid();
     this.drawGrid();
-    if (this.points != []) {
-      this.drawGiven();
-    }
   },
 
   mounted() {},
@@ -79,7 +75,7 @@ export default {
         this.ratio = this.Data.bgRatio;
       }
       if (this.Data.givenPoints != null) {
-        this.points = this.Data.givenPoints;
+        this.drawGiven();
       }
     },
     initializeScene() {
@@ -114,18 +110,17 @@ export default {
       }
     },
     drawGiven() {
-      for (let point in this.points) {
+      for (let point in this.Data.givenPoints) {
         this.configGivenPoint.push({
-          x: this.gridPos.x[this.points[point][0]],
-          y: this.gridPos.y[this.points[point][1]],
+          x: this.gridPos.x[this.Data.givenPoints[point][0]],
+          y: this.gridPos.y[this.Data.givenPoints[point][1]],
           radius: this.configKonva.width * 0.01,
           stroke: "brown",
           fill: "white",
         });
       }
-      if (this.points.length > 1) {
-        for (let i = 0; i < this.points.length - 1; ++i) {
-          this.links.push([i, i + 1]);
+      if (this.Data.givenPoints.length > 1) {
+        for (let i = 0; i < this.Data.givenPoints.length - 1; ++i) {
           this.configLine.push({
             points: [
               this.configGivenPoint[i].x,
@@ -140,15 +135,14 @@ export default {
     },
     drawNewLine(e) {
       this.drawing = true;
-      let id = this.points.length;
 
-      this.points.push(
-        this.getClosestPoint(e.target.getStage().getPointerPosition())
+      this.currentPoint = this.getClosestPoint(
+        e.target.getStage().getPointerPosition()
       );
       this.configLine.push({
         points: [
-          this.gridPos.x[this.points[id][0]],
-          this.gridPos.y[this.points[id][1]],
+          this.gridPos.x[this.currentPoint.x],
+          this.gridPos.y[this.currentPoint.y],
           e.target.getStage().getPointerPosition().x,
           e.target.getStage().getPointerPosition().y,
         ],
@@ -159,8 +153,8 @@ export default {
       if (this.drawing) {
         let id = this.configLine.length - 1;
         this.configLine[id].points = [
-          this.gridPos.x[this.points[id][0]],
-          this.gridPos.y[this.points[id][1]],
+          this.gridPos.x[this.currentPoint.x],
+          this.gridPos.y[this.currentPoint.y],
           e.target.getStage().getPointerPosition().x,
           e.target.getStage().getPointerPosition().y,
         ];
@@ -168,16 +162,19 @@ export default {
     },
     stopDrawing(e) {
       let id = this.configLine.length - 1;
-      let getPoint = this.getClosestPoint(
+      let pointerPoint = this.getClosestPoint(
         e.target.getStage().getPointerPosition()
       );
       this.drawing = false;
       this.configLine[id].points = [
-        this.gridPos.x[this.points[id][0]],
-        this.gridPos.y[this.points[id][1]],
-        this.gridPos.x[getPoint[0]],
-        this.gridPos.y[getPoint[1]],
+        this.gridPos.x[this.currentPoint.x],
+        this.gridPos.y[this.currentPoint.y],
+        this.gridPos.x[pointerPoint.x],
+        this.gridPos.y[pointerPoint.y],
       ];
+      if (this.Data.varifyOption == "rect") {
+      } else if (this.Data.varifyOption == "shape") {
+      }
     },
     getClosestPoint(pos) {
       let x, y;
@@ -195,7 +192,7 @@ export default {
           distance = Math.abs(pos.y - this.gridPos.y[i]);
         }
       }
-      return [x, y];
+      return { x: x, y: y };
     },
   },
 };
