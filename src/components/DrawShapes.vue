@@ -173,11 +173,12 @@ export default {
         this.gridPos.x[pointerPoint.x],
         this.gridPos.y[pointerPoint.y],
       ];
-      console.log(this.isTriangle(), this.sides);
+      console.log(this.isQuadrilateral(), this.sides);
       if (this.Data.varifyOption == "rect") {
       } else if (this.Data.varifyOption == "shape") {
       }
     },
+
     getClosestPoint(pos) {
       let x, y;
       let distance = 999;
@@ -234,6 +235,21 @@ export default {
       }
       return links;
     },
+    isLinkedByLines(id1, id2) {
+      if (id1 == id2) return false;
+      let linkingLines = [];
+      for (let link1 in this.findLinks(id1)) {
+        for (let link2 in this.findLinks(id2)) {
+          if (this.findLinks(id1)[link1] == this.findLinks(id2)[link2]) {
+            linkingLines.push(this.findLinks(id1)[link1]);
+            if (linkingLines.length == 2) {
+              return linkingLines;
+            }
+          }
+        }
+      }
+      return false;
+    },
     getPointsPositionFromLine(id) {
       return [
         {
@@ -279,6 +295,22 @@ export default {
           }
         }
         this.sides = [];
+      }
+      return false;
+    },
+    isQuadrilateral() {
+      for (let i in this.configLine) {
+        for (let j in this.configLine) {
+          if (this.isLinkedByLines(i, j)) {
+            this.sides = [
+              i,
+              this.isLinkedByLines(i, j)[0],
+              j,
+              this.isLinkedByLines(i, j)[1],
+            ];
+            return true;
+          }
+        }
       }
       return false;
     },
