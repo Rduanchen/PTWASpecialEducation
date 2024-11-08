@@ -53,6 +53,7 @@ export default {
 
       drawing: false,
       currentPoint: {},
+      sides: [],
     };
   },
 
@@ -65,6 +66,9 @@ export default {
     this.initializeScene();
     this.setGrid();
     this.drawGrid();
+    if (this.Data.givenPoints != null) {
+      this.drawGiven();
+    }
   },
 
   mounted() {},
@@ -73,9 +77,6 @@ export default {
     getData() {
       if (this.Data.bgRatio != null) {
         this.ratio = this.Data.bgRatio;
-      }
-      if (this.Data.givenPoints != null) {
-        this.drawGiven();
       }
     },
     initializeScene() {
@@ -172,6 +173,7 @@ export default {
         this.gridPos.x[pointerPoint.x],
         this.gridPos.y[pointerPoint.y],
       ];
+      console.log(this.isTriangle(), this.sides);
       if (this.Data.varifyOption == "rect") {
       } else if (this.Data.varifyOption == "shape") {
       }
@@ -194,28 +196,91 @@ export default {
       }
       return { x: x, y: y };
     },
-    slope(line) {
-      let point1 = {
-          x: line.points[0],
-          y: line.points[1],
-        },
-        point2 = {
-          x: line.points[2],
-          y: line.points[3],
-        };
-      if (point1.x == point2.x) return "vertical";
-      else return (point1.y - point2.y) / (point1.x - point2.x);
+    slope(id) {
+      let points = this.getPointsPositionFromLine(id);
+      if (points[0].x == points[1].x) return "vertical";
+      else return (points[0].y - points[1].y) / (points[0].x - points[1].x);
     },
-    isParallel(line1, line2) {
-      if (this.slope(line1) == this.slope(line2)) return true;
+    isParallel(id1, id2) {
+      if (this.slope(id1) == this.slope(id2)) return true;
       else return false;
     },
-    isPerpendicular(line1, line2) {
-      if (this.slope(line1) == "vertical" || this.slope(line2) == "vertical") {
-        if (this.slope(line1) == 0 || this.slope(line2) == 0) return true;
+    isPerpendicular(id1, id2) {
+      if (this.slope(id1) == "vertical" || this.slope(id2) == "vertical") {
+        if (this.slope(id1) == 0 || this.slope(id2) == 0) return true;
         else return false;
-      } else if (this.slope(line1) * this.slope(line2) == -1) return true;
+      } else if (this.slope(id1) * this.slope(id2) == -1) return true;
       else return false;
+    },
+    isLinked(id1, id2) {
+      let points1 = this.getPointsPositionFromLine(id1),
+        points2 = this.getPointsPositionFromLine(id2);
+      if (this.isSameLine(id1, id2) || id1 == id2) return false;
+      else if (
+        this.isSamePoint(points1[0], points2[0]) ||
+        this.isSamePoint(points1[0], points2[1]) ||
+        this.isSamePoint(points1[1], points2[1]) ||
+        this.isSamePoint(points1[1], points2[0])
+      ) {
+        return true;
+      } else return false;
+    },
+    findLinks(id) {
+      let links = [];
+      for (let line in this.configLine) {
+        if (this.isLinked(id, line)) {
+          links.push(line);
+        }
+      }
+      return links;
+    },
+    getPointsPositionFromLine(id) {
+      return [
+        {
+          x: this.configLine[id].points[0].toFixed(),
+          y: this.configLine[id].points[1].toFixed(),
+        },
+        {
+          x: this.configLine[id].points[2].toFixed(),
+          y: this.configLine[id].points[3].toFixed(),
+        },
+      ];
+    },
+    isSamePoint(point1, point2) {
+      if (point1.x == point2.x && point1.y == point2.y) return true;
+      else return false;
+    },
+    isSameLine(id1, id2) {
+      let points1 = this.getPointsPositionFromLine(id1),
+        points2 = this.getPointsPositionFromLine(id2);
+      if (
+        (this.isSamePoint(points1[0], points2[0]) &&
+          this.isSamePoint(points1[1], points2[1])) ||
+        (this.isSamePoint(points1[0], points2[1]) &&
+          this.isSamePoint(points1[1], points2[0]))
+      )
+        return true;
+      else return false;
+    },
+    isTriangle() {
+      this.sides = [];
+      for (let line in this.configLine) {
+        if (this.findLinks(line).length >= 2) {
+          this.sides.push(line);
+          for (let i in this.findLinks(line)) {
+            this.sides.push(this.findLinks(line)[i]);
+            for (let j in this.findLinks(line)) {
+              if (this.isLinked(i, j)) {
+                this.sides.push(this.findLinks(line)[j]);
+                return true;
+              }
+            }
+            this.sides.pop();
+          }
+        }
+        this.sides = [];
+      }
+      return false;
     },
   },
 };
