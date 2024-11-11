@@ -23,6 +23,10 @@ export default {
       configFraction: {
         verifyOption: "answer",
         shape: "circle",
+        answer: {
+          numerator: 1,
+          denominator: 4,
+        },
       },
       id: "MA3029",
     };

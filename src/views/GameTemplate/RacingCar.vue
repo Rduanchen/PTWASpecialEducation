@@ -4,8 +4,7 @@
       <h2>{{ GameData.Question }}</h2>
       <v-stage :config="configKonva">
         <v-layer>
-          <v-rect :config="configBG"></v-rect>
-          <v-image v-for="passage in configPassage" :config="passage"></v-image>
+          <v-image v-for="road in configRoad" :config="road"></v-image>
         </v-layer>
 
         <v-layer>
@@ -14,6 +13,7 @@
 
         <v-layer>
           <v-image v-for="tunnel in configTunnel" :config="tunnel"></v-image>
+          <v-rect v-for="box in configTextBox" :config="box"></v-rect>
           <v-text v-for="option in configOption" :config="option"></v-text>
         </v-layer>
       </v-stage>
@@ -45,15 +45,10 @@ export default {
   data() {
     return {
       configKonva: {},
-      configBG: {
-        x: 0,
-        y: 0,
-        fill: "gray",
-        stroke: "gray",
-      },
-      configPassage: [],
+      configRoad: [],
       configTunnel: [],
       configOption: [],
+      configTextBox: [],
       configCar: {},
 
       speed: 1,
@@ -99,39 +94,38 @@ export default {
         document.getElementById("GameContainer").clientWidth * 0.8;
       this.configKonva.width = this.gameWidth;
       this.configKonva.height = this.gameWidth / 2;
-      this.configBG.width = this.gameWidth;
-      this.configBG.height = this.gameWidth / 2;
-      this.drawPassage();
+      this.drawRoad();
       this.drawTunnel();
       this.drawOptions();
+      this.drawTextBox();
       this.drawCar();
     },
-    drawPassage() {
-      const passageImg = new window.Image();
-      passageImg.src = getSystemAssets("Passage.png", "racingCar");
+    drawRoad() {
+      const roadImg = new window.Image();
+      roadImg.src = getSystemAssets("road.png", "racingCar");
       this.laneWidth = this.gameWidth / 2 / this.options.length;
-      this.passageX = 0;
+      this.roadX = 0;
       for (var i = 0; i < this.options.length; i++) {
-        let passage = {
+        let road = {
           x: 0,
           y: this.laneWidth * i,
           width: this.gameWidth * 2.225,
           height: this.laneWidth,
-          image: passageImg,
+          image: roadImg,
         };
-        this.configPassage.push(passage);
+        this.configRoad.push(road);
       }
     },
     drawTunnel() {
       const tunnelImg = new window.Image();
-      tunnelImg.src = getSystemAssets("Tunnel.png", "racingCar");
+      tunnelImg.src = getSystemAssets("tunnel.png", "racingCar");
       this.tunnelOffset = {
         x: this.gameWidth,
         y: 0,
       };
       for (var i = 0; i < this.options.length; i++) {
         let tunnel = {
-          x: canvasTools.offset(this.configPassage[i], this.tunnelOffset).x,
+          x: canvasTools.offset(this.configRoad[i], this.tunnelOffset).x,
           y: this.laneWidth * i,
           width: this.laneWidth * 2,
           height: this.laneWidth,
@@ -142,55 +136,77 @@ export default {
     },
     drawOptions() {
       this.optionOffset = {
-        x: this.gameWidth * 1.05,
-        y: this.gameWidth * 0.04,
+        x: this.gameWidth + this.laneWidth * 0.85,
+        y: this.laneWidth * 0.325,
       };
       for (var i = 0; i < this.options.length; i++) {
         let option = {
-          x: canvasTools.offset(this.configPassage[i], this.optionOffset).x,
-          y: canvasTools.offset(this.configPassage[i], this.optionOffset).y,
-          fontSize: this.gameWidth * 0.05,
+          x: canvasTools.offset(this.configRoad[i], this.optionOffset).x,
+          y: canvasTools.offset(this.configRoad[i], this.optionOffset).y,
+          fontSize: this.laneWidth * 0.4,
           text: this.options[i],
         };
         this.configOption.push(option);
       }
     },
+    drawTextBox() {
+      this.textBoxOffset = {
+        x: this.gameWidth + this.laneWidth * 0.75,
+        y: this.laneWidth * 0.25,
+      };
+      for (var i = 0; i < this.options.length; i++) {
+        let box = {
+          cornerRadius: this.laneWidth * 0.1,
+          stroke: "black",
+          fill: "white",
+          x: canvasTools.offset(this.configRoad[i], this.textBoxOffset).x,
+          y: canvasTools.offset(this.configRoad[i], this.textBoxOffset).y,
+          height: this.laneWidth * 0.5,
+          width: this.laneWidth * 1,
+        };
+        this.configTextBox.push(box);
+      }
+    },
     drawCar() {
       const carImg = new window.Image();
-      carImg.src = getSystemAssets("RacingCar.png", "racingCar");
+      carImg.src = getSystemAssets("car.png", "racingCar");
       this.configCar.image = carImg;
       this.configCar.height = this.laneWidth * 0.8;
       this.configCar.width = this.laneWidth * 0.8;
       this.carOffset = { x: this.laneWidth * 0.2, y: this.laneWidth * 0.1 };
       this.configCar.x = canvasTools.offset(
-        this.configPassage[this.currentOptionId],
+        this.configRoad[this.currentOptionId],
         this.carOffset
       ).x;
       this.configCar.y = canvasTools.offset(
-        this.configPassage[this.currentOptionId],
+        this.configRoad[this.currentOptionId],
         this.carOffset
       ).y;
     },
     update() {
-      this.movePassage();
+      this.moveRoad();
       this.moveCar();
     },
-    movePassage() {
-      if (this.passageX < this.gameWidth * -1.2) {
+    moveRoad() {
+      if (this.roadX < this.gameWidth * -1.2) {
         this.checkAnswer();
       } else {
-        this.passageX -= this.speed;
-        for (let passage in this.configPassage)
-          this.configPassage[passage].x = this.passageX;
+        this.roadX -= this.speed;
+        for (let road in this.configRoad) this.configRoad[road].x = this.roadX;
         for (let tunnel in this.configTunnel)
           this.configTunnel[tunnel].x = canvasTools.offset(
-            this.configPassage[0],
+            this.configRoad[0],
             this.tunnelOffset
           ).x;
         for (let option in this.configOption)
           this.configOption[option].x = canvasTools.offset(
-            this.configPassage[0],
+            this.configRoad[0],
             this.optionOffset
+          ).x;
+        for (let box in this.configTextBox)
+          this.configTextBox[box].x = canvasTools.offset(
+            this.configRoad[0],
+            this.textBoxOffset
           ).x;
       }
     },
@@ -200,7 +216,7 @@ export default {
           if (
             this.configCar.y >
             canvasTools.offset(
-              this.configPassage[this.currentOptionId],
+              this.configRoad[this.currentOptionId],
               this.carOffset
             ).y
           ) {
@@ -216,7 +232,7 @@ export default {
           if (
             this.configCar.y <
             canvasTools.offset(
-              this.configPassage[this.currentOptionId],
+              this.configRoad[this.currentOptionId],
               this.carOffset
             ).y
           ) {
@@ -299,7 +315,7 @@ export default {
     },
 
     replay() {
-      this.passageX = 0;
+      this.roadX = 0;
       this.speed = 1;
       this.canMove = true;
     },

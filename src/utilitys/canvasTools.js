@@ -24,3 +24,22 @@ export function shuffleOptions(array){
       }
     return shuffled;
 }
+
+export function isInBound(object, boundaries){
+    //boundaries={up, down, left, right}
+    if (
+        object.y < boundaries.up ||
+        object.y > boundaries.down ||
+        object.x < boundaries.left ||
+        object.x > boundaries.right
+      )
+        return false;
+    else return true;
+}
+
+export function randomPosition(boundaries){
+    return {
+        x: Math.random()*(boundaries.right-boundaries.left)+boundaries.left,
+        y: Math.random()*(boundaries.down-boundaries.up)+boundaries.up,
+    }
+}

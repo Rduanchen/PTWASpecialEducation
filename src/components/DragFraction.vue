@@ -6,20 +6,24 @@
           <v-rect :config="configBG"></v-rect>
           <v-rect :config="configSideBar"></v-rect>
         </v-layer>
-
-        <v-layer>
-          <v-shape :config="configCircleNumerator"></v-shape>
-          <v-circle
-            v-for="denominator in configCircleDenominator"
-            :config="denominator"
-          ></v-circle>
-          <v-circle
-            v-for="frame in configCircleFrame"
-            :config="frame"
-          ></v-circle>
+        <v-layer v-if="Data.shape == 'circle'">
+          <circleFraction
+            :gameWidth="gameWidth"
+            :gameHeight="gameHeight"
+            :numerator="numerator"
+            :denominator="denominator"
+            @addFill="addFill"
+          ></circleFraction>
         </v-layer>
-        <v-layer v-for="slice in configCircleSlice">
-          <v-line v-for="line in slice" :config="line"></v-line>
+
+        <v-layer v-if="Data.shape == 'rect'">
+          <rectFraction
+            :gameWidth="gameWidth"
+            :gameHeight="gameHeight"
+            :numerator="numerator"
+            :denominator="denominator"
+            @addFill="addFill"
+          ></rectFraction>
         </v-layer>
 
         <v-layer>
@@ -41,49 +45,42 @@ import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
 import * as canvasTools from "@/utilitys/canvasTools.js";
 import { defineAsyncComponent } from "vue";
 export default {
-  components: {},
+  components: {
+    circleFraction: defineAsyncComponent(() =>
+      import("@/components/dragFractionCircle.vue")
+    ),
+    rectFraction: defineAsyncComponent(() =>
+      import("@/components/dragFractionRect.vue")
+    ),
+  },
   data() {
     return {
       configKonva: {},
       configBG: {
-        fill: "lightgray",
-        stroke: "lightgray",
+        fill: "#DDF0FF",
+        stroke: "#DDF0FF",
       },
       configSideBar: {
-        fill: "gray",
-        stroke: "gray",
+        fill: "#84919B",
+        stroke: "#84919B",
       },
 
-      configCircleNumerator: {
-        draggable: true,
-        fill: "navy",
-        stroke: "navy",
-      },
-      configCircleDenominator: [],
-      configCircleFrame: [],
-      configCircleSlice: [],
+      gameWidth: 0,
+      gameHeight: 0,
 
       configArrow: [],
       configNumeratorNumber: {},
       configDenominatorNumber: {},
+      fill: [],
 
-      numerator: 2,
-      denominator: 2,
+      numerator: 3,
+      denominator: 3,
     };
   },
 
-  props: {
-    GameData: {
-      type: Object,
-      required: true,
-    },
-    GameConfig: {
-      type: Object,
-      required: true,
-    },
-  },
+  props: ["Data", "ID"],
 
-  emits: ["play-effect", "add-record", "next-question"],
+  emits: ["getAnswer"],
 
   beforeMount() {
     this.initializeScene();
@@ -103,46 +100,8 @@ export default {
       this.configSideBar.width = this.gameWidth * 0.25;
       this.configSideBar.height = this.gameHeight;
       this.configSideBar.x = this.gameWidth * 0.75;
-      this.drawCircleNumerator();
-      this.drawCircleDenominator();
-
       this.drawArrow();
       this.drawNumber();
-    },
-    update() {},
-
-    drawCircleNumerator() {
-      this.configCircleNumerator.radius = this.gameWidth * 0.075;
-      this.configCircleNumerator.x = this.gameWidth * 0.875;
-      this.configCircleNumerator.y = this.gameHeight * 0.2;
-      this.configCircleNumerator.startRadians = Math.PI * 1.5;
-      this.configCircleNumerator.endRadians =
-        Math.PI * (2 / this.numerator - 0.5);
-      this.configCircleNumerator.sceneFunc = this.circleSceneFunc;
-    },
-    drawCircleDenominator() {
-      let denominator = {
-        radius: this.gameWidth * 0.075,
-        x: this.gameWidth * 0.875,
-        y: this.gameHeight * 0.7,
-        fill: "navy",
-        stroke: "navy",
-      };
-      this.configCircleDenominator.push(denominator);
-    },
-    circleSceneFunc(context, shape) {
-      context.beginPath();
-      context.moveTo(0, 0);
-      context.arc(
-        0,
-        0,
-        shape.getAttr("radius"),
-        shape.getAttr("startRadians"),
-        shape.getAttr("endRadians")
-      );
-      context.lineTo(0, 0);
-      context.fillStrokeShape(shape);
-      context.closePath();
     },
 
     drawArrow() {
@@ -170,8 +129,8 @@ export default {
       ];
       for (let pos in arrowPosition) {
         let arrow = {
-          stroke: "brown",
-          fill: "brown",
+          stroke: "#BA3F38",
+          fill: "#BA3F38",
           length: this.gameWidth * 0.05,
           sceneFunc: this.arrowSceneFunc,
         };
@@ -208,22 +167,65 @@ export default {
     adjustNumber(e) {
       switch (e.target.attrs.operator) {
         case "numeratorMinus":
-          this.numerator--;
+          if (this.numerator > 2) this.numerator--;
           break;
         case "numeratorPlus":
-          this.numerator++;
+          if (this.numerator < 12) this.numerator++;
           break;
         case "denominatorMinus":
-          this.denominator--;
+          if (this.denominator > 2) this.denominator--;
           break;
         case "denominatorPlus":
-          this.denominator++;
+          if (this.denominator < 12) this.denominator++;
           break;
       }
+      this.drawAfterAdjusted();
+    },
+    drawAfterAdjusted() {
       this.configNumeratorNumber.text = this.numerator;
       this.configDenominatorNumber.text = this.denominator;
-      this.configCircleNumerator.endRadians =
-        Math.PI * (2 / this.numerator - 0.5);
+
+      if (this.numerator == 2) {
+        this.configArrow[0].fill = "#505050";
+        this.configArrow[0].stroke = "#505050";
+      } else if (this.numerator == 12) {
+        this.configArrow[1].fill = "#505050";
+        this.configArrow[1].stroke = "#505050";
+      } else {
+        this.configArrow[0].fill = "#BA3F38";
+        this.configArrow[0].stroke = "#BA3F38";
+        this.configArrow[1].fill = "#BA3F38";
+        this.configArrow[1].stroke = "#BA3F38";
+      }
+
+      if (this.denominator == 2) {
+        this.configArrow[2].fill = "#505050";
+        this.configArrow[2].stroke = "#505050";
+      } else if (this.denominator == 12) {
+        this.configArrow[3].fill = "#505050";
+        this.configArrow[3].stroke = "#505050";
+      } else {
+        this.configArrow[2].fill = "#BA3F38";
+        this.configArrow[2].stroke = "#BA3F38";
+        this.configArrow[3].fill = "#BA3F38";
+        this.configArrow[3].stroke = "#BA3F38";
+      }
+    },
+    addFill(fill) {
+      let total = 0;
+      for (let fraction in fill) {
+        total += fill[fraction];
+      }
+      if (this.Data.verifyOption == "answer") {
+        let answer = this.Data.answer.numerator / this.Data.answer.denominator;
+        if (answer.toFixed(2) == total.toFixed(2)) {
+          this.$emit("getAnswer", true);
+        } else {
+          this.$emit("getAnswer", false);
+        }
+      } else if (this.Data.verifyOption == "value") {
+        this.$emit("getAnswer", total.toFixed(2));
+      }
     },
   },
 };

@@ -4,7 +4,8 @@
       :grade="this.Grade"
       :gameName="this.Name"
       :subject="Subjects[Subject]"
-      @previous-page="previousPage" />
+      @previous-page="previousPage"
+    />
     <section>
       <div class="">
         <div class="Container">
@@ -122,8 +123,10 @@
             </template>
           </SideBar>
 
-
-          <scratchSheet v-if="scratchSheetVisible" @closeSheet="closeSratSheet"></scratchSheet>
+          <scratchSheet
+            v-if="scratchSheetVisible"
+            @closeSheet="closeSratSheet"
+          ></scratchSheet>
 
           <MediaModal
             :showMediaModal="showMediaModal"
@@ -146,13 +149,13 @@ import loading from "@/components/loading.vue";
 import GameStartandOver from "@/components/GameSystem/GameStartandOver.vue";
 import Header from "@/components/GameSystem/header.vue";
 import LevelAndTime from "@/components/GameSystem/LevelAndTime.vue";
-import MediaModal from '@/components/GameSystem/MediaModal.vue';
+import MediaModal from "@/components/GameSystem/MediaModal.vue";
 import scratchSheet from "@/components/ScratchSheets.vue";
 import hintbutton from "@/components/GameSystem/hintbutton.vue";
 import * as ImportUrl from "@/utilitys/get_assets.js";
 import { defineAsyncComponent } from "vue";
 import EffectWindow from "@/components/GameSystem/EffectWindow.vue";
-import gameStore from '@/stores/game';
+import gameStore from "@/stores/game";
 import { mapWritableState } from "pinia";
 import { soundManager } from "@/utilitys/sound-manager.js";
 import DragFraction from "../components/DragFraction.vue";
@@ -203,16 +206,21 @@ export default {
       questionOrder: [],
       questionCopy: [],
       isGif: false,
-      showMediaModal:false,
-      modalTitle:"",
-      mediaType:"none",
-      mediaSrc:"",
-      modalContent: '',
+      showMediaModal: false,
+      modalTitle: "",
+      mediaType: "none",
+      mediaSrc: "",
+      modalContent: "",
       // SentData2ChildComponent: {},
     };
   },
   computed: {
-    ...mapWritableState(gameStore, ['gameCode','transitionName','GameStatus','Nowlevel']),
+    ...mapWritableState(gameStore, [
+      "gameCode",
+      "transitionName",
+      "GameStatus",
+      "Nowlevel",
+    ]),
     selfdefinetemplate() {
       return defineAsyncComponent(() =>
         import(
@@ -232,7 +240,7 @@ export default {
     this.Subject = this.$route.params.Subject;
     this.Grade = this.$route.params.Grade;
     this.Name = this.$route.params.GameName;
-    this.GameStatus = 'NotStart';
+    this.GameStatus = "NotStart";
     this.Nowlevel = 1;
     (async () => {
       try {
@@ -245,7 +253,7 @@ export default {
         // this.InitIntroVideo();
         this.Dataloaded = true;
         this.randomChoice();
-        for(let x in this.GameData.Questions){
+        for (let x in this.GameData.Questions) {
           this.isPassLevel.push(false);
         }
       } catch (error) {
@@ -283,7 +291,7 @@ export default {
         if (this.GameData.Questions[i].length != undefined) {
           let num = this.GameData.Questions[i].length;
           let rand = Math.floor(Math.random() * (num - 0 + 0));
-          console.log('rand',rand);
+          console.log("rand", rand);
           question.push(this.GameData.Questions[i][rand]);
           record.push(rand);
         } else {
@@ -327,40 +335,40 @@ export default {
 
     setModalContent(contentType) {
       const contentMap = {
-        'hint': {
-          title: '需要提示嗎?',
-          content: '以下是遊戲的提示內容。',
-          hintType: this.Hint.Type
+        hint: {
+          title: "需要提示嗎?",
+          content: "以下是遊戲的提示內容。",
+          hintType: this.Hint.Type,
         },
-        'teach': {
-          title: '不會玩嗎?請看教學影片:',
-          content: '以下是遊戲的教學內容。',
-          hintType: null
-        }
+        teach: {
+          title: "不會玩嗎?請看教學影片:",
+          content: "以下是遊戲的教學內容。",
+          hintType: null,
+        },
       };
 
       if (contentMap[contentType]) {
         this.modalTitle = contentMap[contentType].title;
         this.modalContent = contentMap[contentType].content;
 
-        if (contentType === 'hint' && contentMap[contentType].hintType) {
+        if (contentType === "hint" && contentMap[contentType].hintType) {
           this.setHintMediaContent(contentMap[contentType].hintType);
         }
       }
     },
 
     setHintMediaContent(hintType) {
-      if (hintType === 'Level') {
-        this.modalContent = '這是關卡提示';
-      } else if (hintType === 'Single') {
-        this.modalContent = '這是單一提示';
+      if (hintType === "Level") {
+        this.modalContent = "這是關卡提示";
+      } else if (hintType === "Single") {
+        this.modalContent = "這是單一提示";
       }
     },
 
     getMediaSource(contentType) {
-      if (contentType === 'hint') {
+      if (contentType === "hint") {
         return this.fetchHintMedia();
-      } else if (contentType === 'teach') {
+      } else if (contentType === "teach") {
         return this.fetchIntroVideo();
       }
       return null;
@@ -368,13 +376,13 @@ export default {
 
     setMediaSource(mediaSource) {
       this.mediaSrc = mediaSource.filePath;
-      this.mediaType = mediaSource.sourceType === 'video' ? 'video' : 'image';
+      this.mediaType = mediaSource.sourceType === "video" ? "video" : "image";
     },
 
     handleMissingMedia() {
-      this.modalContent = '喔喔，沒有提供相關的資源';
-      this.mediaType = 'none';
-      console.warn('No media available for the selected content type.');
+      this.modalContent = "喔喔，沒有提供相關的資源";
+      this.mediaType = "none";
+      console.warn("No media available for the selected content type.");
     },
 
     fetchHintMedia() {
@@ -382,28 +390,28 @@ export default {
         const { filePath, sourceType } = this.getHintMediaData();
         return {
           filePath: ImportUrl.GamesGetAssetsFile(this.GameID, filePath),
-          sourceType
+          sourceType,
         };
       } catch {
-        console.warn('Missing data in Hint, type:', this.Hint.Type);
+        console.warn("Missing data in Hint, type:", this.Hint.Type);
         return null;
       }
     },
 
     getHintMediaData() {
       const hintType = this.Hint.Type;
-      if (hintType === 'Level') {
+      if (hintType === "Level") {
         return {
           filePath: this.GameData.Hint.Data[this.Nowlevel - 1].FilePath,
-          sourceType: this.GameData.Hint.Data[this.Nowlevel - 1].SourceType
+          sourceType: this.GameData.Hint.Data[this.Nowlevel - 1].SourceType,
         };
-      } else if (hintType === 'Single') {
+      } else if (hintType === "Single") {
         return {
           filePath: this.GameData.Hint.Data.FilePath,
-          sourceType: this.GameData.Hint.Data.SourceType
+          sourceType: this.GameData.Hint.Data.SourceType,
         };
       }
-      throw new Error('Invalid hint type');
+      throw new Error("Invalid hint type");
     },
 
     fetchIntroVideo() {
@@ -411,7 +419,7 @@ export default {
         const introFilePath = this.getIntroVideoFilePath();
         return {
           filePath: introFilePath,
-          sourceType: 'video'
+          sourceType: "video",
         };
       } catch {
         return this.getFallbackMedia();
@@ -419,9 +427,12 @@ export default {
     },
 
     getIntroVideoFilePath() {
-      const introFilePath = ImportUrl.GamesGetAssetsFile(this.GameID, this.GameData.introvideo).toString();
-      if (!introFilePath || introFilePath.includes('undefined')) {
-        throw new Error('Invalid intro video URL');
+      const introFilePath = ImportUrl.GamesGetAssetsFile(
+        this.GameID,
+        this.GameData.introvideo
+      ).toString();
+      if (!introFilePath || introFilePath.includes("undefined")) {
+        throw new Error("Invalid intro video URL");
       }
       return introFilePath;
     },
@@ -429,9 +440,9 @@ export default {
     getFallbackMedia() {
       const defaultGif = ImportUrl.getDefaultHintAssets(`${this.GameType}.gif`);
       if (defaultGif) {
-        return { filePath: defaultGif, sourceType: 'image' };
+        return { filePath: defaultGif, sourceType: "image" };
       }
-      console.warn('No Intro Video and no default GIF available');
+      console.warn("No Intro Video and no default GIF available");
       return null;
     },
     openMediaModal() {
@@ -487,14 +498,14 @@ export default {
       this.finaltime = 0;
       this.download_data = [[]];
       this.isPassLevel = [];
-      for(let x in this.GameData.Questions){
+      for (let x in this.GameData.Questions) {
         this.isPassLevel.push(false);
       }
     },
     nextQuestion() {
-      this.isPassLevel[this.Nowlevel-1] = true;
+      this.isPassLevel[this.Nowlevel - 1] = true;
       this.resetWrongTimes();
-      if(this.checkUnansweredQuestions()){
+      if (this.checkUnansweredQuestions()) {
         this.GameStatus = "Done";
         soundManager.stopAllSounds();
         this.effectPlayer("FireWorkAnimation");
@@ -514,7 +525,6 @@ export default {
 
         // 嘗試從當前等級以後尋找未回答的問題
         if (!this.findNextUnansweredQuestion(this.Nowlevel, totalQuestions)) {
-          
           // 如果找不到且當前是最後一題，則允許回到之前的未答題目
           if (this.Nowlevel === totalQuestions) {
             this.findNextUnansweredQuestion(0, totalQuestions);
@@ -533,7 +543,7 @@ export default {
       for (let i = startLevel; i < totalQuestions; i++) {
         if (!this.isPassLevel[i]) {
           this.Nowlevel = i + 1;
-          this.transitionName = 'slide-left';
+          this.transitionName = "slide-left";
           return true;
         }
       }
@@ -595,7 +605,7 @@ export default {
       }
     },
     effectPlayer(type) {
-      let sound;  
+      let sound;
       switch (type) {
         case "CorrectSound":
           this.effectPlayer("CorrectAnimation");
@@ -614,9 +624,11 @@ export default {
           }, 3000);
           break;
         case "HarraySound": //Wait for remove
-          console.warn("HarraySound is Deprecated, Please use FireWorkAnimation instead");
+          console.warn(
+            "HarraySound is Deprecated, Please use FireWorkAnimation instead"
+          );
           sound = new Audio();
-          sound.src = ImportUrl.GetSystemAssetsFile("harray.mp3","effects");
+          sound.src = ImportUrl.GetSystemAssetsFile("harray.mp3", "effects");
           sound.src = ImportUrl.GetSystemEffectAssetsFile("harray.mp3");
           soundManager.playSound(`harray`, false);
           sound.oncanplaythrough = function () {
@@ -717,7 +729,7 @@ export default {
     previousPage() {
       soundManager.stopAllSounds();
       this.exitFullScreen();
-      this.$router.replace({ path: `/GameSelect/${this.$route.params.Grade}`})
+      this.$router.replace({ path: `/GameSelect/${this.$route.params.Grade}` });
     },
     closeSratSheet() {
       this.scratchSheetVisible = false;
@@ -727,7 +739,7 @@ export default {
     },
     resetWrongTimes() {
       this.WrongTimes = 0;
-    }
+    },
   },
   components: {
     hintbutton,
@@ -993,7 +1005,7 @@ export default {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  flex-grow: 1; 
+  flex-grow: 1;
 }
 
 .mediaModal-footer {
