@@ -1,207 +1,601 @@
 {
-  "id": "MA4005",
-  "introvideo": "src",
-  "TotalLevel": 2,
-  "GameType": "LinkGame",
-  "GameConfig": {},
+  "id": "MA3032",
+  "GameType": "CompareGame",
+  "IntroText": {
+    "Type": "PlainText",
+    "Content": "請比較兩邊的容量，並將正確的比大小的符號拖曳到正確框框中"
+  },
+  "GameConfig": {
+    "CustomeSymbol": true,
+    "SystemSymbol": "BigSmall",
+    "WithImage": false,
+    "CheckAnswerMode": "Button"
+  },
+
   "Questions": [
     [
       {
-        "Question": {
-          "text": "連連看!牛奶150ml，礦泉水210ml，汽水250ml",
-          "RowData": [
-            [
-              { "Name": "ImageContainer", "Data": { "Src": "milk.png" } },
-              { "Name": "ImageContainer", "Data": { "Src": "water.png" } },
-              { "Name": "ImageContainer", "Data": { "Src": "cola.png" } }
-            ],
-            [
-              { "Name": "ImageContainer", "Data": { "Src": "250ml.png" } },
-              { "Name": "ImageContainer", "Data": { "Src": "150ml.png" } },
-              { "Name": "ImageContainer", "Data": { "Src": "210ml.png" } }
-            ]
-          ]
-        },
-        "Answer": [
+        "QuestionText": "毫升公升比大小",
+        "Description": "毫升公升比大小",
+        "SlotComponentVerifycation": true,
+        "OptionBarTitle": "在口裡填入>、<或= ",
+        "Datas": [
           [
-            [0, 0],
-            [1, 1]
-          ],
-          [
-            [0, 1],
-            [1, 2]
-          ],
-          [
-            [0, 2],
-            [1, 0]
-          ]
-        ]
-      },
-      {
-        "Question": {
-          "text": "連連看!西瓜汁140ml，紅茶100ml，奶茶90ml",
-          "RowData": [
-            [
-              {
-                "Name": "ImageContainer",
-                "Data": { "Src": "watermelon-juice.png" }
-              },
-              { "Name": "ImageContainer", "Data": { "Src": "black-tea.png" } },
-              { "Name": "ImageContainer", "Data": { "Src": "bubble-tea.png" } }
-            ],
-            [
-              { "Name": "ImageContainer", "Data": { "Src": "100ml.png" } },
-              { "Name": "ImageContainer", "Data": { "Src": "140ml.png" } },
-              { "Name": "ImageContainer", "Data": { "Src": "90ml.png" } }
-            ]
-          ]
-        },
-        "Answer": [
-          [
-            [0, 0],
-            [1, 1]
-          ],
-          [
-            [0, 1],
-            [1, 0]
-          ],
-          [
-            [0, 2],
-            [1, 2]
-          ]
-        ]
-      },
-      {
-        "Question": {
-          "text": "連連看!柳橙汁230ml，豆漿170ml，運動飲料210ml",
-          "RowData": [
-            [
-              {
-                "Name": "ImageContainer",
-                "Data": { "Src": "orange-juice.png" }
-              },
-              { "Name": "ImageContainer", "Data": { "Src": "soy-milk.png" } },
-              {
-                "Name": "ImageContainer",
-                "Data": { "Src": "energy-drink.png" }
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "四公升"
               }
-            ],
-            [
-              { "Name": "ImageContainer", "Data": { "Src": "210ml.png" } },
-              { "Name": "ImageContainer", "Data": { "Src": "170ml.png" } },
-              { "Name": "ImageContainer", "Data": { "Src": "230ml.png" } }
-            ]
+            },
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "四千毫升"
+              }
+            }
           ]
-        },
-        "Answer": [
+        ],
+        "Answer": ["Equal"]
+      },
+      {
+        "QuestionText": "毫升公升比大小",
+        "Description": "毫升公升比大小",
+        "SlotComponentVerifycation": true,
+        "OptionBarTitle": "在口裡填入>、<或= ",
+        "Datas": [
           [
-            [0, 0],
-            [1, 2]
-          ],
-          [
-            [0, 1],
-            [1, 1]
-          ],
-          [
-            [0, 2],
-            [1, 0]
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "三公升"
+              }
+            },
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "三千毫升"
+              }
+            }
           ]
-        ]
+        ],
+        "Answer": ["Equal"]
+      },
+      {
+        "QuestionText": "毫升公升比大小",
+        "Description": "毫升公升比大小",
+        "SlotComponentVerifycation": true,
+        "OptionBarTitle": "在口裡填入>、<或= ",
+        "Datas": [
+          [
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "五公升"
+              }
+            },
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "五千毫升"
+              }
+            }
+          ]
+        ],
+        "Answer": ["Equal"]
+      },
+      {
+        "QuestionText": "毫升公升比大小",
+        "Description": "毫升公升比大小",
+        "SlotComponentVerifycation": true,
+        "OptionBarTitle": "在口裡填入>、<或= ",
+        "Datas": [
+          [
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "九公升"
+              }
+            },
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "九千毫升"
+              }
+            }
+          ]
+        ],
+        "Answer": ["Equal"]
+      },
+      {
+        "QuestionText": "毫升公升比大小",
+        "Description": "毫升公升比大小",
+        "SlotComponentVerifycation": true,
+        "OptionBarTitle": "在口裡填入>、<或= ",
+        "Datas": [
+          [
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "十公升"
+              }
+            },
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "一萬毫升"
+              }
+            }
+          ]
+        ],
+        "Answer": ["Equal"]
       }
     ],
     [
       {
-        "Question": {
-          "text": "連連看!將一樣多的杯子連起來",
-          "RowData": [
-            [
-              { "Name": "ImageContainer", "Data": { "Src": "1500ml.png" } },
-              { "Name": "ImageContainer", "Data": { "Src": "900ml.png" } },
-              { "Name": "ImageContainer", "Data": { "Src": "1200ml.png" } }
-            ],
-            [
-              { "Name": "ImageContainer", "Data": { "Src": "2-1500ml.png" } },
-              { "Name": "ImageContainer", "Data": { "Src": "2-1200ml.png" } },
-              { "Name": "ImageContainer", "Data": { "Src": "2-900ml.png" } }
-            ]
+        "QuestionText": "毫升公升比大小",
+        "Description": "毫升公升比大小",
+        "SlotComponentVerifycation": true,
+        "OptionBarTitle": "在口裡填入>、<或= ",
+        "Datas": [
+          [
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "一公升"
+              }
+            },
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "一百毫升"
+              }
+            }
           ]
-        },
-        "Answer": [
-          [
-            [0, 0],
-            [1, 0]
-          ],
-          [
-            [0, 1],
-            [1, 2]
-          ],
-          [
-            [0, 2],
-            [1, 1]
-          ]
-        ]
+        ],
+        "Answer": ["Big"]
       },
       {
-        "Question": {
-          "text": "連連看!將一樣多的杯子連起來",
-          "RowData": [
-            [
-              { "Name": "ImageContainer", "Data": { "Src": "1000ml.png" } },
-              { "Name": "ImageContainer", "Data": { "Src": "1900ml.png" } },
-              { "Name": "ImageContainer", "Data": { "Src": "1700ml.png" } }
-            ],
-            [
-              { "Name": "ImageContainer", "Data": { "Src": "2-1900ml.png" } },
-              { "Name": "ImageContainer", "Data": { "Src": "2-1700ml.png" } },
-              { "Name": "ImageContainer", "Data": { "Src": "2-1000ml.png" } }
-            ]
+        "QuestionText": "毫升公升比大小",
+        "Description": "毫升公升比大小",
+        "SlotComponentVerifycation": true,
+        "OptionBarTitle": "在口裡填入>、<或= ",
+        "Datas": [
+          [
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "兩百毫升"
+              }
+            },
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "兩公升"
+              }
+            }
           ]
-        },
-        "Answer": [
-          [
-            [0, 0],
-            [1, 2]
-          ],
-          [
-            [0, 1],
-            [1, 0]
-          ],
-          [
-            [0, 2],
-            [1, 1]
-          ]
-        ]
+        ],
+        "Answer": ["Small"]
       },
       {
-        "Question": {
-          "text": "連連看!將一樣多的杯子連起來",
-          "RowData": [
-            [
-              { "Name": "ImageContainer", "Data": { "Src": "1600ml.png" } },
-              { "Name": "ImageContainer", "Data": { "Src": "1400ml.png" } },
-              { "Name": "ImageContainer", "Data": { "Src": "1800ml.png" } }
-            ],
-            [
-              { "Name": "ImageContainer", "Data": { "Src": "2-1800ml.png" } },
-              { "Name": "ImageContainer", "Data": { "Src": "2-1600ml.png" } },
-              { "Name": "ImageContainer", "Data": { "Src": "2-1400ml.png" } }
-            ]
+        "QuestionText": "毫升公升比大小",
+        "Description": "毫升公升比大小",
+        "SlotComponentVerifycation": true,
+        "OptionBarTitle": "在口裡填入>、<或= ",
+        "Datas": [
+          [
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "一公升"
+              }
+            },
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "一千毫升"
+              }
+            }
           ]
-        },
-        "Answer": [
+        ],
+        "Answer": ["Equal"]
+      },
+      {
+        "QuestionText": "毫升公升比大小",
+        "Description": "毫升公升比大小",
+        "SlotComponentVerifycation": true,
+        "OptionBarTitle": "在口裡填入>、<或= ",
+        "Datas": [
           [
-            [0, 0],
-            [1, 1]
-          ],
-          [
-            [0, 1],
-            [1, 2]
-          ],
-          [
-            [0, 2],
-            [1, 0]
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "三百毫升"
+              }
+            },
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "三公升"
+              }
+            }
           ]
-        ]
+        ],
+        "Answer": ["Small"]
+      },
+      {
+        "QuestionText": "毫升公升比大小",
+        "Description": "毫升公升比大小",
+        "SlotComponentVerifycation": true,
+        "OptionBarTitle": "在口裡填入>、<或= ",
+        "Datas": [
+          [
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "兩公升"
+              }
+            },
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "兩千毫升"
+              }
+            }
+          ]
+        ],
+        "Answer": ["Equal"]
+      }
+    ],
+    [
+      {
+        "QuestionText": "毫升公升比大小",
+        "Description": "毫升公升比大小",
+        "SlotComponentVerifycation": true,
+        "OptionBarTitle": "在口裡填入>、<或= ",
+        "Datas": [
+          [
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "十七毫升"
+              }
+            },
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "十七公升"
+              }
+            }
+          ]
+        ],
+        "Answer": ["Small"]
+      },
+      {
+        "QuestionText": "毫升公升比大小",
+        "Description": "毫升公升比大小",
+        "SlotComponentVerifycation": true,
+        "OptionBarTitle": "在口裡填入>、<或= ",
+        "Datas": [
+          [
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "二十毫升"
+              }
+            },
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "二十公升"
+              }
+            }
+          ]
+        ],
+        "Answer": ["Small"]
+      },
+      {
+        "QuestionText": "毫升公升比大小",
+        "Description": "毫升公升比大小",
+        "SlotComponentVerifycation": true,
+        "OptionBarTitle": "在口裡填入>、<或= ",
+        "Datas": [
+          [
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "五十公升"
+              }
+            },
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "五十毫升"
+              }
+            }
+          ]
+        ],
+        "Answer": ["Big"]
+      },
+      {
+        "QuestionText": "毫升公升比大小",
+        "Description": "毫升公升比大小",
+        "SlotComponentVerifycation": true,
+        "OptionBarTitle": "在口裡填入>、<或= ",
+        "Datas": [
+          [
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "五毫升"
+              }
+            },
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "五公升"
+              }
+            }
+          ]
+        ],
+        "Answer": ["Small"]
+      },
+      {
+        "QuestionText": "毫升公升比大小",
+        "Description": "毫升公升比大小",
+        "SlotComponentVerifycation": true,
+        "OptionBarTitle": "在口裡填入>、<或= ",
+        "Datas": [
+          [
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "一公升"
+              }
+            },
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "一毫升"
+              }
+            }
+          ]
+        ],
+        "Answer": ["Big"]
+      }
+    ],
+    [
+      {
+        "QuestionText": "毫升公升比大小",
+        "Description": "毫升公升比大小",
+        "SlotComponentVerifycation": true,
+        "OptionBarTitle": "在口裡填入>、<或= ",
+        "Datas": [
+          [
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "一千六百毫升"
+              }
+            },
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "一公升六百毫升"
+              }
+            }
+          ]
+        ],
+        "Answer": ["Equal"]
+      },
+      {
+        "QuestionText": "毫升公升比大小",
+        "Description": "毫升公升比大小",
+        "SlotComponentVerifycation": true,
+        "OptionBarTitle": "在口裡填入>、<或= ",
+        "Datas": [
+          [
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "一千一百毫升"
+              }
+            },
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "一公升六十毫升"
+              }
+            }
+          ]
+        ],
+        "Answer": ["Big"]
+      },
+      {
+        "QuestionText": "毫升公升比大小",
+        "Description": "毫升公升比大小",
+        "SlotComponentVerifycation": true,
+        "OptionBarTitle": "在口裡填入>、<或= ",
+        "Datas": [
+          [
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "兩公升二十毫升"
+              }
+            },
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "兩千零二十毫升"
+              }
+            }
+          ]
+        ],
+        "Answer": ["Equal"]
+      },
+      {
+        "QuestionText": "毫升公升比大小",
+        "Description": "毫升公升比大小",
+        "SlotComponentVerifycation": true,
+        "OptionBarTitle": "在口裡填入>、<或= ",
+        "Datas": [
+          [
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "三千五百毫升"
+              }
+            },
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "三公升五十毫升"
+              }
+            }
+          ]
+        ],
+        "Answer": ["Big"]
+      },
+      {
+        "QuestionText": "毫升公升比大小",
+        "Description": "毫升公升比大小",
+        "SlotComponentVerifycation": true,
+        "OptionBarTitle": "在口裡填入>、<或= ",
+        "Datas": [
+          [
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "兩千四百五十毫升"
+              }
+            },
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "兩公升四十五毫升"
+              }
+            }
+          ]
+        ],
+        "Answer": ["Big"]
+      }
+    ],
+    [
+      {
+        "QuestionText": "毫升公升比大小",
+        "Description": "毫升公升比大小",
+        "SlotComponentVerifycation": true,
+        "OptionBarTitle": "在口裡填入>、<或= ",
+        "Datas": [
+          [
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "三千零二十毫升"
+              }
+            },
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "三公升兩百毫升"
+              }
+            }
+          ]
+        ],
+        "Answer": ["Small"]
+      },
+      {
+        "QuestionText": "毫升公升比大小",
+        "Description": "毫升公升比大小",
+        "SlotComponentVerifycation": true,
+        "OptionBarTitle": "在口裡填入>、<或= ",
+        "Datas": [
+          [
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "一千零一十毫升"
+              }
+            },
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "一公升一百毫升"
+              }
+            }
+          ]
+        ],
+        "Answer": ["Small"]
+      },
+      {
+        "QuestionText": "毫升公升比大小",
+        "Description": "毫升公升比大小",
+        "SlotComponentVerifycation": true,
+        "OptionBarTitle": "在口裡填入>、<或= ",
+        "Datas": [
+          [
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "兩千兩百毫升"
+              }
+            },
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "兩公升兩百毫升"
+              }
+            }
+          ]
+        ],
+        "Answer": ["Equal"]
+      },
+      {
+        "QuestionText": "毫升公升比大小",
+        "Description": "毫升公升比大小",
+        "SlotComponentVerifycation": true,
+        "OptionBarTitle": "在口裡填入>、<或= ",
+        "Datas": [
+          [
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "一千五百二十毫升"
+              }
+            },
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "一公升五百二十毫升"
+              }
+            }
+          ]
+        ],
+        "Answer": ["Equal"]
+      },
+      {
+        "QuestionText": "毫升公升比大小",
+        "Description": "毫升公升比大小",
+        "SlotComponentVerifycation": true,
+        "OptionBarTitle": "在口裡填入>、<或= ",
+        "Datas": [
+          [
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "三千兩百一十毫升"
+              }
+            },
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "三公升二十一毫升"
+              }
+            }
+          ]
+        ],
+        "Answer": ["Big"]
       }
     ]
   ]

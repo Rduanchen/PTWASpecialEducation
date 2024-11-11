@@ -63,7 +63,6 @@
                   @play-effect="effectPlayer"
                   @next-question="nextQuestion"
                   @previous-question="previousQuestion"
-                  @change-level="changelevel"
                   @start-game="startGame"
                   @reload-page="reloadPage"
                   @change-status="changeGameStatus"
@@ -158,6 +157,8 @@ import gameStore from "@/stores/game";
 import { mapWritableState } from "pinia";
 import { soundManager } from "@/utilitys/sound-manager.js";
 import DragFraction from "../components/DragFraction.vue";
+import LinktoImage from "./GameTemplate/LinktoImage.vue";
+import WordProblemWithCalculator from "./GameTemplate/WordProblemWithCalculator.vue";
 
 export default {
   data() {
@@ -831,6 +832,12 @@ export default {
     ), //for testing only
     NumberLock: defineAsyncComponent(() =>
       import("@/views/GameTemplate/NumberLock.vue")
+    ),
+    LinkToImage: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/LinktoImage.vue")
+    ),
+    WordProblemWithCalculator: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/WordProblemWithCalculator.vue")
     ),
   },
 };

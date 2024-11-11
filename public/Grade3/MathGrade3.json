@@ -115,13 +115,13 @@
             "id": "MA3032",
             "Name": "比大小",
             "Description": "比比看，並將正確的符號拖曳到框框中",
-            "Img": "MA30.png"
+            "Img": "MA3032.png"
           },
           {
             "id": "MA3033",
             "Name": "認識毫升",
             "Description": "將量杯填滿至指定的公升數",
-            "Img": "MA3031.png"
+            "Img": "MA3033.png"
           }
         ]
       },
@@ -130,15 +130,15 @@
         "Games": [
           {
             "id": "MA3034",
-            "Name": "認識毫升",
-            "Description": "將量杯填滿至指定的公升數",
-            "Img": "MA3031.png"
+            "Name": "容積的加減(計算題)",
+            "Description": "使用定位版計算答案，並且填到框框中",
+            "Img": "MA3034.png"
           },
           {
             "id": "MA3035",
             "Name": "認識毫升",
             "Description": "將量杯填滿至指定的公升數",
-            "Img": "MA3031.png"
+            "Img": "MA3035.png"
           }
         ]
       }
