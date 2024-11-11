@@ -830,6 +830,9 @@ export default {
     DragFraction: defineAsyncComponent(() =>
       import("@/views/GameTemplate/DragFractionTester.vue")
     ), //for testing only
+    MoneyDrag: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/MoneyDrag.vue")
+    ),
   },
 };
 </script>
