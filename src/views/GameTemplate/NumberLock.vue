@@ -173,10 +173,6 @@ export default {
       console.log(result);
       this.topComponentsAnswer = result;
     },
-    GetComponentAnswer(Reply, index) {
-      console.log("Recive:", Reply);
-      this.ComponentsAnswers = Reply;
-    },
     NowClick() {
       if (this.GameConfig.layout.pad == false) return;
       if (document.activeElement.tagName == "INPUT") {
