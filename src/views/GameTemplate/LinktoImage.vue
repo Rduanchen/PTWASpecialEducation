@@ -1,97 +1,93 @@
 <template>
-  <div class="OutterContainer">
-    1234
-    <div class="MainStage">
-      <v-stage
-        ref="stage"
-        :config="stageConfig"
-        @mousemove="Drawing"
-        @mouseup="EndDrawing"
-      >
-        <v-layer ref="RectContainer">
-          <v-rect
-            v-for="(item, index) in Rects"
-            :key="index"
-            :config="item"
-            @mousedown="StartDrawing(index)"
-          />
-          <v-text v-for="(item, index) in Texts" :key="index" :config="item" />
-        </v-layer>
-        <v-layer ref="layer">
-          <v-image :config="ImageConfig" />
-          <v-circle
-            v-for="(item, index) in ImageMountPoint"
-            :key="index"
-            :config="item"
-          />
-        </v-layer>
-        <v-layer ref="LineLayer">
-          <v-line v-for="(item, index) in Lines" :key="index" :config="item" />
-        </v-layer>
-      </v-stage>
+  <div class="OutterContainer container">
+    <div class="title">
+      <a>{{ GameData.Question }}</a>
     </div>
-    <div class="Functions">
-      <button @click="CheckAllAnswer">檢查答案</button>
-      <button @click="ClearAll">清除所有答案</button>
-      <button @click="Pop">清除最後一個</button>
-      <p v-if="ErrorMesseagesSwitch.AllAnswerNotFinish">所有答案尚未完成</p>
-      <p v-if="ErrorMesseagesSwitch.WrongAnswer">答案有誤</p>
+    <div class="game-area">
+      <div class="main-stage">
+        <v-stage
+          ref="stage"
+          :config="stageConfig"
+          @pointermove="Drawing"
+          @pointerup="EndDrawing"
+        >
+          <v-layer ref="RectContainer">
+            <v-rect
+              v-for="(item, index) in Rects"
+              :key="index"
+              :config="item"
+              @pointerdown="StartDrawing(index)"
+            />
+            <v-text
+              v-for="(item, index) in Texts"
+              :key="index"
+              :config="item"
+              @pointerdown="StartDrawing(index)"
+            />
+          </v-layer>
+          <v-layer ref="layer">
+            <v-image :config="ImageConfig" />
+            <v-circle
+              v-for="(item, index) in ImageMountPoint"
+              :key="index"
+              :config="item"
+            />
+          </v-layer>
+          <v-layer ref="LineLayer">
+            <v-line
+              v-for="(item, index) in Lines"
+              :key="index"
+              :config="item"
+            />
+          </v-layer>
+        </v-stage>
+      </div>
+      <div class="Functions">
+        <button @click="CheckAllAnswer">檢查答案</button>
+        <button @click="ClearAll">清除所有答案</button>
+        <button @click="Pop">清除最後一個</button>
+
+        <div class="error">
+          <p
+            class="header"
+            v-if="
+              ErrorMesseagesSwitch.AllAnswerNotFinish ||
+              ErrorMesseagesSwitch.WrongAnswer
+            "
+          >
+            錯誤
+          </p>
+          <p v-if="ErrorMesseagesSwitch.AllAnswerNotFinish">所有答案尚未完成</p>
+          <p v-if="ErrorMesseagesSwitch.WrongAnswer">答案有誤</p>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { FastLayer } from "konva/lib/FastLayer";
+import { getGameAssets } from "@/utilitys/get_assets.js";
 export default {
   name: "LinktoImageGame",
-  //   props: {
-  // GameData: {
-  //   type: Object,
-  //   required: true,
-  // },
-  // GameConfig: {
-  //   type: Object,
-  //   required: true,
-  // },
-  // id: {
-  //   type: String,
-  //   required: true,
-  // },
-  //   },
+  props: {
+    GameData: {
+      type: Object,
+      required: true,
+    },
+    GameConfig: {
+      type: Object,
+      required: true,
+    },
+    id: {
+      type: String,
+      required: true,
+    },
+  },
   data() {
     return {
       stageConfig: {
         width: 700,
         height: 500,
-      },
-      GameData: {
-        Question: "Which one is the correct answer?",
-        BGSrc:
-          "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
-        SelectionType: "Text",
-        Selections: ["1", "2", "3", "4", "5", "6"],
-        MountPoint: [
-          {
-            Connect2: "1",
-            X: 100,
-            Y: 100,
-          },
-          {
-            Connect2: "2",
-            X: 200,
-            Y: 100,
-          },
-          {
-            Connect2: "3",
-            X: 300,
-            Y: 200,
-          },
-          {
-            Connect2: ["4", "5"],
-            X: 400,
-            Y: 300,
-          },
-        ],
       },
       Rects: [],
       Lines: [],
@@ -112,6 +108,18 @@ export default {
         AllAnswerNotFinish: false,
         WrongAnswer: false,
       },
+      randomColorlist: [
+        "F6BD60",
+        "F7EDE2",
+        "F5CAC3",
+        "84A59D",
+        "F28482",
+        "F5CAC3",
+        "F7EDE2",
+        "F6BD60",
+        "84A59D",
+        "F28482",
+      ],
     };
   },
   methods: {
@@ -238,11 +246,13 @@ export default {
         this.ErrorMesseagesSwitch.AllAnswerNotFinish = false;
       }
       if (this.LinkedRecord.length == this.Pair.length && WrongAmount == 0) {
-        console.log("Pass");
-        this.$;
+        this.$emit("play-effect", "CorrectSound");
+        this.$emit("add-record", ["不支援", "不支援", "正確"]);
+        this.$emit("next-question");
         Pass = true;
       } else {
-        console.log("Not Pass");
+        this.$emit("play-effect", "WrongSound");
+        this.$emit("add-record", ["不支援", "不支援", "正確"]);
         Pass = false;
       }
       return {
@@ -263,11 +273,120 @@ export default {
       this.Lines = [];
       this.$refs.LineLayer.getNode().batchDraw();
     },
-    InitAnswer() {},
+    addText({ x, y, width, text }) {
+      this.Texts.push({
+        x: x,
+        y: y,
+        text: text,
+        align: "center",
+        width: width,
+        fontSize: this.FontSize,
+      });
+    },
+    addRect(x, y, width, height) {
+      this.Rects.push({
+        x: x,
+        y: y,
+        width: width,
+        height: height,
+        cornerRadius: this.RectCornerRaduis,
+        fill: this.randomColor(),
+      });
+    },
+    randomColor() {
+      return ` #${
+        this.randomColorlist[
+          Math.floor(Math.random() * (this.randomColorlist.length - 1))
+        ]
+      }`;
+    },
+    configRect() {
+      //Config Rect
+      if (this.GameData.Selections.length <= 4) {
+        // 小於等於4，一行排列
+        let RectWidth =
+          (this.stageConfig.width -
+            (this.GameData.Selections.length + 1) * this.MinGap) /
+          this.GameData.Selections.length;
+
+        this.GameData.Selections.forEach((item, index) => {
+          this.addRect(
+            this.MinGap + index * (RectWidth + this.MinGap),
+            0,
+            RectWidth,
+            100
+          );
+          this.addText({
+            x: this.MinGap + index * (RectWidth + this.MinGap) + RectWidth / 2,
+            y: 50,
+            text: item,
+            width: RectWidth,
+          });
+        });
+      } else {
+        let RectWidth =
+          (this.stageConfig.width -
+            (this.GameData.Selections.length / 2 + 1) * this.MinGap) /
+          (this.GameData.Selections.length / 2);
+        this.GameData.Selections.forEach((item, index) => {
+          if (index % 2 == 0) {
+            this.addRect(
+              this.MinGap + parseInt(index / 2) * (RectWidth + this.MinGap),
+              0,
+              RectWidth,
+              this.SelectionHeight
+            );
+            this.addText({
+              x: this.MinGap + parseInt(index / 2) * (RectWidth + this.MinGap),
+              y: (this.SelectionHeight - this.FontSize) / 2,
+              width: RectWidth,
+              text: item,
+            });
+          } else {
+            this.addRect(
+              this.MinGap + parseInt(index / 2) * (RectWidth + this.MinGap),
+              this.stageConfig.height - this.SelectionHeight,
+              RectWidth,
+              this.SelectionHeight
+            );
+            this.addText({
+              x: this.MinGap + parseInt(index / 2) * (RectWidth + this.MinGap),
+              y: this.stageConfig.height - this.SelectionHeight / 2 - 10, // 10 is magic number
+              text: item,
+              width: RectWidth,
+            });
+          }
+        });
+      }
+    },
+    configPoint() {
+      this.Pair = [];
+      for (let i in this.GameData.MountPoint) {
+        for (let j in this.GameData.Selections) {
+          if (typeof this.GameData.MountPoint[i].Connect2 == "string") {
+            if (
+              this.GameData.MountPoint[i].Connect2 ==
+              this.GameData.Selections[j]
+            ) {
+              this.Pair.push([i, j]);
+            }
+          } else {
+            for (let k in this.GameData.MountPoint[i].Connect2) {
+              if (
+                this.GameData.MountPoint[i].Connect2[k] ==
+                this.GameData.Selections[j]
+              ) {
+                this.Pair.push([i, j]);
+              }
+            }
+          }
+        }
+      }
+    },
   },
   created() {
     let BGImage = new window.Image();
-    BGImage.src = this.GameData.BGSrc;
+    BGImage.src = getGameAssets(this.id, this.GameData.BGSrc);
 
     // 當圖片載入完成後再進行縮放和定位計算
     BGImage.onload = () => {
@@ -308,112 +427,20 @@ export default {
       console.log(this.ImageConfig.x, this.ImageConfig.y);
       this.GameData.MountPoint.forEach((item) => {
         this.ImageMountPoint.push({
-          x: item.X + NewX,
-          y: item.Y + NewY + this.SelectionHeight,
+          x: item.x + NewX,
+          y: item.y + NewY + this.SelectionHeight,
           radius: 10,
           fill: "yellow",
         });
       });
     };
 
-    //Config Rect
-    if (this.GameData.Selections.length <= 4) {
-      let RectWidth =
-        (this.stageConfig.width -
-          (this.GameData.Selections.length + 1) * this.MinGap) /
-        this.GameData.Selections.length;
-      this.GameData.Selections.forEach((item, index) => {
-        this.Rects.push({
-          x: this.MinGap + index * (RectWidth + this.MinGap),
-          y: 0,
-          width: RectWidth,
-          cornerRadius: this.RectCornerRaduis,
-          height: 100,
-          fill: "red",
-        });
-        this.Texts.push({
-          x: this.MinGap + index * (RectWidth + this.MinGap) + RectWidth / 2,
-          y: this.stageConfig.height - this.SelectionHeight - this.FontSize / 2,
-          text: item,
-          align: "center",
-          fontSize: this.FontSize,
-        });
-      });
-    } else {
-      let RectWidth =
-        (this.stageConfig.width -
-          (this.GameData.Selections.length / 2 + 1) * this.MinGap) /
-        (this.GameData.Selections.length / 2);
-      this.GameData.Selections.forEach((item, index) => {
-        if (index % 2 == 0) {
-          this.Rects.push({
-            x: this.MinGap + parseInt(index / 2) * (RectWidth + this.MinGap),
-            y: 0,
-            width: RectWidth,
-            height: this.SelectionHeight,
-            cornerRadius: this.RectCornerRaduis,
-            fill: "red",
-          });
-          this.Texts.push({
-            x:
-              this.MinGap +
-              parseInt(index / 2) * (RectWidth + this.MinGap) +
-              RectWidth / 2,
-            y: (this.SelectionHeight - this.FontSize) / 2,
-            text: item,
-            align: "center",
-            fontSize: this.FontSize,
-          });
-        } else {
-          this.Rects.push({
-            x: this.MinGap + parseInt(index / 2) * (RectWidth + this.MinGap),
-            y: this.stageConfig.height - this.SelectionHeight,
-            width: RectWidth,
-            height: this.SelectionHeight,
-            cornerRadius: this.RectCornerRaduis,
-            fill: "blue",
-          });
-          this.Texts.push({
-            x:
-              this.MinGap +
-              parseInt(index / 2) * (RectWidth + this.MinGap) +
-              RectWidth / 2,
-            y:
-              this.stageConfig.height -
-              (this.SelectionHeight - this.FontSize) / 2 -
-              this.FontSize,
-            text: item,
-            align: "center",
-            fontSize: this.FontSize,
-          });
-        }
-      });
-    }
-    this.Pair = [];
-    for (let i in this.GameData.MountPoint) {
-      for (let j in this.GameData.Selections) {
-        if (typeof this.GameData.MountPoint[i].Connect2 == "string") {
-          if (
-            this.GameData.MountPoint[i].Connect2 == this.GameData.Selections[j]
-          ) {
-            this.Pair.push([i, j]);
-          }
-        } else {
-          for (let k in this.GameData.MountPoint[i].Connect2) {
-            if (
-              this.GameData.MountPoint[i].Connect2[k] ==
-              this.GameData.Selections[j]
-            ) {
-              this.Pair.push([i, j]);
-            }
-          }
-        }
-      }
-    }
+    this.configRect();
+    this.configPoint();
   },
   mounted() {
     // Stage border
-    this.InitAnswer();
+    // this.InitAnswer();
     let layer = this.$refs.layer.getNode();
     layer.moveToBottom();
     layer.draw();
@@ -424,28 +451,49 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .OutterContainer {
-  display: grid;
-  grid-template-columns: 0.5fr 8fr 3fr 0.5fr;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $gap--small;
+  .game-area {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+  }
 }
-.MainStage {
-  grid-column: 2/3;
+
+.title {
+  @extend .container-basic;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: $primary-color;
+  padding: $gap--small;
+  width: 100%;
+  a {
+    font-size: $text-medium;
+    font-weight: $text-bold;
+  }
+}
+
+.main-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .Functions {
   display: flex;
-  grid-column: 3/4;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   gap: 1rem;
-  p {
-    color: red;
-    font-weight: 700;
-  }
   button {
     width: 100%;
+    min-width: 200px;
     height: 3rem;
     border: none;
     background-color: #4caf50;
@@ -456,6 +504,20 @@ export default {
   button:hover {
     scale: 1.1;
     transition: 0.5s;
+  }
+  .error {
+    align-self: flex-start;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    .header {
+      font-size: $text-medium;
+      font-weight: $text-bold;
+    }
+    p {
+      font-weight: $text-bold;
+      color: $error-color;
+    }
   }
 }
 </style>
