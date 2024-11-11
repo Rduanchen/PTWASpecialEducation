@@ -839,6 +839,9 @@ export default {
     WordProblemWithCalculator: defineAsyncComponent(() =>
       import("@/views/GameTemplate/WordProblemWithCalculator.vue")
     ),
+    MoneyDrag: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/MoneyDrag.vue")
+    ),
   },
 };
 </script>
