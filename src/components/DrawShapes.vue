@@ -6,6 +6,9 @@
         @mousedown="drawNewLine"
         @mousemove="moveLine"
         @mouseup="stopDrawing"
+        @touchstart="drawNewLine"
+        @touchmove="moveLine"
+        @touchend="stopDrawing"
       >
         <v-layer>
           <v-line
@@ -13,7 +16,11 @@
             :points="pointSet"
             :stroke="'black'"
           ></v-line>
-          <v-image :config="configReturnBtn" @mousedown="deleteLine"></v-image>
+          <v-image
+            :config="configReturnBtn"
+            @mousedown="deleteLine"
+            @touchstart="deleteLine"
+          ></v-image>
         </v-layer>
         <v-layer>
           <v-line
