@@ -9,10 +9,11 @@
       >
         <v-layer>
           <v-line
-            v-for="points in configGrid"
-            :points="points"
+            v-for="pointSet in configGrid"
+            :points="pointSet"
             :stroke="'black'"
           ></v-line>
+          <v-image :config="configReturnBtn" @mousedown="deleteLine"></v-image>
         </v-layer>
         <v-layer>
           <v-line
@@ -31,7 +32,7 @@
 </template>
 
 <script>
-import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
+import { getSystemAssets } from "@/utilitys/get_assets.js";
 import * as canvasTools from "@/utilitys/canvasTools.js";
 import { defineAsyncComponent } from "vue";
 export default {
@@ -48,6 +49,7 @@ export default {
         y: [],
       },
       configGrid: [],
+      configReturnBtn: {},
       configLine: [],
       configGivenPoint: [],
 
@@ -66,6 +68,7 @@ export default {
     this.initializeScene();
     this.setGrid();
     this.drawGrid();
+    this.drawReturnBtn();
     if (this.Data.givenPoints != null) {
       this.drawGiven();
     }
@@ -109,6 +112,15 @@ export default {
           this.gridPos.y[i],
         ]);
       }
+    },
+    drawReturnBtn() {
+      const returnBtn = new window.Image();
+      returnBtn.src = getSystemAssets("backArrow.png", "icon");
+      this.configReturnBtn.image = returnBtn;
+      this.configReturnBtn.x = this.gameWidth * 0.85;
+      this.configReturnBtn.y = this.gameWidth * 0.85;
+      this.configReturnBtn.width = this.gameWidth * 0.15;
+      this.configReturnBtn.height = this.gameWidth * 0.15;
     },
     drawGiven() {
       for (let point in this.Data.givenPoints) {
@@ -173,10 +185,14 @@ export default {
         this.gridPos.x[pointerPoint.x],
         this.gridPos.y[pointerPoint.y],
       ];
-      console.log(this.isQuadrilateral(), this.sides);
-      if (this.Data.varifyOption == "rect") {
-      } else if (this.Data.varifyOption == "shape") {
-      }
+      if (
+        this.isSamePoint(
+          this.getPointSetFromLine(id)[0],
+          this.getPointSetFromLine(id)[1]
+        )
+      )
+        this.configLine.splice(id, 1);
+      this.varify();
     },
 
     getClosestPoint(pos) {
@@ -198,9 +214,13 @@ export default {
       return { x: x, y: y };
     },
     slope(id) {
-      let points = this.getPointsPositionFromLine(id);
-      if (points[0].x == points[1].x) return "vertical";
-      else return (points[0].y - points[1].y) / (points[0].x - points[1].x);
+      let pointSet = this.getPointSetFromLine(id);
+      if (pointSet[0].x == pointSet[1].x) return "vertical";
+      else
+        return (
+          (pointSet[0].y - pointSet[1].y) /
+          (pointSet[0].x - pointSet[1].x)
+        ).toFixed(2);
     },
     isParallel(id1, id2) {
       if (this.slope(id1) == this.slope(id2)) return true;
@@ -214,14 +234,14 @@ export default {
       else return false;
     },
     isLinked(id1, id2) {
-      let points1 = this.getPointsPositionFromLine(id1),
-        points2 = this.getPointsPositionFromLine(id2);
+      let pointSet1 = this.getPointSetFromLine(id1),
+        pointSet2 = this.getPointSetFromLine(id2);
       if (this.isSameLine(id1, id2) || id1 == id2) return false;
       else if (
-        this.isSamePoint(points1[0], points2[0]) ||
-        this.isSamePoint(points1[0], points2[1]) ||
-        this.isSamePoint(points1[1], points2[1]) ||
-        this.isSamePoint(points1[1], points2[0])
+        this.isSamePoint(pointSet1[0], pointSet2[0]) ||
+        this.isSamePoint(pointSet1[0], pointSet2[1]) ||
+        this.isSamePoint(pointSet1[1], pointSet2[1]) ||
+        this.isSamePoint(pointSet1[1], pointSet2[0])
       ) {
         return true;
       } else return false;
@@ -250,15 +270,15 @@ export default {
       }
       return false;
     },
-    getPointsPositionFromLine(id) {
+    getPointSetFromLine(id) {
       return [
         {
-          x: this.configLine[id].points[0].toFixed(),
-          y: this.configLine[id].points[1].toFixed(),
+          x: this.configLine[id].points[0],
+          y: this.configLine[id].points[1],
         },
         {
-          x: this.configLine[id].points[2].toFixed(),
-          y: this.configLine[id].points[3].toFixed(),
+          x: this.configLine[id].points[2],
+          y: this.configLine[id].points[3],
         },
       ];
     },
@@ -267,16 +287,54 @@ export default {
       else return false;
     },
     isSameLine(id1, id2) {
-      let points1 = this.getPointsPositionFromLine(id1),
-        points2 = this.getPointsPositionFromLine(id2);
+      let pointSet1 = this.getPointSetFromLine(id1),
+        pointSet2 = this.getPointSetFromLine(id2);
       if (
-        (this.isSamePoint(points1[0], points2[0]) &&
-          this.isSamePoint(points1[1], points2[1])) ||
-        (this.isSamePoint(points1[0], points2[1]) &&
-          this.isSamePoint(points1[1], points2[0]))
+        (this.isSamePoint(pointSet1[0], pointSet2[0]) &&
+          this.isSamePoint(pointSet1[1], pointSet2[1])) ||
+        (this.isSamePoint(pointSet1[0], pointSet2[1]) &&
+          this.isSamePoint(pointSet1[1], pointSet2[0]))
       )
         return true;
       else return false;
+    },
+    isIntersected() {
+      for (let i in this.configLine) {
+        let pointSet1 = this.getPointSetFromLine(i);
+        for (let j in this.configLine) {
+          if (j < i || this.isSameLine(i, j)) continue;
+          let pointSet2 = this.getPointSetFromLine(j);
+          if (
+            this.cross(
+              this.vector(pointSet1[0], pointSet2[1]),
+              this.vector(pointSet2[0], pointSet2[1])
+            ) *
+              this.cross(
+                this.vector(pointSet1[1], pointSet2[1]),
+                this.vector(pointSet2[0], pointSet2[1])
+              ) <
+              0 &&
+            this.cross(
+              this.vector(pointSet2[0], pointSet1[1]),
+              this.vector(pointSet1[0], pointSet1[1])
+            ) *
+              this.cross(
+                this.vector(pointSet2[1], pointSet1[1]),
+                this.vector(pointSet1[0], pointSet1[1])
+              ) <
+              0
+          ) {
+            return true;
+          }
+        }
+      }
+      return false;
+    },
+    vector(point1, point2) {
+      return { x: point1.x - point2.x, y: point1.y - point2.y };
+    },
+    cross(vector1, vector2) {
+      return vector1.x * vector2.y - vector1.y * vector2.x;
     },
     isTriangle() {
       this.sides = [];
@@ -284,17 +342,20 @@ export default {
         if (this.findLinks(line).length >= 2) {
           this.sides.push(line);
           for (let i in this.findLinks(line)) {
-            this.sides.push(this.findLinks(line)[i]);
             for (let j in this.findLinks(line)) {
-              if (this.isLinked(i, j)) {
-                this.sides.push(this.findLinks(line)[j]);
+              if (
+                this.isLinked(this.findLinks(line)[i], this.findLinks(line)[j])
+              ) {
+                this.sides = [
+                  line,
+                  this.findLinks(line)[i],
+                  this.findLinks(line)[j],
+                ];
                 return true;
               }
             }
-            this.sides.pop();
           }
         }
-        this.sides = [];
       }
       return false;
     },
@@ -313,6 +374,56 @@ export default {
         }
       }
       return false;
+    },
+    isTrapezium() {
+      if (this.isQuadrilateral()) {
+        if (
+          (this.isParallel(this.sides[0], this.sides[2]) &&
+            !this.isParallel(this.sides[1], this.sides[3])) ||
+          (!this.isParallel(this.sides[0], this.sides[2]) &&
+            this.isParallel(this.sides[1], this.sides[3]))
+        ) {
+          return true;
+        }
+      }
+      return false;
+    },
+    isParallelogram() {
+      if (this.isQuadrilateral()) {
+        if (
+          this.isParallel(this.sides[0], this.sides[2]) &&
+          this.isParallel(this.sides[1], this.sides[3])
+        ) {
+          return true;
+        }
+      }
+      return false;
+    },
+    isRectangle() {
+      if (this.isParallelogram()) {
+        if (this.isPerpendicular(this.sides[0], this.sides[1])) {
+          return true;
+        }
+      }
+      return false;
+    },
+    deleteLine() {
+      let id = this.configLine.length - 1;
+      if (this.configLine[id].stroke != "brown") {
+        this.configLine.splice(id, 1);
+      }
+    },
+    varify() {
+      if (this.isIntersected()) console.log("is intersected");
+      if (this.isTriangle()) console.log("is triangle, sides: ", this.sides);
+      if (this.isTrapezium()) console.log("is trapezium, sides: ", this.sides);
+      if (this.isParallelogram())
+        console.log("is parallelogram, sides: ", this.sides);
+      if (this.isRectangle()) console.log("is rectangle, sides: ", this.sides);
+
+      if (this.Data.varifyOption == "rect") {
+      } else if (this.Data.varifyOption == "shape") {
+      }
     },
   },
 };

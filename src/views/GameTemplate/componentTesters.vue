@@ -65,10 +65,12 @@ export default {
       },
       configDrawShapes: {
         //bgRatio: [],
-        /*givenPoints: [
+        givenPoints: [
           [2, 2],
           [2, 5],
-        ],*/
+        ],
+        varifyOption: "rect", //none, rect, shape
+        answer: [5, 3],
       },
       id: "MA3029",
     };
