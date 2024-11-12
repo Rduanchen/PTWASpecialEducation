@@ -4,6 +4,7 @@
       <option>numberLine</option>
       <option>fraction</option>
       <option selected>drawShapes</option>
+      <option selected>dragToAlign</option>
     </select>
   </div>
   <div v-if="tester == 'fraction'">
@@ -27,6 +28,13 @@
       @getAnswer="printAns"
     ></drawShapes>
   </div>
+  <div v-if="tester == 'dragToAlign'">
+    <dragToAlign
+      :Data="configDragToAlign"
+      :ID="id"
+      @getAnswer="printAns"
+    ></dragToAlign>
+  </div>
 </template>
 
 <script>
@@ -44,10 +52,13 @@ export default {
     drawShapes: defineAsyncComponent(() =>
       import("@/components/DrawShapes.vue")
     ),
+    dragToAlign: defineAsyncComponent(() =>
+      import("@/components/DragToAlign.vue")
+    ),
   },
   data() {
     return {
-      tester: "drawShapes",
+      tester: "dragToAlign",
       configFraction: {
         verifyOption: "answer",
         shape: "circle",
@@ -61,7 +72,7 @@ export default {
         max: 10,
         min: 2,
         init_pos: 5,
-        image: "RacingCar.png",
+        image: "apple.png",
       },
       configDrawShapes: {
         //bgRatio: [],
@@ -72,7 +83,11 @@ export default {
         varifyOption: "rect", //none, rect, shape
         answer: [5, 3], //[5, 3], // triangle, rectangle, trapezium, parallelogram
       },
-      id: "MA3029",
+      configDragToAlign: {
+        imageRatio: [5, 3],
+        image: "apple.png",
+      },
+      id: "Dev0105",
     };
   },
   methods: {
