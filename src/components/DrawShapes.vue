@@ -34,7 +34,7 @@
 <script>
 import { getSystemAssets } from "@/utilitys/get_assets.js";
 import * as canvasTools from "@/utilitys/canvasTools.js";
-import { defineAsyncComponent } from "vue";
+import { defineAsyncComponent, h } from "vue";
 export default {
   components: {},
   data() {
@@ -282,6 +282,13 @@ export default {
         },
       ];
     },
+    lengthInGrid(id) {
+      let pointOnGrid1 = this.getClosestPoint(this.getPointSetFromLine(id)[0]);
+      let pointOnGrid2 = this.getClosestPoint(this.getPointSetFromLine(id)[1]);
+      return Math.abs(
+        pointOnGrid1.x + pointOnGrid1.y - pointOnGrid2.x - pointOnGrid2.y
+      );
+    },
     isSamePoint(point1, point2) {
       if (point1.x == point2.x && point1.y == point2.y) return true;
       else return false;
@@ -417,8 +424,7 @@ export default {
       if (this.isIntersected()) {
         this.$emit("getAnswer", false);
         return;
-      }
-      if (this.Data.varifyOption == "shape") {
+      } else if (this.Data.varifyOption == "shape") {
         switch (this.Data.answer) {
           case "triangle":
             this.$emit("getAnswer", this.isTriangle());
@@ -433,7 +439,21 @@ export default {
             this.$emit("getAnswer", this.isParallelogram());
             break;
         }
+      } else if (this.Data.varifyOption == "rect") this.varifyRectangle();
+    },
+    varifyRectangle() {
+      if (this.isRectangle()) {
+        let height = this.lengthInGrid(this.sides[0]),
+          width = this.lengthInGrid(this.sides[1]);
+        if (
+          (this.Data.answer[0] == height && this.Data.answer[1] == width) ||
+          (this.Data.answer[0] == width && this.Data.answer[1] == height)
+        ) {
+          this.$emit("getAnswer", true);
+          return;
+        }
       }
+      this.$emit("getAnswer", false);
     },
   },
 };

@@ -65,12 +65,12 @@ export default {
       },
       configDrawShapes: {
         //bgRatio: [],
-        givenPoints: [
+        /*givenPoints: [
           [2, 2],
           [2, 5],
-        ],
-        varifyOption: "shape", //none, rect, shape
-        answer: "trapezium", //[5, 3], // triangle, rectangle, trapezium, parallelogram
+        ],*/
+        varifyOption: "rect", //none, rect, shape
+        answer: [5, 3], //[5, 3], // triangle, rectangle, trapezium, parallelogram
       },
       id: "MA3029",
     };
