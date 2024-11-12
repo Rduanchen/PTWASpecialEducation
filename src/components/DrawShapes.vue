@@ -83,8 +83,7 @@ export default {
       }
     },
     initializeScene() {
-      this.gameWidth =
-        document.getElementById("GameContainer").clientWidth * 0.5;
+      this.gameWidth = document.getElementById("GameContainer").clientWidth;
       this.configKonva.width = this.gameWidth;
       this.configKonva.height =
         (this.gameWidth * this.ratio.height) / this.ratio.width;
