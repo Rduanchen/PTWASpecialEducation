@@ -93,9 +93,9 @@
                 "Games": [
                     {
                         "id": "Dev0301",
-                        "Name": "找找看",
-                        "Description": "依照聲音指示",
-                        "Img": "Dev0301.png"
+                        "Name": "錢幣拖曳",
+                        "Description": "拿出正確的錢幣",
+                        "Img": ""
                     },
                     {
                         "id": "Dev0302",
