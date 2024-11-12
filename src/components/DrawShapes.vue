@@ -414,15 +414,25 @@ export default {
       }
     },
     varify() {
-      if (this.isIntersected()) console.log("is intersected");
-      if (this.isTriangle()) console.log("is triangle, sides: ", this.sides);
-      if (this.isTrapezium()) console.log("is trapezium, sides: ", this.sides);
-      if (this.isParallelogram())
-        console.log("is parallelogram, sides: ", this.sides);
-      if (this.isRectangle()) console.log("is rectangle, sides: ", this.sides);
-
-      if (this.Data.varifyOption == "rect") {
-      } else if (this.Data.varifyOption == "shape") {
+      if (this.isIntersected()) {
+        this.$emit("getAnswer", false);
+        return;
+      }
+      if (this.Data.varifyOption == "shape") {
+        switch (this.Data.answer) {
+          case "triangle":
+            this.$emit("getAnswer", this.isTriangle());
+            break;
+          case "rectangle":
+            this.$emit("getAnswer", this.isRectangle());
+            break;
+          case "trapezium":
+            this.$emit("getAnswer", this.isTrapezium());
+            break;
+          case "parallelogram":
+            this.$emit("getAnswer", this.isParallelogram());
+            break;
+        }
       }
     },
   },

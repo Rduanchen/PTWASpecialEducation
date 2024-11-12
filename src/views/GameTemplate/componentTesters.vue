@@ -69,8 +69,8 @@ export default {
           [2, 2],
           [2, 5],
         ],
-        varifyOption: "rect", //none, rect, shape
-        answer: [5, 3],
+        varifyOption: "shape", //none, rect, shape
+        answer: "trapezium", //[5, 3], // triangle, rectangle, trapezium, parallelogram
       },
       id: "MA3029",
     };
