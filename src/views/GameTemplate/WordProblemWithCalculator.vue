@@ -1,17 +1,23 @@
 <template>
-  <div class="word-problem">
-    <div class="left-container">
-      <Markdown
-        :Data="markdownData"
-        @ReplyAnswer="this.markdownAnswer"
-      ></Markdown>
-      <button class="submit" @click="checkAnswer">檢查答案</button>
+  <div class="outter-container">
+    <div class="head-container" v-if="this.GaneData.headQuestion">
+      <p>{{ this.GameData.headQuestion }}</p>
     </div>
-    <div class="right-container">
-      <Calculator
-        :Data="calculatorData"
-        @ReplyAnswer="this.calculatorAnswer"
-      ></Calculator>
+    <div class="word-problem">
+      <div class="left-container">
+        <Markdown
+          class="markdown"
+          :Data="markdownData"
+          @ReplyAnswer="this.markdownAnswer"
+        ></Markdown>
+        <button class="submit" @click="checkAnswer">檢查答案</button>
+      </div>
+      <div class="right-container">
+        <Calculator
+          :Data="calculatorData"
+          @ReplyAnswer="this.calculatorAnswer"
+        ></Calculator>
+      </div>
     </div>
   </div>
 </template>
@@ -43,29 +49,29 @@ export default {
   emits: ["addRecord", "playEffect", "nextQuestion"],
   data() {
     return {
-      GameData: {
-        calculator: {
-          Unit: "Volume",
-          CarryAmount: 1,
-          CustomeUnit: null,
-          NumberAmount: 4,
-          decimalPoint: 0,
-          Preset: {
-            Number: ["1200", "1300"],
-            Symbol: "+",
-          },
-          Answer: {
-            Carry: [],
-            Answer: "2500",
-            Number: ["1200", "1300"],
-            Symbol: "+",
-          },
-        },
-        markdown: {
-          Render: `# 請回答以下問題: $n$ 1公升 200毫升+1公升300毫升= $n$ $i$公升 $i$ 毫升`,
-          Answer: [2, 500],
-        },
-      },
+      // GameData: {
+      //   calculator: {
+      //     Unit: "Volume",
+      //     CarryAmount: 1,
+      //     CustomeUnit: null,
+      //     NumberAmount: 4,
+      //     decimalPoint: 0,
+      //     Preset: {
+      //       Number: ["1200", "1300"],
+      //       Symbol: "+",
+      //     },
+      //     Answer: {
+      //       Carry: [],
+      //       Answer: "2500",
+      //       Number: ["1200", "1300"],
+      //       Symbol: "+",
+      //     },
+      //   },
+      //   markdown: {
+      //     Render: `# 請回答以下問題: $n$ 1公升 200毫升+1公升300毫升= $n$ $i$公升 $i$ 毫升`,
+      //     Answer: [2, 500],
+      //   },
+      // },
       calculatorData: {
         Unit: "Volume",
         CarryAmount: 1,
@@ -128,36 +134,45 @@ export default {
   computed: {
     // Add your computed properties here
   },
-  created() {},
+  created() {
+    this.calculatorData = this.GameData.calculator;
+    this.markdownData = this.GameData.markdown;
+  },
   mounted() {
     // Lifecycle hook when component is mounted
   },
 };
 </script>
 <style scoped lang="scss">
+.outter-container {
+  display: flex;
+  flex-direction: column;
+  gap: $gap--medium;
+}
+.head-container {
+  @extend .container-basic;
+  display: flex;
+  background-color: $primary-color;
+  padding: $gap--small;
+  font-size: $text-large;
+}
 .word-problem {
   display: flex;
-  flex-direction: row;
   justify-content: center;
-  align-items: center;
   gap: $gap--medium;
-  width: 100%;
-  height: 100%;
+  flex-direction: row;
+  .right-container {
+    width: 40%;
+  }
   .left-container {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    align-items: center;
-    gap: $gap--small;
-    min-height: 50%;
+    width: 40%;
     .markdown {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: $border-radius;
-      height: 80%;
-      width: 50%;
+      width: 100%;
     }
+    width: 50%;
     .submit {
       @extend .button-basic;
       width: 100%;
