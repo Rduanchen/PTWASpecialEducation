@@ -1,5 +1,5 @@
 <template>
-  <div class="outter-container">
+  <div class="markdown-container">
     <template v-for="(element, index) in elements" :key="index">
       <component
         :is="getElementTag(element.el)"
@@ -131,10 +131,10 @@ input {
   padding: 5px;
   margin: 5px;
 }
-.outter-container {
+.markdown-container {
   span,
   p {
-    font-size: 1.4rem;
+    font-size: $text-medium;
   }
 }
 </style>
