@@ -20,6 +20,7 @@ const componentsMapping = {
     Water: () => import('@/components/Water.vue'),
     MoneyGenerator: () => import('@/components/MoneyGenerator.vue'),
     CardWithButton: () => import('@/components/CardWithButton.vue'),
+    MoneyDisplay: () => import('@/components/MoneyDisplay.vue'),
 }
 export function GetComponents(name) {
     console.warn('GetComponents is deprecated, please use getComponents instead.')
