@@ -198,7 +198,7 @@ export default {
         )
       )
         this.configLine.splice(id, 1);
-      this.varify();
+      this.verify();
     },
 
     getClosestPoint(pos) {
@@ -426,11 +426,11 @@ export default {
         this.configLine.splice(id, 1);
       }
     },
-    varify() {
+    verify() {
       if (this.isIntersected()) {
         this.$emit("getAnswer", false);
         return;
-      } else if (this.Data.varifyOption == "shape") {
+      } else if (this.Data.verifyOption == "shape") {
         switch (this.Data.answer) {
           case "triangle":
             this.$emit("getAnswer", this.isTriangle());
@@ -445,9 +445,9 @@ export default {
             this.$emit("getAnswer", this.isParallelogram());
             break;
         }
-      } else if (this.Data.varifyOption == "rect") this.varifyRectangle();
+      } else if (this.Data.verifyOption == "rect") this.verifyRectangle();
     },
-    varifyRectangle() {
+    verifyRectangle() {
       if (this.isRectangle()) {
         let height = this.lengthInGrid(this.sides[0]),
           width = this.lengthInGrid(this.sides[1]);
