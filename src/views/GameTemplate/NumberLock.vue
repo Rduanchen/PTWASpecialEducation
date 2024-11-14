@@ -14,18 +14,11 @@
           :is="GameData.downComponent.Name"
           :Data="GameData.downComponent.Data"
           :ID="this.ID"
-          @ReplyAnswer="downReply"
+          @replyAnswer="downReply"
         ></component>
       </div>
     </div>
     <div class="right-column">
-      <div class="number-pad" v-if="ShowPad && this.GameConfig.layout.pad">
-        <VirtualNumPad
-          @virtualpadinput-Input="Input"
-          @virtualpadinput-delete="Delete"
-          @virtualpadinput-pop="Pop"
-        ></VirtualNumPad>
-      </div>
       <button @click="CheckAnswer" class="button--submit">送出答案</button>
     </div>
     {{ NowSelect }}
