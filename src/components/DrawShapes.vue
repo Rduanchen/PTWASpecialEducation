@@ -41,7 +41,7 @@
 <script>
 import { getSystemAssets } from "@/utilitys/get_assets.js";
 import * as canvasTools from "@/utilitys/canvasTools.js";
-import { defineAsyncComponent, h } from "vue";
+import { defineAsyncComponent } from "vue";
 export default {
   components: {},
   data() {
@@ -68,7 +68,7 @@ export default {
 
   props: ["Data", "ID"],
 
-  emits: ["getAnswer"],
+  emits: ["ReplyAnswer", "replyAnswer"],
 
   beforeMount() {
     this.getData();
@@ -428,21 +428,26 @@ export default {
     },
     verify() {
       if (this.isIntersected()) {
-        this.$emit("getAnswer", false);
+        this.$emit("ReplyAnswer", false);
+        this.$emit("replyAnswer", false);
         return;
       } else if (this.Data.verifyOption == "shape") {
         switch (this.Data.answer) {
           case "triangle":
-            this.$emit("getAnswer", this.isTriangle());
+            this.$emit("ReplyAnswer", this.isTriangle());
+            this.$emit("replyAnswer", this.isTriangle());
             break;
           case "rectangle":
-            this.$emit("getAnswer", this.isRectangle());
+            this.$emit("ReplyAnswer", this.isRectangle());
+            this.$emit("replyAnswer", this.isRectangle());
             break;
           case "trapezium":
-            this.$emit("getAnswer", this.isTrapezium());
+            this.$emit("ReplyAnswer", this.isTrapezium());
+            this.$emit("replyAnswer", this.isTrapezium());
             break;
           case "parallelogram":
-            this.$emit("getAnswer", this.isParallelogram());
+            this.$emit("ReplyAnswer", this.isParallelogram());
+            this.$emit("replyAnswer", this.isParallelogram());
             break;
         }
       } else if (this.Data.verifyOption == "rect") this.verifyRectangle();
@@ -455,11 +460,13 @@ export default {
           (this.Data.answer[0] == height && this.Data.answer[1] == width) ||
           (this.Data.answer[0] == width && this.Data.answer[1] == height)
         ) {
-          this.$emit("getAnswer", true);
+          this.$emit("ReplyAnswer", true);
+          this.$emit("replyAnswer", true);
           return;
         }
       }
-      this.$emit("getAnswer", false);
+      this.$emit("ReplyAnswer", false);
+      this.$emit("replyAnswer", false);
     },
   },
 };

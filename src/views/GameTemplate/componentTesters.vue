@@ -25,7 +25,7 @@
     <drawShapes
       :Data="configDrawShapes"
       :ID="id"
-      @getAnswer="printAns"
+      @replyAnswer="printAns"
     ></drawShapes>
   </div>
   <div v-if="tester == 'dragToAlign'">
