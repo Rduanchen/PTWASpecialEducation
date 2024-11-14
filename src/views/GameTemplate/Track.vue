@@ -467,4 +467,8 @@ export default {
   background-color: #4caf50;
   transition: width 0.5s ease;
 }
+
+:deep(.word) {
+  color: #fff;
+}
 </style>

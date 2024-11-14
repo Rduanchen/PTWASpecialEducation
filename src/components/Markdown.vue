@@ -1,5 +1,5 @@
 <template>
-  <div class="outter-container">
+  <div class="markdown-container">
     <template v-for="(element, index) in elements" :key="index">
       <component
         :is="getElementTag(element.el)"
@@ -20,7 +20,6 @@
     </template>
   </div>
 </template>
-
 <script>
 export default {
   data() {
@@ -46,12 +45,13 @@ export default {
   methods: {
     parseMarkdown() {
       const content = this.markdownContent.trim();
-      const tokenRegex = /(\$i\$|\$t\$|\$s\$|\$n\$|#\s|##\s|###\s|\*\*|\n)/g;
+      const tokenRegex = /(\$i\$|\$t\$|\$s\$|\$n\$|#\s|##\s|###\s|\*\*|__|\n)/g;
       const tokens = content.split(tokenRegex);
       this.wa = tokens;
       const elements = [];
       let currentTag = null;
       let bold = false;
+      let underline = false;
 
       tokens.forEach((token) => {
         if (token === "$i$") {
@@ -70,11 +70,13 @@ export default {
           currentTag = "h3";
         } else if (token === "**") {
           bold = !bold;
+        } else if (token === "__") {
+          underline = !underline;
         } else if (token.trim() === "") {
-          // 忽略空白字符串
+          // Ignore empty strings
         } else {
-          // 处理文本内容
-          let el = currentTag || (bold ? "b" : "span");
+          // Process text content with possible formatting
+          let el = currentTag || (bold ? "b" : underline ? "u" : "span");
           elements.push({ el: el, content: token });
           currentTag = null;
         }
@@ -83,7 +85,7 @@ export default {
       this.elements = elements;
     },
     getElementTag(el) {
-      const validTags = ["h1", "h2", "h3", "p", "b", "li", "span"];
+      const validTags = ["h1", "h2", "h3", "p", "b", "u", "li", "span"];
       return validTags.includes(el) ? el : "span";
     },
     isSpecialElement(el) {
@@ -129,10 +131,10 @@ input {
   padding: 5px;
   margin: 5px;
 }
-.outter-container {
+.markdown-container {
   span,
   p {
-    font-size: 1.4rem;
+    font-size: $text-medium;
   }
 }
 </style>
