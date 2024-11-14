@@ -34,7 +34,6 @@
                 ></EffectWindow>
                 <transition :name="transitionName" mode="out-in">
                   <component
-                    class="GameComponent111"
                     v-if="GameType != 'SelfDefine'"
                     v-bind:is="this.GameType"
                     ref="GameComponent"
@@ -64,7 +63,6 @@
                   @play-effect="effectPlayer"
                   @next-question="nextQuestion"
                   @previous-question="previousQuestion"
-                  @change-level="changelevel"
                   @start-game="startGame"
                   @reload-page="reloadPage"
                   @change-status="changeGameStatus"
@@ -159,6 +157,8 @@ import gameStore from "@/stores/game";
 import { mapWritableState } from "pinia";
 import { soundManager } from "@/utilitys/sound-manager.js";
 import DragFraction from "../components/DragFraction.vue";
+import LinktoImage from "./GameTemplate/LinktoImage.vue";
+import WordProblemWithCalculator from "./GameTemplate/WordProblemWithCalculator.vue";
 
 export default {
   data() {
@@ -830,6 +830,15 @@ export default {
     DragFraction: defineAsyncComponent(() =>
       import("@/views/GameTemplate/DragFractionTester.vue")
     ), //for testing only
+    NumberLock: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/NumberLock.vue")
+    ),
+    LinkToImage: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/LinktoImage.vue")
+    ),
+    WordProblemWithCalculator: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/WordProblemWithCalculator.vue")
+    ),
     MoneyDrag: defineAsyncComponent(() =>
       import("@/views/GameTemplate/MoneyDrag.vue")
     ),
@@ -904,9 +913,18 @@ export default {
   display: flex;
   flex-direction: row;
   align-items: center;
-  align-self: center;
+  justify-content: center;
+  .games {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
   overflow-x: auto;
-  overflow-y: scroll;
+  overflow-y: auto;
   touch-action: none;
   user-select: none;
   -webkit-user-select: none;
