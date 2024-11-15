@@ -13,6 +13,7 @@
 
         <v-layer v-if="!isBgImage">
           <v-rect :config="configBg"></v-rect>
+          <!--
           <safeArea
             v-for="i in safeMap"
             :x="i[0]"
@@ -25,6 +26,19 @@
             :y="i[1]"
             :width="laneWidth"
           ></bounds>
+          -->
+          <v-rect
+            v-for="block in configBounds"
+            :config="block"
+            :fill="'blue'"
+            :strokeEnabled="false"
+          ></v-rect>
+          <v-rect
+            v-for="block in configSafeArea"
+            :config="block"
+            :fill="'green'"
+            :strokeEnabled="false"
+          ></v-rect>
         </v-layer>
         <v-layer>
           <v-text v-for="option in configOption" :config="option"></v-text>
@@ -73,6 +87,10 @@ export default {
       isBgImage: true,
 
       configOption: [],
+      optionMap: [0, 0, 0, 0],
+
+      configBounds: [],
+      configSafeArea: [],
 
       configPlayer: {
         fill: "yellow",
@@ -86,10 +104,6 @@ export default {
         fill: "red",
         stroke: "red",
       },
-      genMap: [],
-      safeMap: [],
-      optionMap: [0, 0, 0, 0],
-
       entityInfo: {
         player: {
           tag: "player",
@@ -139,6 +153,7 @@ export default {
           randomRouteCD: true,
         },
       },
+
       touchPosition: {
         x: 0,
         y: 0,
@@ -170,13 +185,14 @@ export default {
 
   methods: {
     fitCanvasInScreen() {
-      var gameWidth = document.getElementById("GameContainer").clientWidth;
-      this.configKonva.width = Math.floor(gameWidth * 0.8);
-      this.configKonva.height = Math.floor(this.configKonva.width / 2);
+      this.gameWidth =
+        document.getElementById("GameContainer").clientWidth * 0.8;
+      this.configKonva.width = this.gameWidth;
+      this.configKonva.height = this.gameWidth * 0.5;
     },
     generateMap() {
       this.randomMapId = Math.floor(Math.random() * map.length);
-      this.laneWidth = Math.floor(this.configKonva.width * 0.05);
+      this.laneWidth = this.gameWidth * 0.05;
       var mapBG = document.createElement("img");
       mapBG.src = getGameAssets(
         "Dev02_Maze",
@@ -192,7 +208,6 @@ export default {
       } else {
         this.configBg.width = this.laneWidth * 20 - 3;
         this.configBg.height = this.laneWidth * 10 - 3;
-        this.configBg.strokeWidth = Math.floor(this.laneWidth * 0.1);
         for (var i = 0; i < 20; ++i) {
           for (var j = 0; j < 10; ++j) {
             if (map[this.randomMapId][j][i] == 1) {
@@ -244,8 +259,8 @@ export default {
         for (var j = 0; j < 20; ++j) {
           if (j >= 8 && j <= 11) continue;
           if (map[this.randomMapId][i][j] == 0) {
-            this.configGhost_1.x = Math.floor(this.laneWidth * (j + 0.5));
-            this.configGhost_1.y = Math.floor(this.laneWidth * (i + 0.5));
+            this.configGhost_1.x = this.laneWidth * (j + 0.5);
+            this.configGhost_1.y = this.laneWidth * (i + 0.5);
             break;
           }
         }
@@ -254,8 +269,8 @@ export default {
         for (var j = 19; j > -1; --j) {
           if (j >= 8 && j <= 11) continue;
           if (map[this.randomMapId][i][j] == 0) {
-            this.configGhost_2.x = Math.floor(this.laneWidth * (j + 0.5));
-            this.configGhost_2.y = Math.floor(this.laneWidth * (i + 0.5));
+            this.configGhost_2.x = this.laneWidth * (j + 0.5);
+            this.configGhost_2.y = this.laneWidth * (i + 0.5);
             break;
           }
         }
@@ -274,12 +289,10 @@ export default {
         var randomPosition = Math.floor(
           Math.random() * possiblePosition.length
         );
-        this.configPlayer.x = Math.floor(
-          this.laneWidth * (possiblePosition[randomPosition].x + 0.5)
-        );
-        this.configPlayer.y = Math.floor(
-          this.laneWidth * (possiblePosition[randomPosition].y + 0.5)
-        );
+        this.configPlayer.x =
+          this.laneWidth * (possiblePosition[randomPosition].x + 0.5);
+        this.configPlayer.y =
+          this.laneWidth * (possiblePosition[randomPosition].y + 0.5);
         return 0;
       }
       for (var i = 3; i < 7; ++i) {
@@ -290,15 +303,11 @@ export default {
         }
       }
       if (possiblePosition[0]) {
-        var randomPosition = Math.floor(
-          Math.random() * possiblePosition.length
-        );
-        this.configPlayer.x = Math.floor(
-          this.laneWidth * (possiblePosition[randomPosition].x + 0.5)
-        );
-        this.configPlayer.y = Math.floor(
-          this.laneWidth * (possiblePosition[randomPosition].y + 0.5)
-        );
+        var randomPosition = Math.random() * possiblePosition.length;
+        this.configPlayer.x =
+          this.laneWidth * (possiblePosition[randomPosition].x + 0.5);
+        this.configPlayer.y =
+          this.laneWidth * (possiblePosition[randomPosition].y + 0.5);
         return 0;
       }
     },
@@ -317,10 +326,10 @@ export default {
       context.closePath();
     },
     initializeEntityConfig() {
-      this.configPlayer.radius = Math.floor(this.laneWidth * 0.35);
+      this.configPlayer.radius = this.laneWidth * 0.35;
       this.configPlayer.sceneFunc = this.playerSceneFunc;
-      this.configGhost_1.radius = Math.floor(this.laneWidth * 0.35);
-      this.configGhost_2.radius = Math.floor(this.laneWidth * 0.35);
+      this.configGhost_1.radius = this.laneWidth * 0.35;
+      this.configGhost_2.radius = this.laneWidth * 0.35;
     },
     bootGame() {
       this.printOptions();
@@ -639,25 +648,25 @@ export default {
       else if (entity.randomRouteCD) this.ghostRandomRoute(entity);
       switch (entity.movement) {
         case "left":
-          config.x -= Math.floor(this.laneWidth * 0.05);
+          config.x -= this.laneWidth * 0.05;
           config.y = Math.round(
             (Math.round(entity.xyGrid.y) + 0.5) * this.laneWidth
           );
           break;
         case "right":
-          config.x += Math.floor(this.laneWidth * 0.05);
+          config.x += this.laneWidth * 0.05;
           config.y = Math.round(
             (Math.round(entity.xyGrid.y) + 0.5) * this.laneWidth
           );
           break;
         case "up":
-          config.y -= Math.floor(this.laneWidth * 0.05);
+          config.y -= this.laneWidth * 0.05;
           config.x = Math.round(
             (Math.round(entity.xyGrid.x) + 0.5) * this.laneWidth
           );
           break;
         case "down":
-          config.y += Math.floor(this.laneWidth * 0.05);
+          config.y += this.laneWidth * 0.05;
           config.x = Math.round(
             (Math.round(entity.xyGrid.x) + 0.5) * this.laneWidth
           );
