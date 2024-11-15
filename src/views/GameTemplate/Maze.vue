@@ -61,7 +61,6 @@
 </template>
 
 <script>
-import { getGameAssets } from "@/utilitys/get_assets.js";
 import { getSystemAssets } from "@/utilitys/get_assets.js";
 import { defineAsyncComponent } from "vue";
 import { map } from "@/assets/System/mazeMap/map.json";
@@ -193,27 +192,33 @@ export default {
     generateMap() {
       this.randomMapId = Math.floor(Math.random() * map.length);
       this.laneWidth = this.gameWidth * 0.05;
-      var mapBG = document.createElement("img");
-      mapBG.src = getGameAssets(
+      const mapBG = new window.Image();
+      mapBG.src = getSystemAssets(
         "Dev02_Maze",
-        "map_" + this.randomMapId + ".jpg"
+        "map_" + this.randomMapId + ".png"
       );
       if (mapBG.src.includes("undefined")) {
         this.isBgImage = false;
       }
       if (this.isBgImage) {
         this.configBgImage.image = mapBG;
-        this.configBgImage.width = this.laneWidth * 20 - 3;
-        this.configBgImage.height = this.laneWidth * 10 - 3;
+        this.configBgImage.width = this.laneWidth * 20;
+        this.configBgImage.height = this.laneWidth * 10;
       } else {
-        this.configBg.width = this.laneWidth * 20 - 3;
-        this.configBg.height = this.laneWidth * 10 - 3;
+        this.configBg.width = this.laneWidth * 20;
+        this.configBg.height = this.laneWidth * 10;
         for (var i = 0; i < 20; ++i) {
           for (var j = 0; j < 10; ++j) {
+            let block = {
+              x: i * this.laneWidth,
+              y: j * this.laneWidth,
+              width: this.laneWidth,
+              height: this.laneWidth,
+            };
             if (map[this.randomMapId][j][i] == 1) {
-              this.genMap.push([this.laneWidth * i, this.laneWidth * j]);
+              this.configBounds.push(block);
             } else if (map[this.randomMapId][j][i] != 0) {
-              this.safeMap.push([this.laneWidth * i, this.laneWidth * j]);
+              this.configSafeArea.push(block);
             }
           }
         }
@@ -285,7 +290,7 @@ export default {
           }
         }
       }
-      if (possiblePosition[0]) {
+      if (possiblePosition.length > 0) {
         var randomPosition = Math.floor(
           Math.random() * possiblePosition.length
         );
@@ -302,7 +307,7 @@ export default {
           }
         }
       }
-      if (possiblePosition[0]) {
+      if (possiblePosition.length > 0) {
         var randomPosition = Math.random() * possiblePosition.length;
         this.configPlayer.x =
           this.laneWidth * (possiblePosition[randomPosition].x + 0.5);
