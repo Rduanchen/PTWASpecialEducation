@@ -114,24 +114,29 @@ export default {
     },
 
     balloonSpawner() {
-      let balloonType = Math.floor(Math.random() * this.balloonTemplate.length);
-      let balloon = {};
-      balloon.radius = this.gameWidth * 0.07;
-      balloon.y = this.gameWidth * 0.5 + balloon.radius;
-      balloon.x =
-        Math.random() * (this.gameWidth - balloon.radius * 2) + balloon.radius;
-      balloon.fill = this.balloonTemplate[balloonType];
-      balloon.stroke = this.balloonTemplate[balloonType];
-      this.configBalloon.push(balloon);
+      if (!this.isAiming) {
+        let balloonType = Math.floor(
+          Math.random() * this.balloonTemplate.length
+        );
+        let balloon = {};
+        balloon.radius = this.gameWidth * 0.07;
+        balloon.y = this.gameWidth * 0.5 + balloon.radius;
+        balloon.x =
+          Math.random() * (this.gameWidth - balloon.radius * 2) +
+          balloon.radius;
+        balloon.fill = this.balloonTemplate[balloonType];
+        balloon.stroke = this.balloonTemplate[balloonType];
+        this.configBalloon.push(balloon);
 
-      let option = canvasTools.offset(balloon, {
-        x: balloon.radius * -0.8,
-        y: balloon.radius * -0.3,
-      });
-      option.text =
-        this.allOptions[Math.floor(Math.random() * this.allOptions.length)];
-      option.fontSize = balloon.radius * 0.6;
-      this.configOptions.push(option);
+        let option = canvasTools.offset(balloon, {
+          x: balloon.radius * -0.8,
+          y: balloon.radius * -0.3,
+        });
+        option.text =
+          this.allOptions[Math.floor(Math.random() * this.allOptions.length)];
+        option.fontSize = balloon.radius * 0.6;
+        this.configOptions.push(option);
+      }
     },
     moveBalloon() {
       for (let i = 0; i < this.configBalloon.length; ++i) {
