@@ -34,9 +34,10 @@
           <v-circle :config="configGhost_1"></v-circle>
           <v-circle :config="configGhost_2"></v-circle>
         </v-layer>
-        <v-layer v-if="joystickVisible">
+        <v-layer>
           <joystick
-            :laneWidth="laneWidth"
+            v-if="joystickVisible"
+            :radius="laneWidth * 1.5"
             :position="touchPosition"
             @move="moveByJoystick"
           ></joystick>
