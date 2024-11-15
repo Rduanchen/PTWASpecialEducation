@@ -8,11 +8,11 @@
         @touchend="touchEnd"
       >
         <v-layer>
-          <v-rect :config="configBg" v-if="!isBgImage"></v-rect>
           <v-image :config="configBgImage" v-if="isBgImage"></v-image>
         </v-layer>
 
         <v-layer>
+          <v-rect :config="configBg" v-if="!isBgImage"></v-rect>
           <safeArea
             v-for="i in safeMap"
             v-if="!isBgImage"
@@ -67,20 +67,12 @@ export default {
   },
   data() {
     return {
-      configKonva: {
-        width: 1000,
-        height: 500,
-      },
+      configKonva: {},
       configBg: {
-        x: 0,
-        y: 0,
         fill: "black",
-        stroke: "black",
+        strokeEnabled: false,
       },
-      configBgImage: {
-        x: 0,
-        y: 0,
-      },
+      configBgImage: {},
       isBgImage: true,
 
       configOption: [],
@@ -88,21 +80,6 @@ export default {
       configPlayer: {
         fill: "yellow",
         stroke: "yellow",
-        sceneFunc: function (context, shape) {
-          context.beginPath();
-          //context.rotate(0.5 * Math.PI);
-          context.moveTo(0, 0);
-          context.arc(
-            0,
-            0,
-            shape.getAttr("radius"),
-            shape.getAttr("startRadians"),
-            shape.getAttr("endRadians")
-          );
-          context.lineTo(0, 0);
-          context.fillStrokeShape(shape);
-          context.closePath();
-        },
       },
       configGhost_1: {
         fill: "red",
@@ -112,7 +89,6 @@ export default {
         fill: "red",
         stroke: "red",
       },
-      randomMapId: 2,
       genMap: [],
       safeMap: [],
       optionMap: [0, 0, 0, 0],
@@ -329,8 +305,23 @@ export default {
         return 0;
       }
     },
+    playerSceneFunc(context, shape) {
+      context.beginPath();
+      context.moveTo(0, 0);
+      context.arc(
+        0,
+        0,
+        shape.getAttr("radius"),
+        shape.getAttr("startRadians"),
+        shape.getAttr("endRadians")
+      );
+      context.lineTo(0, 0);
+      context.fillStrokeShape(shape);
+      context.closePath();
+    },
     initializeEntityConfig() {
       this.configPlayer.radius = Math.floor(this.laneWidth * 0.35);
+      this.configPlayer.sceneFunc = this.playerSceneFunc;
       this.configGhost_1.radius = Math.floor(this.laneWidth * 0.35);
       this.configGhost_2.radius = Math.floor(this.laneWidth * 0.35);
     },
