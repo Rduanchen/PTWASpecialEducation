@@ -7,28 +7,26 @@
         @touchstart="touchStart"
         @touchend="touchEnd"
       >
-        <v-layer>
-          <v-image :config="configBgImage" v-if="isBgImage"></v-image>
+        <v-layer v-if="isBgImage">
+          <v-image :config="configBgImage"></v-image>
         </v-layer>
 
-        <v-layer>
-          <v-rect :config="configBg" v-if="!isBgImage"></v-rect>
+        <v-layer v-if="!isBgImage">
+          <v-rect :config="configBg"></v-rect>
           <safeArea
             v-for="i in safeMap"
-            v-if="!isBgImage"
             :x="i[0]"
             :y="i[1]"
             :width="laneWidth"
           ></safeArea>
-        </v-layer>
-        <v-layer>
           <bounds
             v-for="i in genMap"
-            v-if="!isBgImage"
             :x="i[0]"
             :y="i[1]"
             :width="laneWidth"
           ></bounds>
+        </v-layer>
+        <v-layer>
           <v-text v-for="option in configOption" :config="option"></v-text>
         </v-layer>
         <v-layer>
@@ -36,11 +34,10 @@
           <v-circle :config="configGhost_1"></v-circle>
           <v-circle :config="configGhost_2"></v-circle>
         </v-layer>
-        <v-layer>
+        <v-layer v-if="joystickVisible">
           <joystick
             :laneWidth="laneWidth"
             :position="touchPosition"
-            :visible="joystickVisible"
             @move="moveByJoystick"
           ></joystick>
         </v-layer>
