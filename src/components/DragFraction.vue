@@ -31,6 +31,7 @@
             v-for="arrow in configArrow"
             :config="arrow"
             @mousedown="adjustNumber"
+            @touchstart="adjustNumber"
           ></v-shape>
           <v-text :config="configNumeratorNumber"></v-text>
           <v-text :config="configDenominatorNumber"></v-text>
