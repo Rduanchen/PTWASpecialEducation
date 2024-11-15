@@ -29,10 +29,7 @@
             :y="i[1]"
             :width="laneWidth"
           ></bounds>
-          <v-text :config="configOption[0]"></v-text>
-          <v-text :config="configOption[1]"></v-text>
-          <v-text :config="configOption[2]"></v-text>
-          <v-text :config="configOption[3]"></v-text>
+          <v-text v-for="option in configOption" :config="option"></v-text>
         </v-layer>
         <v-layer>
           <v-shape :config="configPlayer"></v-shape>
@@ -86,20 +83,7 @@ export default {
       },
       isBgImage: true,
 
-      configOption: [
-        {
-          stroke: "black",
-        },
-        {
-          stroke: "black",
-        },
-        {
-          stroke: "black",
-        },
-        {
-          stroke: "black",
-        },
-      ],
+      configOption: [],
 
       configPlayer: {
         fill: "yellow",
@@ -271,14 +255,14 @@ export default {
 
     printOptions() {
       for (var i = 0; i < 4; ++i) {
-        this.configOption[i].text = this.GameData.Options[i];
-        this.configOption[i].x =
-          this.optionMap[i].x * this.laneWidth +
-          Math.floor(0.1 * this.laneWidth);
-        this.configOption[i].y =
-          this.optionMap[i].y * this.laneWidth +
-          Math.floor(0.1 * this.laneWidth);
-        this.configOption[i].fontSize = Math.floor(this.laneWidth * 0.8);
+        let option = {
+          stroke: "black",
+          text: this.GameData.Options[i],
+          x: this.optionMap[i].x * this.laneWidth + 0.1 * this.laneWidth,
+          y: this.optionMap[i].y * this.laneWidth + 0.1 * this.laneWidth,
+          fontSize: this.laneWidth * 0.8,
+        };
+        this.configOption.push(option);
       }
     },
 
