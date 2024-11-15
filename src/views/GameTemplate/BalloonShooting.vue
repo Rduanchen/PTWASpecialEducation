@@ -144,7 +144,10 @@ export default {
         }
       }
     },
-    aimStart() {
+    aimStart(e) {
+      this.aimPosition = e.target.getStage().getPointerPosition();
+      this.configScope.x = e.target.getStage().getPointerPosition().x;
+      this.configScope.y = e.target.getStage().getPointerPosition().y;
       this.isAiming = true;
       this.readyToShoot = false;
       this.configScope.radius = this.gameWidth * 0.12;
