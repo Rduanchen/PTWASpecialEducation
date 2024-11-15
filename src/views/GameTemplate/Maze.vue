@@ -13,20 +13,6 @@
 
         <v-layer v-if="!isBgImage">
           <v-rect :config="configBg"></v-rect>
-          <!--
-          <safeArea
-            v-for="i in safeMap"
-            :x="i[0]"
-            :y="i[1]"
-            :width="laneWidth"
-          ></safeArea>
-          <bounds
-            v-for="i in genMap"
-            :x="i[0]"
-            :y="i[1]"
-            :width="laneWidth"
-          ></bounds>
-          -->
           <v-rect
             v-for="block in configBounds"
             :config="block"
@@ -67,10 +53,6 @@ import { map } from "@/assets/System/mazeMap/map.json";
 
 export default {
   components: {
-    bounds: defineAsyncComponent(() => import("@/components/mazeBounds.vue")),
-    safeArea: defineAsyncComponent(() =>
-      import("@/components/mazeSafeArea.vue")
-    ),
     joystick: defineAsyncComponent(() =>
       import("@/components/touchscreenJoystick.vue")
     ),
@@ -308,7 +290,9 @@ export default {
         }
       }
       if (possiblePosition.length > 0) {
-        var randomPosition = Math.random() * possiblePosition.length;
+        var randomPosition = Math.floor(
+          Math.random() * possiblePosition.length
+        );
         this.configPlayer.x =
           this.laneWidth * (possiblePosition[randomPosition].x + 0.5);
         this.configPlayer.y =
