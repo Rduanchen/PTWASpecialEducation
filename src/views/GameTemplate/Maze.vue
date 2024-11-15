@@ -53,9 +53,8 @@
 </template>
 
 <script>
-import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
+import { getGameAssets } from "@/utilitys/get_assets.js";
 import { getSystemAssets } from "@/utilitys/get_assets.js";
-import { Container } from "konva/lib/Container";
 import { defineAsyncComponent } from "vue";
 import { map } from "@/assets/System/mazeMap/map.json";
 
@@ -222,7 +221,7 @@ export default {
       this.randomMapId = Math.floor(Math.random() * map.length);
       this.laneWidth = Math.floor(this.configKonva.width * 0.05);
       var mapBG = document.createElement("img");
-      mapBG.src = GamesGetAssetsFile(
+      mapBG.src = getGameAssets(
         "Dev02_Maze",
         "map_" + this.randomMapId + ".jpg"
       );
@@ -247,7 +246,6 @@ export default {
           }
         }
       }
-      console.log("bg:", this.isBgImage);
     },
 
     getOptionPosition() {
