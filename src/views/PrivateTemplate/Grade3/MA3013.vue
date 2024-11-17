@@ -1,0 +1,254 @@
+<template>
+  <div class="outter-container">
+    <div class="title">
+      <a>{{ this.GameData.questionText }}</a>
+    </div>
+    <div class="game-area">
+      <div class="left-component">
+        <MoneyGenerator
+          class="money-generator"
+          :Data="moneyGeneratorData"
+        ></MoneyGenerator>
+        <Markdown
+          class="markdown"
+          :Data="markdownData"
+          @ReplyAnswer="markdownReplyAnswer"
+        ></Markdown>
+      </div>
+      <div class="right-component">
+        <NumberBoardInput
+          class="number-board"
+          :Data="numberInputData"
+          @ReplyAnswer="numberBoardReply"
+        ></NumberBoardInput>
+        <VirtualNumPad
+          @virtualpadinput-Input="push"
+          @virtualpadinput-delete="clear"
+          @virtualpadinput-pop="pop"
+        ></VirtualNumPad>
+        <button @click="checkAnswer" class="btn-submit">檢查答案</button>
+      </div>
+    </div>
+    {{ BoardReply }}
+    {{ markdownReply }}
+  </div>
+</template>
+
+<script>
+import MoneyGenerator from "@/components/MoneyGenerator.vue";
+import VirtualNumPad from "@/components/VirtualNumPadInput.vue";
+import Markdown from "@/components/Markdown.vue";
+import NumberBoardInput from "@/components/NumberBoardInput.vue";
+import { now } from "@vueuse/core";
+
+export default {
+  name: "MA3013",
+  components: {
+    MoneyGenerator,
+    VirtualNumPad,
+    Markdown,
+    NumberBoardInput,
+  },
+  props: {
+    GameData: {
+      type: Object,
+      required: true,
+    },
+    GameConfig: {
+      type: Object,
+      required: true,
+    },
+    id: {
+      type: String,
+      required: true,
+    },
+  },
+  data() {
+    return {
+      // Add your component data here
+      //   GameData: {
+      //     questionText:
+      //       "請數數看錢幣，並且在以下的框框中以及定位版中輸入確的答案",
+      //     markdownIndex: `# 請輸入正確的答案 $n$ 1361是$i$個千、$i$ 個百、$i$個十、$i$個一合起來的`,
+      //     markdownInputIndex: [1, 3, 6, 1],
+      //     answer: 1361,
+      //   },
+      moneyGeneratorData: {},
+      markdownData: {
+        Render: undefined,
+        Answer: [1, 3, 6, 1],
+      },
+      numberInputData: {
+        Unit: ["千位", "百位", "十位", "個位"],
+        Number: undefined,
+      },
+      BoardReply: undefined,
+      markdownReply: undefined,
+      moneyGenerator: {
+        Thousands: 0,
+        FiveHundreds: 0,
+        Hundreds: 0,
+        Fifties: 0,
+        Tens: 0,
+        Fives: 0,
+        Ones: 0,
+      },
+      answerArr: [],
+      nowSelect: undefined,
+    };
+  },
+  created() {
+    // Lifecycle hook when the component is created
+    this.markdownData.Render = this.GameData.markdownIndex;
+    this.numberInputData.Number = this.GameData.answer;
+    this.markdownData.Answer = this.GameData.markdownInputIndex;
+    this.answerArr = this.GameData.answer.toString().split("");
+    let diff = 4 - this.answerArr.length;
+    for (let i = 0; i < diff; i++) {
+      this.answerArr.unshift(0);
+    }
+
+    this.moneyGeneratorData = {
+      Thousands: this.answerArr[0],
+      FiveHundreds: 0,
+      Hundreds: this.answerArr[1],
+      Fifties: 0,
+      Tens: this.answerArr[2],
+      Fives: 0,
+      Ones: this.answerArr[3],
+    };
+    document.addEventListener("click", this.nowClicked);
+  },
+  methods: {
+    // Add your component methods here
+    numberBoardReply(reply) {
+      this.BoardReply = reply;
+    },
+    markdownReplyAnswer(reply) {
+      this.markdownReply = reply;
+    },
+    nowClicked() {
+      if (document.activeElement.tagName == "INPUT") {
+        this.nowSelect = document.activeElement;
+      } else if (document.activeElement.tagName == "BUTTON") {
+        this.NowSelect.focus();
+      }
+    },
+    clear() {
+      let activeElement = this.nowSelect;
+      if (activeElement) {
+        const start = activeElement.selectionStart;
+        const end = activeElement.selectionEnd;
+        const value = activeElement.value;
+        activeElement.value = "";
+        activeElement.selectionStart = activeElement.selectionEnd = start - 1;
+        const event = new Event("input", { bubbles: true });
+        activeElement.dispatchEvent(event);
+      }
+    },
+    pop() {
+      let activeElement = this.nowSelect;
+      if (activeElement) {
+        const start = activeElement.selectionStart;
+        const end = activeElement.selectionEnd;
+        const value = activeElement.value;
+        activeElement.value = value.slice(0, start) + value.slice(end);
+        activeElement.selectionStart = activeElement.selectionEnd = start;
+        const event = new Event("input", { bubbles: true });
+        activeElement.dispatchEvent(event);
+      }
+    },
+    push(ch) {
+      let activeElement = this.nowSelect;
+      activeElement.focus();
+      if (activeElement) {
+        const start = activeElement.selectionStart;
+        const end = activeElement.selectionEnd;
+        const value = activeElement.value;
+        activeElement.value = activeElement.value + ch;
+        activeElement.selectionStart = activeElement.selectionEnd = start + 1;
+        const event = new Event("input", { bubbles: true });
+        activeElement.dispatchEvent(event);
+      }
+    },
+    checkAnswer() {
+      if (this.BoardReply && this.markdownReply) {
+        this.$emit("play-effect", "CorrectSound");
+        this.$emit("next-question");
+        this.$emit("add-record", ["不支援", "不支援", "正確"]);
+      } else {
+        this.$emit("play-effect", "WrongSound");
+        this.$emit("add-record", ["不支援", "不支援", "錯誤"]);
+      }
+    },
+  },
+  computed: {
+    // Add your computed properties here
+  },
+  mounted() {
+    // Lifecycle hook when the component is mounted
+  },
+};
+</script>
+
+<style scoped lang="scss">
+.outter-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .title {
+    @extend .container-basic;
+    padding: $gap--small;
+    width: 100%;
+    background-color: $primary-color;
+    font-size: 2em;
+    margin: 10px;
+  }
+  .left-component {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $gap--small;
+    width: 70%;
+    .money-generator {
+      width: 100%;
+      border-radius: $border-radius;
+      padding: $gap--small;
+      background-color: $sub-color;
+    }
+    :deep(input) {
+      max-width: 100px;
+    }
+  }
+  .right-component {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: $gap--small;
+    width: 40%;
+    .number-board {
+      width: 40%;
+    }
+  }
+  .markdown {
+    width: 100%;
+    border-radius: $border-radius;
+    padding: $gap--small;
+    background-color: $info-color;
+  }
+  .btn-submit {
+    padding: $gap--small;
+    width: 70%;
+    border: none;
+    border-radius: $border-radius;
+    background-color: $submit-color;
+    &:hover {
+      transform: scale($transform-scale);
+    }
+  }
+}
+.game-area {
+  display: flex;
+}
+</style>

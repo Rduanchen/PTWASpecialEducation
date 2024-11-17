@@ -1,8 +1,14 @@
 <template>
   <div class="container">
     <div class="progress">
-      <div class="progress-bar" role="progressbar" :style="{ width: progressBarWidth }"
-        aria-valuenow="progressPercentage" aria-valuemin="0" aria-valuemax="100"></div>
+      <div
+        class="progress-bar"
+        role="progressbar"
+        :style="{ width: progressBarWidth }"
+        aria-valuenow="progressPercentage"
+        aria-valuemin="0"
+        aria-valuemax="100"
+      ></div>
     </div>
     <div class="gameAndQuestion">
       <!-- Life bar section -->
@@ -22,11 +28,22 @@
 
       <!-- Conveyor belt section -->
       <div class="box ratio-7">
-        <div class="conveyor-belt" :class="{ paused: isPaused }" :style="conveyorStyle">
-          <div class="conveyor-item" v-for="(item, index) in currentQuestions" :key="index">
+        <div
+          class="conveyor-belt"
+          :class="{ paused: isPaused }"
+          :style="conveyorStyle"
+        >
+          <div
+            class="conveyor-item"
+            v-for="(item, index) in currentQuestions"
+            :key="index"
+          >
             <div class="question-container">
-              <component :is="this.GameData.Question[currentQuestions[index]].name"
-                :Data="this.GameData.Question[currentQuestions[index]].Data" :ID="this.id"></component>
+              <component
+                :is="this.GameData.Question[currentQuestions[index]].name"
+                :Data="this.GameData.Question[currentQuestions[index]].Data"
+                :ID="this.id"
+              ></component>
               <!-- <p class="question-text">{{ item.Question }}</p> -->
             </div>
           </div>
@@ -37,12 +54,17 @@
       <!-- Answer buttons or home page -->
       <div class="box ratio-3">
         <div class="button-container">
-          <button v-for="(selection, index) in this.GameData.Question[
-            currentQuestions[currentQuestionIndex]
-          ].Selections" :key="index" :class="[
-            'big-button',
-            { 'wrong-answer': wrongAnswerIndex === index },
-          ]" @click="handleAnswer(index)">
+          <button
+            v-for="(selection, index) in this.GameData.Question[
+              currentQuestions[currentQuestionIndex]
+            ].Selections"
+            :key="index"
+            :class="[
+              'big-button',
+              { 'wrong-answer': wrongAnswerIndex === index },
+            ]"
+            @click="handleAnswer(index)"
+          >
             {{ selection }}
           </button>
         </div>
@@ -59,7 +81,7 @@ import gameplayMusic from "@/assets/sounds/game_sounds/gameplay-music.mp3";
 import clickSound from "@/assets/sounds/game_sounds/click-sound.mp3";
 import wrongSound from "@/assets/sounds/game_sounds/wrong_sound_effect.mp3";
 import { getComponents } from "@/utilitys/get-components.js";
-import { soundManager } from '@/utilitys/sound-manager.js';
+import { soundManager } from "@/utilitys/sound-manager.js";
 
 export default {
   name: "QuizComponent",
@@ -156,7 +178,7 @@ export default {
     },
     progressBarWidth() {
       return `${this.progressPercentage}%`;
-    }
+    },
   },
   methods: {
     startQuiz() {
@@ -215,10 +237,10 @@ export default {
       this.isPaused = true;
     },
     playCkickSound() {
-      soundManager.playSoundImmediately('trackClickSound', true,false);
+      soundManager.playSoundImmediately("trackClickSound", true, false);
     },
     playBackgroundMusic() {
-      soundManager.playSoundLoop('trackBackgroundMusic', true,true);
+      soundManager.playSoundLoop("trackBackgroundMusic", true, true);
     },
     toggleMute() {
       this.isMuted = !this.isMuted;
@@ -251,10 +273,14 @@ export default {
     ImageContainer: getComponents("ImageContainer"),
   },
   created() {
-    soundManager.registerSound('trackBackgroundMusic', `${gameplayMusic}`, true);
-    soundManager.registerSound('trackClickSound', `${clickSound}`, true);
+    soundManager.registerSound(
+      "trackBackgroundMusic",
+      `${gameplayMusic}`,
+      true
+    );
+    soundManager.registerSound("trackClickSound", `${clickSound}`, true);
     this.startQuiz();
-  }
+  },
 };
 </script>
 
@@ -440,5 +466,9 @@ export default {
   height: 20px;
   background-color: #4caf50;
   transition: width 0.5s ease;
+}
+
+:deep(.word) {
+  color: #fff;
 }
 </style>

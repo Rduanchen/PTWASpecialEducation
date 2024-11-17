@@ -1,486 +1,612 @@
 <template>
-  <div class="Container">
-      <div class="card CaluculatorBody">
-          <div class="unit">
-              <div class="units" v-for="item in Title">
-                  <button type="button" class="btn btn-primary" v-if="item != null">{{ item }}</button>
-                  <div class="space" v-if="item == null"></div>
-              </div>
-          </div>
-          
-          <div class="Carry">
-              <div class="Carrys" v-for="(items,index) in Carry">
-                  <draggable :list="Carry[index]" group="Number" item-key="name" class="CarryContainer" @change="GetIndex(index)" @add="CarryCheckInput" :sort="false">
-                      <template #item="{ element }">
-                          <button type="button" class="btn btn-primary m-1 my-btn">{{ element }}</button>
-                      </template>
-                  </draggable>
-              </div>
-          </div>
-          <hr>
-          <div class="NumberArea">
-              <div class="NumberRow" v-for="(items,index) in Num_list">
-                  <draggable :list="Sy_list[index]" :sort="false" group="Symbol" item-key="name" @change="sym_control(index)" class="SymbolContainer">
-                      <template #item="{ element }">
-                          <button type="button" class="btn btn-primary m-1 my-btn">{{ element }}</button>
-                      </template>
-                  </draggable>
-                  <div class="space" v-if="items == null"></div>
-                  <div class="NumbersContainer">
-                      <div class="Number" v-for="item in items">
-                          <draggable :list="item" :sort="false" group="Number" item-key="name" class="NumberConainer"  @change="GetIndex(index)" @add="NumberCheckInput">
-                              <template #item="{ element }">
-                              <button type="button" class="btn btn-primary m-1 my-btn">{{ element }}</button>
-                              </template>
-                          </draggable>
-                      </div>
-                  </div>
-              </div>
-          </div>
-          <hr>
-          <div class="Answer">
-              <div class="AnswerContainer" v-for="(item,index) in Ans">
-                  <draggable :list="item" :sort="false" group="Number" item-key="name" class="NumberConainer" @change="GetIndex(index)" @add="AnsCheckInput">
-                      <template #item="{ element }">
-                          <button type="button" class="btn btn-primary m-1 my-btn" >{{ element }}</button>
-                      </template>
-                  </draggable>
-              </div>
-          </div>
-          <div class="buttons">
-              <button @click="AddRow" class="btn btn-primary m-1">新增一行</button>
-              <button @click="removerow" class="btn btn-primary m-1">移除最後一行</button>
-              <button @click="clear" class="btn btn-primary m-1">清除所有數字</button>
-          </div>
+  <div class="outter">
+    <div class="calculator">
+      <div class="unit btn-group" style="flex-direction: row-reverse">
+        <div class="units" v-for="item in Title">
+          <button type="button" v-if="item != null">{{ item }}</button>
+          <div class="space" v-if="item == null"></div>
+        </div>
       </div>
-      <div class="card Selection">
-          <div class="row">
-              <div class="NumberPart">
-                  <h2>數字</h2>
-                  <hr>
-                      <draggable
-                      class="NumberContainer"
-                      :list="Num"
-                      :group="{ name: 'Number', pull: 'clone', put: false }"
-                      :sort="false"
-                      @change="log"
-                      item-key="Number"
-                      >
-                          <template #item="{ element }">
-                              <button type="button" class="btn btn-primary m-1 ">{{ element }}</button>
-                          </template>
-                      </draggable>
-  
+      <div class="carry btn-group" v-for="(carries, Row) in Carry">
+        <div class="carrys" v-for="(items, cnt) in carries">
+          <button
+            ref="Carry"
+            :class="{ 'btn--line': this.CarryLine[Row][cnt] }"
+          >
+            {{ items }}
+            <q-menu anchor="top left" self="bottom left" class="q-menu">
+              <div class="btns">
+                <button @click="CarryInput(Row, cnt, 0)" v-close-popup>
+                  0
+                </button>
+                <button
+                  v-for="index in 5"
+                  @click="CarryInput(Row, cnt, index)"
+                  v-close-popup
+                >
+                  {{ index }}
+                </button>
+                <button
+                  v-for="index in 5"
+                  @click="CarryInput(Row, cnt, index + 5)"
+                  v-close-popup
+                >
+                  {{ index + 5 }}
+                </button>
+                <button @click="CarryInput(Row, cnt, '/')" v-close-popup>
+                  /
+                </button>
+                <button @click="CarryInput(Row, cnt, 'delete')" v-close-popup>
+                  <q-icon name="bi-trash"></q-icon>
+                </button>
               </div>
-              <div class="SymbolPart">
-              <h2>符號</h2>
-              <hr>
-              <draggable
-                  class="SymbolContainer"
-                  :list="Symbol"
-                  :group="{ name: 'Symbol', pull: 'clone', put: false }"
-                  @change="log"
-                  :sort="false"
-                  item-key="index"
+            </q-menu>
+          </button>
+          <button v-if="this.Num_list[0][cnt] == '.'">.</button>
+        </div>
+      </div>
+      <hr />
+      <div class="number-area">
+        <div class="NumberRow btn-group" v-for="(items, Row) in Num_list">
+          <button v-if="Row != 0">
+            {{ Sy_list[Row] }}
+            <q-menu
+              anchor="top left"
+              self="bottom left"
+              class="q-menu"
+              v-if="this.SymbolEditable[Row]"
+            >
+              <div class="btns">
+                <button @click="SymbolInput(Row, '+')">+</button>
+                <button @click="SymbolInput(Row, '-')">-</button>
+              </div>
+            </q-menu>
+          </button>
+          <div class="space"></div>
+          <div class="NumbersContainer btn-group">
+            <div
+              v-for="(item, Col) in items"
+              style="display: flex; justify-content: center"
+            >
+              <button v-if="this.Num_list[0][Col] == '.'">.</button>
+              <button
+                :class="{ 'btn--line': this.ButtonLine[Row][Col] }"
+                v-else
               >
-                  <template #item="{ element }">
-                      <button type="button" class="btn btn-primary m-1">{{ element }}</button>
-                  </template>
-              </draggable>
-              </div>
-              <div class="setting">
-                    <h2>設定</h2>
-                    <hr>
-                    單位:
-                    <div class="unit">
-                        <button type="button" class="btn btn-primary m-1" @click="UseUnit('Number')">一般</button>
-                        <button type="button" class="btn btn-primary m-1" @click="UseUnit('Volume')">容積</button>
-                        <button type="button" class="btn btn-primary m-1" @click="UseUnit('Time')">時間</button>
-                        <button type="button" class="btn btn-primary m-1" @click="UseUnit('Weight')">重量</button>
-                        <button type="button" class="btn btn-primary m-1" @click="UseUnit('Length')">長度</button>
-                    </div>
-                    位數:
-                    <div class="UnitNumber d-flex">
-                        <button type="button" class="btn btn-danger m-1 w-50" @click="SetUnit(-1)">-</button>
-                        <button type="button" class="btn btn-primary m-1 w-50" @click="SetUnit(1)">+</button>
-                    </div>
-              </div>
+                {{ item }}
+                <q-menu anchor="top left" self="bottom left" class="q-menu">
+                  <div class="btns">
+                    <button
+                      @click="NumInput(Row, Col, 0)"
+                      v-if="this.NumberEditable[Row][Col]"
+                    >
+                      0
+                    </button>
+                    <button
+                      v-for="index in 5"
+                      @click="NumInput(Row, Col, index)"
+                      v-if="this.NumberEditable[Row][Col]"
+                    >
+                      {{ index }}
+                    </button>
+                    <button
+                      v-for="index in 4"
+                      @click="NumInput(Row, Col, index + 5)"
+                      v-if="this.NumberEditable[Row][Col]"
+                    >
+                      {{ index + 5 }}
+                    </button>
+                    <button @click="NumInput(Row, Col, '/')">/</button>
+                    <button
+                      @click="NumInput(Row, Col, 'delete')"
+                      v-if="this.NumberEditable[Row][Col]"
+                    >
+                      <q-icon name="bi-trash"></q-icon>
+                    </button>
+                  </div>
+                </q-menu>
+              </button>
+            </div>
           </div>
-          </div>
+        </div>
+      </div>
+      <hr />
+      <div class="answer btn-group">
+        <div class="AnswerContainer" v-for="(item, col) in Ans">
+          <button
+            :class="{
+              'btn-wrong': this.WrongAnswerMarkup[col],
+              'btn-normal': this.WrongAnswerMarkup[col] == false,
+            }"
+            class="answers"
+          >
+            {{ item }}
+            <q-menu anchor="top left" self="bottom left" class="q-menu">
+              <div class="btns">
+                <button @click="AnsInput(col, 0)" v-close-popup>0</button>
+                <button
+                  v-for="index in 5"
+                  @click="AnsInput(col, index)"
+                  v-close-popup
+                >
+                  {{ index }}
+                </button>
+                <button
+                  v-for="index in 5"
+                  @click="AnsInput(col, index + 5)"
+                  v-close-popup
+                >
+                  {{ index + 5 }}
+                </button>
+                <button @click="AnsInput(col, 'delete')" v-close-popup>
+                  <q-icon name="bi-trash"></q-icon>
+                </button>
+              </div>
+            </q-menu>
+          </button>
+          <button v-if="this.Num_list[0][col - 1] == '.'">.</button>
+        </div>
+      </div>
+    </div>
   </div>
-  </template>
-        
-  <script>
-  import draggable from 'vuedraggable';
-  export default {
-      name: "calculator",
-      display: "calculator",
-      components: {
-          draggable
-      },
-      data() {
-          return {
-              Num:["0","1","2","3","4","5","6","7","8","9"],
-              Symbol:["+","-","x","÷"],
-              Num_list: [],
-              Index:null,
-              Index2: null,
-              // Num_list: [[],[],[]],
-              Sy_list: [],
-              Ans:[],
-              Carry:[],
-              Title:[],
-              NowUnit:2,
-              FakeData:{
-                  Unit : 3,
-                  UseUnit: "Volume",
-                  Units:{
-                      Number:{
-                          Title:["個位","十位","百位","千位","萬位"],
-                          Total:5
-                      },
-                      Time:{
-                          Title:["秒",null,"分",null,"時",null,"日"],
-                          Total:4
-                      },
-                      Weight:{
-                          Title:["公克",null,null,"公斤",null,null,"公噸"],
-                          Total:4
-                      },
-                      Length:{
-                          Title:["毫米",null,"公分",null,"公尺",null,"公里"],
-                          Total:4
-                      },
-                      Volume:{
-                          Title:["毫升",null,null,"公升",null,null,"公秉"],
-                          Total:3
-                      }
-                  }
-              }
-          };
-      },
-      mounted(){
-          for(var i = 0; i<this.FakeData.Unit; i++){
-              this.Title.push(this.FakeData.Units[this.FakeData.UseUnit].Title[i]);
-          }
-          for(var i = 0; i<=this.FakeData.Unit; i++){
-              this.Carry.push([]);
-              this.Ans.push([]);
-          }
-          for(var x = 0; x<this.NowUnit ; x++){
-              let temp = [];
-              this.Sy_list.push([]);
-              for(var i = 0; i<this.FakeData.Unit; i++){
-                  temp.push([]);
-              }
-              this.Num_list.push(temp);
-          }
-          console.log(this.Ans);
-      },
-      methods: {
-        SetUnit: function(num){
-            if(!( this.FakeData.Unit==8 && num == 1 ) && !(this.FakeData.Unit==2 && num==-1)){
-                this.FakeData.Unit = this.FakeData.Unit + num;
-                console.log(this.FakeData.Unit);
-                this.Title = [];
-                this.Num_list = [];
-                this.Sy_list = [];
-                this.Carry = [];
-                this.Ans = [];
+</template>
 
-                for(var i = 0; i<this.FakeData.Unit; i++){
-                    this.Title.push(this.FakeData.Units[this.FakeData.UseUnit].Title[i]);
-                }
-                for(var i = 0; i<=this.FakeData.Unit; i++){
-                    this.Carry.push([]);
-                    this.Ans.push([]);
-                }
-                for(var x = 0; x<this.NowUnit ; x++){
-                    let temp = [];
-                    this.Sy_list.push([]);
-                    for(var i = 0; i<this.FakeData.Unit; i++){
-                        temp.push([]);
-                    }
-                    this.Num_list.push(temp);
-                }
-            }
-        },
-        UseUnit: function(unit){
-            this.FakeData.UseUnit = unit;
-            this.Title = [];
-            for(var i = 0; i<this.FakeData.Unit; i++){
-                this.Title.push(this.FakeData.Units[this.FakeData.UseUnit].Title[i]);
-            }
-        },
-        log: function(evt) {
-            console.log(evt);
-            this.Num=["0","1","2","3","4","5","6","7","8","9"];
-        },
-        removerow: function(evt) {
-            /**
-             * 移除最後一行(Remove last row)
-             */
-            if(this.Num_list.length>1){
-                this.Num_list.pop();
-                this.Sy_list.pop();
-            }
-        },
-        GetIndex: function(index){
-            this.Index = index;
-        },
-        NumberCheckInput: function(){
-            console.log(this.Index);
-            for(var i in this.Num_list[this.Index]){
-                if(this.Num_list[this.Index][i].length>1){
-                    let temp = this.Num_list[this.Index][i][1];
-                    this.Num_list[this.Index][i] = [temp];
-                }
-            }
-        },
-        CarryCheckInput: function(newVal){
-            this.Carry[this.Index] = [`${newVal.oldIndex}`];    
-        },
-        AnsCheckInput: function(newVal){
-            this.Ans[this.Index] = [`${newVal.oldIndex}`];    
-        },
-        AddRow:function(){
-            let temp = [];
-            this.NowUnit ++;
-            this.Sy_list.push([]);
-            for(var i = 0; i<this.FakeData.Unit; i++){
-                temp.push([]);
-            }
-            this.Num_list.push(temp);
-            if(this.Num_list.length*((10**this.FakeData.Unit)-1) > (10**(this.Ans.length))){
-                this.Ans.push([]);
-                this.Carry.push([]);
-            }
-        },
-        clear: function(evt) {
-            this.Num_list = [];
-            this.Sy_list = [];
-            this.Carry = [];
-            this.Ans = [];
-            this.Title = [];
-            for(var i = 0; i<this.FakeData.Unit; i++){
-                this.Title.push(this.FakeData.Units[this.FakeData.UseUnit].Title[i]);
-            }
-            for(var i = 0; i<=this.FakeData.Unit; i++){
-                this.Carry.push([]);
-                this.Ans.push([]);
-            }
-            for(var x = 0; x<2 ; x++){
-                let temp = [];
-                for(var i = 0; i<this.FakeData.Unit; i++){
-                    temp.push([]);
-                }
-                this.Num_list.push(temp);
-            }
+<script>
+import draggable from "vuedraggable";
+import { wordProblemWithCalculator as emitter } from "@/utilitys/mitt.js";
+export default {
+  name: "calculator",
+  display: "calculator",
+  components: {
+    draggable,
+  },
+  props: {
+    Data: {
+      type: Object,
+      required: true,
+    },
+    ID: {
+      type: String,
+      required: false,
+    },
+  },
+  data() {
+    return {
+      Num_list: [],
+      Sy_list: [],
+      Ans: [],
+      Carry: [],
+      Title: [],
+      ButtonLine: [],
+      CarryLine: [],
+      AnswerLine: [],
+      NumberEditable: [],
+      SymbolEditable: [],
+      WrongAnswerMarkup: [],
+      NumberRow: 2,
+      NumberAmount: 8,
+      DotPosition: 0,
+      //   Data: {
+      //     Unit: "Number",
+      //     CarryAmount: 2,
+      //     NumberAmount: 5,
+      //     CustomeUnit: null,
+      //     decimalPoint: 1,
+      //     Preset: {
+      //       Number: ["149.2", "254.1"],
+      //       Symbol: "+",
+      //     },
+      //     Answer: {
+      //       Carry: [],
+      //       Answer: "403",
+      //       Number: ["149", "254"],
+      //       Symbol: "+",
+      //     },
+      //   },
+      CustomeUnit: undefined,
+      UnitPreset: {
+        UseUnit: "Volume",
+        Units: {
+          Number: {
+            Title: ["個位", "十位", "百位", "千位", "萬位"],
+            Total: 5,
           },
-          sym_control: function() {
-          /**
-           * 控制符號的數量，每一行只能有一個符號(Control the number of symbol, each row can only have one symbol)
-           */
-            this.Sy_list[0]=[];
-            for(var i in this.Sy_list){
-                if(this.Sy_list[i].length>1){
-                this.Sy_list[i].pop()
-                }
-            }
-
+          Time: {
+            Title: ["秒", null, "分", null, "時", null, "日"],
+            Total: 4,
           },
-          Calculat: function(){
-          /**
-           * 計算答案(Calculate the answer)
-           */
-          this.Ans=[]; //Clear the answer
-          var num=[]; //Store the number(Temporally)
-          var sy=[]; //Store the symbol(Temporally)
-  
-          //Push the Number to Array
-          for(var i in this.Num_list){
-              num.push(this.Num_list[i].join(''));
-          }
-  
-          //Push the Symbol to Array
-          for(var i in this.Sy_list){
-              sy.push(this.Sy_list[i].join(''));
-          }
-  
-          //Calculate the answer
-          var ans=num[0];
-          for(var i=0;i<=sy.length;i++){
-              if(sy[i+1]=="+"){
-              ans=parseInt(ans)+parseInt(num[i+1]);
-              }
-              else if(sy[i+1]=="-"){
-              ans=parseInt(ans)-parseInt(num[i+1]);
-              }
-              else if(sy[i+1]=="x"){
-              ans=parseInt(ans)*parseInt(num[i+1]);
-              }
-              else if(sy[i+1]=="÷"){
-              ans=parseInt(ans)/parseInt(num[i+1]);
-              }
-          }
-          ans=ans.toString()
-          //Push the answer to Array, And vue will display it.
-          for(var i in ans){
-              this.Ans.push(ans[i]);
-          }
-          }
+          Weight: {
+            Title: ["公克", null, null, "公斤", null, null, "公噸"],
+            Total: 4,
+          },
+          Length: {
+            Title: ["毫米", null, "公分", null, "公尺", null, "公里"],
+            Total: 4,
+          },
+          Volume: {
+            Title: ["毫升", null, null, "公升", null, null, "公秉"],
+            Total: 3,
+          },
+        },
+      },
+    };
+  },
+  emits: ["ReplyAnswer"],
+  created() {
+    // this.Data = this.GameData;
+    this.NumberAmount = this.Data.NumberAmount;
+    this.DotPosition = this.Data.decimalPoint;
+    if (this.Data.CustomeUnit != undefined) {
+      for (var i = 0; i < this.CustomeUnit.length; i++) {
+        this.Title.push(this.CustomeUnit[i]);
       }
+    } else {
+      for (var i = 0; i < this.NumberAmount; i++) {
+        this.Title.push(
+          this.UnitPreset.Units[this.UnitPreset.UseUnit].Title[i]
+        );
+      }
+    }
+    for (var i = 0; i <= this.NumberAmount; i++) {
+      this.Ans.push("");
+      this.AnswerLine.push(false);
+      this.WrongAnswerMarkup.push(false);
+    }
+
+    for (var i = 0; i < this.Data.CarryAmount; i++) {
+      let temp = [];
+      let templine = [];
+      for (var x = 0; x < this.NumberAmount; x++) {
+        temp.push("");
+        templine.push(false);
+      }
+      this.Carry.push(temp);
+      this.CarryLine.push(templine);
+    }
+    for (var x = 0; x < this.NumberRow; x++) {
+      let temp = [];
+      this.Sy_list.push("");
+      this.SymbolEditable.push(true);
+      let tempNumber = [];
+      let tempeditable = [];
+      for (var i = 0; i < this.NumberAmount; i++) {
+        temp.push("");
+        tempNumber.push(false);
+        tempeditable.push(true);
+      }
+      this.Num_list.push(temp);
+      this.ButtonLine.push(tempNumber);
+      this.NumberEditable.push(tempeditable);
+    }
+    this.UseUnit(this.Data.Unit);
+    this.presetCalculator();
+    this.shiftNumber();
+    emitter.on("checkAnswer", this.parentRequestCheckAnswer);
+  },
+  methods: {
+    shiftNumber() {
+      for (var i in this.Num_list) {
+        for (var j in this.Num_list[i]) {
+          if (this.Num_list[i][j] == ".") {
+            if (this.Num_list[i].length - 1 - j < this.DotPosition) {
+              for (
+                var x = 0;
+                x < this.DotPosition - (this.Num_list[i].length - 1 - j);
+                x++
+              ) {
+                this.Num_list[i].push("");
+              }
+            }
+          }
+        }
+      }
+    },
+    CarryInput(Row, index, num) {
+      if (num == "delete") {
+        this.Carry[Row][index] = "";
+      } else if (num == "/") {
+        this.CarryLine[Row][index] = !this.CarryLine[Row][index];
+      } else {
+        this.Carry[Row][index] = num;
+      }
+      this.checkAnswer();
+    },
+    NumInput(Row, Col, num) {
+      if (num == "delete") {
+        this.Num_list[Row][Col] = "";
+      } else if (num == "/") {
+        this.ButtonLine[Row][Col] = !this.ButtonLine[Row][Col];
+      } else {
+        this.Num_list[Row][Col] = num;
+      }
+      this.checkAnswer();
+    },
+    AnsInput(index, num) {
+      this.WrongAnswerMarkup[index] = false;
+      if (num == "delete") {
+        this.Ans[index] = "";
+      } else if (num == "/") {
+        this.AnswerLine[index] = !this.AnswerLine[index];
+      } else {
+        this.Ans[index] = num;
+      }
+      this.checkAnswer();
+    },
+    presetCalculator() {
+      for (var i in this.Data.Preset.Number) {
+        let temp = this.Num_list[i].length - 1;
+        if (
+          this.Data.Preset.Symbol != undefined &&
+          this.Data.Preset.Symbol != null &&
+          this.Data.Preset.Symbol != ""
+        ) {
+          this.Sy_list[i] = this.Data.Preset.Symbol;
+          this.SymbolEditable[i] = false;
+        }
+        for (var j = this.Data.Preset.Number[i].length - 1; j >= 0; j--) {
+          this.Num_list[i][temp] = this.Data.Preset.Number[i][j];
+          this.NumberEditable[i][temp] = false;
+          temp--;
+        }
+      }
+    },
+    SymbolInput(index, num) {
+      this.Sy_list[index] = num;
+    },
+    SetUnit: function (num) {
+      if (
+        !(this.NumberAmount == 8 && num == 1) &&
+        !(this.NumberAmount == 2 && num == -1)
+      ) {
+        this.NumberAmount = this.NumberAmount + num;
+        console.log(this.NumberAmount);
+        this.Title = [];
+        this.Num_list = [];
+        this.Sy_list = [];
+        this.Carry = [];
+        this.Ans = [];
+        this.ButtonLine = [];
+        this.CarryLine = [];
+        for (var i = 0; i < this.NumberAmount; i++) {
+          this.Title.push(
+            this.UnitPreset.Units[this.UnitPreset.UseUnit].Title[i]
+          );
+        }
+        for (var i = 0; i <= this.NumberAmount; i++) {
+          this.Carry.push([]);
+          this.Ans.push([]);
+        }
+        for (var x = 0; x < this.NumberRow; x++) {
+          let temp = [];
+          this.Sy_list.push([]);
+          for (var i = 0; i < this.NumberAmount; i++) {
+            temp.push([]);
+          }
+          this.Num_list.push(temp);
+        }
+      }
+    },
+    UseUnit: function (unit) {
+      this.UnitPreset.UseUnit = unit;
+      this.Title = [];
+      for (var i = 0; i < this.NumberAmount; i++) {
+        this.Title.push(
+          this.UnitPreset.Units[this.UnitPreset.UseUnit].Title[i]
+        );
+      }
+    },
+    checkAnswer() {
+      let AnswerCheck = true;
+      for (var i in this.Data.Answer.Number) {
+        let temp = this.Num_list[i].length - 1;
+        for (var j = this.Data.Answer.Number[i].length - 1; j >= 0; j--) {
+          if (this.Num_list[i][temp] != this.Data.Answer.Number[i][j]) {
+            AnswerCheck = false;
+          }
+          temp--;
+        }
+      }
+      let temp = this.Ans.length - 1;
+      for (var i = this.Data.Answer.Answer.length - 1; i >= 0; i--) {
+        if (this.Ans[temp] != this.Data.Answer.Answer[i]) {
+          AnswerCheck = false;
+          // this.WrongAnswerMarkup[temp] = true;
+        }
+        temp--;
+      }
+      //Carry
+      if (
+        this.Data.Answer.Carry != undefined &&
+        this.Data.Answer.Carry != null &&
+        this.Data.Answer.Carry != []
+      ) {
+        for (var i in this.Data.Answer.Carry) {
+          let temp = this.Carry[i].length - 1;
+          for (var j = this.Data.Answer.Carry[i].length - 1; j >= 0; j--) {
+            if (this.Carry[i][temp] != this.Data.Answer.Carry[i][j]) {
+              AnswerCheck = false;
+              console.log("Carry Wrong");
+            }
+            temp--;
+          }
+        }
+      }
+      if (AnswerCheck) {
+        this.$emit("ReplyAnswer", true);
+      } else {
+        var wrongAnswer = 0;
+        var digits = Math.ceil(
+          Math.log(this.Data.Answer.Answer) / Math.log(10)
+        );
+        for (var i = 0; i < this.Ans.length - 1; ++i) {
+          if (this.Ans[this.Ans.length - i - 1] != null) {
+            wrongAnswer += this.Ans[this.Ans.length - i - 1] * Math.pow(10, i);
+          } else {
+            if (i < digits) wrongAnswer = null;
+            break;
+          }
+        }
+      }
+      if (wrongAnswer) {
+        this.$emit("ReplyAnswer", false);
+      }
+    },
+    parentRequestCheckAnswer() {
+      let AnswerCheck = true;
+      for (var i in this.Data.Answer.Number) {
+        let temp = this.Num_list[i].length - 1;
+        for (var j = this.Data.Answer.Number[i].length - 1; j >= 0; j--) {
+          if (this.Num_list[i][temp] != this.Data.Answer.Number[i][j]) {
+            AnswerCheck = false;
+          }
+          temp--;
+        }
+      }
+      let temp = this.Ans.length - 1;
+      for (var i = this.Data.Answer.Answer.length - 1; i >= 0; i--) {
+        if (this.Ans[temp] != this.Data.Answer.Answer[i]) {
+          AnswerCheck = false;
+          this.WrongAnswerMarkup[temp] = true;
+        }
+        temp--;
+      }
+    },
+    clear: function (evt) {
+      for (var x in this.Carry) {
+        for (var y in this.Carry[x]) {
+          this.Carry[x][y] = "";
+        }
+      }
+      for (var x in this.Ans) {
+        this.Ans[x] = "";
+        this.WrongAnswerMarkup[x] = false;
+      }
+      for (var x in this.Num_list) {
+        for (var y in this.Num_list[x]) {
+          this.Num_list[x][y] = "";
+        }
+      }
+      for (var x in this.Sy_list) {
+        this.Sy_list[x] = "";
+      }
+      this.presetCalculator();
+    },
+  },
 };
-  </script>
-  <style scoped lang="scss">
-  .NumberRow{
-      display: flex;
-      flex-direction: row;
-      justify-content: end;
-      // border: solid;
-      /* padding: 1vh; */
-      border-color: blue;
-      .SymbolContainer{
-          display: flex;
-          justify-content: center;
-          height: 60px;
-          width: 50px;
-          margin: 1vh 0.5vw;
-          border-radius: 10px;
-          background-color: yellow
-      }
+</script>
+<style lang="scss" scoped>
+.outter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 1rem;
+}
+.calculator {
+  display: flex;
+  flex-direction: column;
+  .carrys {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
   }
-  .unit{
-      margin-bottom: 2vh;
-      display: flex;
-      flex-direction: row-reverse;
-      justify-content: end;
-      button{
-          width: 50px;
-          margin: 1vh 6px;
-      }
+  .btn-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    align-items: center;
+    gap: 12px;
+    margin: 5px 0;
+    .btn--line {
+      background: linear-gradient(
+        120deg,
+        transparent 49.5%,
+        black 45.5%,
+        black 51.5%,
+        transparent 50%
+      );
+      background-color: $sub-color;
+    }
   }
-  .space{
-      width: 50px;
-      margin: 1vh 6px;
+  .number-area button {
+    background-color: $primary-color;
   }
-  .Number{
-      display: flex;
-      flex-direction: row;
-      justify-content: end;
-      margin: 1vh 6px;
+  .carrys button {
+    border: dashed 3px;
+    background-color: white;
+    color: $hightlight-color;
   }
-  .NumberArea{
-      display: flex;
-      flex-direction: column;
-      justify-content: end;
-      .NumbersContainer{
-          display: flex;
-          flex-direction: row;
-          justify-content: end;
-      }
-  }
-  .Selection{
-        position: sticky;
-        top:0;
-        max-height: 100vh;
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      .NumberContainer{
-          display: flex;
-          flex-direction: row;
-          justify-content: center;
-          flex-wrap: wrap;
-  
-      }
-      .SymbolContainer{
-          display: flex;
-          flex-direction: row;
-          justify-content: center;
-          flex-wrap: wrap;
-      }
-      button{
-          height: 60px;
-          width: 50px;
-      }
-  }
-  .Carry{
-      display: flex;
-      flex-direction: row;
-      justify-content: end;
-      
-      .CarryContainer{
-          display: flex;
-          justify-content: center;
-          width: 50px;
-          height: 60px;
-          margin: 0 6px;
-          border-radius: 10px;
-          background-color: #caf0f8;
-      }
-      margin-bottom: 1vh;
-  }
-  .Answer{
-      display: flex;
-      flex-direction: row;
-      justify-content: end;
-      .AnswerContainer{
-          margin: 0 6px;
-          .NumberConainer{
-              display: flex;
-              justify-content: end;
-              height: 60px;
-              width: 50px;
-          }
-          .NumberConainer{
-              background-color: #90e0ef;
-          }
-      }
-      margin: 1vh 0;
-  }
-  .NumberConainer{
-      height: 60px;
-      width: 50px;
-      display: flex;
-      justify-content: center;
-      border-radius: 10px;
-      background-color: #f0f0f0;
-  }
-  .Container{
-        max-height: 75vh;
+  .answer {
+    .btn-wrong {
+      background-color: $error-color;
+    }
+    .btn-normal {
+      background-color: $sub-color;
+    }
+    .AnswerContainer {
       display: flex;
       flex-direction: row;
       justify-content: center;
-      gap: 1vh 1vw;
-      margin-top: 2vh;
-      font-family: 'YuanQuan';
-      font-size: large;
-      width: 100%;
-      .CaluculatorBody{
-        max-height: 100vh;
-        overflow: scroll;
-          width: 70%;
-          padding: 1rem;
-      }
-      .Selection{
-          width: 30%;
-          padding: 1rem;
-      }
+    }
   }
-  .buttons{
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      gap: 1vh 1vw;
-      margin-top: 2vh;
+  .unit button {
+    background-color: $accent-color;
+    height: auto;
+    border: none;
   }
-  .card{
-      border-radius: 20px;
+  .btn-primary {
+    width: 40px;
   }
-  button{
-      border-radius: 20 px !important;
-      text-align: center;
-      font-size: large;
+}
+.space {
+  width: 40px;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 20px;
+  button {
+    height: 3rem;
+    width: 13rem;
+    background-color: $accent-color;
   }
-  </style>
+}
+hr {
+  height: 2px;
+  border-width: 0;
+  color: $dark-color;
+  background-color: $dark-color;
+}
+.btns {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 1rem;
+  padding: 1rem;
+  button {
+    border: none;
+    border-radius: 15px;
+    height: 40px;
+    width: 40px;
+  }
+}
+
+button {
+  border: none;
+  border-radius: 10px;
+  color: $dark-color;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 60px;
+  font-size: x-large;
+  font-weight: bold;
+}
+</style>

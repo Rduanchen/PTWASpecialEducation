@@ -26,16 +26,6 @@ const router = createRouter({
       component:()=>import("@/views/Game.vue"),
     },
     {
-      path:"/Link",
-      name:"Link",
-      component:()=>import("@/components/link.vue"),
-    },
-    {
-      path:"/countertest",
-      name:"countertest",
-      component:()=>import("@/components/countertest.vue"),
-    },
-    {
       path:"/CoulorBarChart",
       name:"CoulorBarChart",
       component:()=>import("@/components/CoulorBarChart.vue"),
@@ -157,6 +147,14 @@ const router = createRouter({
       path: '/FindItemGameMaker',
       name: 'FindItemGameMaker',
       component: () => import('@/components/FindItemGameMaker.vue'),
+    },
+    {
+      path: '/NumberLineWithBlank',
+      component: () => import('@/components/NumberLineWithBlank.vue'),
+    },
+    {
+      path: '/3031',
+      component: () => import('@/views/PrivateTemplate/Grade3/MA3031.vue'),
     }
   ]
 });
