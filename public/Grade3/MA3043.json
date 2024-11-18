@@ -1,0 +1,21 @@
+{
+  "id": "Dev02_Maze",
+  "introvideo": "hint1.mp4",
+  "IntroText": {
+    "Type": "PlainText",
+    "Content": "[Insert question.]"
+  },
+  "TotalLevel": 2,
+  "GameType": "Maze",
+  "GameConfig": {
+    "GlobalTitle": "[Insert title.]"
+  },
+  "Hint": {},
+  "Questions": [
+    {
+      "Question": "找出近似於答案的算式: 62 X 9 ",
+      "Options": ["60 X 9", "70 X 9", "50 X 9"],
+      "Answer": 0
+    }
+  ]
+}

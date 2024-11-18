@@ -1,6 +1,6 @@
 <template>
   <div class="outter-container">
-    <div class="head-container" v-if="this.GaneData.headQuestion">
+    <div class="head-container" v-if="this.GameData.headQuestion">
       <p>{{ this.GameData.headQuestion }}</p>
     </div>
     <div class="word-problem">
@@ -25,7 +25,6 @@
 import Calculator from "@/components/Calculator.vue";
 import Markdown from "@/components/Markdown.vue";
 import { wordProblemWithCalculator as emitter } from "@/utilitys/mitt.js";
-import { toDisplayString } from "vue";
 export default {
   name: "WordProblemWithCalculator",
   components: {
