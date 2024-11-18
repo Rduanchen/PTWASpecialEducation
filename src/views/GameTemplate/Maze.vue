@@ -7,32 +7,27 @@
         @touchstart="touchStart"
         @touchend="touchEnd"
       >
-        <v-layer>
-          <v-rect :config="configBg" v-if="!isBgImage"></v-rect>
-          <v-image :config="configBgImage" v-if="isBgImage"></v-image>
+        <v-layer v-if="isBgImage">
+          <v-image :config="configBgImage"></v-image>
         </v-layer>
 
-        <v-layer>
-          <safeArea
-            v-for="i in safeMap"
-            v-if="!isBgImage"
-            :x="i[0]"
-            :y="i[1]"
-            :width="laneWidth"
-          ></safeArea>
+        <v-layer v-if="!isBgImage">
+          <v-rect :config="configBg"></v-rect>
+          <v-rect
+            v-for="block in configBounds"
+            :config="block"
+            :fill="'blue'"
+            :strokeEnabled="false"
+          ></v-rect>
+          <v-rect
+            v-for="block in configSafeArea"
+            :config="block"
+            :fill="'green'"
+            :strokeEnabled="false"
+          ></v-rect>
         </v-layer>
         <v-layer>
-          <bounds
-            v-for="i in genMap"
-            v-if="!isBgImage"
-            :x="i[0]"
-            :y="i[1]"
-            :width="laneWidth"
-          ></bounds>
-          <v-text :config="configOption[0]"></v-text>
-          <v-text :config="configOption[1]"></v-text>
-          <v-text :config="configOption[2]"></v-text>
-          <v-text :config="configOption[3]"></v-text>
+          <v-text v-for="option in configOption" :config="option"></v-text>
         </v-layer>
         <v-layer>
           <v-shape :config="configPlayer"></v-shape>
@@ -41,9 +36,9 @@
         </v-layer>
         <v-layer>
           <joystick
-            :laneWidth="laneWidth"
+            v-if="joystickVisible"
+            :radius="laneWidth * 1.5"
             :position="touchPosition"
-            :visible="joystickVisible"
             @move="moveByJoystick"
           ></joystick>
         </v-layer>
@@ -53,73 +48,35 @@
 </template>
 
 <script>
-import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
 import { getSystemAssets } from "@/utilitys/get_assets.js";
-import { Container } from "konva/lib/Container";
 import { defineAsyncComponent } from "vue";
 import { map } from "@/assets/System/mazeMap/map.json";
 
 export default {
   components: {
-    bounds: defineAsyncComponent(() => import("@/components/mazeBounds.vue")),
-    safeArea: defineAsyncComponent(() =>
-      import("@/components/mazeSafeArea.vue")
-    ),
     joystick: defineAsyncComponent(() =>
       import("@/components/touchscreenJoystick.vue")
     ),
   },
   data() {
     return {
-      configKonva: {
-        width: 1000,
-        height: 500,
-      },
+      configKonva: {},
       configBg: {
-        x: 0,
-        y: 0,
         fill: "black",
-        stroke: "black",
+        strokeEnabled: false,
       },
-      configBgImage: {
-        x: 0,
-        y: 0,
-      },
+      configBgImage: {},
       isBgImage: true,
 
-      configOption: [
-        {
-          stroke: "black",
-        },
-        {
-          stroke: "black",
-        },
-        {
-          stroke: "black",
-        },
-        {
-          stroke: "black",
-        },
-      ],
+      configOption: [],
+      optionMap: [0, 0, 0, 0],
+
+      configBounds: [],
+      configSafeArea: [],
 
       configPlayer: {
         fill: "yellow",
         stroke: "yellow",
-        sceneFunc: function (context, shape) {
-          context.beginPath();
-          //context.rotate(0.5 * Math.PI);
-          context.moveTo(0, 0);
-          context.arc(
-            0,
-            0,
-            shape.getAttr("radius"),
-            shape.getAttr("startRadians"),
-            shape.getAttr("endRadians")
-          );
-          context.lineTo(0, 0);
-          context.fillStrokeShape(shape);
-          context.closePath();
-        },
       },
       configGhost_1: {
         fill: "red",
@@ -129,11 +86,6 @@ export default {
         fill: "red",
         stroke: "red",
       },
-      randomMapId: 2,
-      genMap: [],
-      safeMap: [],
-      optionMap: [0, 0, 0, 0],
-
       entityInfo: {
         player: {
           tag: "player",
@@ -183,6 +135,7 @@ export default {
           randomRouteCD: true,
         },
       },
+
       touchPosition: {
         x: 0,
         y: 0,
@@ -214,40 +167,45 @@ export default {
 
   methods: {
     fitCanvasInScreen() {
-      var gameWidth = document.getElementById("GameContainer").clientWidth;
-      this.configKonva.width = Math.floor(gameWidth * 0.8);
-      this.configKonva.height = Math.floor(this.configKonva.width / 2);
+      this.gameWidth =
+        document.getElementById("GameContainer").clientWidth * 0.8;
+      this.configKonva.width = this.gameWidth;
+      this.configKonva.height = this.gameWidth * 0.5;
     },
     generateMap() {
       this.randomMapId = Math.floor(Math.random() * map.length);
-      this.laneWidth = Math.floor(this.configKonva.width * 0.05);
-      var mapBG = document.createElement("img");
-      mapBG.src = GamesGetAssetsFile(
+      this.laneWidth = this.gameWidth * 0.05;
+      const mapBG = new window.Image();
+      mapBG.src = getSystemAssets(
         "Dev02_Maze",
-        "map_" + this.randomMapId + ".jpg"
+        "map_" + this.randomMapId + ".png"
       );
       if (mapBG.src.includes("undefined")) {
         this.isBgImage = false;
       }
       if (this.isBgImage) {
         this.configBgImage.image = mapBG;
-        this.configBgImage.width = this.laneWidth * 20 - 3;
-        this.configBgImage.height = this.laneWidth * 10 - 3;
+        this.configBgImage.width = this.laneWidth * 20;
+        this.configBgImage.height = this.laneWidth * 10;
       } else {
-        this.configBg.width = this.laneWidth * 20 - 3;
-        this.configBg.height = this.laneWidth * 10 - 3;
-        this.configBg.strokeWidth = Math.floor(this.laneWidth * 0.1);
+        this.configBg.width = this.laneWidth * 20;
+        this.configBg.height = this.laneWidth * 10;
         for (var i = 0; i < 20; ++i) {
           for (var j = 0; j < 10; ++j) {
+            let block = {
+              x: i * this.laneWidth,
+              y: j * this.laneWidth,
+              width: this.laneWidth,
+              height: this.laneWidth,
+            };
             if (map[this.randomMapId][j][i] == 1) {
-              this.genMap.push([this.laneWidth * i, this.laneWidth * j]);
+              this.configBounds.push(block);
             } else if (map[this.randomMapId][j][i] != 0) {
-              this.safeMap.push([this.laneWidth * i, this.laneWidth * j]);
+              this.configSafeArea.push(block);
             }
           }
         }
       }
-      console.log("bg:", this.isBgImage);
     },
 
     getOptionPosition() {
@@ -273,14 +231,14 @@ export default {
 
     printOptions() {
       for (var i = 0; i < 4; ++i) {
-        this.configOption[i].text = this.GameData.Options[i];
-        this.configOption[i].x =
-          this.optionMap[i].x * this.laneWidth +
-          Math.floor(0.1 * this.laneWidth);
-        this.configOption[i].y =
-          this.optionMap[i].y * this.laneWidth +
-          Math.floor(0.1 * this.laneWidth);
-        this.configOption[i].fontSize = Math.floor(this.laneWidth * 0.8);
+        let option = {
+          stroke: "black",
+          text: this.GameData.Options[i],
+          x: this.optionMap[i].x * this.laneWidth + 0.1 * this.laneWidth,
+          y: this.optionMap[i].y * this.laneWidth + 0.1 * this.laneWidth,
+          fontSize: this.laneWidth * 0.8,
+        };
+        this.configOption.push(option);
       }
     },
 
@@ -289,8 +247,8 @@ export default {
         for (var j = 0; j < 20; ++j) {
           if (j >= 8 && j <= 11) continue;
           if (map[this.randomMapId][i][j] == 0) {
-            this.configGhost_1.x = Math.floor(this.laneWidth * (j + 0.5));
-            this.configGhost_1.y = Math.floor(this.laneWidth * (i + 0.5));
+            this.configGhost_1.x = this.laneWidth * (j + 0.5);
+            this.configGhost_1.y = this.laneWidth * (i + 0.5);
             break;
           }
         }
@@ -299,8 +257,8 @@ export default {
         for (var j = 19; j > -1; --j) {
           if (j >= 8 && j <= 11) continue;
           if (map[this.randomMapId][i][j] == 0) {
-            this.configGhost_2.x = Math.floor(this.laneWidth * (j + 0.5));
-            this.configGhost_2.y = Math.floor(this.laneWidth * (i + 0.5));
+            this.configGhost_2.x = this.laneWidth * (j + 0.5);
+            this.configGhost_2.y = this.laneWidth * (i + 0.5);
             break;
           }
         }
@@ -315,16 +273,14 @@ export default {
           }
         }
       }
-      if (possiblePosition[0]) {
+      if (possiblePosition.length > 0) {
         var randomPosition = Math.floor(
           Math.random() * possiblePosition.length
         );
-        this.configPlayer.x = Math.floor(
-          this.laneWidth * (possiblePosition[randomPosition].x + 0.5)
-        );
-        this.configPlayer.y = Math.floor(
-          this.laneWidth * (possiblePosition[randomPosition].y + 0.5)
-        );
+        this.configPlayer.x =
+          this.laneWidth * (possiblePosition[randomPosition].x + 0.5);
+        this.configPlayer.y =
+          this.laneWidth * (possiblePosition[randomPosition].y + 0.5);
         return 0;
       }
       for (var i = 3; i < 7; ++i) {
@@ -334,23 +290,36 @@ export default {
           }
         }
       }
-      if (possiblePosition[0]) {
+      if (possiblePosition.length > 0) {
         var randomPosition = Math.floor(
           Math.random() * possiblePosition.length
         );
-        this.configPlayer.x = Math.floor(
-          this.laneWidth * (possiblePosition[randomPosition].x + 0.5)
-        );
-        this.configPlayer.y = Math.floor(
-          this.laneWidth * (possiblePosition[randomPosition].y + 0.5)
-        );
+        this.configPlayer.x =
+          this.laneWidth * (possiblePosition[randomPosition].x + 0.5);
+        this.configPlayer.y =
+          this.laneWidth * (possiblePosition[randomPosition].y + 0.5);
         return 0;
       }
     },
+    playerSceneFunc(context, shape) {
+      context.beginPath();
+      context.moveTo(0, 0);
+      context.arc(
+        0,
+        0,
+        shape.getAttr("radius"),
+        shape.getAttr("startRadians"),
+        shape.getAttr("endRadians")
+      );
+      context.lineTo(0, 0);
+      context.fillStrokeShape(shape);
+      context.closePath();
+    },
     initializeEntityConfig() {
-      this.configPlayer.radius = Math.floor(this.laneWidth * 0.35);
-      this.configGhost_1.radius = Math.floor(this.laneWidth * 0.35);
-      this.configGhost_2.radius = Math.floor(this.laneWidth * 0.35);
+      this.configPlayer.radius = this.laneWidth * 0.35;
+      this.configPlayer.sceneFunc = this.playerSceneFunc;
+      this.configGhost_1.radius = this.laneWidth * 0.35;
+      this.configGhost_2.radius = this.laneWidth * 0.35;
     },
     bootGame() {
       this.printOptions();
@@ -669,25 +638,25 @@ export default {
       else if (entity.randomRouteCD) this.ghostRandomRoute(entity);
       switch (entity.movement) {
         case "left":
-          config.x -= Math.floor(this.laneWidth * 0.05);
+          config.x -= this.laneWidth * 0.05;
           config.y = Math.round(
             (Math.round(entity.xyGrid.y) + 0.5) * this.laneWidth
           );
           break;
         case "right":
-          config.x += Math.floor(this.laneWidth * 0.05);
+          config.x += this.laneWidth * 0.05;
           config.y = Math.round(
             (Math.round(entity.xyGrid.y) + 0.5) * this.laneWidth
           );
           break;
         case "up":
-          config.y -= Math.floor(this.laneWidth * 0.05);
+          config.y -= this.laneWidth * 0.05;
           config.x = Math.round(
             (Math.round(entity.xyGrid.x) + 0.5) * this.laneWidth
           );
           break;
         case "down":
-          config.y += Math.floor(this.laneWidth * 0.05);
+          config.y += this.laneWidth * 0.05;
           config.x = Math.round(
             (Math.round(entity.xyGrid.x) + 0.5) * this.laneWidth
           );

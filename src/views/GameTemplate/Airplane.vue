@@ -164,11 +164,11 @@ export default {
       this.configOptions.push(option);
     },
     moveTarget() {
-      let leftborder = -this.configTarget[i].radius;
       for (let i = 0; i < this.configTarget.length; ++i) {
         this.configTarget[i].x -= this.speed;
         this.configOptions[i].x =
           this.configTarget[i].x - this.configTarget[i].radius * 0.8;
+        let leftborder = -this.configTarget[i].radius;
         if (this.configTarget[i].x < leftborder) {
           this.configTarget.splice(i, 1);
           this.configOptions.splice(i, 1);
