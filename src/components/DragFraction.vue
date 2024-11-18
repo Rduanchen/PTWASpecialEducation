@@ -30,7 +30,7 @@
           <v-shape
             v-for="arrow in configArrow"
             :config="arrow"
-            @mousedown="adjustNumber"
+            @pointerdown="adjustNumber"
           ></v-shape>
           <v-text :config="configNumeratorNumber"></v-text>
           <v-text :config="configDenominatorNumber"></v-text>
