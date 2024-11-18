@@ -150,6 +150,12 @@
             "Name": "NumberLock",
             "Description": "",
             "Img": ""
+          },
+          {
+            "id": "Dev0307",
+            "Name": "和1一樣大的分數",
+            "Description": "",
+            "Img": ""
           }
         ]
       }

@@ -842,6 +842,9 @@ export default {
     MoneyDrag: defineAsyncComponent(() =>
       import("@/views/GameTemplate/MoneyDrag.vue")
     ),
+    MA3111: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/MA3111.vue")
+    ),
   },
 };
 </script>
