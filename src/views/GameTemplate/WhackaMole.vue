@@ -15,8 +15,8 @@
         <v-image
           v-for="mole in configObjects.mole"
           :config="mole"
-          @click="whacked"
-          @touch="whacked"
+          @mousedown="whacked"
+          @touchstart="whacked"
         ></v-image>
         <v-image v-for="hole in configObjects.hole" :config="hole"></v-image>
       </v-layer>
