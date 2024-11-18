@@ -59,7 +59,7 @@ export default {
       numerator: this.GameData.answerData.answer.numerator, // 分子
       denominator: this.GameData.answerData.answer.denominator, // 分母
       isAnswerCorrect: false,
-      shape: this.GameData.answerData.answer.shape,
+      shape: this.GameData.answerData.shape,
     };
   },
   computed: {},
@@ -70,15 +70,8 @@ export default {
     calculateChartSize() {
       const fractionChart = this.$refs.fractionChart;
       if (fractionChart) {
-        const styles = getComputedStyle(fractionChart);
-        console.log("FractionChart styles:", styles);
         this.chartWidth = fractionChart.offsetWidth * 0.85 || 150; // 確保有預設值
         this.chartHeight = fractionChart.offsetHeight * 0.85 || 150; // 確保有預設值
-        console.log(
-          "Chart size calculated:",
-          this.chartWidth,
-          this.chartHeight
-        );
       } else {
         console.error("FractionChart not found!");
       }
