@@ -1,0 +1,298 @@
+{
+  "id": "MA3111",
+  "introvideo": "hint1.mp4",
+  "IntroText": {
+    "Type": "PlainText",
+    "Content": "[Insert question.]"
+  },
+  "GameType": "SelfDefine",
+  "GameConfig": {},
+  "Hint": {},
+  "Questions": [
+    [
+      {
+        "question": "\\frac{2}{2}",
+        "answerData": {
+          "shape": "circle",
+          "verifyOption": "answer",
+          "answer": {
+            "numerator": 2,
+            "denominator": 2
+          }
+        }
+      },
+      {
+        "question": "\\frac{3}{3}",
+        "answerData": {
+          "shape": "circle",
+          "verifyOption": "answer",
+          "answer": {
+            "numerator": 3,
+            "denominator": 3
+          }
+        }
+      },
+      {
+        "question": "\\frac{4}{4}",
+        "answerData": {
+          "shape": "rect",
+          "verifyOption": "answer",
+          "answer": {
+            "numerator": 4,
+            "denominator": 4
+          }
+        }
+      },
+      {
+        "question": "\\frac{2}{2}",
+        "answerData": {
+          "shape": "rect",
+          "verifyOption": "answer",
+          "answer": {
+            "numerator": 2,
+            "denominator": 2
+          }
+        }
+      },
+      {
+        "question": "\\frac{3}{3}",
+        "answerData": {
+          "shape": "rect",
+          "verifyOption": "answer",
+          "answer": {
+            "numerator": 3,
+            "denominator": 3
+          }
+        }
+      }
+    ],
+    [
+      {
+        "question": "\\frac{4}{4}",
+        "answerData": {
+          "shape": "circle",
+          "verifyOption": "answer",
+          "answer": {
+            "numerator": 4,
+            "denominator": 4
+          }
+        }
+      },
+      {
+        "question": "\\frac{5}{5}",
+        "answerData": {
+          "shape": "circle",
+          "verifyOption": "answer",
+          "answer": {
+            "numerator": 5,
+            "denominator": 5
+          }
+        }
+      },
+      {
+        "question": "\\frac{6}{6}",
+        "answerData": {
+          "shape": "rect",
+          "verifyOption": "answer",
+          "answer": {
+            "numerator": 6,
+            "denominator": 6
+          }
+        }
+      },
+      {
+        "question": "\\frac{4}{4}",
+        "answerData": {
+          "shape": "rect",
+          "verifyOption": "answer",
+          "answer": {
+            "numerator": 4,
+            "denominator": 4
+          }
+        }
+      },
+      {
+        "question": "\\frac{5}{5}",
+        "answerData": {
+          "shape": "rect",
+          "verifyOption": "answer",
+          "answer": {
+            "numerator": 5,
+            "denominator": 5
+          }
+        }
+      }
+    ],
+    [
+      {
+        "question": "\\frac{6}{6}",
+        "answerData": {
+          "shape": "circle",
+          "verifyOption": "answer",
+          "answer": {
+            "numerator": 6,
+            "denominator": 6
+          }
+        }
+      },
+      {
+        "question": "\\frac{7}{7}",
+        "answerData": {
+          "shape": "circle",
+          "verifyOption": "answer",
+          "answer": {
+            "numerator": 7,
+            "denominator": 7
+          }
+        }
+      },
+      {
+        "question": "\\frac{4}{4}",
+        "answerData": {
+          "shape": "rect",
+          "verifyOption": "answer",
+          "answer": {
+            "numerator": 4,
+            "denominator": 4
+          }
+        }
+      },
+      {
+        "question": "\\frac{7}{7}",
+        "answerData": {
+          "shape": "rect",
+          "verifyOption": "answer",
+          "answer": {
+            "numerator": 7,
+            "denominator": 7
+          }
+        }
+      },
+      {
+        "question": "\\frac{8}{8}",
+        "answerData": {
+          "shape": "rect",
+          "verifyOption": "answer",
+          "answer": {
+            "numerator": 8,
+            "denominator": 8
+          }
+        }
+      }
+    ],
+    [
+      {
+        "question": "\\frac{10}{10}",
+        "answerData": {
+          "shape": "circle",
+          "verifyOption": "answer",
+          "answer": {
+            "numerator": 10,
+            "denominator": 10
+          }
+        }
+      },
+      {
+        "question": "\\frac{9}{9}",
+        "answerData": {
+          "shape": "circle",
+          "verifyOption": "answer",
+          "answer": {
+            "numerator": 9,
+            "denominator": 9
+          }
+        }
+      },
+      {
+        "question": "\\frac{9}{9}",
+        "answerData": {
+          "shape": "rect",
+          "verifyOption": "answer",
+          "answer": {
+            "numerator": 9,
+            "denominator": 9
+          }
+        }
+      },
+      {
+        "question": "\\frac{9}{9}",
+        "answerData": {
+          "shape": "rect",
+          "verifyOption": "answer",
+          "answer": {
+            "numerator": 9,
+            "denominator": 9
+          }
+        }
+      },
+      {
+        "question": "\\frac{8}{8}",
+        "answerData": {
+          "shape": "rect",
+          "verifyOption": "answer",
+          "answer": {
+            "numerator": 8,
+            "denominator": 8
+          }
+        }
+      }
+    ],
+    [
+      {
+        "question": "\\frac{11}{11}",
+        "answerData": {
+          "shape": "circle",
+          "verifyOption": "answer",
+          "answer": {
+            "numerator": 11,
+            "denominator": 11
+          }
+        }
+      },
+      {
+        "question": "\\frac{12}{12}",
+        "answerData": {
+          "shape": "circle",
+          "verifyOption": "answer",
+          "answer": {
+            "numerator": 12,
+            "denominator": 12
+          }
+        }
+      },
+      {
+        "question": "\\frac{10}{10}",
+        "answerData": {
+          "shape": "rect",
+          "verifyOption": "answer",
+          "answer": {
+            "numerator": 10,
+            "denominator": 10
+          }
+        }
+      },
+      {
+        "question": "\\frac{12}{12}",
+        "answerData": {
+          "shape": "rect",
+          "verifyOption": "answer",
+          "answer": {
+            "numerator": 12,
+            "denominator": 12
+          }
+        }
+      },
+      {
+        "question": "\\frac{11}{11}",
+        "answerData": {
+          "shape": "rect",
+          "verifyOption": "answer",
+          "answer": {
+            "numerator": 11,
+            "denominator": 11
+          }
+        }
+      }
+    ]
+  ]
+}
