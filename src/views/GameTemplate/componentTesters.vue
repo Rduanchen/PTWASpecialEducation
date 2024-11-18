@@ -1,0 +1,99 @@
+<template>
+  <div>
+    <select @change="(event) => (tester = event.target.value)">
+      <option>numberLine</option>
+      <option>fraction</option>
+      <option selected>drawShapes</option>
+      <option selected>dragToAlign</option>
+    </select>
+  </div>
+  <div v-if="tester == 'fraction'">
+    <dragFraction
+      :Data="configFraction"
+      :ID="id"
+      @getAnswer="printAns"
+    ></dragFraction>
+  </div>
+  <div v-if="tester == 'numberLine'">
+    <numberLine
+      :Data="configNumberLine"
+      :ID="id"
+      @getDragPosition="printAns"
+    ></numberLine>
+  </div>
+  <div v-if="tester == 'drawShapes'">
+    <drawShapes
+      :Data="configDrawShapes"
+      :ID="id"
+      @replyAnswer="printAns"
+    ></drawShapes>
+  </div>
+  <div v-if="tester == 'dragToAlign'">
+    <dragToAlign
+      :Data="configDragToAlign"
+      :ID="id"
+      @getAnswer="printAns"
+    ></dragToAlign>
+  </div>
+</template>
+
+<script>
+import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
+import * as canvasTools from "@/utilitys/canvasTools.js";
+import { defineAsyncComponent } from "vue";
+export default {
+  components: {
+    dragFraction: defineAsyncComponent(() =>
+      import("@/components/DragFraction.vue")
+    ),
+    numberLine: defineAsyncComponent(() =>
+      import("@/components/DragOnNumberLine.vue")
+    ),
+    drawShapes: defineAsyncComponent(() =>
+      import("@/components/DrawShapes.vue")
+    ),
+    dragToAlign: defineAsyncComponent(() =>
+      import("@/components/DragToAlign.vue")
+    ),
+  },
+  data() {
+    return {
+      tester: "dragToAlign",
+      configFraction: {
+        verifyOption: "answer",
+        shape: "circle",
+        answer: {
+          numerator: 1,
+          denominator: 4,
+        },
+      },
+      configNumberLine: {
+        spacing: 1,
+        max: 10,
+        min: 2,
+        init_pos: 5,
+        image: "apple.png",
+      },
+      configDrawShapes: {
+        //bgRatio: [],
+        /*givenPoints: [
+          [2, 2],
+          [2, 5],
+        ],*/
+        verifyOption: "rect", //none, rect, shape
+        answer: [5, 3], //[5, 3], // triangle, rectangle, trapezium, parallelogram
+      },
+      configDragToAlign: {
+        imageRatio: [5, 3],
+        image: "apple.png",
+      },
+      id: "Dev0105",
+    };
+  },
+  methods: {
+    printAns(x) {
+      console.log(x);
+    },
+  },
+};
+</script>

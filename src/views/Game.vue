@@ -156,9 +156,6 @@ import EffectWindow from "@/components/GameSystem/EffectWindow.vue";
 import gameStore from "@/stores/game";
 import { mapWritableState } from "pinia";
 import { soundManager } from "@/utilitys/sound-manager.js";
-import DragFraction from "../components/DragFraction.vue";
-import LinktoImage from "./GameTemplate/LinktoImage.vue";
-import WordProblemWithCalculator from "./GameTemplate/WordProblemWithCalculator.vue";
 
 export default {
   data() {
@@ -821,8 +818,8 @@ export default {
     Airplane: defineAsyncComponent(() =>
       import("@/views/GameTemplate/Airplane.vue")
     ),
-    DragOnNumberLine: defineAsyncComponent(() =>
-      import("@/views/GameTemplate/NumberLineTester.vue")
+    ComponentTesters: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/componentTesters.vue")
     ), //for testing only
     BalloonShooting: defineAsyncComponent(() =>
       import("@/views/GameTemplate/BalloonShooting.vue")

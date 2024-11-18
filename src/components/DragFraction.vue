@@ -31,6 +31,7 @@
             v-for="arrow in configArrow"
             :config="arrow"
             @mousedown="adjustNumber"
+            @touchstart="adjustNumber"
           ></v-shape>
           <v-text :config="configNumeratorNumber"></v-text>
           <v-text :config="configDenominatorNumber"></v-text>
@@ -90,8 +91,7 @@ export default {
 
   methods: {
     initializeScene() {
-      this.gameWidth =
-        document.getElementById("GameContainer").clientWidth * 0.5;
+      this.gameWidth = document.getElementById("GameContainer").clientWidth;
       this.gameHeight = this.gameWidth * 0.75;
       this.configKonva.width = this.gameWidth;
       this.configKonva.height = this.gameHeight;
