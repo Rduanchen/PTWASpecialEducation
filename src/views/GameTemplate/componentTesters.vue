@@ -11,7 +11,7 @@
     <dragFraction
       :Data="configFraction"
       :ID="id"
-      @getAnswer="printAns"
+      @replyAnswer="printAns"
     ></dragFraction>
   </div>
   <div v-if="tester == 'numberLine'">
@@ -29,11 +29,7 @@
     ></drawShapes>
   </div>
   <div v-if="tester == 'dragToAlign'">
-    <dragToAlign
-      :Data="configDragToAlign"
-      :ID="id"
-      @getAnswer="printAns"
-    ></dragToAlign>
+    <dragToAlign :Data="configDragToAlign" :ID="id"></dragToAlign>
   </div>
 </template>
 
