@@ -1,36 +1,28 @@
 <template>
-  <div class="gameContainer">
-    <div id="canvasContainer">
-      <v-stage
-        :config="configKonva"
-        @pointerdown="drawNewLine"
-        @pointermove="moveLine"
-        @pointerup="stopDrawing"
-      >
-        <v-layer>
-          <v-line
-            v-for="pointSet in configGrid"
-            :points="pointSet"
-            :stroke="'black'"
-          ></v-line>
-          <v-image
-            :config="configReturnBtn"
-            @pointerdown="deleteLine"
-          ></v-image>
-        </v-layer>
-        <v-layer>
-          <v-line
-            v-for="line in configLine"
-            :config="line"
-            :strokeWidth="5"
-          ></v-line>
-          <v-circle
-            v-for="point in configGivenPoint"
-            :config="point"
-          ></v-circle>
-        </v-layer>
-      </v-stage>
-    </div>
+  <div ref="container">
+    <v-stage
+      :config="configKonva"
+      @pointerdown="drawNewLine"
+      @pointermove="moveLine"
+      @pointerup="stopDrawing"
+    >
+      <v-layer>
+        <v-line
+          v-for="pointSet in configGrid"
+          :points="pointSet"
+          :stroke="'black'"
+        ></v-line>
+        <v-image :config="configReturnBtn" @pointerdown="deleteLine"></v-image>
+      </v-layer>
+      <v-layer>
+        <v-line
+          v-for="line in configLine"
+          :config="line"
+          :strokeWidth="5"
+        ></v-line>
+        <v-circle v-for="point in configGivenPoint" :config="point"></v-circle>
+      </v-layer>
+    </v-stage>
   </div>
 </template>
 
@@ -66,7 +58,7 @@ export default {
 
   emits: ["ReplyAnswer", "replyAnswer"],
 
-  beforeMount() {
+  mounted() {
     this.getData();
     this.initializeScene();
     this.setGrid();
@@ -77,8 +69,6 @@ export default {
     }
   },
 
-  mounted() {},
-
   methods: {
     getData() {
       if (this.Data.bgRatio != null) {
@@ -86,7 +76,7 @@ export default {
       }
     },
     initializeScene() {
-      this.gameWidth = document.getElementById("GameContainer").clientWidth;
+      this.gameWidth = this.$refs.container.clientWidth;
       this.configKonva.width = this.gameWidth;
       this.configKonva.height =
         (this.gameWidth * this.ratio.height) / this.ratio.width;
