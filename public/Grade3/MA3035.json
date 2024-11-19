@@ -257,7 +257,128 @@
         }
       }
     ],
-
+    [
+      {
+        "headQuestion": "繩子有18公分8毫米，用剪刀剪掉52毫米，請問繩子剩下幾公分幾毫米?",
+        "calculator": {
+          "Unit": "Length",
+          "CarryAmount": 1,
+          "CustomeUnit": null,
+          "NumberAmount": 4,
+          "decimalPoint": 0,
+          "Preset": {
+            "Number": ["188", "52"],
+            "Symbol": "-"
+          },
+          "Answer": {
+            "Carry": [],
+            "Answer": "136",
+            "Number": ["188", "52"],
+            "Symbol": "-"
+          }
+        },
+        "markdown": {
+          "Render": "橫式: _18公分8毫米 $i$ 52毫米 = $i$ 公分 $i$ 毫米 $n$ 也等於 $i$ 毫米_",
+          "Answer": ["-", 13, 6, 136]
+        }
+      },
+      {
+        "headQuestion": "繩子有9公分7毫米，用剪刀剪掉33毫米，請問繩子剩下幾公分幾毫米?",
+        "calculator": {
+          "Unit": "Length",
+          "CarryAmount": 1,
+          "CustomeUnit": null,
+          "NumberAmount": 4,
+          "decimalPoint": 0,
+          "Preset": {
+            "Number": ["97", "33"],
+            "Symbol": "-"
+          },
+          "Answer": {
+            "Carry": [],
+            "Answer": "64",
+            "Number": ["97", "33"],
+            "Symbol": "-"
+          }
+        },
+        "markdown": {
+          "Render": "橫式: _9公分7毫米 $i$ 33毫米 = $i$ 公分 $i$ 毫米 $n$ 也等於 $i$ 毫米_",
+          "Answer": ["-", 6, 4, 64]
+        }
+      },
+      {
+        "headQuestion": "綠緞帶有12公分7毫米，用剪刀剪掉25毫米，請問綠緞帶剩下幾公分幾毫米?",
+        "calculator": {
+          "Unit": "Length",
+          "CarryAmount": 1,
+          "CustomeUnit": null,
+          "NumberAmount": 4,
+          "decimalPoint": 0,
+          "Preset": {
+            "Number": ["127", "25"],
+            "Symbol": "-"
+          },
+          "Answer": {
+            "Carry": [],
+            "Answer": "102",
+            "Number": ["127", "25"],
+            "Symbol": "-"
+          }
+        },
+        "markdown": {
+          "Render": "橫式: _12公分7毫米 $i$ 25毫米 = $i$ 公分 $i$ 毫米 $n$ 也等於 $i$ 毫米_",
+          "Answer": ["-", 10, 2, 102]
+        }
+      },
+      {
+        "headQuestion": "綠緞帶有7公分8毫米，用剪刀剪掉46毫米，請問綠緞帶剩下幾公分幾毫米?",
+        "calculator": {
+          "Unit": "Length",
+          "CarryAmount": 1,
+          "CustomeUnit": null,
+          "NumberAmount": 4,
+          "decimalPoint": 0,
+          "Preset": {
+            "Number": ["78", "46"],
+            "Symbol": "-"
+          },
+          "Answer": {
+            "Carry": [],
+            "Answer": "32",
+            "Number": ["78", "46"],
+            "Symbol": "-"
+          }
+        },
+        "markdown": {
+          "Render": "橫式: _7公分8毫米 $i$ 46毫米 = $i$ 公分 $i$ 毫米 $n$ 也等於 $i$ 毫米_",
+          "Answer": ["-", 3, 2, 32]
+        }
+      },
+      {
+        "headQuestion": "綠緞帶有10公分9毫米，用剪刀剪掉65毫米，請問綠緞帶剩下幾公分幾毫米?",
+        "calculator": {
+          "Unit": "Length",
+          "CarryAmount": 1,
+          "CustomeUnit": null,
+          "NumberAmount": 4,
+          "decimalPoint": 0,
+          "Preset": {
+            "Number": ["109", "65"],
+            "Symbol": "-"
+          },
+          "Answer": {
+            "Carry": [],
+            "Answer": "44",
+            "Number": ["109", "65"],
+            "Symbol": "-"
+          }
+        },
+        "markdown": {
+          "Render": "橫式: _10公分9毫米 $i$ 65毫米 = $i$ 公分 $i$ 毫米 $n$ 也等於 $i$ 毫米_",
+          "Answer": ["-", 4, 4, 44]
+        }
+      }
+    ],
     [
       {
         "headQuestion": "阿海的鉛筆長17公分3毫米，小田的鉛筆比阿海的短3公分8毫米，請問小田的鉛筆長度是幾公分幾毫米?",
