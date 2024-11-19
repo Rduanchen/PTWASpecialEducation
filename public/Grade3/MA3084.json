@@ -1,0 +1,251 @@
+{
+  "id": "MA3029",
+  "introvideo": "hint1.mp4",
+  "IntroText": {
+    "Type": "PlainText",
+    "Content": "[Insert question.]"
+  },
+  "TotalLevel": 1,
+  "GameType": "WordProblemWithCalculator",
+  "GameConfig": {
+    "calculatorVerify": true,
+    "markdownVerify": true
+  },
+  "Hint": {},
+  "Questions": [
+    [
+      {
+        "calculator": {
+          "Unit": "Volume",
+          "CarryAmount": 1,
+          "CustomeUnit": null,
+          "NumberAmount": 4,
+          "decimalPoint": 0,
+          "Preset": {
+            "Number": ["1200", "1300"],
+            "Symbol": "+"
+          },
+          "Answer": {
+            "Carry": [],
+            "Answer": "2500",
+            "Number": ["1200", "1300"],
+            "Symbol": "+"
+          }
+        },
+        "markdown": {
+          "Render": "# 請回答以下問題: $n$ 1公升 200毫升+1公升300毫升= $n$ $i$公升 $i$ 毫升",
+          "Answer": [2, 500]
+        }
+      },
+      {
+        "calculator": {
+          "Unit": "Volume",
+          "CarryAmount": 1,
+          "CustomeUnit": null,
+          "NumberAmount": 4,
+          "decimalPoint": 0,
+          "Preset": {
+            "Number": ["1300", "1100"],
+            "Symbol": "+"
+          },
+          "Answer": {
+            "Carry": [],
+            "Answer": "2400",
+            "Number": ["1300", "1100"],
+            "Symbol": "+"
+          }
+        },
+        "markdown": {
+          "Render": "# 請回答以下問題: $n$ 1公升 300毫升+1公升100毫升= $n$ $i$公升 $i$ 毫升",
+          "Answer": [2, 400]
+        }
+      },
+      {
+        "calculator": {
+          "Unit": "Volume",
+          "CarryAmount": 1,
+          "CustomeUnit": null,
+          "NumberAmount": 4,
+          "decimalPoint": 0,
+          "Preset": {
+            "Number": ["1100", "1200"],
+            "Symbol": "+"
+          },
+          "Answer": {
+            "Carry": [],
+            "Answer": "2300",
+            "Number": ["1100", "1200"],
+            "Symbol": "+"
+          }
+        },
+        "markdown": {
+          "Render": "# 請回答以下問題: $n$ 1公升 100毫升+1公升200毫升= $n$ $i$公升 $i$ 毫升",
+          "Answer": [2, 300]
+        }
+      },
+      {
+        "calculator": {
+          "Unit": "Volume",
+          "CarryAmount": 1,
+          "CustomeUnit": null,
+          "NumberAmount": 4,
+          "decimalPoint": 0,
+          "Preset": {
+            "Number": ["1400", "1300"],
+            "Symbol": "+"
+          },
+          "Answer": {
+            "Carry": [],
+            "Answer": "2700",
+            "Number": ["1400", "1300"],
+            "Symbol": "+"
+          }
+        },
+        "markdown": {
+          "Render": "# 請回答以下問題: $n$ 1公升 400毫升+1公升300毫升= $n$ $i$公升 $i$ 毫升",
+          "Answer": [2, 700]
+        }
+      },
+      {
+        "calculator": {
+          "Unit": "Volume",
+          "CarryAmount": 1,
+          "CustomeUnit": null,
+          "NumberAmount": 4,
+          "decimalPoint": 0,
+          "Preset": {
+            "Number": ["1600", "1300"],
+            "Symbol": "+"
+          },
+          "Answer": {
+            "Carry": [],
+            "Answer": "2900",
+            "Number": ["1600", "1300"],
+            "Symbol": "+"
+          }
+        },
+        "markdown": {
+          "Render": "# 請回答以下問題: $n$ 1公升 600毫升+1公升300毫升= $n$ $i$公升 $i$ 毫升",
+          "Answer": [2, 900]
+        }
+      }
+    ],
+    [
+      {
+        "calculator": {
+          "Unit": "Volume",
+          "CarryAmount": 1,
+          "CustomeUnit": null,
+          "NumberAmount": 4,
+          "decimalPoint": 0,
+          "Preset": {
+            "Number": ["5500", "2400"],
+            "Symbol": "-"
+          },
+          "Answer": {
+            "Carry": [],
+            "Answer": "3100",
+            "Number": ["5500", "2400"],
+            "Symbol": "-"
+          }
+        },
+        "markdown": {
+          "Render": "# 請回答以下問題: $n$ 5公升 500毫升-2公升400毫升= $n$ $i$公升 $i$ 毫升",
+          "Answer": [3, 100]
+        }
+      },
+      {
+        "calculator": {
+          "Unit": "Volume",
+          "CarryAmount": 1,
+          "CustomeUnit": null,
+          "NumberAmount": 4,
+          "decimalPoint": 0,
+          "Preset": {
+            "Number": ["5400", "1100"],
+            "Symbol": "-"
+          },
+          "Answer": {
+            "Carry": [],
+            "Answer": "4300",
+            "Number": ["5400", "1100"],
+            "Symbol": "-"
+          }
+        },
+        "markdown": {
+          "Render": "# 請回答以下問題: $n$ 5公升 400毫升-1公升100毫升= $n$ $i$公升 $i$ 毫升",
+          "Answer": [4, 300]
+        }
+      },
+      {
+        "calculator": {
+          "Unit": "Volume",
+          "CarryAmount": 1,
+          "CustomeUnit": null,
+          "NumberAmount": 4,
+          "decimalPoint": 0,
+          "Preset": {
+            "Number": ["5600", "2200"],
+            "Symbol": "-"
+          },
+          "Answer": {
+            "Carry": [],
+            "Answer": "3400",
+            "Number": ["5600", "2200"],
+            "Symbol": "-"
+          }
+        },
+        "markdown": {
+          "Render": "# 請回答以下問題: $n$ 5公升 600毫升-2公升200毫升= $n$ $i$公升 $i$ 毫升",
+          "Answer": [3, 400]
+        }
+      },
+      {
+        "calculator": {
+          "Unit": "Volume",
+          "CarryAmount": 1,
+          "CustomeUnit": null,
+          "NumberAmount": 4,
+          "decimalPoint": 0,
+          "Preset": {
+            "Number": ["5800", "2300"],
+            "Symbol": "-"
+          },
+          "Answer": {
+            "Carry": [],
+            "Answer": "3500",
+            "Number": ["5800", "2300"],
+            "Symbol": "-"
+          }
+        },
+        "markdown": {
+          "Render": "# 請回答以下問題: $n$ 5公升 800毫升-2公升300毫升= $n$ $i$公升 $i$ 毫升",
+          "Answer": [3, 500]
+        }
+      },
+      {
+        "calculator": {
+          "Unit": "Volume",
+          "CarryAmount": 1,
+          "CustomeUnit": null,
+          "NumberAmount": 4,
+          "decimalPoint": 0,
+          "Preset": {
+            "Number": ["5600", "1100"],
+            "Symbol": "-"
+          },
+          "Answer": {
+            "Carry": [],
+            "Answer": "4500",
+            "Number": ["5600", "1100"],
+            "Symbol": "-"
+          }
+        },
+        "markdown": {
+          "Render": "# 請回答以下問題: $n$ 5公升 600毫升-1公升100毫升= $n$ $i$公升 $i$ 毫升",
+          "Answer": [4, 500]
+        }
+      }
+    ]
+  ]
+}

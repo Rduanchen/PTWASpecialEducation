@@ -10,19 +10,26 @@
     "GameConfig": {
         "GlobalTitle": "[Insert title.]"
     },
-    "Hint":{
-        
-    },
+    "Hint": {},
     "Questions": [
         {
             "Question": "[Insert question 1.]",
-            "Options": [1, 2, 3, "ans"],
+            "Options": [
+                1,
+                2,
+                3,
+                "ans"
+            ],
             "Answer": 3
         },
-
         {
             "Question": "[Insert question 2.]",
-            "Options": [1, "ans", 3, 4],
+            "Options": [
+                1,
+                "ans",
+                3,
+                4
+            ],
             "Answer": 1
         }
     ]

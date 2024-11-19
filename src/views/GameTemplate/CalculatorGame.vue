@@ -16,8 +16,14 @@
             {{ items }}
             <q-menu anchor="top left" self="bottom left" class="q-menu">
               <div class="btns">
-                <button @click="CarryInput(Row, cnt, 0)" v-close-popup>0</button>
-                <button v-for="index in 5" @click="CarryInput(Row, cnt, index)" v-close-popup>
+                <button @click="CarryInput(Row, cnt, 0)" v-close-popup>
+                  0
+                </button>
+                <button
+                  v-for="index in 5"
+                  @click="CarryInput(Row, cnt, index)"
+                  v-close-popup
+                >
                   {{ index }}
                 </button>
                 <button
@@ -27,7 +33,9 @@
                 >
                   {{ index + 5 }}
                 </button>
-                <button @click="CarryInput(Row, cnt, '/')" v-close-popup>/</button>
+                <button @click="CarryInput(Row, cnt, '/')" v-close-popup>
+                  /
+                </button>
                 <button @click="CarryInput(Row, cnt, 'delete')" v-close-popup>
                   <q-icon name="bi-trash"></q-icon>
                 </button>
@@ -116,10 +124,18 @@
             <q-menu anchor="top left" self="bottom left" class="q-menu">
               <div class="btns">
                 <button @click="AnsInput(col, 0)" v-close-popup>0</button>
-                <button v-for="index in 5" @click="AnsInput(col, index)" v-close-popup>
+                <button
+                  v-for="index in 5"
+                  @click="AnsInput(col, index)"
+                  v-close-popup
+                >
                   {{ index }}
                 </button>
-                <button v-for="index in 5" @click="AnsInput(col, index + 5)" v-close-popup>
+                <button
+                  v-for="index in 5"
+                  @click="AnsInput(col, index + 5)"
+                  v-close-popup
+                >
                   {{ index + 5 }}
                 </button>
                 <button @click="AnsInput(col, 'delete')" v-close-popup>

@@ -1,126 +1,140 @@
 <template>
-<div>
-    <div v-html="renderedContent" class="Content"></div>    
-</div>
+  <div class="markdown-container">
+    <template v-for="(element, index) in elements" :key="index">
+      <component
+        :is="getElementTag(element.el)"
+        v-if="!isSpecialElement(element.el)"
+      >
+        {{ element.content }}
+      </component>
+      <input
+        v-else-if="element.el === 'input'"
+        type="text"
+        v-model="element.content"
+        @input="checkAnswer($event)"
+        @click="disableKeyboardOnMobile"
+      />
+      <span v-else-if="element.el === 'tab'">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+      <span v-else-if="element.el === 'space'">&nbsp;</span>
+      <br v-else-if="element.el === 'br'" />
+    </template>
+  </div>
 </template>
-
 <script>
-/*
-    Simple Markdown
-    # Header 1
-    ## Header 2
-    ### Header 3
-    **Bold Text**
-    $i$ Input Box
-    $t$ tab
-    $s$ space
-    $n$ new line
-    - List 1
-*/
-export default { 
-name: 'Markdown',
-props: {
-    Data: {
-        type: Object,
-        required: true
-    }
-},
-data() {
+export default {
+  data() {
     return {
-        // Data: {
-        //     Render: `
-        //         123432
-        //         # Header 1
-        //         ## Header 2
-        //         ### Header 3
-        //         **Bold Text**
-        //         - List 1
-        //         $i$ $i$ Input Box
-        //         $i$ Input Box
-        //         $t$ tab
-        //         $s$ space
-        //         $n$ new line
-        //     `,
-        //     Answers: [
-        //         '1',
-        //         '2',
-        //         '3'
-        //     ]
-        // },
-        inputIndex: 0,
-        InputVal: [],
-        temp: false,
+      markdownContent: ``,
+      elements: [],
     };
-},
-methods: {
-    reply(index) {
-        this.InputVal[index] = document.getElementById(`Box${index}`).value;
-        let check = true;
-        for (let i = 0; i < this.Data.Answers.length; i++) {
-            if (this.Data.Answers[i] == this.InputVal[i]) {
-                check = true;
-            } else {
-                check = false;
-            }
+  },
+  props: {
+    Data: {
+      type: Object,
+      required: true,
+    },
+    ID: {
+      type: String,
+      required: false,
+    },
+  },
+  created() {
+    this.markdownContent = this.Data.Render;
+    this.parseMarkdown();
+  },
+  methods: {
+    parseMarkdown() {
+      const content = this.markdownContent.trim();
+      const tokenRegex = /(\$i\$|\$t\$|\$s\$|\$n\$|#\s|##\s|###\s|\*\*|__|\n)/g;
+      const tokens = content.split(tokenRegex);
+      this.wa = tokens;
+      const elements = [];
+      let currentTag = null;
+      let bold = false;
+      let underline = false;
+
+      tokens.forEach((token) => {
+        if (token === "$i$") {
+          elements.push({ el: "input", content: "" });
+        } else if (token === "$t$") {
+          elements.push({ el: "tab", content: "" });
+        } else if (token === "$s$") {
+          elements.push({ el: "space", content: "" });
+        } else if (token === "$n$" || token === "\n") {
+          elements.push({ el: "br", content: "" });
+        } else if (token === "# ") {
+          currentTag = "h1";
+        } else if (token === "## ") {
+          currentTag = "h2";
+        } else if (token === "### ") {
+          currentTag = "h3";
+        } else if (token === "**") {
+          bold = !bold;
+        } else if (token === "__") {
+          underline = !underline;
+        } else if (token.trim() === "") {
+          // Ignore empty strings
+        } else {
+          // Process text content with possible formatting
+          let el = currentTag || (bold ? "b" : underline ? "u" : "span");
+          elements.push({ el: el, content: token });
+          currentTag = null;
         }
-        if (check) {
-            this.$emit('ReplyAnswer', true);
-            this.temp = true;
+      });
+
+      this.elements = elements;
+    },
+    getElementTag(el) {
+      const validTags = ["h1", "h2", "h3", "p", "b", "u", "li", "span"];
+      return validTags.includes(el) ? el : "span";
+    },
+    isSpecialElement(el) {
+      return ["input", "tab", "space", "br"].includes(el);
+    },
+    checkAnswer() {
+      if (typeof this.Data.Answer != "object") return;
+      let check = true;
+      let userAnswer = this.elements
+        .filter((element) => element.el === "input")
+        .map((element) => element.content);
+      console.log(userAnswer);
+      console.log(this.Data.Answer);
+      for (let i = 0; i < this.Data.Answer.length; i++) {
+        if (this.Data.Answer[i] != userAnswer[i]) {
+          check = false;
+          break;
         }
-        else{
-            this.$emit('ReplyAnswer', false);
-            this.temp = false;
-        }
-    }
-},
-mounted() {
-    const matches = this.Data.Render.match(/\$i\$/g);
-    const count = matches ? matches.length : 0;
-    for (let i = 0; i < count; i++) {
-        this.InputVal.push(0);
-    }
-    for (let i = 0; i < this.inputIndex; i++) {
-        document.getElementById(`Box${i}`).addEventListener('input', (event) => {
-            this.reply(i);
-        });
-    }
-},
-computed: {
-    renderedContent() {
-        let content = this.Data.Render;
-        let index = 0;
-        content = content.replace(/### (.*?)\n/g, '<h3>$1</h3>\n'); // ### Header 3
-        content = content.replace(/## (.*?)\n/g, '<h2>$1</h2>\n'); // ## Header 2
-        content = content.replace(/# (.*?)\n/g, '<h1>$1</h1>\n'); // # Header 1
-        content = content.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>'); // **Bold Text**
-        content = content.replace(/\$i\$/g, () => {
-            const inputHTML = `<input type="text" class="input" style=" border: 3px solid #ccc; border-radius: 10px; height: 40px; " id="Box${this.inputIndex}"/>`;
-            this.inputIndex ++ ;
-            return inputHTML;
-        }); // $i$ Input Box
-        content = content.replace(/\$t\$/g, '&nbsp;&nbsp;&nbsp;&nbsp;'); // $t$ tab
-        content = content.replace(/\$s\$/g, '&nbsp;'); // $s$ space
-        content = content.replace(/\$n\$/g, '<br/>'); // $n$ new line
-        content = content.replace(/---\n/g, '<hr>\n'); // - List 1
-        content = content.replace(/- (.*?)\n/g, '<ul><li>$1</li></ul>\n'); // - List 1
-        content = content.replace(/> (.*?)\n/g, '<blockquote style="border-left: solid 3px black; padding-left: 10px;">$1</blockquote>\n'); // > Blockquote
-        return content;
-    }
-}
+      }
+      if (check) {
+        this.$emit("ReplyAnswer", true);
+      } else {
+        this.$emit("ReplyAnswer", false);
+      }
+    },
+    disableKeyboardOnMobile($event) {
+      const input = $event.target;
+      // Check if the user is on a mobile device
+      if (/Mobi|Android/i.test(navigator.userAgent)) {
+        input.setAttribute("readonly", "true");
+      } else {
+        input.removeAttribute("readonly");
+      }
+    },
+  },
 };
 </script>
-<style scoped>
-/* Your component's styles go here */
-.Content {
-    padding: 20px;
-    font-family: Arial, sans-serif;
-    width: 100%;
-    height: 100%;
+<style scoped lang="scss">
+input {
+  min-width: 50px;
+  border: 1px solid #000;
+  border-radius: $border-radius;
+  padding: 5px;
+  margin: 5px;
 }
-.input{
-    width: 100%;
-    height: 40px;
-    margin: 10px 0;
+.markdown-container {
+  span,
+  p {
+    font-size: $text-medium;
+  }
 }
 </style>
-  
