@@ -4,12 +4,9 @@
       <h2>{{ GameData.Question }}</h2>
       <v-stage
         :config="configKonva"
-        @mousedown="aimStart"
-        @mousemove="aimMove"
-        @mouseup="shoot"
-        @touchstart="aimStart"
-        @touchmove="aimMove"
-        @touchend="shoot"
+        @pointerdown="aimStart"
+        @pointermove="aimMove"
+        @pointerup="shoot"
       >
         <v-layer>
           <v-rect :config="configBG"></v-rect>

@@ -3,12 +3,9 @@
     <div id="canvasContainer">
       <v-stage
         :config="configKonva"
-        @mousedown="drawNewLine"
-        @mousemove="moveLine"
-        @mouseup="stopDrawing"
-        @touchstart="drawNewLine"
-        @touchmove="moveLine"
-        @touchend="stopDrawing"
+        @pointerdown="drawNewLine"
+        @pointermove="moveLine"
+        @pointerup="stopDrawing"
       >
         <v-layer>
           <v-line
@@ -18,8 +15,7 @@
           ></v-line>
           <v-image
             :config="configReturnBtn"
-            @mousedown="deleteLine"
-            @touchstart="deleteLine"
+            @pointerdown="deleteLine"
           ></v-image>
         </v-layer>
         <v-layer>
