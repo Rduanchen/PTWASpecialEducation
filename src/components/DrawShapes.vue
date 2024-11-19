@@ -426,6 +426,7 @@ export default {
       return false;
     },
     deleteLine() {
+      if (this.configLine.length == 0) return;
       let id = this.configLine.length - 1;
       if (this.configLine[id].stroke != "brown") {
         this.configLine.splice(id, 1);
