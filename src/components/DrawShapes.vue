@@ -1,5 +1,5 @@
 <template>
-  <div class="gameContainer">
+  <div class="gameContainer" id="g_container" ref="gameContainer">
     <div id="canvasContainer">
       <v-stage
         :config="configKonva"
@@ -14,7 +14,7 @@
           <v-line
             v-for="pointSet in configGrid"
             :points="pointSet"
-            :stroke="'black'"
+            :stroke="'#aaa'"
           ></v-line>
           <v-image
             :config="configReturnBtn"
@@ -71,17 +71,17 @@ export default {
   emits: ["ReplyAnswer", "replyAnswer"],
 
   beforeMount() {
-    this.getData();
-    this.initializeScene();
-    this.setGrid();
-    this.drawGrid();
-    this.drawReturnBtn();
-    if (this.Data.givenPoints != null) {
-      this.drawGiven();
-    }
+    this.$nextTick(() => {
+      this.getData();
+      this.initializeScene();
+      this.setGrid();
+      this.drawGrid();
+      this.drawReturnBtn();
+      if (this.Data.givenPoints != null) {
+        this.drawGiven();
+      }
+    });
   },
-
-  mounted() {},
 
   methods: {
     getData() {
@@ -90,7 +90,12 @@ export default {
       }
     },
     initializeScene() {
-      this.gameWidth = document.getElementById("GameContainer").clientWidth;
+      try {
+        this.gameWidth = this.$refs.gameContainer.clientWidth;
+      } catch (e) {
+        this.gameWidth = 400;
+      }
+      console.log(this.gameWidth);
       this.configKonva.width = this.gameWidth;
       this.configKonva.height =
         (this.gameWidth * this.ratio.height) / this.ratio.width;
