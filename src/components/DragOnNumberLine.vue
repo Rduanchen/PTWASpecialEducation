@@ -1,5 +1,5 @@
 <template>
-  <div class="gameContainer">
+  <div ref="container">
     <v-stage :config="configKonva">
       <v-layer>
         <v-rect :config="configBG"></v-rect>
@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
+import { getGameAssets } from "@/utilitys/get_assets.js";
 import * as canvasTools from "@/utilitys/canvasTools.js";
 import { defineAsyncComponent } from "vue";
 
@@ -37,14 +37,12 @@ export default {
         visible: false,
       },
 
+      configCircle: {},
+      configImage: {},
+
       configNumberLine: [],
       configNumber: [],
       numberX: [],
-
-      startNum: 0,
-      endNum: 300,
-
-      isImage: true,
     };
   },
 
@@ -52,15 +50,14 @@ export default {
 
   emits: ["ReplyAnswer"],
 
-  beforeMount() {
+  mounted() {
     this.initializeScene();
     this.initializeNumberLine();
   },
 
   methods: {
     initializeScene() {
-      this.gameWidth =
-        document.getElementById("GameContainer").clientWidth * 0.8;
+      this.gameWidth = this.$refs.container.clientWidth * 0.8;
       this.configKonva.width = this.gameWidth;
       this.configKonva.height = this.gameWidth / 4;
       this.configBG.width = this.gameWidth;
@@ -144,11 +141,11 @@ export default {
       let initId = 0;
       if (this.Data.init_pos) initId = this.getInitialPositionId();
 
-      if (GamesGetAssetsFile(this.ID, this.Data.image).includes("undefined")) {
+      if (getGameAssets(this.ID, this.Data.image).includes("undefined")) {
         this.isImage = false;
         console.log("No image found");
         console.log(this.ID, this.Data.image);
-      }
+      } else this.isImage = true;
 
       let configDraggable = {
         x: this.numberX[initId],
@@ -159,7 +156,7 @@ export default {
 
       if (this.isImage) {
         const draggableImage = new window.Image();
-        draggableImage.src = GamesGetAssetsFile(this.ID, this.Data.image);
+        draggableImage.src = getGameAssets(this.ID, this.Data.image);
         configDraggable.image = draggableImage;
         configDraggable.width = this.intervalLength;
         configDraggable.height = this.intervalLength;
@@ -208,8 +205,9 @@ export default {
         }
       }
 
-      if (this.isImage) e.target.x(snapTo - this.configImage.width * 0.5);
-      else this.configCircle.x = e.target.x(snapTo);
+      if (this.isImage)
+        this.configImage.x = snapTo - this.configImage.width * 0.5;
+      else this.configCircle.x = snapTo;
 
       this.checkAnswer(output);
     },

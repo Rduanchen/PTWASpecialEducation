@@ -1,40 +1,28 @@
 <template>
-  <div class="gameContainer" id="g_container" ref="gameContainer">
-    <div id="canvasContainer">
-      <v-stage
-        :config="configKonva"
-        @mousedown="drawNewLine"
-        @mousemove="moveLine"
-        @mouseup="stopDrawing"
-        @touchstart="drawNewLine"
-        @touchmove="moveLine"
-        @touchend="stopDrawing"
-      >
-        <v-layer>
-          <v-line
-            v-for="pointSet in configGrid"
-            :points="pointSet"
-            :stroke="'#aaa'"
-          ></v-line>
-          <v-image
-            :config="configReturnBtn"
-            @mousedown="deleteLine"
-            @touchstart="deleteLine"
-          ></v-image>
-        </v-layer>
-        <v-layer>
-          <v-line
-            v-for="line in configLine"
-            :config="line"
-            :strokeWidth="5"
-          ></v-line>
-          <v-circle
-            v-for="point in configGivenPoint"
-            :config="point"
-          ></v-circle>
-        </v-layer>
-      </v-stage>
-    </div>
+  <div ref="container">
+    <v-stage
+      :config="configKonva"
+      @pointerdown="drawNewLine"
+      @pointermove="moveLine"
+      @pointerup="stopDrawing"
+    >
+      <v-layer>
+        <v-line
+          v-for="pointSet in configGrid"
+          :points="pointSet"
+          :stroke="'black'"
+        ></v-line>
+        <v-image :config="configReturnBtn" @pointerdown="deleteLine"></v-image>
+      </v-layer>
+      <v-layer>
+        <v-line
+          v-for="line in configLine"
+          :config="line"
+          :strokeWidth="5"
+        ></v-line>
+        <v-circle v-for="point in configGivenPoint" :config="point"></v-circle>
+      </v-layer>
+    </v-stage>
   </div>
 </template>
 
@@ -70,17 +58,15 @@ export default {
 
   emits: ["ReplyAnswer", "replyAnswer"],
 
-  beforeMount() {
-    this.$nextTick(() => {
-      this.getData();
-      this.initializeScene();
-      this.setGrid();
-      this.drawGrid();
-      this.drawReturnBtn();
-      if (this.Data.givenPoints != null) {
-        this.drawGiven();
-      }
-    });
+  mounted() {
+    this.getData();
+    this.initializeScene();
+    this.setGrid();
+    this.drawGrid();
+    this.drawReturnBtn();
+    if (this.Data.givenPoints != null) {
+      this.drawGiven();
+    }
   },
 
   methods: {
@@ -90,12 +76,7 @@ export default {
       }
     },
     initializeScene() {
-      try {
-        this.gameWidth = this.$refs.gameContainer.clientWidth;
-      } catch (e) {
-        this.gameWidth = 400;
-      }
-      console.log(this.gameWidth);
+      this.gameWidth = this.$refs.container.clientWidth;
       this.configKonva.width = this.gameWidth;
       this.configKonva.height =
         (this.gameWidth * this.ratio.height) / this.ratio.width;

@@ -1,17 +1,15 @@
 <template>
-  <div class="gameContainer">
-    <div id="canvasContainer">
-      <v-stage :config="configKonva">
-        <v-layer>
-          <v-line
-            v-for="pointSet in configGrid"
-            :points="pointSet"
-            :stroke="'black'"
-          ></v-line>
-          <v-image :config="configImage" @dragmove="keepInBound"></v-image>
-        </v-layer>
-      </v-stage>
-    </div>
+  <div ref="container">
+    <v-stage :config="configKonva">
+      <v-layer>
+        <v-line
+          v-for="pointSet in configGrid"
+          :points="pointSet"
+          :stroke="'black'"
+        ></v-line>
+        <v-image :config="configImage" @dragmove="keepInBound"></v-image>
+      </v-layer>
+    </v-stage>
   </div>
 </template>
 
@@ -41,18 +39,16 @@ export default {
 
   props: ["Data", "ID"],
 
-  beforeMount() {
+  mounted() {
     this.initializeScene();
     this.setGrid();
     this.drawGrid();
     this.drawImage();
   },
 
-  mounted() {},
-
   methods: {
     initializeScene() {
-      this.gameWidth = document.getElementById("GameContainer").clientWidth;
+      this.gameWidth = this.$refs.container.clientWidth;
       this.configKonva.width = this.gameWidth;
       this.configKonva.height = this.gameWidth;
       this.gridWidth = this.gameWidth / this.ratio.width;

@@ -1,6 +1,6 @@
 <template>
-  <div class="gameContainer">
-    <div id="canvasContainer">
+  <div class="gameContainer" ref="container">
+    <div>
       <h2>{{ GameData.Question }}</h2>
       <v-stage :config="configKonva">
         <v-layer>
@@ -75,14 +75,11 @@ export default {
 
   emits: ["play-effect", "add-record", "next-question"],
 
-  beforeMount() {
+  mounted() {
     this.options = canvasTools.shuffleOptions(this.GameData.Options);
     this.currentOptionId = Math.floor(Math.random() * this.options.length);
     this.initializeScene();
     window.addEventListener("keydown", this.input);
-  },
-
-  mounted() {
     var btnCon = document.getElementById("btnContainer");
     btnCon.style.height = this.configKonva.height + "px";
     this.game = window.setInterval(this.update, 20);
@@ -90,8 +87,7 @@ export default {
 
   methods: {
     initializeScene() {
-      this.gameWidth =
-        document.getElementById("GameContainer").clientWidth * 0.8;
+      this.gameWidth = this.$refs.container.clientWidth * 0.8;
       this.configKonva.width = this.gameWidth;
       this.configKonva.height = this.gameWidth / 2;
       this.drawRoad();
