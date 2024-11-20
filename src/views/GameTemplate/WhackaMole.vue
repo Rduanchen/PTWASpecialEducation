@@ -1,5 +1,5 @@
 <template>
-  <div class="gameContainer">
+  <div ref="container">
     <h2>{{ GameData.Question }}</h2>
     <v-stage :config="configKonva">
       <v-layer>
@@ -15,8 +15,7 @@
         <v-image
           v-for="mole in configObjects.mole"
           :config="mole"
-          @mousedown="whacked"
-          @touchstart="whacked"
+          @pointerdown="whacked"
         ></v-image>
         <v-image v-for="hole in configObjects.hole" :config="hole"></v-image>
       </v-layer>
@@ -60,19 +59,15 @@ export default {
       required: true,
     },
   },
-  beforeMount() {
+  mounted() {
     this.initializeScene();
     this.initializeOption();
-  },
-
-  mounted() {
     this.game = window.setInterval(this.update, 20);
   },
 
   methods: {
     initializeScene() {
-      this.gameWidth =
-        document.getElementById("GameContainer").clientWidth * 0.8;
+      this.gameWidth = this.$refs.container.clientWidth * 0.8;
       this.configKonva.width = this.gameWidth;
       this.configKonva.height = this.gameWidth / 2;
       this.setAttributes();

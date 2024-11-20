@@ -1,42 +1,34 @@
 <template>
-  <div class="gameContainer">
-    <div id="canvasContainer">
-      <h2>{{ GameData.Question }}</h2>
-      <v-stage
-        :config="configKonva"
-        @mousedown="aimStart"
-        @mousemove="aimMove"
-        @mouseup="shoot"
-        @touchstart="aimStart"
-        @touchmove="aimMove"
-        @touchend="shoot"
-      >
-        <v-layer>
-          <v-rect :config="configBG"></v-rect>
-        </v-layer>
+  <div ref="container">
+    <h2>{{ GameData.Question }}</h2>
+    <v-stage
+      :config="configKonva"
+      @pointerdown="aimStart"
+      @pointermove="aimMove"
+      @pointerup="shoot"
+    >
+      <v-layer>
+        <v-rect :config="configBG"></v-rect>
+      </v-layer>
 
-        <v-layer>
-          <v-circle
-            v-for="balloon in configBalloon"
-            :config="balloon"
-          ></v-circle>
-          <v-text v-for="option in configOptions" :config="option"></v-text>
-        </v-layer>
-        <v-layer>
-          <v-circle v-if="isAiming" :config="configScope"></v-circle>
-          <v-line
-            v-if="isAiming"
-            v-for="line in configCross"
-            :config="line"
-          ></v-line>
-        </v-layer>
-      </v-stage>
-    </div>
+      <v-layer>
+        <v-circle v-for="balloon in configBalloon" :config="balloon"></v-circle>
+        <v-text v-for="option in configOptions" :config="option"></v-text>
+      </v-layer>
+      <v-layer>
+        <v-circle v-if="isAiming" :config="configScope"></v-circle>
+        <v-line
+          v-if="isAiming"
+          v-for="line in configCross"
+          :config="line"
+        ></v-line>
+      </v-layer>
+    </v-stage>
   </div>
 </template>
 
 <script>
-import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
+import { getGameAssets } from "@/utilitys/get_assets.js";
 import * as canvasTools from "@/utilitys/canvasTools.js";
 import { defineAsyncComponent } from "vue";
 
@@ -81,12 +73,9 @@ export default {
 
   emits: ["play-effect", "add-record", "next-question"],
 
-  beforeMount() {
+  mounted() {
     this.initializeScene();
     this.initializeOptions();
-  },
-
-  mounted() {
     this.balloonSpawner();
     this.game = window.setInterval(this.update, 20);
     this.spawner = window.setInterval(this.balloonSpawner, 1000);
@@ -94,8 +83,7 @@ export default {
 
   methods: {
     initializeScene() {
-      this.gameWidth =
-        document.getElementById("GameContainer").clientWidth * 0.8;
+      this.gameWidth = this.$refs.container.clientWidth * 0.8;
       this.configKonva.width = this.gameWidth;
       this.configKonva.height = this.gameWidth / 2;
       this.configBG.width = this.gameWidth;

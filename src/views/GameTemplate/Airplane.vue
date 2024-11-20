@@ -1,23 +1,21 @@
 <template>
-  <div class="gameContainer">
-    <div id="canvasContainer">
-      <h2>{{ GameData.Question }}</h2>
-      <v-stage :config="configKonva">
-        <v-layer>
-          <v-image :config="configBG_1"></v-image>
-          <v-image :config="configBG_2"></v-image>
-        </v-layer>
+  <div ref="container">
+    <h2>{{ GameData.Question }}</h2>
+    <v-stage :config="configKonva">
+      <v-layer>
+        <v-image :config="configBG_1"></v-image>
+        <v-image :config="configBG_2"></v-image>
+      </v-layer>
 
-        <v-layer>
-          <v-circle v-for="target in configTarget" :config="target"></v-circle>
-          <v-text v-for="option in configOptions" :config="option"></v-text>
-        </v-layer>
+      <v-layer>
+        <v-circle v-for="target in configTarget" :config="target"></v-circle>
+        <v-text v-for="option in configOptions" :config="option"></v-text>
+      </v-layer>
 
-        <v-layer>
-          <v-rect :config="configPlane" @dragmove="keepInBound"></v-rect>
-        </v-layer>
-      </v-stage>
-    </div>
+      <v-layer>
+        <v-rect :config="configPlane" @dragmove="keepInBound"></v-rect>
+      </v-layer>
+    </v-stage>
   </div>
 </template>
 
@@ -69,12 +67,9 @@ export default {
 
   emits: ["play-effect", "add-record", "next-question"],
 
-  beforeMount() {
+  mounted() {
     this.initializeScene();
     this.initializeOptions();
-  },
-
-  mounted() {
     this.targetSpawner();
     this.game = window.setInterval(this.update, 20);
     this.spawner = window.setInterval(this.targetSpawner, 3000);
@@ -82,8 +77,7 @@ export default {
 
   methods: {
     initializeScene() {
-      this.gameWidth =
-        document.getElementById("GameContainer").clientWidth * 0.8;
+      this.gameWidth = this.$refs.container.clientWidth * 0.8;
       this.configKonva.width = this.gameWidth;
       this.configKonva.height = this.gameWidth / 2;
       this.drawBackground();
