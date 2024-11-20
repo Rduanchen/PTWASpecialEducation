@@ -68,7 +68,6 @@ export default {
   },
   methods: {
     handleValidation(result) {
-      console.log(result);
       this.isAnswerRight = result;
     },
     triggerValidation() {
