@@ -115,7 +115,7 @@ export default {
   border-radius: $border-radius;
   gap: $gap--small;
   padding: $padding--small;
-  height: 50vh;
+  height: 80%;
 }
 
 .fraction {
