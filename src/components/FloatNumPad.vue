@@ -22,7 +22,7 @@ export default {
   name: "FloatNumPad",
   emits: ["button-clicked"],
   props: {
-    Data: {
+    data: {
       type: Object,
       required: true,
     },
@@ -63,8 +63,8 @@ export default {
         const viewportWidth = window.innerWidth;
         const viewportHeight = window.innerHeight;
 
-        let top = parseFloat(this.Data.top);
-        let left = parseFloat(this.Data.left);
+        let top = parseFloat(this.data.top);
+        let left = parseFloat(this.data.left);
 
         if (top + numpadHeight > viewportHeight) {
           top = viewportHeight - numpadHeight;
@@ -91,7 +91,7 @@ export default {
     },
   },
   watch: {
-    Data: {
+    data: {
       handler() {
         this.adjustPosition();
       },

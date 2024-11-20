@@ -839,6 +839,9 @@ export default {
     MoneyDrag: defineAsyncComponent(() =>
       import("@/views/GameTemplate/MoneyDrag.vue")
     ),
+    FractionArithmetic: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/FractionArithmetic.vue")
+    ),
   },
 };
 </script>
