@@ -24,7 +24,6 @@
           @addFill="addFill"
         ></rectFraction>
       </v-layer>
-
       <v-layer>
         <v-shape
           v-for="arrow in configArrow"
@@ -45,10 +44,14 @@ import { defineAsyncComponent } from "vue";
 export default {
   components: {
     circleFraction: defineAsyncComponent(() =>
-      import("@/components/dragFractionCircle.vue")
+      import(
+        "@/components/components-utilitys/drag-fraction/dragFractionCircle.vue"
+      )
     ),
     rectFraction: defineAsyncComponent(() =>
-      import("@/components/dragFractionRect.vue")
+      import(
+        "@/components/components-utilitys/drag-fraction/dragFractionRect.vue"
+      )
     ),
   },
   data() {
