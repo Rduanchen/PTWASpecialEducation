@@ -1,5 +1,5 @@
 <template>
-  <div class="gameContainer">
+  <div class="gameContainer" ref="gameContainer">
     <div id="canvasContainer">
       <v-stage :config="configKonva">
         <v-layer>
@@ -84,14 +84,17 @@ export default {
   emits: ["getAnswer"],
 
   beforeMount() {
-    this.initializeScene();
+    this.$nextTick(() => {
+      this.initializeScene();
+    });
   },
 
   mounted() {},
 
   methods: {
     initializeScene() {
-      this.gameWidth = document.getElementById("GameContainer").clientWidth;
+      const gameContainer = this.$refs.gameContainer;
+      this.gameWidth = gameContainer.offsetWidth;
       this.gameHeight = this.gameWidth * 0.75;
       this.configKonva.width = this.gameWidth;
       this.configKonva.height = this.gameHeight;
