@@ -842,6 +842,9 @@ export default {
     MA3111: defineAsyncComponent(() =>
       import("@/views/GameTemplate/MA3111.vue")
     ),
+    FractionArithmetic: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/FractionArithmetic.vue")
+    ),
   },
 };
 </script>
