@@ -56,6 +56,9 @@ export default {
     DragOnNumberLine: defineAsyncComponent(() =>
       import("@/components/DragOnNumberLine.vue")
     ),
+    ImageContainer: defineAsyncComponent(() =>
+      import("@/components/ImageContainer.vue")
+    ),
   },
   props: {
     GameData: {
@@ -292,6 +295,7 @@ export default {
   padding: 10px;
   border-radius: 10px;
   border: solid;
+  max-height: 80vh;
 }
 .left-column {
   display: flex;
@@ -299,6 +303,7 @@ export default {
   justify-content: center;
   gap: $gap--small;
   .game-area {
+    max-height: 40vh;
     display: flex;
     justify-content: center;
     align-items: center;
