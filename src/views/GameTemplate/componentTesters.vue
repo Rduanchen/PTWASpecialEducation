@@ -78,7 +78,10 @@ export default {
         image: "apple.png",
       },
       configDrawShapes: {
-        //bgRatio: [],
+        bgRatio: {
+          width: 20,
+          height: 10,
+        },
         /*givenPoints: [
           [2, 2],
           [2, 5],
@@ -115,6 +118,7 @@ export default {
   methods: {
     printAns(x) {
       console.log(x);
+      if (x) alert("correct! (3*5)");
     },
   },
 };

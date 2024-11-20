@@ -110,7 +110,7 @@ export default {
       returnBtn.src = getSystemAssets("backArrow.png", "icon");
       this.configReturnBtn.image = returnBtn;
       this.configReturnBtn.x = this.gameWidth * 0.85;
-      this.configReturnBtn.y = this.gameWidth * 0.85;
+      this.configReturnBtn.y = this.configKonva.height - this.gameWidth * 0.15;
       this.configReturnBtn.width = this.gameWidth * 0.15;
       this.configReturnBtn.height = this.gameWidth * 0.15;
     },
