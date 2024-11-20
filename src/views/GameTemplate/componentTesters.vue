@@ -3,15 +3,16 @@
     <select @change="(event) => (tester = event.target.value)">
       <option>numberLine</option>
       <option>fraction</option>
-      <option selected>drawShapes</option>
-      <option selected>dragToAlign</option>
+      <option>drawShapes</option>
+      <option>dragToAlign</option>
+      <option selected>dragImages</option>
     </select>
   </div>
   <div v-if="tester == 'fraction'">
     <dragFraction
       :Data="configFraction"
       :ID="id"
-      @getAnswer="printAns"
+      @replyAnswer="printAns"
     ></dragFraction>
   </div>
   <div v-if="tester == 'numberLine'">
@@ -29,16 +30,15 @@
     ></drawShapes>
   </div>
   <div v-if="tester == 'dragToAlign'">
-    <dragToAlign
-      :Data="configDragToAlign"
-      :ID="id"
-      @getAnswer="printAns"
-    ></dragToAlign>
+    <dragToAlign :Data="configDragToAlign" :ID="id"></dragToAlign>
+  </div>
+  <div v-if="tester == 'dragImages'">
+    <dragImages :Data="configDragImages" :ID="id"></dragImages>
   </div>
 </template>
 
 <script>
-import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
+import { getGameAssets } from "@/utilitys/get_assets.js";
 import * as canvasTools from "@/utilitys/canvasTools.js";
 import { defineAsyncComponent } from "vue";
 export default {
@@ -55,10 +55,13 @@ export default {
     dragToAlign: defineAsyncComponent(() =>
       import("@/components/DragToAlign.vue")
     ),
+    dragImages: defineAsyncComponent(() =>
+      import("@/components/DragImages.vue")
+    ),
   },
   data() {
     return {
-      tester: "dragToAlign",
+      tester: "dragImages",
       configFraction: {
         verifyOption: "answer",
         shape: "circle",
@@ -86,6 +89,25 @@ export default {
       configDragToAlign: {
         imageRatio: [5, 3],
         image: "apple.png",
+      },
+      configDragImages: {
+        images: [
+          {
+            path: "apple.png",
+            ratio: {
+              width: 3,
+              height: 3,
+            },
+          },
+          {
+            path: "sugar.png",
+            ratio: {
+              width: 2,
+              height: 5,
+            },
+          },
+        ],
+        background: "black",
       },
       id: "Dev0105",
     };

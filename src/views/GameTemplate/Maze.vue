@@ -1,49 +1,47 @@
 <template>
-  <div class="gameContainer">
-    <div id="canvasContainer">
-      <h2>{{ GameData.Question }}</h2>
-      <v-stage
-        :config="configKonva"
-        @touchstart="touchStart"
-        @touchend="touchEnd"
-      >
-        <v-layer v-if="isBgImage">
-          <v-image :config="configBgImage"></v-image>
-        </v-layer>
+  <div ref="container">
+    <h2>{{ GameData.Question }}</h2>
+    <v-stage
+      :config="configKonva"
+      @touchstart="touchStart"
+      @touchend="touchEnd"
+    >
+      <v-layer v-if="isBgImage">
+        <v-image :config="configBgImage"></v-image>
+      </v-layer>
 
-        <v-layer v-if="!isBgImage">
-          <v-rect :config="configBg"></v-rect>
-          <v-rect
-            v-for="block in configBounds"
-            :config="block"
-            :fill="'blue'"
-            :strokeEnabled="false"
-          ></v-rect>
-          <v-rect
-            v-for="block in configSafeArea"
-            :config="block"
-            :fill="'green'"
-            :strokeEnabled="false"
-          ></v-rect>
-        </v-layer>
-        <v-layer>
-          <v-text v-for="option in configOption" :config="option"></v-text>
-        </v-layer>
-        <v-layer>
-          <v-shape :config="configPlayer"></v-shape>
-          <v-circle :config="configGhost_1"></v-circle>
-          <v-circle :config="configGhost_2"></v-circle>
-        </v-layer>
-        <v-layer>
-          <joystick
-            v-if="joystickVisible"
-            :radius="laneWidth * 1.5"
-            :position="touchPosition"
-            @move="moveByJoystick"
-          ></joystick>
-        </v-layer>
-      </v-stage>
-    </div>
+      <v-layer v-if="!isBgImage">
+        <v-rect :config="configBg"></v-rect>
+        <v-rect
+          v-for="block in configBounds"
+          :config="block"
+          :fill="'blue'"
+          :strokeEnabled="false"
+        ></v-rect>
+        <v-rect
+          v-for="block in configSafeArea"
+          :config="block"
+          :fill="'green'"
+          :strokeEnabled="false"
+        ></v-rect>
+      </v-layer>
+      <v-layer>
+        <v-text v-for="option in configOption" :config="option"></v-text>
+      </v-layer>
+      <v-layer>
+        <v-shape :config="configPlayer"></v-shape>
+        <v-circle :config="configGhost_1"></v-circle>
+        <v-circle :config="configGhost_2"></v-circle>
+      </v-layer>
+      <v-layer>
+        <joystick
+          v-if="joystickVisible"
+          :radius="laneWidth * 1.5"
+          :position="touchPosition"
+          @move="moveByJoystick"
+        ></joystick>
+      </v-layer>
+    </v-stage>
   </div>
 </template>
 
@@ -66,7 +64,6 @@ export default {
         strokeEnabled: false,
       },
       configBgImage: {},
-      isBgImage: true,
 
       configOption: [],
       optionMap: [0, 0, 0, 0],
@@ -155,20 +152,16 @@ export default {
     },
   },
 
-  beforeMount() {
+  mounted() {
     this.fitCanvasInScreen();
     this.generateMap();
     this.getOptionPosition();
-  },
-
-  mounted() {
     this.bootGame();
   },
 
   methods: {
     fitCanvasInScreen() {
-      this.gameWidth =
-        document.getElementById("GameContainer").clientWidth * 0.8;
+      this.gameWidth = this.$refs.container.clientWidth * 0.8;
       this.configKonva.width = this.gameWidth;
       this.configKonva.height = this.gameWidth * 0.5;
     },
@@ -182,7 +175,7 @@ export default {
       );
       if (mapBG.src.includes("undefined")) {
         this.isBgImage = false;
-      }
+      } else this.isBgImage = true;
       if (this.isBgImage) {
         this.configBgImage.image = mapBG;
         this.configBgImage.width = this.laneWidth * 20;

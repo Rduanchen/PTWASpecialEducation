@@ -220,7 +220,7 @@ export default {
             Total: 4,
           },
           Length: {
-            Title: ["毫米", null, "公分", null, "公尺", null, "公里"],
+            Title: ["毫米", "公分", null, "公尺", null, "公里"],
             Total: 4,
           },
           Volume: {

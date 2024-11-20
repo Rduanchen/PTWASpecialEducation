@@ -1,57 +1,57 @@
 <template>
-  <div class="gameContainer" ref="gameContainer">
-    <div id="canvasContainer">
-      <v-stage :config="configKonva">
-        <v-layer>
-          <v-rect :config="configBG"></v-rect>
-          <v-rect :config="configSideBar"></v-rect>
-        </v-layer>
-        <v-layer v-if="Data.shape == 'circle'">
-          <circleFraction
-            :gameWidth="gameWidth"
-            :gameHeight="gameHeight"
-            :numerator="numerator"
-            :denominator="denominator"
-            @addFill="addFill"
-          ></circleFraction>
-        </v-layer>
+  <div ref="container">
+    <v-stage :config="configKonva">
+      <v-layer>
+        <v-rect :config="configBG"></v-rect>
+        <v-rect :config="configSideBar"></v-rect>
+      </v-layer>
+      <v-layer v-if="Data.shape == 'circle'">
+        <circleFraction
+          :gameWidth="gameWidth"
+          :gameHeight="gameHeight"
+          :numerator="numerator"
+          :denominator="denominator"
+          @addFill="addFill"
+        ></circleFraction>
+      </v-layer>
 
-        <v-layer v-if="Data.shape == 'rect'">
-          <rectFraction
-            :gameWidth="gameWidth"
-            :gameHeight="gameHeight"
-            :numerator="numerator"
-            :denominator="denominator"
-            @addFill="addFill"
-          ></rectFraction>
-        </v-layer>
-
-        <v-layer>
-          <v-shape
-            v-for="arrow in configArrow"
-            :config="arrow"
-            @mousedown="adjustNumber"
-            @touchstart="adjustNumber"
-          ></v-shape>
-          <v-text :config="configNumeratorNumber"></v-text>
-          <v-text :config="configDenominatorNumber"></v-text>
-        </v-layer>
-      </v-stage>
-    </div>
+      <v-layer v-if="Data.shape == 'rect'">
+        <rectFraction
+          :gameWidth="gameWidth"
+          :gameHeight="gameHeight"
+          :numerator="numerator"
+          :denominator="denominator"
+          @addFill="addFill"
+        ></rectFraction>
+      </v-layer>
+      <v-layer>
+        <v-shape
+          v-for="arrow in configArrow"
+          :config="arrow"
+          @pointerdown="adjustNumber"
+        ></v-shape>
+        <v-text :config="configNumeratorNumber"></v-text>
+        <v-text :config="configDenominatorNumber"></v-text>
+      </v-layer>
+    </v-stage>
   </div>
 </template>
 
 <script>
-import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
+import { getGameAssets } from "@/utilitys/get_assets.js";
 import * as canvasTools from "@/utilitys/canvasTools.js";
 import { defineAsyncComponent } from "vue";
 export default {
   components: {
     circleFraction: defineAsyncComponent(() =>
-      import("@/components/dragFractionCircle.vue")
+      import(
+        "@/components/components-utilitys/drag-fraction/dragFractionCircle.vue"
+      )
     ),
     rectFraction: defineAsyncComponent(() =>
-      import("@/components/dragFractionRect.vue")
+      import(
+        "@/components/components-utilitys/drag-fraction/dragFractionRect.vue"
+      )
     ),
   },
   data() {
@@ -81,20 +81,15 @@ export default {
 
   props: ["Data", "ID"],
 
-  emits: ["getAnswer"],
+  emits: ["replyAnswer"],
 
-  beforeMount() {
-    this.$nextTick(() => {
-      this.initializeScene();
-    });
+  mounted() {
+    this.initializeScene();
   },
-
-  mounted() {},
 
   methods: {
     initializeScene() {
-      const gameContainer = this.$refs.gameContainer;
-      this.gameWidth = gameContainer.offsetWidth;
+      this.gameWidth = this.$refs.container.clientWidth;
       this.gameHeight = this.gameWidth * 0.75;
       this.configKonva.width = this.gameWidth;
       this.configKonva.height = this.gameHeight;
@@ -222,12 +217,12 @@ export default {
       if (this.Data.verifyOption == "answer") {
         let answer = this.Data.answer.numerator / this.Data.answer.denominator;
         if (answer.toFixed(2) == total.toFixed(2)) {
-          this.$emit("getAnswer", true);
+          this.$emit("replyAnswer", true);
         } else {
-          this.$emit("getAnswer", false);
+          this.$emit("replyAnswer", false);
         }
       } else if (this.Data.verifyOption == "value") {
-        this.$emit("getAnswer", total.toFixed(2));
+        this.$emit("replyAnswer", total.toFixed(2));
       }
     },
   },

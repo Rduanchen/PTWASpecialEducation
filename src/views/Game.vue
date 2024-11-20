@@ -144,15 +144,15 @@
 import fetchJson from "@/utilitys/fetch-json.js";
 import * as Arr2CSV from "@/utilitys/array2csv.js";
 import loading from "@/components/loading.vue";
-import GameStartandOver from "@/components/GameSystem/GameStartandOver.vue";
-import Header from "@/components/GameSystem/header.vue";
-import LevelAndTime from "@/components/GameSystem/LevelAndTime.vue";
-import MediaModal from "@/components/GameSystem/MediaModal.vue";
+import GameStartandOver from "@/components/game-system/GameStartandOver.vue";
+import Header from "@/components/game-system/header.vue";
+import LevelAndTime from "@/components/game-system/LevelAndTime.vue";
+import MediaModal from "@/components/game-system/MediaModal.vue";
 import scratchSheet from "@/components/ScratchSheets.vue";
-import hintbutton from "@/components/GameSystem/hintbutton.vue";
+import hintbutton from "@/components/game-system/hintbutton.vue";
 import * as ImportUrl from "@/utilitys/get_assets.js";
 import { defineAsyncComponent } from "vue";
-import EffectWindow from "@/components/GameSystem/EffectWindow.vue";
+import EffectWindow from "@/components/game-system/EffectWindow.vue";
 import gameStore from "@/stores/game";
 import { mapWritableState } from "pinia";
 import { soundManager } from "@/utilitys/sound-manager.js";
@@ -810,7 +810,7 @@ export default {
     Track: defineAsyncComponent(() => import("@/views/GameTemplate/Track.vue")),
     EffectWindow,
     SideBar: defineAsyncComponent(() =>
-      import("@/components/GameSystem/SideBar.vue")
+      import("@/components/game-system/SideBar.vue")
     ),
     CopyItem: defineAsyncComponent(() =>
       import("@/views/GameTemplate/CopyItem.vue")
