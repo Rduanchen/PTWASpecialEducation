@@ -78,7 +78,6 @@ export default {
     validateAnswer() {
       const userNumerator = this.$refs.numerator.value;
       const userDenominator = this.$refs.denominator.value;
-      console.log("使用者答案：", userNumerator, userDenominator);
 
       const isCorrect =
         parseInt(userNumerator, 10) === this.answerData.numerator &&
