@@ -44,6 +44,8 @@ export default {
   text-align: center;
   justify-content: center;
   align-items: center;
+  height: 100%;
+  width: 100%;
   line-height: 1.2;
   font-size: 3rem;
 }
@@ -54,7 +56,7 @@ export default {
 
 .line {
   display: block;
-  border-top: 2px solid black;
+  border-top: 0.2rem solid black;
   width: 100%;
   margin: 2px 0;
 }

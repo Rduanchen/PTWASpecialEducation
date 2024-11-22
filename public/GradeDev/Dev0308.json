@@ -11,16 +11,17 @@
   "Questions": [
     [
       {
-        "Question": {
-          "LeftTerm": "\\frac{2}{4}",
-          "RightTerm": "\\frac{1}{4}",
-          "OperationType": "&#43;"
+        "question": {
+          "leftTerm": "\\frac{2}{4}",
+          "rightTerm": "\\frac{1}{4}",
+          "operationType": "&#43;",
+          "description": "哥哥想做蛋糕，第一次用了1/5公斤的糖，第二次再加了一些糖，總共用了4/5公斤的糖，哥哥第二次加了公斤的糖?"
         },
-        "AcheckCalculationData": {
+        "acheckCalculationData": {
           "shape": "circle",
           "verifyOption": "value"
         },
-        "Answer": {
+        "answer": {
           "numerator": 3,
           "denominator": 4
         }

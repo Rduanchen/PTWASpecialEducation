@@ -107,19 +107,25 @@ export default {
 
 <style scoped>
 .fraction-for-answer {
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   text-align: center;
+  height: 100%;
+  width: 100%;
+  gap: 0.2rem;
 }
 
 .fraction-input {
+  flex: 1;
   width: 100%;
-  padding: 5px;
   text-align: center;
+  font-size: 1.5rem;
 }
 
 .line {
   display: block;
-  border-top: 2px solid black;
+  border-top: 0.2rem solid black;
   width: 100%;
   margin: 2px 0;
 }
