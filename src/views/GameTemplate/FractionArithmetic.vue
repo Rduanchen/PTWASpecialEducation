@@ -1,28 +1,33 @@
 <template>
   <div class="game">
     <div class="question-and-answer">
-      <FractionDisplay
-        :data="questionLeftTerm"
-        class="fraction"
-      ></FractionDisplay>
-      <span class="math-symbol" v-html="operation"></span>
-      <FractionDisplay
-        :data="questionRightTerm"
-        class="fraction"
-      ></FractionDisplay>
-      <span class="math-symbol">&#61;</span>
-      <FractionForAnswer
-        ref="fractionsComponent"
-        :answerData="answerData"
-        @validation="handleValidation"
-      ></FractionForAnswer>
-      <button @click="triggerValidation">送出答案</button>
+      <h1 class="question__description">{{ questionDescription }}</h1>
+      <div class="question__math-expression">
+        <FractionDisplay
+          :data="questionLeftTerm"
+          class="math-expression__fraction"
+        ></FractionDisplay>
+        <span class="question__math-symbol" v-html="operation"></span>
+        <FractionDisplay
+          :data="questionRightTerm"
+          class="math-expression__fraction"
+        ></FractionDisplay>
+        <span class="question__math-symbol">&#61;</span>
+        <FractionForAnswer
+          ref="fractionsComponent"
+          :answerData="answerData"
+          @validation="handleValidation"
+        ></FractionForAnswer>
+      </div>
     </div>
     <div class="check-calculation">
       <DragFraction
         :Data="checkCalculationData"
         class="check-calculation-components"
       ></DragFraction>
+      <button @click="triggerValidation" class="check-answer-btn">
+        送出答案
+      </button>
     </div>
   </div>
 </template>
@@ -58,12 +63,14 @@ export default {
   },
   data() {
     return {
-      questionLeftTerm: this.GameData.Question.LeftTerm,
-      questionRightTerm: this.GameData.Question.RightTerm,
-      operation: this.GameData.Question.OperationType,
-      checkCalculationData: this.GameData.AcheckCalculationData,
-      answerData: this.GameData.Answer,
+      questionDescription: this.GameData.question.description,
+      questionLeftTerm: this.GameData.question.leftTerm,
+      questionRightTerm: this.GameData.question.rightTerm,
+      operation: this.GameData.question.operationType,
+      checkCalculationData: this.GameData.acheckCalculationData,
+      answerData: this.GameData.answer,
       isAnswerRight: false,
+      questionType: this.GameData.question.questionType,
     };
   },
   methods: {
@@ -89,7 +96,7 @@ export default {
   height: 100%;
   justify-content: center;
   align-items: center;
-  gap: 0.2rem;
+  gap: 0.5rem;
 }
 
 .question-and-answer {
@@ -97,42 +104,61 @@ export default {
   height: 15vh;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem;
-  gap: 3rem;
   width: 100%;
-  @extend .game-section;
+  height: 20%;
+  gap: $gap--small;
 }
 
-.math-symbol {
+.question__math-expression {
+  flex: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  padding: 0.5rem;
+  gap: $gap--small;
+  @extend .game-section--border;
+}
+
+.question__math-symbol {
   font-size: 5rem;
 }
 
-.check-calculation {
-  flex: 1;
+.question__description {
+  flex: 2;
   display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: $gap--small;
+  font-size: $text-medium;
+  margin: 0;
+  @extend .game-section--border;
+  height: 100%;
+  line-height: 1.3;
+}
+
+.check-calculation {
+  display: flex;
+  gap: $gap--small;
   height: 80%;
   width: 100%;
   align-items: center;
-  justify-content: center;
-  @extend .game-section;
+  justify-content: space-between;
 }
 
-.fraction {
-  flex: 1;
-}
-
-.game-section {
+.game-section--border {
   border: $border--normal solid #000;
   border-radius: $border-radius;
-  gap: $gap--small;
-  padding: $padding--small;
 }
 
 .check-calculation-components {
   width: 70%;
 }
 
-.check-answer {
-  @extend .button-basic;
+.check-answer-btn {
+  height: 100%;
+  width: 25%;
+  border: none;
+  background-color: #e4c9b6;
 }
 </style>
