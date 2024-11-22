@@ -46,6 +46,9 @@ export default {
         left: 0,
       },
       activeInputRef: "",
+      // 定義常數
+      numPadOffset: 10, // 虛擬鍵盤與目標輸入框的間距
+      maxInputLength: 4, // 輸入框最大字符數
     };
   },
   methods: {
@@ -55,7 +58,7 @@ export default {
       this.activeInputRef = inputRef;
 
       this.numPadPosition = {
-        top: `${inputRect.bottom + window.scrollY + 10}px`,
+        top: `${inputRect.bottom + window.scrollY + this.numPadOffset}px`,
         left: `${inputRect.left + window.scrollX}px`,
       };
 
@@ -96,7 +99,7 @@ export default {
     updateInputValue(label) {
       if (this.activeInputRef) {
         const input = this.$refs[this.activeInputRef];
-        if (input.value.length < 4) {
+        if (input.value.length < this.maxInputLength) {
           input.value += label;
         }
       }
