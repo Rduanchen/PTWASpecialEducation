@@ -1,15 +1,16 @@
 <template>
-  <v-stage :config="{ width: gameWidth, height: gameHeight }">
-    <!-- 分子（填滿部分）在下層 -->
-    <v-layer>
-      <v-rect :config="configNumerator"></v-rect>
-    </v-layer>
-    <!-- 分母（虛線部分和外框）在上層 -->
-    <v-layer>
-      <v-rect :config="configDenominatorBorder"></v-rect>
-      <v-shape :config="configDenominator"></v-shape>
-    </v-layer>
-  </v-stage>
+  <div ref="fractionChart" class="fraction-chart">
+    <v-stage :config="{ width: gameWidth, height: gameHeight }">
+      <v-layer>
+        <v-rect :config="configNumerator"></v-rect>
+      </v-layer>
+
+      <v-layer>
+        <v-rect :config="configDenominatorBorder"></v-rect>
+        <v-shape :config="configDenominator"></v-shape>
+      </v-layer>
+    </v-stage>
+  </div>
 </template>
 
 <script>
@@ -21,17 +22,21 @@ const SHAPE_CONFIGS = {
   },
   rect: {
     widthRatio: 0.8,
-    heightRatio: 0.2,
+    heightRatio: 0.6,
     xOffset: 0.1,
-    yOffset: 0.4,
+    yOffset: 0.2,
   },
 };
 
 export default {
   name: "FractionChart",
+  data() {
+    return {
+      gameWidth: 150,
+      gameHeight: 150,
+    };
+  },
   props: {
-    gameWidth: { type: Number, required: true },
-    gameHeight: { type: Number, required: true },
     numerator: { type: Number, required: true },
     denominator: { type: Number, required: true },
     shape: { type: String, required: true }, // circle 或 rect
@@ -57,7 +62,21 @@ export default {
         : null;
     },
   },
+  beforeMount() {
+    this.$nextTick(() => {
+      this.initializeScene();
+    });
+  },
   methods: {
+    initializeScene() {
+      const fractionChart = this.$refs.fractionChart;
+      if (fractionChart) {
+        this.gameWidth = fractionChart.offsetWidth * 0.8; // 確保有預設值
+        this.gameHeight = fractionChart.offsetHeight * 0.8; // 確保有預設值
+      } else {
+        console.error("FractionChart not found!");
+      }
+    },
     getCircleConfig(fillRatio, config) {
       return {
         radius: this.gameWidth * config.radiusRatio,
@@ -159,3 +178,11 @@ export default {
   },
 };
 </script>
+
+<style scoped lang="scss">
+.fraction-chart {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+</style>
