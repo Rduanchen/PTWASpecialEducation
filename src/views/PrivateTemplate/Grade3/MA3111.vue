@@ -1,26 +1,32 @@
 <template>
   <div class="game">
-    <FractionDisplay
-      :data="GameData.question"
-      class="fraction"
-    ></FractionDisplay>
-    <div ref="fractionChart" class="fraction-chart">
-      <FractionChart
-        :gameWidth="chartWidth"
-        :gameHeight="chartHeight"
-        :numerator="numerator"
-        :denominator="denominator"
-        :shape="shape"
-        @mounted="calculateChartSize"
-      ></FractionChart>
+    <div class="game__question-area">
+      <h1 class="game__question-description">{{ questionDescription }}</h1>
     </div>
-    <DragFraction
-      :Data="configFraction"
-      :ID="id"
-      @getAnswer="drag"
-      class="answer-area"
-    ></DragFraction>
-    <button class="check-answer-btn" @click="checkAnswer">確認答案</button>
+    <div class="game__interaction-area">
+      <div class="game__fraction-panel">
+        <FractionDisplay
+          :data="questionFraction"
+          class="game__fraction-display"
+        ></FractionDisplay>
+        <FractionChart
+          :numerator="numerator"
+          :denominator="denominator"
+          :shape="shape"
+          @mounted="calculateChartSize"
+          class="game__chart-container"
+        ></FractionChart>
+        <button class="game__check-answer-btn" @click="checkAnswer">
+          確認答案
+        </button>
+      </div>
+      <DragFraction
+        :Data="configFraction"
+        :ID="id"
+        @getAnswer="drag"
+        class="game__answer-area"
+      ></DragFraction>
+    </div>
   </div>
 </template>
 
@@ -60,6 +66,8 @@ export default {
       denominator: this.GameData.answerData.answer.denominator, // 分母
       isAnswerCorrect: false,
       shape: this.GameData.answerData.shape,
+      questionDescription: this.GameData.question.description,
+      questionFraction: this.GameData.question.fraction,
     };
   },
   computed: {},
@@ -84,62 +92,70 @@ export default {
       }
     },
   },
-  mounted() {
-    window.addEventListener("resize", this.calculateChartSize);
-    this.$nextTick(() => {
-      setTimeout(() => {
-        this.calculateChartSize();
-      }, 200);
-    });
-  },
-
-  beforeUnmount() {
-    window.removeEventListener("resize", this.calculateChartSize); // 移除事件監聽器
-  },
 };
 </script>
 
 <style scoped lang="scss">
 .game {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  gap: 0.5rem;
   height: 100%;
   width: 100%;
   justify-content: space-between;
-  gap: 0.5rem;
-  position: relative; /* 為了讓按鈕的定位參考 .game 容器 */
 }
 
-.game-section {
+.game__question-area {
+  display: flex;
+  height: 15%;
+  padding: $padding--small;
+  align-items: center;
+  @extend .game-section--border;
+}
+
+.game__question-description {
+  font-size: $text-large;
+  margin: 0;
+}
+
+.game__interaction-area {
+  display: flex;
+  align-items: center;
+  height: 80%;
+  width: 100%;
+}
+
+.game__fraction-panel {
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+  height: 100%;
+  padding: $padding--small;
+}
+
+.game__fraction-display {
+  flex: 2;
+}
+
+.game__chart-container {
+  flex: 3;
+  justify-content: center;
+  align-items: center;
+}
+
+.game__answer-area {
+  width: 70%;
+  height: 100%;
+}
+
+.game__check-answer-btn {
+  flex: 1;
+  border: none;
+  background-color: #aabdc3;
+}
+
+.game-section--border {
   border: $border--normal solid #000;
   border-radius: $border-radius;
-  gap: $gap--small;
-  padding: $padding--small;
-  height: 80%;
-}
-
-.fraction {
-  flex: 1;
-  min-width: 150px; // 確保有最小寬高
-  min-height: 150px; // 確保有最小寬高
-  @extend .game-section;
-}
-
-.fraction-chart {
-  flex: 1;
-  @extend .game-section;
-}
-
-.answer-area {
-  flex: 2;
-  @extend .game-section;
-}
-
-/* 確認答案按鈕固定在右下角 */
-.check-answer-btn {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-  @extend .button-basic;
 }
 </style>

@@ -11,7 +11,10 @@
   "Questions": [
     [
       {
-        "question": "\\frac{2}{2}",
+        "question": {
+          "fraction": "\\frac{2}{2}",
+          "description": "用分數板排排看，並回答問題"
+        },
         "answerData": {
           "shape": "circle",
           "verifyOption": "answer",
