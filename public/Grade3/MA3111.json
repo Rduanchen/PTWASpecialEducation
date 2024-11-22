@@ -11,7 +11,10 @@
   "Questions": [
     [
       {
-        "question": "\\frac{2}{2}",
+        "question": {
+          "fraction": "\\frac{2}{2}",
+          "description": "用分數板排排看，並回答問題"
+        },
         "answerData": {
           "shape": "circle",
           "verifyOption": "answer",
@@ -22,7 +25,10 @@
         }
       },
       {
-        "question": "\\frac{3}{3}",
+        "question": {
+          "fraction": "\\frac{3}{3}",
+          "description": "用分數板排排看，並回答問題"
+        },
         "answerData": {
           "shape": "circle",
           "verifyOption": "answer",
@@ -33,7 +39,10 @@
         }
       },
       {
-        "question": "\\frac{4}{4}",
+        "question": {
+          "fraction": "\\frac{4}{4}",
+          "description": "用分數板排排看，並回答問題"
+        },
         "answerData": {
           "shape": "rect",
           "verifyOption": "answer",
@@ -44,7 +53,10 @@
         }
       },
       {
-        "question": "\\frac{2}{2}",
+        "question": {
+          "fraction": "\\frac{2}{2}",
+          "description": "用分數板排排看，並回答問題"
+        },
         "answerData": {
           "shape": "rect",
           "verifyOption": "answer",
@@ -55,7 +67,10 @@
         }
       },
       {
-        "question": "\\frac{3}{3}",
+        "question": {
+          "fraction": "\\frac{3}{3}",
+          "description": "用分數板排排看，並回答問題"
+        },
         "answerData": {
           "shape": "rect",
           "verifyOption": "answer",
@@ -68,7 +83,10 @@
     ],
     [
       {
-        "question": "\\frac{4}{4}",
+        "question": {
+          "fraction": "\\frac{4}{4}",
+          "description": "用分數板排排看，並回答問題"
+        },
         "answerData": {
           "shape": "circle",
           "verifyOption": "answer",
@@ -79,7 +97,10 @@
         }
       },
       {
-        "question": "\\frac{5}{5}",
+        "question": {
+          "fraction": "\\frac{5}{5}",
+          "description": "用分數板排排看，並回答問題"
+        },
         "answerData": {
           "shape": "circle",
           "verifyOption": "answer",
@@ -90,7 +111,10 @@
         }
       },
       {
-        "question": "\\frac{6}{6}",
+        "question": {
+          "fraction": "\\frac{6}{6}",
+          "description": "用分數板排排看，並回答問題"
+        },
         "answerData": {
           "shape": "rect",
           "verifyOption": "answer",
@@ -101,7 +125,10 @@
         }
       },
       {
-        "question": "\\frac{4}{4}",
+        "question": {
+          "fraction": "\\frac{4}{4}",
+          "description": "用分數板排排看，並回答問題"
+        },
         "answerData": {
           "shape": "rect",
           "verifyOption": "answer",
@@ -112,7 +139,10 @@
         }
       },
       {
-        "question": "\\frac{5}{5}",
+        "question": {
+          "fraction": "\\frac{5}{5}",
+          "description": "用分數板排排看，並回答問題"
+        },
         "answerData": {
           "shape": "rect",
           "verifyOption": "answer",
@@ -125,7 +155,10 @@
     ],
     [
       {
-        "question": "\\frac{6}{6}",
+        "question": {
+          "fraction": "\\frac{6}{6}",
+          "description": "用分數板排排看，並回答問題"
+        },
         "answerData": {
           "shape": "circle",
           "verifyOption": "answer",
@@ -136,7 +169,10 @@
         }
       },
       {
-        "question": "\\frac{7}{7}",
+        "question": {
+          "fraction": "\\frac{7}{7}",
+          "description": "用分數板排排看，並回答問題"
+        },
         "answerData": {
           "shape": "circle",
           "verifyOption": "answer",
@@ -147,7 +183,10 @@
         }
       },
       {
-        "question": "\\frac{4}{4}",
+        "question": {
+          "fraction": "\\frac{4}{4}",
+          "description": "用分數板排排看，並回答問題"
+        },
         "answerData": {
           "shape": "rect",
           "verifyOption": "answer",
@@ -158,7 +197,10 @@
         }
       },
       {
-        "question": "\\frac{7}{7}",
+        "question": {
+          "fraction": "\\frac{7}{7}",
+          "description": "用分數板排排看，並回答問題"
+        },
         "answerData": {
           "shape": "rect",
           "verifyOption": "answer",
@@ -169,7 +211,10 @@
         }
       },
       {
-        "question": "\\frac{8}{8}",
+        "question": {
+          "fraction": "\\frac{8}{8}",
+          "description": "用分數板排排看，並回答問題"
+        },
         "answerData": {
           "shape": "rect",
           "verifyOption": "answer",
@@ -182,7 +227,10 @@
     ],
     [
       {
-        "question": "\\frac{10}{10}",
+        "question": {
+          "fraction": "\\frac{10}{10}",
+          "description": "用分數板排排看，並回答問題"
+        },
         "answerData": {
           "shape": "circle",
           "verifyOption": "answer",
@@ -193,7 +241,10 @@
         }
       },
       {
-        "question": "\\frac{9}{9}",
+        "question": {
+          "fraction": "\\frac{9}{9}",
+          "description": "用分數板排排看，並回答問題"
+        },
         "answerData": {
           "shape": "circle",
           "verifyOption": "answer",
@@ -204,7 +255,10 @@
         }
       },
       {
-        "question": "\\frac{9}{9}",
+        "question": {
+          "fraction": "\\frac{9}{9}",
+          "description": "用分數板排排看，並回答問題"
+        },
         "answerData": {
           "shape": "rect",
           "verifyOption": "answer",
@@ -215,7 +269,10 @@
         }
       },
       {
-        "question": "\\frac{9}{9}",
+        "question": {
+          "fraction": "\\frac{9}{9}",
+          "description": "用分數板排排看，並回答問題"
+        },
         "answerData": {
           "shape": "rect",
           "verifyOption": "answer",
@@ -226,7 +283,10 @@
         }
       },
       {
-        "question": "\\frac{8}{8}",
+        "question": {
+          "fraction": "\\frac{8}{8}",
+          "description": "用分數板排排看，並回答問題"
+        },
         "answerData": {
           "shape": "rect",
           "verifyOption": "answer",
@@ -239,7 +299,10 @@
     ],
     [
       {
-        "question": "\\frac{11}{11}",
+        "question": {
+          "fraction": "\\frac{11}{11}",
+          "description": "用分數板排排看，並回答問題"
+        },
         "answerData": {
           "shape": "circle",
           "verifyOption": "answer",
@@ -250,7 +313,10 @@
         }
       },
       {
-        "question": "\\frac{12}{12}",
+        "question": {
+          "fraction": "\\frac{12}{12}",
+          "description": "用分數板排排看，並回答問題"
+        },
         "answerData": {
           "shape": "circle",
           "verifyOption": "answer",
@@ -261,7 +327,10 @@
         }
       },
       {
-        "question": "\\frac{10}{10}",
+        "question": {
+          "fraction": "\\frac{10}{10}",
+          "description": "用分數板排排看，並回答問題"
+        },
         "answerData": {
           "shape": "rect",
           "verifyOption": "answer",
@@ -272,7 +341,10 @@
         }
       },
       {
-        "question": "\\frac{12}{12}",
+        "question": {
+          "fraction": "\\frac{12}{12}",
+          "description": "用分數板排排看，並回答問題"
+        },
         "answerData": {
           "shape": "rect",
           "verifyOption": "answer",
@@ -283,7 +355,10 @@
         }
       },
       {
-        "question": "\\frac{11}{11}",
+        "question": {
+          "fraction": "\\frac{11}{11}",
+          "description": "用分數板排排看，並回答問題"
+        },
         "answerData": {
           "shape": "rect",
           "verifyOption": "answer",
