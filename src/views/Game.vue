@@ -625,18 +625,6 @@ export default {
             this.EffectWindow = false;
           }, 3000);
           break;
-        case "HarraySound": //Wait for remove
-          console.warn(
-            "HarraySound is Deprecated, Please use FireWorkAnimation instead"
-          );
-          sound = new Audio();
-          sound.src = ImportUrl.GetSystemAssetsFile("harray.mp3", "effects");
-          sound.src = ImportUrl.GetSystemEffectAssetsFile("harray.mp3");
-          soundManager.playSound(`harray`, false);
-          sound.oncanplaythrough = function () {
-            sound.play();
-          };
-          break;
         case "CorrectAnimation":
           this.CorrectIncorrect.Status = "Correct";
           this.ShowReply = true;
