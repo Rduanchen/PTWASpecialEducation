@@ -385,4 +385,9 @@ export default {
     font-size: x-large;
   }
 }
+:deep(.number-board-container) {
+  height: 70%;
+  width: 90%;
+  font-size: 1.2rem;
+}
 </style>

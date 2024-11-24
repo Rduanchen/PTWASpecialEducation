@@ -26,7 +26,7 @@
           @virtualpadinput-pop="Pop"
         ></VirtualNumPad>
       </div>
-      <button @click="CheckAnswer" class="button--submit">送出答案</button>
+      <button @click="CheckAnswer" class="button--submit">檢查答案</button>
     </div>
     {{ NowSelect }}
   </div>

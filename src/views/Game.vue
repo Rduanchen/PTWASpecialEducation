@@ -69,6 +69,11 @@
                   @timer-start="startTimer"
                   @timer-pause="pauseTimer"
                   @timer-reset="resetTimer"
+                  @scratch-sheet="
+                    () => {
+                      scratchSheetVisible = true;
+                    }
+                  "
                 >
                 </component>
               </div>
