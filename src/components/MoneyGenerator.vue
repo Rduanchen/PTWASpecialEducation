@@ -8,14 +8,14 @@
     }"
   >
     <div
-      class="Up MoneyContainer"
+      class="Up MoneyContainer papaer-money"
       :key="containerRef"
       v-if="this.Data.Thousands || this.Data.FiveHundreds"
     >
       <img v-for="item in UpContainer" :src="item" />
     </div>
     <div
-      class="Middle MoneyContainer"
+      class="Middle MoneyContainer papaer-money"
       :key="containerRef"
       v-if="this.Data.Hundreds"
     >
@@ -169,22 +169,27 @@ export default {
     grid-template-rows: repeat(4,1fr); */
   gap: 10px;
 }
+.papaer-money {
+  img {
+    height: 70px;
+  }
+}
 .MoneyContainer {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   grid-template-rows: repeat(auto-fill, 1fr);
   gap: 10px;
 }
-img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
 .CoinContainer {
   display: flex;
   flex-direction: row;
   width: 100%;
   max-height: 40px;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
   .PerCoin {
     display: flex;
     justify-content: end;
