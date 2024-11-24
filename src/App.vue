@@ -1,5 +1,5 @@
 <script setup>
-import { RouterView } from 'vue-router'
+import { RouterView } from "vue-router";
 </script>
 
 <template>
@@ -11,35 +11,36 @@ import { RouterView } from 'vue-router'
   <!-- <router-view /> -->
 </template>
 <script>
-import fetchJson from '@/utilitys/fetch-json.js';
+import fetchJson from "@/utilitys/fetch-json.js";
 export default {
-  name: 'App',
+  name: "App",
 };
 </script>
 <style lang="scss">
 @font-face {
-  font-family: 'YuanQuan';
-  src: url('@/assets/fonts/YuanQuan/BpmfGenSenRounded-M.ttf') format('truetype');
+  font-family: "YuanQuan";
+  src: url("@/assets/fonts/YuanQuan/BpmfGenSenRounded-M.ttf") format("truetype");
 }
 .navbar {
-  background-color: #57B9D9; 
-  height: 10vh; 
-  width: 100%; 
+  background-color: #57b9d9;
+  height: 10vh;
+  width: 100%;
   margin: 0;
   .navbar-brand {
-    img{
-        max-width: 70%
+    img {
+      max-width: 70%;
     }
   }
   img {
     max-width: 80%;
   }
-  
 }
-.fade-enter-active, .fade-leave-active {
+.fade-enter-active,
+.fade-leave-active {
   transition: opacity 0.5s;
 }
-.fade-enter-from, .fade-leave-to {
+.fade-enter-from,
+.fade-leave-to {
   opacity: 0;
 }
 </style>
