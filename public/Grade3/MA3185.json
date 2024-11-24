@@ -1,5 +1,4 @@
 {
-  "TotalLevel": 4,
   "GameType": "CalculatorGame",
   "GameConfig": {},
   "Hint": {},
@@ -10,18 +9,17 @@
   "Questions": [
     [
       {
-        "Unit": "Number",
         "CarryAmount": 1,
-        "CustomeUnit": null,
+        "CustomeUnit": ["分", null, "時", null],
         "NumberAmount": 4,
         "Preset": {
-          "Number": ["456", "289"],
+          "Number": ["629", "3  "],
           "Symbol": "+"
         },
         "Answer": {
           "Carry": [],
-          "Answer": "745",
-          "Number": ["456", "289"],
+          "Answer": "929",
+          "Number": ["629", "3  "],
           "Symbol": "+"
         }
       },

@@ -27,10 +27,9 @@
           @virtualpadinput-pop="pop"
         ></VirtualNumPad>
         <button @click="checkAnswer" class="btn-submit">檢查答案</button>
+        <button @click="openScratchSheet" class="btn-submit">開啟畫筆</button>
       </div>
     </div>
-    {{ BoardReply }}
-    {{ markdownReply }}
   </div>
 </template>
 
@@ -65,14 +64,6 @@ export default {
   },
   data() {
     return {
-      // Add your component data here
-      //   GameData: {
-      //     questionText:
-      //       "請數數看錢幣，並且在以下的框框中以及定位版中輸入確的答案",
-      //     markdownIndex: `# 請輸入正確的答案 $n$ 1361是$i$個千、$i$ 個百、$i$個十、$i$個一合起來的`,
-      //     markdownInputIndex: [1, 3, 6, 1],
-      //     answer: 1361,
-      //   },
       moneyGeneratorData: {},
       markdownData: {
         Render: undefined,
@@ -84,25 +75,16 @@ export default {
       },
       BoardReply: undefined,
       markdownReply: undefined,
-      moneyGenerator: {
-        Thousands: 0,
-        FiveHundreds: 0,
-        Hundreds: 0,
-        Fifties: 0,
-        Tens: 0,
-        Fives: 0,
-        Ones: 0,
-      },
       answerArr: [],
       nowSelect: undefined,
     };
   },
   created() {
-    // Lifecycle hook when the component is created
     this.markdownData.Render = this.GameData.markdownIndex;
     this.numberInputData.Number = this.GameData.answer;
     this.markdownData.Answer = this.GameData.markdownInputIndex;
-    this.answerArr = this.GameData.answer.toString().split("");
+    // 如果答案不是四位數，則補齊
+    this.answerArr = this.GameData.moneyBoard;
     let diff = 4 - this.answerArr.length;
     for (let i = 0; i < diff; i++) {
       this.answerArr.unshift(0);
@@ -180,6 +162,9 @@ export default {
         this.$emit("play-effect", "WrongSound");
         this.$emit("add-record", ["不支援", "不支援", "錯誤"]);
       }
+    },
+    openScratchSheet() {
+      this.$emit("scratch-sheet");
     },
   },
   computed: {

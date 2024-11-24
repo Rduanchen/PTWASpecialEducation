@@ -16,21 +16,20 @@
     [
       {
         "QuestionText": "毫升公升比大小",
-        "Description": "毫升公升比大小",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
-        "OptionBarTitle": "在口裡填入>、<或= ",
         "Datas": [
           [
             {
               "Name": "TextOnly",
               "Data": {
-                "Text": "四公升"
+                "Text": "4公升"
               }
             },
             {
               "Name": "TextOnly",
               "Data": {
-                "Text": "四千毫升"
+                "Text": "4000毫升"
               }
             }
           ]
@@ -39,21 +38,20 @@
       },
       {
         "QuestionText": "毫升公升比大小",
-        "Description": "毫升公升比大小",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
-        "OptionBarTitle": "在口裡填入>、<或= ",
         "Datas": [
           [
             {
               "Name": "TextOnly",
               "Data": {
-                "Text": "三公升"
+                "Text": "3公升"
               }
             },
             {
               "Name": "TextOnly",
               "Data": {
-                "Text": "三千毫升"
+                "Text": "3000毫升"
               }
             }
           ]
@@ -62,21 +60,20 @@
       },
       {
         "QuestionText": "毫升公升比大小",
-        "Description": "毫升公升比大小",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
-        "OptionBarTitle": "在口裡填入>、<或= ",
         "Datas": [
           [
             {
               "Name": "TextOnly",
               "Data": {
-                "Text": "五公升"
+                "Text": "5公升"
               }
             },
             {
               "Name": "TextOnly",
               "Data": {
-                "Text": "五千毫升"
+                "Text": "5000毫升"
               }
             }
           ]
@@ -85,21 +82,20 @@
       },
       {
         "QuestionText": "毫升公升比大小",
-        "Description": "毫升公升比大小",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
-        "OptionBarTitle": "在口裡填入>、<或= ",
         "Datas": [
           [
             {
               "Name": "TextOnly",
               "Data": {
-                "Text": "九公升"
+                "Text": "9公升"
               }
             },
             {
               "Name": "TextOnly",
               "Data": {
-                "Text": "九千毫升"
+                "Text": "9000毫升"
               }
             }
           ]
@@ -108,21 +104,20 @@
       },
       {
         "QuestionText": "毫升公升比大小",
-        "Description": "毫升公升比大小",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
-        "OptionBarTitle": "在口裡填入>、<或= ",
         "Datas": [
           [
             {
               "Name": "TextOnly",
               "Data": {
-                "Text": "十公升"
+                "Text": "10公升"
               }
             },
             {
               "Name": "TextOnly",
               "Data": {
-                "Text": "一萬毫升"
+                "Text": "10000毫升"
               }
             }
           ]
@@ -133,9 +128,9 @@
     [
       {
         "QuestionText": "毫升公升比大小",
-        "Description": "毫升公升比大小",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
-        "OptionBarTitle": "在口裡填入>、<或= ",
+
         "Datas": [
           [
             {
@@ -156,9 +151,9 @@
       },
       {
         "QuestionText": "毫升公升比大小",
-        "Description": "毫升公升比大小",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
-        "OptionBarTitle": "在口裡填入>、<或= ",
+
         "Datas": [
           [
             {
@@ -179,9 +174,9 @@
       },
       {
         "QuestionText": "毫升公升比大小",
-        "Description": "毫升公升比大小",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
-        "OptionBarTitle": "在口裡填入>、<或= ",
+
         "Datas": [
           [
             {
@@ -202,9 +197,9 @@
       },
       {
         "QuestionText": "毫升公升比大小",
-        "Description": "毫升公升比大小",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
-        "OptionBarTitle": "在口裡填入>、<或= ",
+
         "Datas": [
           [
             {
@@ -225,9 +220,9 @@
       },
       {
         "QuestionText": "毫升公升比大小",
-        "Description": "毫升公升比大小",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
-        "OptionBarTitle": "在口裡填入>、<或= ",
+
         "Datas": [
           [
             {
@@ -250,67 +245,20 @@
     [
       {
         "QuestionText": "毫升公升比大小",
-        "Description": "毫升公升比大小",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
-        "OptionBarTitle": "在口裡填入>、<或= ",
         "Datas": [
           [
             {
               "Name": "TextOnly",
               "Data": {
-                "Text": "十七毫升"
+                "Text": "1公升"
               }
             },
             {
               "Name": "TextOnly",
               "Data": {
-                "Text": "十七公升"
-              }
-            }
-          ]
-        ],
-        "Answer": ["Small"]
-      },
-      {
-        "QuestionText": "毫升公升比大小",
-        "Description": "毫升公升比大小",
-        "SlotComponentVerifycation": true,
-        "OptionBarTitle": "在口裡填入>、<或= ",
-        "Datas": [
-          [
-            {
-              "Name": "TextOnly",
-              "Data": {
-                "Text": "二十毫升"
-              }
-            },
-            {
-              "Name": "TextOnly",
-              "Data": {
-                "Text": "二十公升"
-              }
-            }
-          ]
-        ],
-        "Answer": ["Small"]
-      },
-      {
-        "QuestionText": "毫升公升比大小",
-        "Description": "毫升公升比大小",
-        "SlotComponentVerifycation": true,
-        "OptionBarTitle": "在口裡填入>、<或= ",
-        "Datas": [
-          [
-            {
-              "Name": "TextOnly",
-              "Data": {
-                "Text": "五十公升"
-              }
-            },
-            {
-              "Name": "TextOnly",
-              "Data": {
-                "Text": "五十毫升"
+                "Text": "100毫升"
               }
             }
           ]
@@ -319,21 +267,20 @@
       },
       {
         "QuestionText": "毫升公升比大小",
-        "Description": "毫升公升比大小",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
-        "OptionBarTitle": "在口裡填入>、<或= ",
         "Datas": [
           [
             {
               "Name": "TextOnly",
               "Data": {
-                "Text": "五毫升"
+                "Text": "200毫升"
               }
             },
             {
               "Name": "TextOnly",
               "Data": {
-                "Text": "五公升"
+                "Text": "2公升"
               }
             }
           ]
@@ -342,34 +289,77 @@
       },
       {
         "QuestionText": "毫升公升比大小",
-        "Description": "毫升公升比大小",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
-        "OptionBarTitle": "在口裡填入>、<或= ",
         "Datas": [
           [
             {
               "Name": "TextOnly",
               "Data": {
-                "Text": "一公升"
+                "Text": "1公升"
               }
             },
             {
               "Name": "TextOnly",
               "Data": {
-                "Text": "一毫升"
+                "Text": "1000毫升"
               }
             }
           ]
         ],
-        "Answer": ["Big"]
+        "Answer": ["Equal"]
+      },
+      {
+        "QuestionText": "毫升公升比大小",
+        "Description": "在框框裡拖入>、<或= ",
+        "SlotComponentVerifycation": true,
+        "Datas": [
+          [
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "300毫升"
+              }
+            },
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "3公升"
+              }
+            }
+          ]
+        ],
+        "Answer": ["Small"]
+      },
+      {
+        "QuestionText": "毫升公升比大小",
+        "Description": "在框框裡拖入>、<或= ",
+        "SlotComponentVerifycation": true,
+        "Datas": [
+          [
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "2公升"
+              }
+            },
+            {
+              "Name": "TextOnly",
+              "Data": {
+                "Text": "2000毫升"
+              }
+            }
+          ]
+        ],
+        "Answer": ["Equal"]
       }
     ],
     [
       {
         "QuestionText": "毫升公升比大小",
-        "Description": "毫升公升比大小",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
-        "OptionBarTitle": "在口裡填入>、<或= ",
+
         "Datas": [
           [
             {
@@ -390,9 +380,9 @@
       },
       {
         "QuestionText": "毫升公升比大小",
-        "Description": "毫升公升比大小",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
-        "OptionBarTitle": "在口裡填入>、<或= ",
+
         "Datas": [
           [
             {
@@ -413,9 +403,9 @@
       },
       {
         "QuestionText": "毫升公升比大小",
-        "Description": "毫升公升比大小",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
-        "OptionBarTitle": "在口裡填入>、<或= ",
+
         "Datas": [
           [
             {
@@ -436,9 +426,9 @@
       },
       {
         "QuestionText": "毫升公升比大小",
-        "Description": "毫升公升比大小",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
-        "OptionBarTitle": "在口裡填入>、<或= ",
+
         "Datas": [
           [
             {
@@ -459,9 +449,9 @@
       },
       {
         "QuestionText": "毫升公升比大小",
-        "Description": "毫升公升比大小",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
-        "OptionBarTitle": "在口裡填入>、<或= ",
+
         "Datas": [
           [
             {
@@ -484,9 +474,9 @@
     [
       {
         "QuestionText": "毫升公升比大小",
-        "Description": "毫升公升比大小",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
-        "OptionBarTitle": "在口裡填入>、<或= ",
+
         "Datas": [
           [
             {
@@ -507,9 +497,9 @@
       },
       {
         "QuestionText": "毫升公升比大小",
-        "Description": "毫升公升比大小",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
-        "OptionBarTitle": "在口裡填入>、<或= ",
+
         "Datas": [
           [
             {
@@ -530,9 +520,9 @@
       },
       {
         "QuestionText": "毫升公升比大小",
-        "Description": "毫升公升比大小",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
-        "OptionBarTitle": "在口裡填入>、<或= ",
+
         "Datas": [
           [
             {
@@ -553,9 +543,9 @@
       },
       {
         "QuestionText": "毫升公升比大小",
-        "Description": "毫升公升比大小",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
-        "OptionBarTitle": "在口裡填入>、<或= ",
+
         "Datas": [
           [
             {
@@ -576,9 +566,9 @@
       },
       {
         "QuestionText": "毫升公升比大小",
-        "Description": "毫升公升比大小",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
-        "OptionBarTitle": "在口裡填入>、<或= ",
+
         "Datas": [
           [
             {

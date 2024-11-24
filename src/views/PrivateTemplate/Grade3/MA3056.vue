@@ -3,15 +3,16 @@
     <div class="head-container">
       {{ this.GameData.headQuestion }}
     </div>
-    <div class="game-area" style="border: solid">
+    <div class="game-area">
       <DrawShapes
+        id="draw-shapes"
         :Data="configDrawShapes"
         :ID="this.id"
         @replyAnswer="getComponentsReply"
       ></DrawShapes>
     </div>
+    <button class="submit-btn" @click="checkAnswer">檢查答案</button>
   </div>
-  {{ componentsReplyAnswer }}
 </template>
 
 <script>
@@ -25,23 +26,46 @@ export default {
     return {
       id: "MA3056",
       componentsReplyAnswer: false,
-      GameData: {
-        headQuestion: "Draw a rectangle with 5 units long and 3 units wide.",
-        formVerify: {
-          type: "rect",
-          answer: [2, 2],
-        },
-      },
       configDrawShapes: {
         verifyOption: "rect", //none, rect, shape
         answer: [5, 3], //[5, 3], // triangle, rectangle, trapezium, parallelogram
+        bgRatio: {
+          width: 10,
+          height: 10,
+        },
       },
     };
+  },
+  props: {
+    GameConfig: {
+      type: Object,
+      required: true,
+    },
+    GameData: {
+      type: Object,
+      required: true,
+    },
+    id: {
+      type: String,
+      required: true,
+    },
+  },
+  created() {
+    // Add your created methods here
+    this.configDrawShapes.answer = this.GameData.answer;
   },
   methods: {
     // Add your component methods here
     getComponentsReply(answer) {
       this.componentsReplyAnswer = answer;
+    },
+    checkAnswer() {
+      if (this.componentsReplyAnswer) {
+        this.$emit("play-effect", "CorrectSound");
+        this.$emit("next-question");
+      } else {
+        this.$emit("play-effect", "WrongSound");
+      }
     },
   },
   computed: {
@@ -52,22 +76,29 @@ export default {
 
 <style scoped lang="scss">
 .outter-container {
-  display: grid;
-  grid-template-rows: 1fr 5fr;
+  display: flex;
+  flex-direction: column;
   gap: $gap--medium;
-  max-height: 100vh !important;
   .head-container {
     @extend .container-basic;
     background-color: $primary-color;
     padding: $gap--small;
+    display: flex;
+    align-items: center;
+    font-size: $text-large;
   }
   .game-area {
     border-radius: $border-radius;
-    padding: $gap--small;
-    DrawShapes {
-      width: 500px;
-      height: 500px;
+    display: flex;
+    justify-content: center;
+    #draw-shapes {
+      width: 30%;
     }
+  }
+  .submit-btn {
+    @extend .button--animation;
+    height: 4rem;
+    background-color: $submit-color;
   }
 }
 </style>

@@ -8,7 +8,7 @@
         :Data="this.GameData.waterContainer"
         @updateML="recordAnswer"
       />
-      <button class="submit-btn" @click="checkAnswer">確認送出</button>
+      <button class="submit-btn" @click="checkAnswer">檢查答案</button>
     </div>
   </div>
 </template>
@@ -31,7 +31,7 @@ export default {
     id: {
       type: String,
       required: true,
-    }
+    },
   },
   data() {
     return {
@@ -47,10 +47,18 @@ export default {
       if (this.replyAnswerCache === this.GameData.answer) {
         this.$emit("play-effect", "CorrectSound");
         this.$emit("next-question");
-        this.$emit("add-record", [this.GameData.answer, this.replyAnswerCache, "正確"]); 
+        this.$emit("add-record", [
+          this.GameData.answer,
+          this.replyAnswerCache,
+          "正確",
+        ]);
       } else {
         this.$emit("play-effect", "WrongSound");
-        this.$emit("add-record", [this.GameData.answer, this.replyAnswerCache, "錯誤"]);
+        this.$emit("add-record", [
+          this.GameData.answer,
+          this.replyAnswerCache,
+          "錯誤",
+        ]);
       }
     },
   },
