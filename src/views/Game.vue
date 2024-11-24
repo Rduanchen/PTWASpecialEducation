@@ -829,9 +829,6 @@ export default {
     BalloonShooting: defineAsyncComponent(() =>
       import("@/views/GameTemplate/BalloonShooting.vue")
     ),
-    DragFraction: defineAsyncComponent(() =>
-      import("@/views/GameTemplate/DragFractionTester.vue")
-    ), //for testing only
     NumberLock: defineAsyncComponent(() =>
       import("@/views/GameTemplate/NumberLock.vue")
     ),
