@@ -45,12 +45,12 @@ export default {
   components: {
     circleFraction: defineAsyncComponent(() =>
       import(
-        "@/components/components-utilitys/drag-fraction/dragFractionCircle.vue"
+        "@/components/components-utilitys/drag-fraction/DragFractionCircle.vue"
       )
     ),
     rectFraction: defineAsyncComponent(() =>
       import(
-        "@/components/components-utilitys/drag-fraction/dragFractionRect.vue"
+        "@/components/components-utilitys/drag-fraction/DragFractionRect.vue"
       )
     ),
   },
