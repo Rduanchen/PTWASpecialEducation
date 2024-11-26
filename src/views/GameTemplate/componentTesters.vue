@@ -5,7 +5,8 @@
       <option>fraction</option>
       <option>drawShapes</option>
       <option>dragToAlign</option>
-      <option selected>dragImages</option>
+      <option>dragImages</option>
+      <option selected>scale</option>
     </select>
   </div>
   <div v-if="tester == 'fraction'">
@@ -35,6 +36,9 @@
   <div v-if="tester == 'dragImages'">
     <dragImages :Data="configDragImages" :ID="id"></dragImages>
   </div>
+  <div v-if="tester == 'scale'">
+    <scale :Data="configScale" :ID="id" @replyAnswer="printAns"></scale>
+  </div>
 </template>
 
 <script>
@@ -58,10 +62,11 @@ export default {
     dragImages: defineAsyncComponent(() =>
       import("@/components/DragImages.vue")
     ),
+    scale: defineAsyncComponent(() => import("@/components/Scale.vue")),
   },
   data() {
     return {
-      tester: "dragImages",
+      tester: "scale",
       configFraction: {
         verifyOption: "answer",
         shape: "circle",
@@ -112,14 +117,23 @@ export default {
         ],
         background: "black",
       },
+      configScale: {
+        answer: 100,
+        //customScaleSrc: "sugar.png",
+      },
       id: "Dev0105",
     };
   },
   methods: {
     printAns(x) {
       console.log(x);
-      if (x) alert("correct! (3*5)");
     },
   },
 };
 </script>
+
+<style scoped>
+div {
+  width: 70%;
+}
+</style>
