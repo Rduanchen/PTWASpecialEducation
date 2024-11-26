@@ -1,33 +1,34 @@
 <template>
-  <div ref="container">
-    <h2>{{ GameData.Question }}</h2>
-    <v-stage :config="configKonva">
-      <v-layer>
-        <v-rect :config="configBG"></v-rect>
-      </v-layer>
-    </v-stage>
+  <div class="gameContainer">
+    <div class="gameTitle">title</div>
+    <div class="gameArea">
+      <div class="gameImage">image</div>
+      <div class="scale">
+        <scale :Data="scaleData" :ID="id"></scale>
+        <button>btn</button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import { getGameAssets } from "@/utilitys/get_assets.js";
-import * as canvasTools from "@/utilitys/canvasTools.js";
 import { defineAsyncComponent } from "vue";
 export default {
-  components: {},
+  components: {
+    scale: defineAsyncComponent(() => import("@/components/Scale.vue")),
+  },
   data() {
     return {
-      configKonva: {},
-      configBG: {
-        x: 0,
-        y: 0,
-        fill: "gray",
-        stroke: "gray",
-      },
+      scaleData: {},
     };
   },
 
   props: {
+    id: {
+      type: String,
+      required: true,
+    },
     GameData: {
       type: Object,
       required: true,
@@ -46,14 +47,38 @@ export default {
   },
 
   methods: {
-    initializeScene() {
-      this.gameWidth = this.$refs.container.clientWidth;
-      this.configKonva.width = this.gameWidth;
-      this.configKonva.height = this.gameWidth / 2;
-      this.configBG.width = this.gameWidth;
-      this.configBG.height = this.gameWidth / 2;
-    },
+    initializeScene() {},
     update() {},
   },
 };
 </script>
+<style scoped>
+.gameContainer {
+  width: 100%;
+  height: 100%;
+  background-color: black;
+}
+.gameTitle {
+  width: 100%;
+  height: 15%;
+  background-color: blueviolet;
+}
+.gameArea {
+  width: 100%;
+  height: 85%;
+  display: flex;
+  background-color: blue;
+}
+.gameImage {
+  width: 60%;
+  background-color: brown;
+}
+.scale {
+  width: 40%;
+  background-color: aquamarine;
+}
+button {
+  width: 100%;
+  height: 12%;
+}
+</style>
