@@ -17,7 +17,7 @@
         <p class="answer-area__title">{{ GameData.InitBox }}</p>
         <draggable
           :list="Items"
-          item-key="id"
+          item-key="Tag"
           :sort="false"
           group="SelectItem"
           class="answer-area__drag--list"
@@ -38,7 +38,7 @@
           <p class="drop-area__title">{{ GameData.Answer[index].GroupName }}</p>
           <draggable
             :list="Groups[index]"
-            item-key="id"
+            item-key="Tag"
             :sort="false"
             group="SelectItem"
             class="drop-area__list"
