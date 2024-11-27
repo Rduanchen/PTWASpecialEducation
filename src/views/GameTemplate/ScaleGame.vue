@@ -126,9 +126,10 @@ img {
   width: 100%;
   height: 88%;
   margin-bottom: 1%;
+  padding: 2%;
 }
 .scale {
-  height: 95%;
+  height: 100%;
   aspect-ratio: 1;
 }
 .btnContainer {
