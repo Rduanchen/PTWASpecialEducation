@@ -1,16 +1,19 @@
 <template>
   <div class="gameContainer">
     <div class="gameTitle">
-      {{ GameData.Question }}
+      <h2>{{ GameData.question }}</h2>
     </div>
     <div class="gameArea">
-      <div class="gameImage">image</div>
+      <div class="gameImage"><img :src="questionImg" /></div>
       <div class="scaleArea">
         <div class="scaleContainer">
-          <div class="scale"><scale :Data="scaleData" :ID="id"></scale></div>
+          <div class="scale">
+            <scale :Data="scaleData" :ID="id" @replyAnswer="getAnswer"></scale>
+          </div>
         </div>
-
-        <button>btn</button>
+        <div class="btnContainer">
+          <button @click="checkAnswer"><h3>確認答案</h3></button>
+        </div>
       </div>
     </div>
   </div>
@@ -26,6 +29,8 @@ export default {
   data() {
     return {
       scaleData: {},
+      questionImg: null,
+      answer: 0,
     };
   },
 
@@ -47,13 +52,29 @@ export default {
   emits: ["play-effect", "add-record", "next-question"],
 
   mounted() {
-    console.log();
-    this.initializeScene();
+    this.questionImg = getGameAssets(this.id, this.GameData.imageSrc);
+    this.initializeScale();
   },
 
   methods: {
-    initializeScene() {},
-    update() {},
+    initializeScale() {
+      if (this.GameData.customOptions.scaleBG == null)
+        this.scaleData.customScaleSrc = null;
+      else this.scaleData.customScaleSrc = this.GameData.customOptions.scaleBG;
+    },
+    getAnswer(ans) {
+      this.answer = ans;
+    },
+    checkAnswer() {
+      if (this.answer == this.GameData.answer) {
+        this.$emit("play-effect", "CorrectSound");
+        this.$emit("add-record", [this.GameData.answer, this.answer, "正確"]);
+        this.$emit("next-question");
+      } else {
+        this.$emit("play-effect", "WrongSound");
+        this.$emit("add-record", [this.GameData.answer, this.answer, "錯誤"]);
+      }
+    },
   },
 };
 </script>
@@ -85,6 +106,12 @@ export default {
   border-radius: 25px;
   width: 46%;
   margin: 1%;
+  padding: 2%;
+}
+img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 .scaleArea {
   width: 50%;
@@ -101,15 +128,23 @@ export default {
   margin-bottom: 1%;
 }
 .scale {
-  background-color: blue;
   height: 95%;
   aspect-ratio: 1;
 }
-button {
+.btnContainer {
   border: 2px solid black;
   border-radius: 25px;
   width: 100%;
   height: 10%;
-  margin-top: 1%;
+  margin-top: 2%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+button {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: none;
 }
 </style>
