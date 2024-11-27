@@ -124,7 +124,7 @@ export default {
         }
         for (var z in this.Groups[i]) {
           if (
-            this.GameData.Answer[i]["Items"].includes(this.Groups[i][z].text)
+            this.GameData.Answer[i]["Items"].includes(this.Groups[i][z].Tag)
           ) {
             member++;
           }
