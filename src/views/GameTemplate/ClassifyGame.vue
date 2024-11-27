@@ -2,12 +2,12 @@
   <div class="custom-container">
     <div class="custom-container__header">
       <p class="custom-container__question">
-        {{ QuestionWord }}
+        {{ questionText }}
       </p>
       <button
         type="button"
         class="custom-container__submit-btn"
-        v-on:click="CheckAnswer()"
+        @click="checkAnswer()"
       >
         送出答案
       </button>
@@ -16,7 +16,7 @@
       <div class="answer-area__drag">
         <p class="answer-area__title">{{ GameData.InitBox }}</p>
         <draggable
-          :list="Items"
+          :list="draggableItems"
           item-key="Tag"
           :sort="false"
           group="SelectItem"
@@ -34,10 +34,13 @@
         </draggable>
       </div>
       <div class="answer-area__drop">
-        <div v-for="(items, index) in Groups" class="drop-area__container">
+        <div
+          v-for="(draggableItems, index) in groupedItems"
+          class="drop-area__container"
+        >
           <p class="drop-area__title">{{ GameData.Answer[index].GroupName }}</p>
           <draggable
-            :list="Groups[index]"
+            :list="groupedItems[index]"
             item-key="Tag"
             :sort="false"
             group="SelectItem"
@@ -59,10 +62,13 @@
   </div>
 </template>
 <script>
+const FAILURE_MESSAGES = {
+  SIZE_MISMATCH: "數量不匹配",
+  CONTENT_MISMATCH: "內容不匹配",
+};
+
 import draggable from "vuedraggable";
 import CardWithButton from "@/components/CardWithButton.vue";
-import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
-import { defineAsyncComponent } from "vue";
 import { getComponents } from "@/utilitys/get_components";
 export default {
   name: "ClassifyGame",
@@ -91,65 +97,77 @@ export default {
   },
   data() {
     return {
-      QuestionWord: "",
+      questionText: this.GameData.Text,
       GroupID: 0,
-      Groups: [],
-      Items: [],
+      groupedItems: this.GameData.Answer.map(() => []),
+      draggableItems: this.GameData.Question,
     };
   },
-  created() {
-    // this.icon= icon1;
-    this.QuestionWord = this.GameData.Text;
-    for (var i in this.GameData.Answer) {
-      this.Groups.push([]);
-    }
-    this.Items = this.GameData.Question;
-  },
+  created() {},
   methods: {
-    CheckAnswer() {
-      // This code will walk through all the groups and check if the answer is right
-      // Only when all the groups are right, the game will return true.
-      var member = 0;
-      for (var i in this.Groups) {
-        if (this.Groups[i].length != this.GameData.Answer[i]["Items"].length) {
-          console.log("ClassifyGame CheckAnswer :Wrong");
-          this.$emit("play-effect", "WrongSound");
-          this.$emit("add-record", [
-            this.Groups[i],
-            this.GameData.Answer[i]["Items"],
-            "錯誤",
-          ]);
-          console.log("here");
+    checkAnswer() {
+      for (let groupIndex in this.groupedItems) {
+        if (!this.isGroupSizeCorrect(groupIndex)) {
+          this.handleIncorrectAnswer(
+            groupIndex,
+            FAILURE_MESSAGES.SIZE_MISMATCH
+          );
           return;
         }
-        for (var z in this.Groups[i]) {
-          if (
-            this.GameData.Answer[i]["Items"].includes(this.Groups[i][z].Tag)
-          ) {
-            member++;
-          }
-        }
-        console.log(member);
-        if (member != this.GameData.Answer[i]["Items"].length) {
-          console.log("ClassifyGame CheckAnswer :Wrong");
-          this.$emit("play-effect", "WrongSound");
-          this.$emit("add-record", [
-            this.Groups[i],
-            this.GameData.Answer[i]["Items"],
-            "錯誤",
-          ]);
-          console.log("there");
+
+        if (!this.isGroupContentCorrect(groupIndex)) {
+          this.handleIncorrectAnswer(
+            groupIndex,
+            FAILURE_MESSAGES.CONTENT_MISMATCH
+          );
           return;
         }
-        member = 0;
-        this.$emit("add-record", [
-          this.Groups[i],
-          this.GameData.Answer[i]["Items"],
-          "正確",
-        ]);
-        this.$emit("play-effect", "CorrectSound");
-        this.$emit("next-question");
       }
+      this.handleCorrectAnswer();
+      this.emitNextQuestion();
+    },
+
+    isGroupSizeCorrect(index) {
+      return (
+        this.groupedItems[index].length ===
+        this.GameData.Answer[index].Items.length
+      );
+    },
+
+    countCorrectItems(index) {
+      return this.groupedItems[index].reduce((matchingItemCount, item) => {
+        return this.GameData.Answer[index].Items.includes(item.Tag)
+          ? matchingItemCount + 1
+          : matchingItemCount;
+      }, 0);
+    },
+
+    handleIncorrectAnswer(index) {
+      this.$emit("play-effect", "WrongSound");
+
+      this.$emit("add-record", [
+        this.groupedItems[index],
+        this.GameData.Answer[index].Items,
+        "錯誤",
+      ]);
+    },
+
+    handleCorrectAnswer() {
+      this.$emit("add-record", [
+        this.groupedItems,
+        this.GameData.Answer,
+        "正確",
+      ]);
+      this.$emit("play-effect", "CorrectSound");
+    },
+    emitNextQuestion() {
+      this.$emit("next-question");
+    },
+    isGroupContentCorrect(groupIndex) {
+      const correctItems = this.GameData.Answer[groupIndex].Items;
+      return this.groupedItems[groupIndex].every((item) =>
+        correctItems.includes(item.Tag)
+      );
     },
   },
 };
