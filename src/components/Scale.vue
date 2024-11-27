@@ -207,18 +207,8 @@ export default {
         if (this.getAnswer() != this.answer) {
           this.answer = this.getAnswer();
           this.configWeight.text = this.getAnswer();
-          if (this.Data.answer == null) {
-            this.$emit("ReplyAnswer", this.answer);
-            this.$emit("replyAnswer", this.answer);
-          } else {
-            if (this.answer == this.Data.answer) {
-              this.$emit("ReplyAnswer", true);
-              this.$emit("replyAnswer", true);
-            } else {
-              this.$emit("ReplyAnswer", false);
-              this.$emit("replyAnswer", false);
-            }
-          }
+          this.$emit("ReplyAnswer", this.answer);
+          this.$emit("replyAnswer", this.answer);
         }
       }
     },
