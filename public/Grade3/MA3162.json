@@ -129,32 +129,32 @@
           "Tag": "1",
           "Name": "ImageContainer",
           "Data": {
-            "Src": "2-1.png",
-            "Alt": "一個角度"
+            "Src": "2-1.PNG",
+            "Alt": ""
           }
         },
         {
           "Tag": "2",
           "Name": "ImageContainer",
           "Data": {
-            "Src": "2-2.png",
-            "Alt": "一個角度"
+            "Src": "2-2.PNG",
+            "Alt": ""
           }
         },
         {
           "Tag": "3",
           "Name": "ImageContainer",
           "Data": {
-            "Src": "2-3.png",
-            "Alt": "一個角度"
+            "Src": "2-3.PNG",
+            "Alt": ""
           }
         },
         {
           "Tag": "4",
           "Name": "ImageContainer",
           "Data": {
-            "Src": "2-4.png",
-            "Alt": "一個角度"
+            "Src": "2-4.PNG",
+            "Alt": ""
           }
         }
       ],
