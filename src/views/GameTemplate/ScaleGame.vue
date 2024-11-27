@@ -1,10 +1,15 @@
 <template>
   <div class="gameContainer">
-    <div class="gameTitle">title</div>
+    <div class="gameTitle">
+      {{ GameData.Question }}
+    </div>
     <div class="gameArea">
       <div class="gameImage">image</div>
-      <div class="scale">
-        <scale :Data="scaleData" :ID="id"></scale>
+      <div class="scaleArea">
+        <div class="scaleContainer">
+          <div class="scale"><scale :Data="scaleData" :ID="id"></scale></div>
+        </div>
+
         <button>btn</button>
       </div>
     </div>
@@ -56,29 +61,55 @@ export default {
 .gameContainer {
   width: 100%;
   height: 100%;
-  background-color: black;
 }
 .gameTitle {
-  width: 100%;
-  height: 15%;
-  background-color: blueviolet;
+  display: flex;
+  align-items: center;
+  border: 2px solid black;
+  border-radius: 25px;
+  width: 98%;
+  height: 10%;
+  margin: 1%;
+  padding-left: 1%;
 }
 .gameArea {
   width: 100%;
   height: 85%;
   display: flex;
-  background-color: blue;
 }
 .gameImage {
-  width: 60%;
-  background-color: brown;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid black;
+  border-radius: 25px;
+  width: 46%;
+  margin: 1%;
+}
+.scaleArea {
+  width: 50%;
+  margin: 1%;
+}
+.scaleContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid black;
+  border-radius: 25px;
+  width: 100%;
+  height: 88%;
+  margin-bottom: 1%;
 }
 .scale {
-  width: 40%;
-  background-color: aquamarine;
+  background-color: blue;
+  height: 95%;
+  aspect-ratio: 1;
 }
 button {
+  border: 2px solid black;
+  border-radius: 25px;
   width: 100%;
-  height: 12%;
+  height: 10%;
+  margin-top: 1%;
 }
 </style>
