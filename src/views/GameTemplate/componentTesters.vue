@@ -6,7 +6,8 @@
       <option>drawShapes</option>
       <option>dragToAlign</option>
       <option>dragImages</option>
-      <option selected>scale</option>
+      <option>scale</option>
+      <option selected>drawingBroad</option>
     </select>
   </div>
   <div v-if="tester == 'fraction'">
@@ -39,6 +40,13 @@
   <div v-if="tester == 'scale'">
     <scale :Data="configScale" :ID="id" @replyAnswer="printAns"></scale>
   </div>
+  <div v-if="tester == 'drawingBroad'">
+    <drawingBroad
+      :Data="configScale"
+      :ID="id"
+      @replyAnswer="printAns"
+    ></drawingBroad>
+  </div>
 </template>
 
 <script>
@@ -63,10 +71,13 @@ export default {
       import("@/components/DragImages.vue")
     ),
     scale: defineAsyncComponent(() => import("@/components/Scale.vue")),
+    drawingBroad: defineAsyncComponent(() =>
+      import("@/components/DrawingBroad.vue")
+    ),
   },
   data() {
     return {
-      tester: "scale",
+      tester: "drawingBroad",
       configFraction: {
         verifyOption: "answer",
         shape: "circle",
@@ -134,6 +145,7 @@ export default {
 
 <style scoped>
 div {
-  width: 70%;
+  width: 70vw;
+  height: 70vh;
 }
 </style>
