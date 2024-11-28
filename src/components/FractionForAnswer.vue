@@ -32,7 +32,7 @@ export default {
       required: true,
     },
   },
-  emits: ["validation"],
+  emits: ["validation", "record-answer"],
   components: {
     FloatNumPad: defineAsyncComponent(() =>
       import("@/components/FloatNumPad.vue")
@@ -81,11 +81,21 @@ export default {
       const userNumerator = this.$refs.numerator.value;
       const userDenominator = this.$refs.denominator.value;
 
+      const correctAnswer = `${this.Data.numerator}/${this.Data.denominator}`;
+
       const isCorrect =
         parseInt(userNumerator, 10) === this.Data.numerator &&
         parseInt(userDenominator, 10) === this.Data.denominator;
 
+      let userAnswer = `${parseInt(userNumerator, 10) || null}/${
+        parseInt(userDenominator, 10) || null
+      }`;
       this.$emit("validation", isCorrect);
+      this.$emit("record-answer", [
+        correctAnswer,
+        userAnswer,
+        isCorrect ? "正確" : "錯誤",
+      ]);
     },
     closeNumPad() {
       this.virtualNumpadSwitch = false;
