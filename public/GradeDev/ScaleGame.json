@@ -6,7 +6,7 @@
         "Content": "[Insert question.]"
     },
     "TotalLevel": 2,
-    "GameType": "ScaleGame",
+    "GameType": "SelfDefine",
     "GameConfig": {
         "GlobalTitle": "[Insert title.]"
     },
