@@ -1,5 +1,5 @@
 <template>
-  <div class="Container" id="ImageContainer" ref="ImageContainer">
+  <div class="image-container" id="ImageContainer" ref="ImageContainer">
     <img ref="Image" id="Img" :src="this.imageUrl" :alt="this.Data.Alt" />
   </div>
 </template>
@@ -79,7 +79,7 @@ export default {
 </script>
 
 <style scoped>
-.Container {
+.image-container {
   display: flex;
   justify-content: center;
   align-items: center;
