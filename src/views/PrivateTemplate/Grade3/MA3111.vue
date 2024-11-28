@@ -10,9 +10,7 @@
           class="game__fraction-display"
         ></FractionDisplay>
         <FractionChart
-          :numerator="numerator"
-          :denominator="denominator"
-          :shape="shape"
+          :Data="chartData"
           @mounted="calculateChartSize"
           class="game__chart-container"
         ></FractionChart>
@@ -62,12 +60,14 @@ export default {
       configFraction: this.GameData.answerData,
       chartWidth: 0,
       chartHeight: 0,
-      numerator: this.GameData.answerData.answer.numerator, // 分子
-      denominator: this.GameData.answerData.answer.denominator, // 分母
       isAnswerCorrect: false,
-      shape: this.GameData.answerData.shape,
       questionDescription: this.GameData.question.description,
       questionFraction: this.GameData.question.fraction,
+      chartData: {
+        shape: this.GameData.answerData.shape,
+        numerator: this.GameData.answerData.answer.numerator, // 分子
+        denominator: this.GameData.answerData.answer.denominator, // 分母
+      },
     };
   },
   computed: {},

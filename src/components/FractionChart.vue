@@ -14,6 +14,8 @@
 </template>
 
 <script>
+import { objectEntries } from "@vueuse/core";
+
 const SHAPE_CONFIGS = {
   circle: {
     radiusRatio: 0.4,
@@ -34,12 +36,16 @@ export default {
     return {
       gameWidth: 150,
       gameHeight: 150,
+      numerator: this.Data.numerator,
+      denominator: this.Data.denominator,
+      shape: this.Data.shape,
     };
   },
   props: {
-    numerator: { type: Number, required: true },
-    denominator: { type: Number, required: true },
-    shape: { type: String, required: true }, // circle 或 rect
+    Data: {
+      type: Object,
+      required: true,
+    },
   },
   computed: {
     configNumerator() {
