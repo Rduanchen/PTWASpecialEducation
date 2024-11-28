@@ -48,7 +48,6 @@ export default {
       activeInputRef: "",
       // 定義常數
       numPadOffset: 10, // 虛擬鍵盤與目標輸入框的間距
-      maxInputLength: 4, // 輸入框最大字符數
     };
   },
   methods: {
@@ -99,9 +98,7 @@ export default {
     updateInputValue(label) {
       if (this.activeInputRef) {
         const input = this.$refs[this.activeInputRef];
-        if (input.value.length < this.maxInputLength) {
-          input.value += label;
-        }
+        input.value += label;
       }
     },
   },
