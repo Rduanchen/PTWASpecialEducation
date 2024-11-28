@@ -47,7 +47,16 @@ export default {
     };
   },
 
-  props: ["Data", "ID"],
+  props: {
+    Data: {
+      type: Object,
+      required: true,
+    },
+    ID: {
+      type: String,
+      required: false,
+    },
+  },
 
   emits: ["ReplyAnswer", "replyAnswer"],
 
