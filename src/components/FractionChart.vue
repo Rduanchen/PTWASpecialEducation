@@ -62,7 +62,7 @@ export default {
         : null;
     },
   },
-  beforeMount() {
+  mounted() {
     this.$nextTick(() => {
       this.initializeScene();
     });
