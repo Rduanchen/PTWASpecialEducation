@@ -9,11 +9,11 @@ $error-color: #dc3545;
 $highlight-color: #198754;
 $warning-color: #ffb703;
 $alert-color: #ff6f61;
-$info-color: $success-color;
+$info-color: lighten($success-color, 20%);
 $hyperlink-color: #0077b6;
 
 
-$primary-btn-bg: darken($primary-color,25%);
+$primary-btn-bg: $primary-color;
 $primary-btn-hover-bg: darken($primary-color, 20%);
 $primary-btn-text: #ffffff;
 
@@ -35,6 +35,10 @@ $error-btn-text: #ffffff;
 
 $disabled-btn-bg: lighten($dark-color, 40%);
 $disabled-btn-text: lighten($dark-color, 60%);
+
+$submit-btn-bg: $submit-color;
+$submit-btn-hover-bg: darken($submit-color, 10%);
+$submit-btn-text: #ffffff;
 
 // $info-btn-bg: darken(#6c757d, 0%); // 按鈕顏色稍微加深
 // $info-btn-hover-bg: darken(#6c757d, 2%); // 懸停時按鈕顏色稍微加深
