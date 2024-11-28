@@ -12,8 +12,7 @@ on:
 
 jobs:
   test:
-    runs-on:
-      - PTWA_Rduan_Desktop
+    runs-on: [DESKTOP-HSOLTO0]
 
     steps:
       # Checkout the repository
