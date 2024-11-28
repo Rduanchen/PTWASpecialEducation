@@ -110,7 +110,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 /* Your component-specific styles go here */
 .Outter {
   width: 100%;

@@ -78,7 +78,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .image-container {
   display: flex;
   justify-content: center;

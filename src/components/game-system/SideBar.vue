@@ -415,7 +415,7 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style scoped lang="scss">
 .SideBar {
   border-left: solid 3px #aaa;
   background-color: #ffedda;

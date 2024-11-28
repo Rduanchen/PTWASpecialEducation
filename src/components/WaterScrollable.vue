@@ -128,9 +128,9 @@ export default {
     updateSize() {
       const Outter = this.$refs.cup;
       if (!Outter) return;
-      
+
       const border = Math.min(Outter.clientWidth, Outter.clientHeight) - 10;
-      
+
       // 更新stage尺寸，考慮dpr
       this.stageSize = {
         width: border,
@@ -142,23 +142,23 @@ export default {
   mounted() {
     // 初始化尺寸
     this.updateSize();
-    
+
     // 添加視窗大小變化監聽
-    window.addEventListener('resize', this.updateSize);
-    
+    window.addEventListener("resize", this.updateSize);
+
     // 載入圖片
     this.loadImage();
-    
+
     // 初始化容量
     this.Data.containVloume = this.Data.Ml;
   },
   beforeDestroy() {
     // 清理監聽器
-    window.removeEventListener('resize', this.updateSize);
+    window.removeEventListener("resize", this.updateSize);
   },
   watch: {
     // 監聽 Data 的變化
-    'Data.Scale'() {
+    "Data.Scale"() {
       this.loadImage();
     },
   },
@@ -189,7 +189,7 @@ export default {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  
+
   button {
     width: 100%;
     height: 30%;
@@ -199,11 +199,11 @@ export default {
     border: none;
     cursor: pointer;
     transition: transform 0.2s ease;
-    
+
     &:hover {
       transform: scale(1.05);
     }
-    
+
     &:active {
       transform: scale(0.95);
     }

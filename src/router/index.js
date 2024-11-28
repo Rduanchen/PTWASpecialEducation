@@ -85,11 +85,6 @@ const router = createRouter({
       component: () => import('@/views/GameTemplate/PairingGame.vue'),
     },
     {
-      path: '/NumberlineV2',
-      name: 'NumberlineV2',
-      component: () => import('@/components/NumberLineV2.vue'),
-    },
-    {
       path: '/NumberLock',
       name: 'NumberLock',
       component: () => import('@/views/GameTemplate/NumberLock.vue'),
@@ -100,19 +95,9 @@ const router = createRouter({
       component: () => import('@/components/Markdown.vue'),
     },
     {
-      path: '/CalculatorV2',
-      name: 'CalculatorV2',
-      component: () => import('@/components/calculatorV2.vue'),
-    },
-    {
       path:'/Calculator',
       name:'Calculator',
       component:()=>import('@/components/calculator.vue'),
-    },
-    {
-      path:'/CalculatorV3',
-      name:'Calculator',
-      component:()=>import('@/components/calculatorV3.vue'),
     },
     {
       path:'/CalculatorGame',

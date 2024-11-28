@@ -61,7 +61,7 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style scoped lang="scss">
 /* Your component's CSS styles go here */
 
 .number-board-container {

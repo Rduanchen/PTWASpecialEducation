@@ -44,9 +44,6 @@ export default {
     Input: defineAsyncComponent(() => import("@/components/ReplyInput.vue")),
     Fractions: defineAsyncComponent(() => import("@/components/Fractions.vue")),
     Markdown: defineAsyncComponent(() => import("@/components/Markdown.vue")),
-    NumberLineArrow: defineAsyncComponent(() =>
-      import("@/components/NumberLineV2.vue")
-    ),
     NumberLine: defineAsyncComponent(() =>
       import("@/components/NumberLine.vue")
     ),

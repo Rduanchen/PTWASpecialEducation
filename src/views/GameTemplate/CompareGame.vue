@@ -269,7 +269,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .Head {
   width: 100%;
   padding-left: 2rem;

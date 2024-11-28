@@ -6,7 +6,7 @@
       </p>
     </div>
     <div class="down-container">
-      <!-- <div
+      <div
         class="component-container"
         v-if="this.GameData.SlotComponents != undefined"
       >
@@ -15,8 +15,8 @@
           :ID="this.id"
           :Data="this.SlotData"
         ></component>
-      </div> -->
-      <!-- <div
+      </div>
+      <div
         class="container__right"
         v-if="this.GameData.SlotComponents != undefined"
       >
@@ -41,8 +41,8 @@
         >
           送出答案
         </button>
-      </div> -->
-      <div class="container__buttom">
+      </div>
+      <div class="container__buttom" v-else>
         <div class="info__card">
           <p class="h2">{{ this.GameData.Question_Text }}</p>
         </div>
@@ -193,14 +193,6 @@ export default {
         font-size: $text-small;
       }
     }
-    .button--submit {
-      @extend .button--animation;
-      height: 15%;
-      background-color: $submit-btn-bg;
-      &:hover {
-        transform: scale($transform-scale);
-      }
-    }
     .component-container {
       width: 35%;
       // 適用於ImageContainer 這個 component
@@ -235,6 +227,14 @@ export default {
           margin: auto 0 auto;
         }
       }
+      .button--submit {
+        @extend .button--animation;
+        background-color: $submit-color;
+        height: 15%;
+        &:hover {
+          transform: scale($transform-scale);
+        }
+      }
     }
     .container__buttom {
       display: flex;
@@ -264,6 +264,14 @@ export default {
         gap: $gap--medium;
         .select-button__group {
           height: 80%;
+        }
+      }
+      .button--submit {
+        @extend .button--animation;
+        background-color: $submit-color;
+        height: 15%;
+        &:hover {
+          transform: scale($transform-scale);
         }
       }
     }
