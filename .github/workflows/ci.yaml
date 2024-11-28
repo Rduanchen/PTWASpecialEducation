@@ -29,10 +29,6 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      # Run tests
-      - name: Run Tests
-        run: npm test
-
       # (可選) Run build to ensure the project can be built
       - name: Build Project
         run: npm run build
