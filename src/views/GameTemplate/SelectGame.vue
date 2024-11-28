@@ -1,71 +1,70 @@
 <template>
-  <div class="Container">
-    <div class="index">
-      <div class="Head">
-        <p class="h2" style="font-weight: bold">
-          {{ this.GameConfig.GlobalTitle }}
-        </p>
-      </div>
-      <div class="Info">
-        <!-- 圖片的列 -->
-        <div
-          class="component-container"
-          v-if="this.GameData.SlotComponents != undefined"
-        >
-          <component
-            class="GameImg"
-            :is="this.SlotComponent"
-            :ID="this.id"
-            :Data="this.SlotData"
-          ></component>
+  <div class="outter-container">
+    <div class="head-container">
+      <p style="font-weight: bold">
+        {{ this.GameConfig.GlobalTitle }}
+      </p>
+    </div>
+    <div class="down-container">
+      <!-- <div
+        class="component-container"
+        v-if="this.GameData.SlotComponents != undefined"
+      >
+        <component
+          :is="this.SlotComponent"
+          :ID="this.id"
+          :Data="this.SlotData"
+        ></component>
+      </div> -->
+      <!-- <div
+        class="container__right"
+        v-if="this.GameData.SlotComponents != undefined"
+      >
+        <div class="info__card">
+          <p>{{ this.GameData.Question_Text }}</p>
         </div>
-        <!-- 按鈕的列 -->
-        <div class="selection" v-if="this.GameData.SlotComponents != undefined">
-          <div class="card">
-            <p class="h2">{{ this.GameData.Question_Text }}</p>
-          </div>
-          <div class="choese">
+        <div class="select-button__group">
+          <button
+            type="button"
+            v-for="i in question"
+            :class="{ 'button--onclick': this.Select[i] }"
+            v-on:click="SelectItem(i)"
+          >
+            {{ i }}
+          </button>
+        </div>
+        <button
+          type="button"
+          class="button--submit"
+          :class="{ 'button--onsubmit': this.Answer != null }"
+          v-on:click="CheckAnswer"
+        >
+          送出答案
+        </button>
+      </div> -->
+      <div class="container__buttom">
+        <div class="info__card">
+          <p class="h2">{{ this.GameData.Question_Text }}</p>
+        </div>
+        <div class="right--container">
+          <div class="select-button__group">
             <button
               type="button"
               v-for="i in question"
-              :class="{ Selected: this.Select[i] }"
+              :class="{ 'button--onclick': this.Select[i] }"
               v-on:click="SelectItem(i)"
             >
               {{ i }}
             </button>
-          </div>
-          <button
-            type="button"
-            class="Check"
-            :class="{ OnSubmit: this.Answer != null }"
-            v-on:click="CheckAnswer"
-          >
-            送出答案
-          </button>
-        </div>
-        <div class="selection2" v-else>
-          <div class="card">
-            <p class="h2">{{ this.GameData.Question_Text }}</p>
-          </div>
-          <div class="con">
-            <div class="choese">
-              <button
-                type="button"
-                v-for="i in question"
-                :class="{ Selected: this.Select[i] }"
-                v-on:click="SelectItem(i)"
-              >
-                {{ i }}
-              </button>
-              <button
-                type="button"
-                class="Check"
-                :class="{ OnSubmit: this.Answer != null }"
-                v-on:click="CheckAnswer"
-              >
-                送出答案
-              </button>
-            </div>
+            <hr />
+            <button
+              type="button"
+              class="button--submit"
+              :class="{ 'button--onsubmit': this.Answer != null }"
+              v-on:click="CheckAnswer"
+            >
+              送出答案
+            </button>
           </div>
         </div>
       </div>
@@ -149,107 +148,128 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-.card {
-  border-style: solid;
-}
-.Container {
+.outter-container {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
-  justify-content: start;
+  gap: $gap--medium;
+  padding: 0 $gap--medium;
   width: 100%;
-  max-height: 60vh !important;
-  .index {
-    .Head {
-      padding: 1em;
-      background-color: #bde0fe;
+  height: 100%;
+  .head-container {
+    @extend .container-basic;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 20%;
+    background-color: $primary-color;
+    font-size: $text-large;
+    padding: $gap--small;
+    p {
+      margin: auto 0 auto;
     }
-    .Info {
-      display: grid;
-      margin-top: 2rem;
-      grid-template-columns: repeat(8, 1fr);
-      gap: 2rem;
-      align-items: center;
-      .selection {
-        grid-column: 6/9;
+  }
+  .down-container {
+    height: 70%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    gap: $gap--medium;
+    padding: $gap--medium;
+    .select-button__group {
+      height: 55%;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: $gap--small;
+      button {
+        @extend .button-basic;
+        border: none;
+        background-color: $primary-btn-bg;
+        height: 25%;
+        font-size: $text-small;
+      }
+    }
+    .button--submit {
+      @extend .button--animation;
+      height: 15%;
+      background-color: $submit-btn-bg;
+      &:hover {
+        transform: scale($transform-scale);
+      }
+    }
+    .component-container {
+      width: 35%;
+      // 適用於ImageContainer 這個 component
+      :deep(.image-container) {
+        img {
+          border-radius: 15px;
+        }
+      }
+    }
+    .container__right {
+      width: 50%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: $gap--medium;
+      button {
+        @extend .button-basic;
+        border-radius: 15px;
+        border: none;
+        font-size: $text-small;
+      }
+      .info__card {
+        height: 30%;
+        @extend .container-basic;
+        background-color: $info-color;
+        padding: $gap--small;
+        font-size: $text-medium;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        p {
+          margin: auto 0 auto;
+        }
+      }
+    }
+    .container__buttom {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      width: 100%;
+      height: 100%;
+      .info__card {
+        width: 40%;
+        @extend .container-basic;
+        background-color: $info-color;
+        padding: $gap--small;
+        font-size: $text-medium;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        p {
+          margin: auto 0 auto;
+        }
+      }
+      .right--container {
+        width: 50%;
+        height: 100%;
         display: flex;
         flex-direction: column;
-        gap: 1rem;
-        .card {
-          padding: 1rem;
+        justify-content: center;
+        gap: $gap--medium;
+        .select-button__group {
+          height: 80%;
         }
-        .choese {
-          margin-top: 1rem;
-          display: flex;
-          flex-direction: column;
-          gap: 1rem;
-          button {
-            scale: 1;
-            transition: 0.25s;
-          }
-          button:hover {
-            scale: 1.05;
-          }
-        }
-      }
-      .selection2 {
-        grid-column: 2/8;
-        display: grid;
-        grid-template-columns: repeat(5, 1fr);
-        gap: 2rem;
-        height: 100%;
-        width: 100%;
-        .card {
-          grid-column: 1/4;
-          border: solid 1px black;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-        .con {
-          grid-column: 4/6;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          .choese {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            gap: 1rem;
-            button {
-              scale: 1;
-              transition: 0.25s;
-            }
-            button:hover {
-              scale: 1.05;
-            }
-            .Check {
-              margin-top: 2rem;
-            }
-          }
-        }
-      }
-      .component-container {
-        grid-column: 1/5;
-        border: solid 1px black;
-        height: 80%;
       }
     }
   }
-  .ImgArea {
-    width: 80%;
-  }
 }
-button {
-  height: 3rem;
-  font-size: xx-large;
-  width: 100%;
-  border: solid 1px black;
-  color: #000;
-  border-radius: 12px;
-  background-color: #fff;
-}
-.OnSubmit {
+.button--onsubmit {
   animation: blink 1s linear infinite;
 }
 @keyframes blink {
@@ -257,17 +277,14 @@ button {
     transform: scale(1);
   }
   50% {
-    transform: scale(1.05);
+    transform: scale(1.03);
   }
   100% {
     transform: scale(1);
   }
 }
-.Check {
-  background-color: #bde0fe;
-}
-.Selected {
-  background-color: #0298c0;
-  scale: 1.05;
+.button--onclick {
+  background-color: $primary-btn-hover-bg !important;
+  scale: 1.03;
 }
 </style>
