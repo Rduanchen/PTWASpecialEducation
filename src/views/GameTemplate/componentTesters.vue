@@ -41,11 +41,23 @@
     <scale :Data="configScale" :ID="id" @replyAnswer="printAns"></scale>
   </div>
   <div v-if="tester == 'drawingBroad'">
-    <drawingBroad
-      :Data="configScale"
-      :ID="id"
-      @replyAnswer="printAns"
-    ></drawingBroad>
+    <drawingBroad :Data="configBrush"></drawingBroad>
+    <button
+      @click="
+        configBrush.color = 'red';
+        configBrush.size = 10;
+      "
+    >
+      brush
+    </button>
+    <button
+      @click="
+        configBrush.color = 'eraser';
+        configBrush.size = 50;
+      "
+    >
+      eraser
+    </button>
   </div>
 </template>
 
@@ -131,6 +143,10 @@ export default {
       configScale: {
         answer: 100,
         //customScaleSrc: "sugar.png",
+      },
+      configBrush: {
+        color: "red",
+        size: 10,
       },
       id: "Dev0105",
     };
