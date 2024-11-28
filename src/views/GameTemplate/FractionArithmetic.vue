@@ -4,12 +4,12 @@
       <h1 class="question__description">{{ questionDescription }}</h1>
       <div class="question__math-expression">
         <FractionDisplay
-          :data="questionLeftTerm"
+          :Data="questionLeftTerm"
           class="math-expression__fraction"
         ></FractionDisplay>
         <span class="question__math-symbol" v-html="operation"></span>
         <FractionDisplay
-          :data="questionRightTerm"
+          :Data="questionRightTerm"
           class="math-expression__fraction"
         ></FractionDisplay>
         <span class="question__math-symbol">&#61;</span>

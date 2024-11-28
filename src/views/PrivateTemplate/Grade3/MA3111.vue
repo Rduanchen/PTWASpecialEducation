@@ -6,7 +6,7 @@
     <div class="game__interaction-area">
       <div class="game__fraction-panel">
         <FractionDisplay
-          :data="questionFraction"
+          :Data="questionFraction"
           class="game__fraction-display"
         ></FractionDisplay>
         <FractionChart
