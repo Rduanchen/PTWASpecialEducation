@@ -27,7 +27,7 @@ import { defineAsyncComponent } from "vue";
 export default {
   name: "FractionForAnswer",
   props: {
-    answerData: {
+    Data: {
       type: Object,
       required: true,
     },
@@ -83,8 +83,8 @@ export default {
       const userDenominator = this.$refs.denominator.value;
 
       const isCorrect =
-        parseInt(userNumerator, 10) === this.answerData.numerator &&
-        parseInt(userDenominator, 10) === this.answerData.denominator;
+        parseInt(userNumerator, 10) === this.Data.numerator &&
+        parseInt(userDenominator, 10) === this.Data.denominator;
 
       this.$emit("validation", isCorrect);
     },

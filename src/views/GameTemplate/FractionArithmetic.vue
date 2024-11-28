@@ -15,7 +15,7 @@
         <span class="question__math-symbol">&#61;</span>
         <FractionForAnswer
           ref="fractionsComponent"
-          :answerData="answerData"
+          :Data="answerData"
           @validation="handleValidation"
         ></FractionForAnswer>
       </div>
