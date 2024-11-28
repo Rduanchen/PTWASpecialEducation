@@ -113,7 +113,7 @@ export default {
         }
       }
       this.handleCorrectAnswer();
-      this.emitNextQuestion();
+      this.$emit("next-question");
     },
 
     isGroupSizeCorrect(index) {
@@ -148,9 +148,6 @@ export default {
         "正確",
       ]);
       this.$emit("play-effect", "CorrectSound");
-    },
-    emitNextQuestion() {
-      this.$emit("next-question");
     },
     isGroupContentCorrect(groupIndex) {
       const correctItems = this.GameData.Answer[groupIndex].Items;
