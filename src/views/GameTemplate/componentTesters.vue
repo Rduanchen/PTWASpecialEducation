@@ -42,22 +42,24 @@
   </div>
   <div v-if="tester == 'drawingBroad'">
     <drawingBroad :Data="configBrush"></drawingBroad>
-    <button
-      @click="
-        configBrush.color = 'red';
-        configBrush.size = 10;
-      "
-    >
-      brush
-    </button>
-    <button
-      @click="
-        configBrush.color = 'eraser';
-        configBrush.size = 50;
-      "
-    >
-      eraser
-    </button>
+    <div class="btnContainer">
+      <button
+        @click="
+          configBrush.color = 'red';
+          configBrush.size = 10;
+        "
+      >
+        brush
+      </button>
+      <button
+        @click="
+          configBrush.color = 'eraser';
+          configBrush.size = 50;
+        "
+      >
+        eraser
+      </button>
+    </div>
   </div>
 </template>
 
@@ -159,9 +161,16 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 div {
   width: 70vw;
   height: 70vh;
+}
+.btnContainer {
+  position: absolute;
+  top: 20%;
+  width: 0;
+  height: 0;
+  z-index: -1;
 }
 </style>
