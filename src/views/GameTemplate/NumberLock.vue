@@ -7,6 +7,7 @@
           :Data="GameData.topComponent.Data"
           :ID="this.ID"
           @ReplyAnswer="topReply"
+          @replyAnswer="topReply"
         ></component>
       </div>
       <div class="game-area--down game-area" v-if="this.GameConfig.layout.down">
@@ -14,6 +15,7 @@
           :is="GameData.downComponent.Name"
           :Data="GameData.downComponent.Data"
           :ID="this.ID"
+          @ReplyAnswer="downReply"
           @replyAnswer="downReply"
         ></component>
       </div>
