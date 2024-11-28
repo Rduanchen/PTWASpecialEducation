@@ -21,7 +21,8 @@
       <DragFraction
         :Data="configFraction"
         :ID="id"
-        @getAnswer="drag"
+        @replyAnswer="drag"
+        @record-answer="handleRecordAnswer"
         class="game__answer-area"
       ></DragFraction>
     </div>
@@ -85,11 +86,16 @@ export default {
       }
     },
     checkAnswer() {
+      this.$emit("add-record", this.recordedAnswer);
       if (this.isAnswerCorrect) {
+        this.$emit("play-effect", "CorrectSound");
         this.$emit("next-question", true);
       } else {
         this.$emit("play-effect", "WrongSound");
       }
+    },
+    handleRecordAnswer(record) {
+      this.recordedAnswer = record;
     },
   },
 };
