@@ -6,7 +6,7 @@
     "Content": "請分辨圖片中的角度為鈍角、銳角或直角"
   },
   "GameConfig": {
-    "GlobalTitle": "請選擇正確的角度",
+    "GlobalTitle": "請選擇正確的單位",
     "RandomMode": true
   },
   "Hint": {
