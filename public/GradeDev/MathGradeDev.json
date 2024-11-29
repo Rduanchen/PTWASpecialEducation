@@ -104,7 +104,13 @@
                       "Name": "磅秤",
                       "Description": "#",
                       "Img": "MA3011.png"
-                  }
+                  },
+                  {
+                    "id": "Dev02_MultiplyBoard",
+                    "Name": "乘法計算版",
+                    "Description": "#",
+                    "Img": "MA3011.png"
+                }
                 ]
             }
         ]

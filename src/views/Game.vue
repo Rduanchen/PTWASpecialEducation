@@ -842,6 +842,9 @@ export default {
     ScaleGame: defineAsyncComponent(() =>
       import("@/views/GameTemplate/ScaleGame.vue")
     ),
+    MultiplyBoard: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/MultiplyBoard.vue")
+    ),
   },
 };
 </script>
