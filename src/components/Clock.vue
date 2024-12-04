@@ -28,7 +28,7 @@ export default {
 
   methods: {
     drawClock() {
-      let canvas = document.getElementById("clock");
+      let canvas = this.$refs.Clock;
       let ctx = canvas.getContext("2d");
       let border = Math.min(
         this.$refs.Outter.clientWidth,
