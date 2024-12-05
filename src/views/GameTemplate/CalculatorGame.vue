@@ -192,23 +192,7 @@ export default {
       NumberRow: 2,
       NumberAmount: 8,
       DotPosition: 0,
-      Data: {
-        Unit: "Number",
-        CarryAmount: 2,
-        NumberAmount: 5,
-        CustomeUnit: null,
-        decimalPoint: 1,
-        Preset: {
-          Number: ["149.2", "254.1"],
-          Symbol: "+",
-        },
-        Answer: {
-          Carry: [],
-          Answer: "403",
-          Number: ["149", "254"],
-          Symbol: "+",
-        },
-      },
+      Data: {},
       CustomeUnit: undefined,
       UnitPreset: {
         UseUnit: "Volume",
@@ -242,6 +226,7 @@ export default {
     this.Data = this.GameData;
     this.NumberAmount = this.Data.NumberAmount;
     this.DotPosition = this.Data.decimalPoint;
+    this.CustomeUnit = this.Data.CustomeUnit;
     if (this.Data.CustomeUnit != undefined) {
       for (var i = 0; i < this.CustomeUnit.length; i++) {
         this.Title.push(this.CustomeUnit[i]);
@@ -284,7 +269,6 @@ export default {
       this.ButtonLine.push(tempNumber);
       this.NumberEditable.push(tempeditable);
     }
-    this.UseUnit(this.Data.Unit);
     this.presetCalculator();
     this.shiftNumber();
     // this.findeNumberAfterPoint();
@@ -387,15 +371,6 @@ export default {
           }
           this.Num_list.push(temp);
         }
-      }
-    },
-    UseUnit: function (unit) {
-      this.UnitPreset.UseUnit = unit;
-      this.Title = [];
-      for (var i = 0; i < this.NumberAmount; i++) {
-        this.Title.push(
-          this.UnitPreset.Units[this.UnitPreset.UseUnit].Title[i]
-        );
       }
     },
     CheckAnswer() {
@@ -562,7 +537,7 @@ export default {
   }
 }
 .space {
-  width: 40px;
+  width: 50px;
 }
 
 .buttons {
@@ -605,7 +580,7 @@ button {
   justify-content: center;
   align-items: center;
   width: 50px;
-  height: 60px;
+  min-height: 60px;
   font-size: x-large;
   font-weight: bold;
 }

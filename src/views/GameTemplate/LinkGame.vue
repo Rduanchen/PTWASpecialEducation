@@ -563,7 +563,7 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style scoped lang="scss"> 
 /* Your component-specific styles go here */
 .Container {
   width: 100%;
