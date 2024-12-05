@@ -150,6 +150,7 @@ import fetchJson from "@/utilitys/fetch-json.js";
 import * as Arr2CSV from "@/utilitys/array2csv.js";
 import loading from "@/components/loading.vue";
 import GameStartandOver from "@/components/game-system/GameStartandOver.vue";
+import GameStart from "@/components/game-system/GameStart.vue";
 import Header from "@/components/game-system/header.vue";
 import LevelAndTime from "@/components/game-system/LevelAndTime.vue";
 import MediaModal from "@/components/game-system/MediaModal.vue";
@@ -719,7 +720,7 @@ export default {
     previousPage() {
       soundManager.stopAllSounds();
       this.exitFullScreen();
-      this.$router.replace({ path: `/GameSelect/${this.$route.params.Grade}` });
+      this.$router.replace({ path: `/${this.$route.params.Grade}` });
     },
     closeSratSheet() {
       this.scratchSheetVisible = false;
@@ -735,6 +736,7 @@ export default {
     hintbutton,
     scratchSheet,
     GameStartandOver,
+    GameStart,
     Header,
     LevelAndTime,
     MediaModal,

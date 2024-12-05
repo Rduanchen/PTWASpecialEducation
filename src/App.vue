@@ -1,21 +1,36 @@
 <script setup>
-import { RouterView } from "vue-router";
+import { computed } from "vue";
+import { useRoute } from "vue-router";
+
+// 取得當前路由
+const route = useRoute();
+
+// 動態取得當前匹配的路由組件
+const currentComponent = computed(() => {
+  const matched = route.matched;
+  if (matched.length > 0) {
+    return matched[matched.length - 1].components.default;
+  }
+  return null;
+});
+
+// 提取路由參數
+const currentParams = computed(() => route.params);
 </script>
 
 <template>
-  <router-view v-slot="{ Component, route }">
+  <router-view v-slot="{ route }">
     <transition :name="route.meta.transition || 'fade'">
-      <component :is="Component" :key="route.path" />
+      <!-- 動態渲染組件，並傳遞路由參數 -->
+      <component
+        :is="currentComponent"
+        :key="route.path"
+        v-bind="currentParams"
+      />
     </transition>
   </router-view>
-  <!-- <router-view /> -->
 </template>
-<script>
-import fetchJson from "@/utilitys/fetch-json.js";
-export default {
-  name: "App",
-};
-</script>
+
 <style lang="scss">
 @font-face {
   font-family: "YuanQuan";
