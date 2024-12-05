@@ -12,7 +12,7 @@ on:
 
 jobs:
   test:
-    runs-on: [DESKTOP-HSOLTO0]
+    runs-on: ubuntu-latest
 
     steps:
       # Checkout the repository
@@ -23,12 +23,16 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16 # 使用 Node.js 版本，與專案需求匹配
+          node-version: 16 # 使用與專案需求匹配的 Node.js 版本
 
       # Install dependencies
       - name: Install Dependencies
         run: npm install
 
-      # (可選) Run build to ensure the project can be built
+      # Run tests
+      - name: Run Tests
+        run: npm test
+
+      # (可選) Build project to ensure it works
       - name: Build Project
         run: npm run build
