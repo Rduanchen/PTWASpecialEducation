@@ -1,5 +1,5 @@
 <template>
-  <div ref="container">
+  <div ref="gameContainer">
     <canvas
       ref="canvas"
       @pointerdown="handlePointer"
@@ -11,9 +11,6 @@
 </template>
 
 <script>
-import { getGameAssets } from "@/utilitys/get_assets.js";
-import * as canvasTools from "@/utilitys/canvasTools.js";
-import { defineAsyncComponent, handleError } from "vue";
 export default {
   components: {},
   data() {
