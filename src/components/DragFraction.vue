@@ -81,7 +81,7 @@ export default {
 
   props: ["Data", "ID"],
 
-  emits: ["replyAnswer"],
+  emits: ["replyAnswer", "record-answer"],
 
   mounted() {
     this.initializeScene();
@@ -216,11 +216,13 @@ export default {
       }
       if (this.Data.verifyOption == "answer") {
         let answer = this.Data.answer.numerator / this.Data.answer.denominator;
-        if (answer.toFixed(2) == total.toFixed(2)) {
-          this.$emit("replyAnswer", true);
-        } else {
-          this.$emit("replyAnswer", false);
-        }
+        let isCorrect = answer.toFixed(2) == total.toFixed(2);
+        this.$emit("replyAnswer", isCorrect);
+        this.$emit("record-answer", [
+          answer.toFixed(2),
+          total.toFixed(2),
+          isCorrect ? "正確" : "錯誤",
+        ]);
       } else if (this.Data.verifyOption == "value") {
         this.$emit("replyAnswer", total.toFixed(2));
       }

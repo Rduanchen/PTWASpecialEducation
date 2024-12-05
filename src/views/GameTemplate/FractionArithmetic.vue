@@ -4,19 +4,20 @@
       <h1 class="question__description">{{ questionDescription }}</h1>
       <div class="question__math-expression">
         <FractionDisplay
-          :data="questionLeftTerm"
+          :Data="questionLeftTerm"
           class="math-expression__fraction"
         ></FractionDisplay>
         <span class="question__math-symbol" v-html="operation"></span>
         <FractionDisplay
-          :data="questionRightTerm"
+          :Data="questionRightTerm"
           class="math-expression__fraction"
         ></FractionDisplay>
         <span class="question__math-symbol">&#61;</span>
         <FractionForAnswer
           ref="fractionsComponent"
-          :answerData="answerData"
+          :Data="answerData"
           @validation="handleValidation"
+          @record-answer="handleRecordAnswer"
         ></FractionForAnswer>
       </div>
     </div>
@@ -63,6 +64,7 @@ export default {
   },
   data() {
     return {
+      recordedAnswer: null,
       questionDescription: this.GameData.question.description,
       questionLeftTerm: this.GameData.question.leftTerm,
       questionRightTerm: this.GameData.question.rightTerm,
@@ -78,11 +80,16 @@ export default {
       this.isAnswerRight = result;
     },
     triggerValidation() {
+      this.$emit("add-record", this.recordedAnswer);
       if (this.isAnswerRight) {
+        this.$emit("play-effect", "CorrectSound");
         this.$emit("next-question", true);
       } else {
         this.$emit("play-effect", "WrongSound");
       }
+    },
+    handleRecordAnswer(record) {
+      this.recordedAnswer = record; // 保存最新的答案記錄
     },
   },
 };

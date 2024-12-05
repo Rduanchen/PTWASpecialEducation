@@ -6,13 +6,11 @@
     <div class="game__interaction-area">
       <div class="game__fraction-panel">
         <FractionDisplay
-          :data="questionFraction"
+          :Data="questionFraction"
           class="game__fraction-display"
         ></FractionDisplay>
         <FractionChart
-          :numerator="numerator"
-          :denominator="denominator"
-          :shape="shape"
+          :Data="chartData"
           @mounted="calculateChartSize"
           class="game__chart-container"
         ></FractionChart>
@@ -23,7 +21,8 @@
       <DragFraction
         :Data="configFraction"
         :ID="id"
-        @getAnswer="drag"
+        @replyAnswer="drag"
+        @record-answer="handleRecordAnswer"
         class="game__answer-area"
       ></DragFraction>
     </div>
@@ -62,12 +61,14 @@ export default {
       configFraction: this.GameData.answerData,
       chartWidth: 0,
       chartHeight: 0,
-      numerator: this.GameData.answerData.answer.numerator, // 分子
-      denominator: this.GameData.answerData.answer.denominator, // 分母
       isAnswerCorrect: false,
-      shape: this.GameData.answerData.shape,
       questionDescription: this.GameData.question.description,
       questionFraction: this.GameData.question.fraction,
+      chartData: {
+        shape: this.GameData.answerData.shape,
+        numerator: this.GameData.answerData.answer.numerator, // 分子
+        denominator: this.GameData.answerData.answer.denominator, // 分母
+      },
     };
   },
   computed: {},
@@ -85,11 +86,16 @@ export default {
       }
     },
     checkAnswer() {
+      this.$emit("add-record", this.recordedAnswer);
       if (this.isAnswerCorrect) {
+        this.$emit("play-effect", "CorrectSound");
         this.$emit("next-question", true);
       } else {
         this.$emit("play-effect", "WrongSound");
       }
+    },
+    handleRecordAnswer(record) {
+      this.recordedAnswer = record;
     },
   },
 };

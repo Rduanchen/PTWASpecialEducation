@@ -62,11 +62,6 @@
   </div>
 </template>
 <script>
-const FAILURE_MESSAGES = {
-  SIZE_MISMATCH: "數量不匹配",
-  CONTENT_MISMATCH: "內容不匹配",
-};
-
 import draggable from "vuedraggable";
 import CardWithButton from "@/components/CardWithButton.vue";
 import { getComponents } from "@/utilitys/get_components";
@@ -108,23 +103,17 @@ export default {
     checkAnswer() {
       for (let groupIndex in this.groupedItems) {
         if (!this.isGroupSizeCorrect(groupIndex)) {
-          this.handleIncorrectAnswer(
-            groupIndex,
-            FAILURE_MESSAGES.SIZE_MISMATCH
-          );
+          this.handleIncorrectAnswer(groupIndex);
           return;
         }
 
         if (!this.isGroupContentCorrect(groupIndex)) {
-          this.handleIncorrectAnswer(
-            groupIndex,
-            FAILURE_MESSAGES.CONTENT_MISMATCH
-          );
+          this.handleIncorrectAnswer(groupIndex);
           return;
         }
       }
       this.handleCorrectAnswer();
-      this.emitNextQuestion();
+      this.$emit("next-question");
     },
 
     isGroupSizeCorrect(index) {
@@ -159,9 +148,6 @@ export default {
         "正確",
       ]);
       this.$emit("play-effect", "CorrectSound");
-    },
-    emitNextQuestion() {
-      this.$emit("next-question");
     },
     isGroupContentCorrect(groupIndex) {
       const correctItems = this.GameData.Answer[groupIndex].Items;

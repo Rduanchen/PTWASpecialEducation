@@ -16,7 +16,7 @@
   </div>
   <FloatNumPad
     v-if="virtualNumpadSwitch"
-    :data="numPadPosition"
+    :Data="numPadPosition"
     @button-clicked="numPadButtonClicked"
   />
 </template>
@@ -27,12 +27,12 @@ import { defineAsyncComponent } from "vue";
 export default {
   name: "FractionForAnswer",
   props: {
-    answerData: {
+    Data: {
       type: Object,
       required: true,
     },
   },
-  emits: ["validation"],
+  emits: ["validation", "record-answer"],
   components: {
     FloatNumPad: defineAsyncComponent(() =>
       import("@/components/FloatNumPad.vue")
@@ -48,7 +48,6 @@ export default {
       activeInputRef: "",
       // 定義常數
       numPadOffset: 10, // 虛擬鍵盤與目標輸入框的間距
-      maxInputLength: 4, // 輸入框最大字符數
     };
   },
   methods: {
@@ -82,11 +81,21 @@ export default {
       const userNumerator = this.$refs.numerator.value;
       const userDenominator = this.$refs.denominator.value;
 
-      const isCorrect =
-        parseInt(userNumerator, 10) === this.answerData.numerator &&
-        parseInt(userDenominator, 10) === this.answerData.denominator;
+      const correctAnswer = `${this.Data.numerator}/${this.Data.denominator}`;
 
+      const isCorrect =
+        parseInt(userNumerator, 10) === this.Data.numerator &&
+        parseInt(userDenominator, 10) === this.Data.denominator;
+
+      let userAnswer = `${parseInt(userNumerator, 10) || null}/${
+        parseInt(userDenominator, 10) || null
+      }`;
       this.$emit("validation", isCorrect);
+      this.$emit("record-answer", [
+        correctAnswer,
+        userAnswer,
+        isCorrect ? "正確" : "錯誤",
+      ]);
     },
     closeNumPad() {
       this.virtualNumpadSwitch = false;
@@ -99,9 +108,7 @@ export default {
     updateInputValue(label) {
       if (this.activeInputRef) {
         const input = this.$refs[this.activeInputRef];
-        if (input.value.length < this.maxInputLength) {
-          input.value += label;
-        }
+        input.value += label;
       }
     },
   },
