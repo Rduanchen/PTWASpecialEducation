@@ -69,6 +69,11 @@
                   @timer-start="startTimer"
                   @timer-pause="pauseTimer"
                   @timer-reset="resetTimer"
+                  @scratch-sheet="
+                    () => {
+                      scratchSheetVisible = true;
+                    }
+                  "
                 >
                 </component>
               </div>
@@ -145,6 +150,7 @@ import fetchJson from "@/utilitys/fetch-json.js";
 import * as Arr2CSV from "@/utilitys/array2csv.js";
 import loading from "@/components/loading.vue";
 import GameStartandOver from "@/components/game-system/GameStartandOver.vue";
+import GameStart from "@/components/game-system/GameStart.vue";
 import Header from "@/components/game-system/header.vue";
 import LevelAndTime from "@/components/game-system/LevelAndTime.vue";
 import MediaModal from "@/components/game-system/MediaModal.vue";
@@ -620,18 +626,6 @@ export default {
             this.EffectWindow = false;
           }, 3000);
           break;
-        case "HarraySound": //Wait for remove
-          console.warn(
-            "HarraySound is Deprecated, Please use FireWorkAnimation instead"
-          );
-          sound = new Audio();
-          sound.src = ImportUrl.GetSystemAssetsFile("harray.mp3", "effects");
-          sound.src = ImportUrl.GetSystemEffectAssetsFile("harray.mp3");
-          soundManager.playSound(`harray`, false);
-          sound.oncanplaythrough = function () {
-            sound.play();
-          };
-          break;
         case "CorrectAnimation":
           this.CorrectIncorrect.Status = "Correct";
           this.ShowReply = true;
@@ -726,7 +720,7 @@ export default {
     previousPage() {
       soundManager.stopAllSounds();
       this.exitFullScreen();
-      this.$router.replace({ path: `/GameSelect/${this.$route.params.Grade}` });
+      this.$router.replace({ path: `/${this.$route.params.Grade}` });
     },
     closeSratSheet() {
       this.scratchSheetVisible = false;
@@ -742,6 +736,7 @@ export default {
     hintbutton,
     scratchSheet,
     GameStartandOver,
+    GameStart,
     Header,
     LevelAndTime,
     MediaModal,
@@ -824,9 +819,6 @@ export default {
     BalloonShooting: defineAsyncComponent(() =>
       import("@/views/GameTemplate/BalloonShooting.vue")
     ),
-    DragFraction: defineAsyncComponent(() =>
-      import("@/views/GameTemplate/DragFractionTester.vue")
-    ), //for testing only
     NumberLock: defineAsyncComponent(() =>
       import("@/views/GameTemplate/NumberLock.vue")
     ),

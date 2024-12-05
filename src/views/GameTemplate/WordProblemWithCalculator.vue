@@ -22,9 +22,9 @@
   </div>
 </template>
 <script>
-import Calculator from "@/components/Calculator.vue";
+import Calculator from "@/components/calculator.vue";
 import Markdown from "@/components/Markdown.vue";
-import { wordProblemWithCalculator as emitter } from "@/utilitys/mitt.js";
+import { subComponentsVerifyAnswer as emitter } from "@/utilitys/mitt.js";
 export default {
   name: "WordProblemWithCalculator",
   components: {

@@ -5,12 +5,17 @@
     "Type": "PlainText",
     "Content": "請先比比看，並且拖曳框框中的 >, =, < 符號到正確的位置"
   },
-  "GameConfig": {},
+  "GameConfig": {
+    "CustomeSymbol": true,
+    "SystemSymbol": "BigSmall",
+    "WithImage": false,
+    "CheckAnswerMode": "Button"
+  },
   "Questions": [
     [
       {
         "QuestionText": "比大小",
-        "Description": "試試看，記得先從千位開始比大小喔",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
         "Datas": [
           [
@@ -34,7 +39,7 @@
       },
       {
         "QuestionText": "比大小",
-        "Description": "試試看，記得先從千位開始比大小喔",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
         "Datas": [
           [
@@ -58,7 +63,7 @@
       },
       {
         "QuestionText": "比大小",
-        "Description": "試試看，記得先從千位開始比大小喔",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
         "Datas": [
           [
@@ -82,7 +87,7 @@
       },
       {
         "QuestionText": "比大小",
-        "Description": "試試看，記得先從千位開始比大小喔",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
         "Datas": [
           [
@@ -106,7 +111,7 @@
       },
       {
         "QuestionText": "比大小",
-        "Description": "試試看，記得先從千位開始比大小喔",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
         "Datas": [
           [
@@ -132,7 +137,7 @@
     [
       {
         "QuestionText": "比大小",
-        "Description": "試試看，記得先從千位開始比大小喔",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
         "Datas": [
           [
@@ -156,7 +161,7 @@
       },
       {
         "QuestionText": "比大小",
-        "Description": "試試看，記得先從千位開始比大小喔",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
         "Datas": [
           [
@@ -180,7 +185,7 @@
       },
       {
         "QuestionText": "比大小",
-        "Description": "試試看，記得先從千位開始比大小喔",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
         "Datas": [
           [
@@ -204,7 +209,7 @@
       },
       {
         "QuestionText": "比大小",
-        "Description": "試試看，記得先從千位開始比大小喔",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
         "Datas": [
           [
@@ -228,7 +233,7 @@
       },
       {
         "QuestionText": "比大小",
-        "Description": "試試看，記得先從千位開始比大小喔",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
         "Datas": [
           [
@@ -254,7 +259,7 @@
     [
       {
         "QuestionText": "比大小",
-        "Description": "試試看，記得先從千位開始比大小喔",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
         "Datas": [
           [
@@ -278,7 +283,7 @@
       },
       {
         "QuestionText": "比大小",
-        "Description": "試試看，記得先從千位開始比大小喔",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
         "Datas": [
           [
@@ -302,7 +307,7 @@
       },
       {
         "QuestionText": "比大小",
-        "Description": "試試看，記得先從千位開始比大小喔",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
         "Datas": [
           [
@@ -326,7 +331,7 @@
       },
       {
         "QuestionText": "比大小",
-        "Description": "試試看，記得先從千位開始比大小喔",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
         "Datas": [
           [
@@ -350,7 +355,7 @@
       },
       {
         "QuestionText": "比大小",
-        "Description": "試試看，記得先從千位開始比大小喔",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
         "Datas": [
           [
@@ -376,7 +381,7 @@
     [
       {
         "QuestionText": "比大小",
-        "Description": "試試看，記得先從千位開始比大小喔",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
         "Datas": [
           [
@@ -400,7 +405,7 @@
       },
       {
         "QuestionText": "比大小",
-        "Description": "試試看，記得先從千位開始比大小喔",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
         "Datas": [
           [
@@ -424,7 +429,7 @@
       },
       {
         "QuestionText": "比大小",
-        "Description": "試試看，記得先從千位開始比大小喔",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
         "Datas": [
           [
@@ -448,7 +453,7 @@
       },
       {
         "QuestionText": "比大小",
-        "Description": "試試看，記得先從千位開始比大小喔",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
         "Datas": [
           [
@@ -472,7 +477,7 @@
       },
       {
         "QuestionText": "比大小",
-        "Description": "試試看，記得先從千位開始比大小喔",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
         "Datas": [
           [
@@ -498,7 +503,7 @@
     [
       {
         "QuestionText": "比大小",
-        "Description": "試試看，記得先從千位開始比大小喔",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
         "Datas": [
           [
@@ -522,7 +527,7 @@
       },
       {
         "QuestionText": "比大小",
-        "Description": "試試看，記得先從千位開始比大小喔",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
         "Datas": [
           [
@@ -546,7 +551,7 @@
       },
       {
         "QuestionText": "比大小",
-        "Description": "試試看，記得先從千位開始比大小喔",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
         "Datas": [
           [
@@ -570,7 +575,7 @@
       },
       {
         "QuestionText": "比大小",
-        "Description": "試試看，記得先從千位開始比大小喔",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
         "Datas": [
           [
@@ -594,7 +599,7 @@
       },
       {
         "QuestionText": "比大小",
-        "Description": "試試看，記得先從千位開始比大小喔",
+        "Description": "在框框裡拖入>、<或= ",
         "SlotComponentVerifycation": true,
         "Datas": [
           [

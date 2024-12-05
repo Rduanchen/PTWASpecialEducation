@@ -153,7 +153,7 @@
 
 <script>
 import draggable from "vuedraggable";
-import { wordProblemWithCalculator as emitter } from "@/utilitys/mitt.js";
+import { subComponentsVerifyAnswer as emitter } from "@/utilitys/mitt.js";
 export default {
   name: "calculator",
   display: "calculator",

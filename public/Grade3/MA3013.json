@@ -13,158 +13,183 @@
         "questionText": "請數數看錢幣，並且在以下的框框中以及定位版中輸入確的答案",
         "markdownIndex": "$n$ 1361是$i$個千、$i$ 個百、$i$個十、$i$個一合起來的",
         "markdownInputIndex": [1, 3, 6, 1],
+        "moneyBoard": [1, 3, 6, 1],
         "answer": 1361
       },
       {
         "questionText": "請數數看錢幣，並且在以下的框框中以及定位版中輸入確的答案",
         "markdownIndex": " $n$ 1525是$i$個千、$i$ 個百、$i$個十、$i$個一合起來的",
         "markdownInputIndex": [1, 5, 2, 5],
+        "moneyBoard": [1, 5, 2, 5],
         "answer": 1525
       },
       {
         "questionText": "請數數看錢幣，並且在以下的框框中以及定位版中輸入確的答案",
         "markdownIndex": "$n$ 1839是$i$個千、$i$ 個百、$i$個十、$i$個一合起來的",
         "markdownInputIndex": [1, 8, 3, 9],
+        "moneyBoard": [1, 8, 3, 9],
         "answer": 1839
       },
       {
         "questionText": "請數數看錢幣，並且在以下的框框中以及定位版中輸入確的答案",
         "markdownIndex": "$n$ 2184是$i$個千、$i$ 個百、$i$個十、$i$個一合起來的",
         "markdownInputIndex": [2, 1, 8, 4],
+        "moneyBoard": [2, 1, 8, 4],
         "answer": 2184
       },
       {
         "questionText": "請數數看錢幣，並且在以下的框框中以及定位版中輸入確的答案",
         "markdownIndex": "$n$ 3763是$i$個千、$i$ 個百、$i$個十、$i$個一合起來的",
         "markdownInputIndex": [3, 7, 6, 3],
+        "moneyBoard": [3, 7, 6, 3],
         "answer": 3763
       }
     ],
     [
       {
-        "questionText": "4 個千、3 個百、8 個十、2 個一，合起來是( 4382 )元。",
+        "questionText": "請數數看錢幣，並且在以下的框框中以及定位版中輸入確的答案。",
         "markdownIndex": "$n$ 4 個千、$i$ 個百、$i$ 個十、$i$ 個一合起來是",
-        "markdownInputIndex": [4, 3, 8, 2],
+        "markdownInputIndex": [3, 8, 2],
+        "moneyBoard": [4, 3, 8, 2],
         "answer": 4382
       },
       {
-        "questionText": "3 個千、1 個百、6 個十、5 個一，合起來是( 3165 )元。",
+        "questionText": "請數數看錢幣，並且在以下的框框中以及定位版中輸入確的答案",
         "markdownIndex": "$n$ 3 個千、$i$ 個百、$i$ 個十、$i$ 個一合起來是",
-        "markdownInputIndex": [3, 1, 6, 5],
+        "markdownInputIndex": [1, 6, 5],
+        "moneyBoard": [3, 1, 6, 5],
         "answer": 3165
       },
       {
-        "questionText": "3 個千、3 個百、3 個十、3 個一，合起來是( 3333 )元。",
+        "questionText": "請數數看錢幣，並且在以下的框框中以及定位版中輸入確的答案",
         "markdownIndex": "$n$ 3 個千、$i$ 個百、$i$ 個十、$i$ 個一合起來是",
-        "markdownInputIndex": [3, 3, 3, 3],
+        "markdownInputIndex": [3, 3, 3],
+        "moneyBoard": [3, 3, 3, 3],
         "answer": 3333
       },
       {
-        "questionText": "5 個千、6 個百、1 個十、9 個一，合起來是( 5619 )元。",
+        "questionText": "請數數看錢幣，並且在以下的框框中以及定位版中輸入確的答案",
         "markdownIndex": "$n$ 5 個千、$i$ 個百、$i$ 個十、$i$ 個一合起來是",
-        "markdownInputIndex": [5, 6, 1, 9],
+        "markdownInputIndex": [6, 1, 9],
+        "moneyBoard": [5, 6, 1, 9],
         "answer": 5619
       },
       {
-        "questionText": "2 個千、4 個百、6 個十、8 個一，合起來是( 2468 )元。",
+        "questionText": "請數數看錢幣，並且在以下的框框中以及定位版中輸入確的答案",
         "markdownIndex": "$n$ 2 個千、$i$ 個百、$i$ 個十、$i$ 個一合起來是",
-        "markdownInputIndex": [2, 4, 6, 8],
+        "markdownInputIndex": [4, 6, 8],
+        "moneyBoard": [2, 4, 6, 8],
         "answer": 2468
       }
     ],
     [
       {
-        "questionText": "錢包裡有( 0 )個千、( 20 )個百、( 1 )個十、( 2 )個一，合起來是( 2012 )元。",
+        "questionText": "請數數看錢幣，並且在以下的框框中以及定位版中輸入確的答案",
         "markdownIndex": "$n$ 0 個千、$i$ 個百、$i$ 個十、$i$ 個一合起來是",
-        "markdownInputIndex": [0, 20, 1, 2],
+        "markdownInputIndex": [20, 1, 2],
+        "moneyBoard": [0, 20, 1, 2],
         "answer": 2012
       },
       {
-        "questionText": "錢包裡有( 0 )個千、( 13 )個百、( 5 )個十、( 3 )個一，合起來是( 1353 )元。",
+        "questionText": "請數數看錢幣，並且在以下的框框中以及定位版中輸入確的答案",
         "markdownIndex": "$n$ 0 個千、$i$ 個百、$i$ 個十、$i$ 個一合起來是",
-        "markdownInputIndex": [0, 13, 5, 3],
+        "markdownInputIndex": [13, 5, 3],
+        "moneyBoard": [0, 13, 5, 3],
         "answer": 1353
       },
       {
-        "questionText": "錢包裡有( 0 )個千、( 18 )個百、( 7 )個十、( 8 )個一，合起來是( 1878 )元。",
+        "questionText": "請數數看錢幣，並且在以下的框框中以及定位版中輸入確的答案",
         "markdownIndex": "$n$ 0 個千、$i$ 個百、$i$ 個十、$i$ 個一合起來是",
-        "markdownInputIndex": [0, 18, 7, 8],
+        "markdownInputIndex": [18, 7, 8],
+        "moneyBoard": [0, 18, 7, 8],
         "answer": 1878
       },
       {
-        "questionText": "錢包裡有( 0 )個千、( 10 )個百、( 9 )個十、( 9 )個一，合起來是( 1099 )元。",
+        "questionText": "請數數看錢幣，並且在以下的框框中以及定位版中輸入確的答案",
         "markdownIndex": "$n$ 0 個千、$i$ 個百、$i$ 個十、$i$ 個一合起來是",
-        "markdownInputIndex": [0, 10, 9, 9],
+        "markdownInputIndex": [10, 9, 9],
+        "moneyBoard": [0, 10, 9, 9],
         "answer": 1099
       },
       {
-        "questionText": "錢包裡有( 0 )個千、( 24 )個百、( 6 )個十、( 3 )個一，合起來是( 2463 )元。",
+        "questionText": "請數數看錢幣，並且在以下的框框中以及定位版中輸入確的答案",
         "markdownIndex": "$n$ 0 個千、$i$ 個百、$i$ 個十、$i$ 個一合起來是",
-        "markdownInputIndex": [0, 24, 6, 3],
+        "markdownInputIndex": [24, 6, 3],
+        "moneyBoard": [0, 24, 6, 3],
         "answer": 2463
       }
     ],
     [
       {
-        "questionText": "錢包裡有( 1 )個千、( 5 )個百、( 2 )個十、( 10 )個一，合起來是( 1530 )元。",
+        "questionText": "請數數看錢幣，並且在以下的框框中以及定位版中輸入確的答案",
         "markdownIndex": "$n$ 1 個千、$i$ 個百、$i$ 個十、$i$ 個一合起來是",
-        "markdownInputIndex": [1, 5, 2, 10],
+        "markdownInputIndex": [5, 2, 10],
+        "moneyBoard": [1, 5, 2, 10],
         "answer": 1530
       },
       {
-        "questionText": "錢包裡有( 1 )個千、( 2 )個百、( 3 )個十、( 12 )個一，合起來是( 1242 )元。",
+        "questionText": "請數數看錢幣，並且在以下的框框中以及定位版中輸入確的答案",
         "markdownIndex": "$n$ 1 個千、$i$ 個百、$i$ 個十、$i$ 個一合起來是",
-        "markdownInputIndex": [1, 2, 3, 12],
+        "markdownInputIndex": [2, 3, 12],
+        "moneyBoard": [1, 2, 3, 12],
         "answer": 1242
       },
       {
-        "questionText": "錢包裡有( 2 )個千、( 4 )個百、( 5 )個十、( 11 )個一，合起來是( 2461 )元。",
+        "questionText": "請數數看錢幣，並且在以下的框框中以及定位版中輸入確的答案",
         "markdownIndex": "$n$ 2 個千、$i$ 個百、$i$ 個十、$i$ 個一合起來是",
-        "markdownInputIndex": [2, 4, 5, 11],
+        "markdownInputIndex": [4, 5, 11],
+        "moneyBoard": [2, 4, 5, 11],
         "answer": 2461
       },
       {
-        "questionText": "錢包裡有( 3 )個千、( 9 )個百、( 6 )個十、( 16 )個一，合起來是( 3976 )元。",
+        "questionText": "請數數看錢幣，並且在以下的框框中以及定位版中輸入確的答案",
         "markdownIndex": "$n$ 3 個千、$i$ 個百、$i$ 個十、$i$ 個一合起來是",
-        "markdownInputIndex": [3, 9, 6, 16],
+        "markdownInputIndex": [9, 6, 16],
+        "moneyBoard": [3, 9, 6, 16],
         "answer": 3976
       },
       {
-        "questionText": "錢包裡有( 5 )個千、( 3 )個百、( 7 )個十、( 14 )個一，合起來是( 5384 )元。",
+        "questionText": "請數數看錢幣，並且在以下的框框中以及定位版中輸入確的答案",
         "markdownIndex": "$n$ 5 個千、$i$ 個百、$i$ 個十、$i$ 個一合起來是",
-        "markdownInputIndex": [5, 3, 7, 14],
+        "markdownInputIndex": [3, 7, 14],
+        "moneyBoard": [5, 3, 7, 14],
         "answer": 5384
       }
     ],
     [
       {
-        "questionText": "錢包裡有( 6 )個千、( 13 )個百、( 0 )個十、( 7 )個一，合起來是( 7307 )元。",
+        "questionText": "請數數看錢幣，並且在以下的框框中以及定位版中輸入確的答案",
         "markdownIndex": "$n$ 6 個千、$i$ 個百、$i$ 個十、$i$ 個一合起來是",
-        "markdownInputIndex": [6, 13, 0, 7],
+        "markdownInputIndex": [13, 0, 7],
+        "moneyBoard": [6, 13, 0, 7],
         "answer": 7307
       },
       {
-        "questionText": "錢包裡有( 5 )個千、( 8 )個百、( 9 )個十、( 10 )個一，合起來是( 5900 )元。",
+        "questionText": "請數數看錢幣，並且在以下的框框中以及定位版中輸入確的答案",
         "markdownIndex": "$n$ 5 個千、$i$ 個百、$i$ 個十、$i$ 個一合起來是",
-        "markdownInputIndex": [5, 8, 9, 10],
+        "markdownInputIndex": [8, 9, 10],
+        "moneyBoard": [5, 8, 9, 10],
         "answer": 5900
       },
       {
-        "questionText": "錢包裡有( 3 )個千、( 1 )個百、( 11 )個十、( 2 )個一，合起來是( 3212 )元。",
+        "questionText": "請數數看錢幣，並且在以下的框框中以及定位版中輸入確的答案",
         "markdownIndex": "$n$ 3 個千、$i$ 個百、$i$ 個十、$i$ 個一合起來是",
-        "markdownInputIndex": [3, 1, 11, 2],
+        "markdownInputIndex": [1, 11, 2],
+        "moneyBoard": [3, 1, 11, 2],
         "answer": 3212
       },
       {
-        "questionText": "錢包裡有( 4 )個千、( 0 )個百、( 12 )個十、( 5 )個一，合起來是( 4125 )元。",
+        "questionText": "請數數看錢幣，並且在以下的框框中以及定位版中輸入確的答案",
         "markdownIndex": "$n$ 4 個千、$i$ 個百、$i$ 個十、$i$ 個一合起來是",
-        "markdownInputIndex": [4, 0, 12, 5],
+        "markdownInputIndex": [0, 12, 5],
+        "moneyBoard": [4, 0, 12, 5],
         "answer": 4125
       },
       {
-        "questionText": "錢包裡有( 2 )個千、( 12 )個百、( 5 )個十、( 9 )個一，合起來是( 3259 )元。",
+        "questionText": "請數數看錢幣，並且在以下的框框中以及定位版中輸入確的答案",
         "markdownIndex": "$n$ 2 個千、$i$ 個百、$i$ 個十、$i$ 個一合起來是",
-        "markdownInputIndex": [2, 12, 5, 9],
+        "markdownInputIndex": [12, 5, 9],
+        "moneyBoard": [2, 12, 5, 9],
         "answer": 3259
       }
     ]
