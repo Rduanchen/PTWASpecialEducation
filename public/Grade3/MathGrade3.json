@@ -336,6 +336,62 @@
     ]
   },
   {
+    "Title": "8 - 時間",
+    "Section": [
+      {
+        "Title": "1日24小時",
+        "Games": [
+          {
+            "id": "MA3181",
+            "Name": "時間配對",
+            "Description": "將圓形的各部位名稱拉到對應位置",
+            "Img": ""
+          },
+          {
+            "id": "MA3182",
+            "Name": "時間連連看",
+            "Description": "",
+            "Img": ""
+          }
+        ]
+      },
+      {
+        "Title": "時、分和秒",
+        "Games": [
+          {
+            "id": "MA3183",
+            "Name": "時間單位換算",
+            "Description": "",
+            "Img": ""
+          },
+          {
+            "id": "MA3184",
+            "Name": "能理解並運用適當的時間單位",
+            "Description": "",
+            "Img": ""
+          }
+        ]
+      },
+      {
+        "Title": "時分的加減計算",
+        "Games": [
+          {
+            "id": "MA3185",
+            "Name": "時分的加減(計算題)",
+            "Description": "",
+            "Img": ""
+          },
+          {
+            "id": "MA3186",
+            "Name": "時分的加減(應用題)",
+            "Description": "",
+            "Img": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
     "Title": "基礎數學2",
     "Section": [
       {
