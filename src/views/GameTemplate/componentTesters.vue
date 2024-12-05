@@ -7,7 +7,7 @@
       <option>dragToAlign</option>
       <option>dragImages</option>
       <option>scale</option>
-      <option selected>drawingBroad</option>
+      <option selected>drawingBoard</option>
     </select>
   </div>
   <div v-if="tester == 'fraction'">
@@ -85,13 +85,13 @@ export default {
       import("@/components/DragImages.vue")
     ),
     scale: defineAsyncComponent(() => import("@/components/Scale.vue")),
-    drawingBroad: defineAsyncComponent(() =>
-      import("@/components/DrawingBroad.vue")
+    drawingBoard: defineAsyncComponent(() =>
+      import("@/components/DrawingBoard.vue")
     ),
   },
   data() {
     return {
-      tester: "drawingBroad",
+      tester: "drawingBoard",
       configFraction: {
         verifyOption: "answer",
         shape: "circle",
