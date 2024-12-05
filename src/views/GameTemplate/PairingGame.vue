@@ -163,7 +163,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .dragable {
   cursor: pointer;
   display: flex;
@@ -175,11 +175,11 @@ export default {
 }
 .Outter {
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  margin: 2rem 0;
   .Submit {
-    margin: 1rem 1rem;
+    margin: 0.8rem 0;
     padding: 1rem 1rem;
     border: solid;
     border-radius: 15px;
@@ -198,12 +198,14 @@ export default {
   top: -1.5rem;
   left: 1rem;
   background-color: white;
+  margin: 0;
 }
 .Container {
   width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  padding-top: 1.8rem;
   .Selection {
     border: solid 3px #aaa;
     width: 20%;
@@ -215,11 +217,14 @@ export default {
       flex-direction: column;
       align-items: center;
       .InnerComponent {
-        display: grid;
-        grid-template-rows: 1fr;
+        display: flex;
+        flex-direction: column;
+        // display: grid;
+        // grid-template-rows: 1fr;
         gap: 0.5rem;
         width: 100%;
         .dragable {
+          flex: 1;
           max-height: 100px;
           border: solid 3px #aaa;
           border-radius: 15px;
@@ -244,7 +249,7 @@ export default {
       flex-direction: row;
       justify-content: space-evenly;
       align-items: center;
-      margin: 1rem 0;
+      // margin: 1rem 0;
       .Answer {
         width: 25%;
         border: solid 3px #000;
