@@ -40,8 +40,8 @@
   <div v-if="tester == 'scale'">
     <scale :Data="configScale" :ID="id" @replyAnswer="printAns"></scale>
   </div>
-  <div v-if="tester == 'drawingBroad'">
-    <drawingBroad :Data="configBrush"></drawingBroad>
+  <div v-if="tester == 'drawingBoard'">
+    <drawingBoard :Data="configBrush"></drawingBoard>
     <div class="btnContainer">
       <button
         @click="

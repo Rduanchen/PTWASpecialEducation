@@ -1,5 +1,5 @@
 <template>
-  <div ref="gameContainer">
+  <div ref="container">
     <canvas
       ref="canvas"
       @pointerdown="handlePointer"
