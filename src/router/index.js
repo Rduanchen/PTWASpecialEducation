@@ -41,10 +41,6 @@ const router = createRouter({
       component: () => import('@/components/NumberLine.vue'),
     },
     {
-      path: '/DigitalClock',
-      component: () => import('@/views/components/DigitalClock.vue'),
-    },
-    {
       path: '/tester',
       component: () => import('@/views/GameTemplate/componentTesters.vue'),
     },
