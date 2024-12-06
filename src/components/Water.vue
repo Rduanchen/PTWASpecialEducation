@@ -106,7 +106,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .Outter {
   display: flex;
   justify-content: center;

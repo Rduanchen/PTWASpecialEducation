@@ -1,5 +1,5 @@
 <template>
-  <div ref="container">
+  <div ref="container" class="container">
     <v-stage :config="configKonva">
       <v-layer>
         <v-rect :config="configBG"></v-rect>
@@ -43,6 +43,7 @@ export default {
       configNumberLine: [],
       configNumber: [],
       numberX: [],
+      isImage: false,
     };
   },
 
@@ -140,7 +141,9 @@ export default {
     drawDraggable() {
       let initId = 0;
       if (this.Data.init_pos) initId = this.getInitialPositionId();
-
+      console.log(
+        getGameAssets(this.ID, this.Data.image).includes("undefined")
+      );
       if (getGameAssets(this.ID, this.Data.image).includes("undefined")) {
         this.isImage = false;
         console.log("No image found");
@@ -235,3 +238,12 @@ export default {
   },
 };
 </script>
+<style scoped lang="scss">
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+</style>

@@ -41,11 +41,14 @@ export default {
       } else {
         container.style.fontSize = this.Data.Size;
       }
+    } else {
+      const container = this.$refs.textOnlyContainer;
+      container.style.fontSize = `${FONT_PACK["TEXT_MEDIUM"]}`;
     }
   },
 };
 </script>
-<style scoped>
+<style scoped lang="scss">
 /* Your component's CSS styles go here */
 div {
   width: 100%;

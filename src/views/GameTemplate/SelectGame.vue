@@ -1,238 +1,298 @@
 <template>
-    <div class="Container">
-        <div class="index">
-            <div class="Head">
-                <p class="h2" style="font-weight: bold;">{{ this.GameConfig.GlobalTitle }}</p>
-            </div>
-            <div class="Info">
-                <!-- 圖片的列 -->
-                <div class="Component" v-if="this.GameData.SlotComponents != undefined">
-                    <component class="GameImg" :is="this.SlotComponent" :ID="this.id" :Data="this.SlotData"></component>
-                </div>
-                <!-- 按鈕的列 -->
-                <div class="selection" v-if="this.GameData.SlotComponents != undefined"> 
-                    <div class="card">
-                        <p class="h2">{{ this.GameData.Question_Text }}</p>
-                    </div>
-                    <div class="choese">
-                        <button type="button" v-for="i in question" :class="{ 'Selected': this.Select[i] }" v-on:click="SelectItem(i)">{{ i }}</button>
-                    </div>
-                    <button type="button" class="Check" :class="{ 'OnSubmit': (this.Answer != null) }" v-on:click="CheckAnswer">送出答案</button>
-                </div>
-                <div class="selection2" v-else>
-                    <div class="card">
-                        <p class="h2">{{ this.GameData.Question_Text }}</p>
-                    </div>
-                    <div class="con">
-                        <div class="choese">
-                            <button type="button" v-for="i in question" :class="{ 'Selected': this.Select[i] }" v-on:click="SelectItem(i)">{{ i }}</button>
-                            <button type="button" class="Check" :class="{ 'OnSubmit': (this.Answer != null) }" v-on:click="CheckAnswer">送出答案</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <div class="outter-container">
+    <div class="head-container">
+      <p style="font-weight: bold">
+        {{ this.GameConfig.GlobalTitle }}
+      </p>
     </div>
+    <div class="down-container">
+      <div
+        class="component-container"
+        v-if="this.GameData.SlotComponents != undefined"
+      >
+        <component
+          :is="this.SlotComponent"
+          :ID="this.id"
+          :Data="this.SlotData"
+        ></component>
+      </div>
+      <div
+        class="container__right"
+        v-if="this.GameData.SlotComponents != undefined"
+      >
+        <div class="info__card">
+          <p>{{ this.GameData.Question_Text }}</p>
+        </div>
+        <div class="select-button__group">
+          <button
+            type="button"
+            v-for="i in question"
+            :class="{ 'button--onclick': this.Select[i] }"
+            v-on:click="SelectItem(i)"
+          >
+            {{ i }}
+          </button>
+        </div>
+        <button
+          type="button"
+          class="button--submit"
+          :class="{ 'button--onsubmit': this.Answer != null }"
+          v-on:click="CheckAnswer"
+        >
+          送出答案
+        </button>
+      </div>
+      <div class="container__buttom" v-else>
+        <div class="info__card">
+          <p class="h2">{{ this.GameData.Question_Text }}</p>
+        </div>
+        <div class="right--container">
+          <div class="select-button__group">
+            <button
+              type="button"
+              v-for="i in question"
+              :class="{ 'button--onclick': this.Select[i] }"
+              v-on:click="SelectItem(i)"
+            >
+              {{ i }}
+            </button>
+            <hr />
+            <button
+              type="button"
+              class="button--submit"
+              :class="{ 'button--onsubmit': this.Answer != null }"
+              v-on:click="CheckAnswer"
+            >
+              送出答案
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 <script>
-import { GamesGetAssetsFile } from '@/utilitys/get_assets.js';
-import { getComponents } from '@/utilitys/get-components.js';
+import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
+import { getComponents } from "@/utilitys/get-components.js";
 export default {
-    name: 'SelectGame',
-    data(){
-        return {
-            imageUrl:'',
-            question: [],
-            SlotComponent: null,
-            comp: null,
-            Answer: null,
-            Select:[]
-        }
+  name: "SelectGame",
+  data() {
+    return {
+      imageUrl: "",
+      question: [],
+      SlotComponent: null,
+      comp: null,
+      Answer: null,
+      Select: [],
+    };
+  },
+  props: {
+    GameData: {
+      type: Object,
+      required: true,
     },
-    props: {
-        GameData: {
-            type: Object,
-            required: true
-        },
-        GameConfig:{
-            type: Object,
-            required: true
-        },
-        id:{
-            type: String,
-            required: true
-        }
+    GameConfig: {
+      type: Object,
+      required: true,
+    },
+    id: {
+      type: String,
+      required: true,
+    },
 
-        //Other Game Methods
+    //Other Game Methods
+  },
+  methods: {
+    SelectItem(index) {
+      for (var i in this.Select) {
+        this.Select[i] = false;
+      }
+      this.Select[index] = true;
+      this.Answer = index;
     },
-    methods:{
-        SelectItem(index){
-            for(var i in this.Select){
-                this.Select[i] = false;
-            }
-            this.Select[index] = true;
-            this.Answer = index;
-        },
-        CheckAnswer(){
-            let answer = this.Answer;
-            if(answer == this.GameData.Answer){
-                this.$emit('play-effect', 'CorrectSound')
-                this.$emit('add-record',[this.GameData.Answer, answer,"正確"])
-                this.$emit('next-question');
-                console.log('check answer : True');
-            }
-            else{
-                this.$emit('play-effect', 'WrongSound',)
-                this.$emit('add-record',[this.GameData.Answer,answer,"錯誤"])
-                console.log('check answer : False');
-            }
-        }
+    CheckAnswer() {
+      let answer = this.Answer;
+      if (answer == this.GameData.Answer) {
+        this.$emit("play-effect", "CorrectSound");
+        this.$emit("add-record", [this.GameData.Answer, answer, "正確"]);
+        this.$emit("next-question");
+        console.log("check answer : True");
+      } else {
+        this.$emit("play-effect", "WrongSound");
+        this.$emit("add-record", [this.GameData.Answer, answer, "錯誤"]);
+        console.log("check answer : False");
+      }
     },
-    created() {
-        for(var i in this.GameData.Question){
-            this.question.push(this.GameData.Question[i]);
-            this.Select.push(false);
-        }
-        this.imageUrl=GamesGetAssetsFile(this.id,this.GameData.img)
-        if(this.GameData.SlotComponents != undefined){
-            let SlotComponentData = this.GameData.SlotComponents[0]
-            this.SlotData = SlotComponentData.Data;
-            this.SlotComponent = SlotComponentData.Name;
-        }
-        console.log(this.imageUrl);
-    },
-    mounted() {
-        // let selection = document.getElementsByClassName('selection')[0];
-        // selection.style.width = '100%';
-        // selection.flexDirection = 'row';
-
-    },
-    components: {
-        ImageContainer : getComponents('ImageContainer'),
+  },
+  created() {
+    for (var i in this.GameData.Question) {
+      this.question.push(this.GameData.Question[i]);
+      this.Select.push(false);
     }
-}
+    this.imageUrl = GamesGetAssetsFile(this.id, this.GameData.img);
+    if (this.GameData.SlotComponents != undefined) {
+      let SlotComponentData = this.GameData.SlotComponents[0];
+      this.SlotData = SlotComponentData.Data;
+      this.SlotComponent = SlotComponentData.Name;
+    }
+    console.log(this.imageUrl);
+  },
+  mounted() {
+    // let selection = document.getElementsByClassName('selection')[0];
+    // selection.style.width = '100%';
+    // selection.flexDirection = 'row';
+  },
+  components: {
+    ImageContainer: getComponents("ImageContainer"),
+  },
+};
 </script>
 <style scoped lang="scss">
-.card {
-    border-style: solid;
-}
-.Container {
+.outter-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: $gap--medium;
+  padding: 0 $gap--medium;
+  width: 100%;
+  height: 100%;
+  .head-container {
+    @extend .container-basic;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    justify-content: start;
     width: 100%;
-    max-height: 60vh !important;
-    .index{
-        .Head{
-            padding: 1em;
-            background-color: #bde0fe;
-        }
-        .Info{
-            display: grid;
-            margin-top: 2rem;
-            grid-template-columns: repeat(8, 1fr);
-            gap: 2rem;
-            align-items: center;
-            .selection{
-                grid-column: 6/9;
-                display: flex;
-                flex-direction: column;
-                gap: 1rem;
-                .card{
-                    padding: 1rem;
-                }
-                .choese{
-                    margin-top: 1rem;
-                    display: flex;
-                    flex-direction: column;
-                    gap: 1rem;
-                    button{
-                        scale: 1;
-                        transition: 0.25s;
-                    }
-                    button:hover{
-                        scale: 1.05;
-                    }
-                }
-            }
-            .selection2{
-                grid-column: 2/8;
-                display: grid;
-                grid-template-columns: repeat(5, 1fr);
-                gap: 2rem;
-                height: 100%;
-                width: 100%;
-                .card
-                {
-                    grid-column: 1/4;
-                    border: solid 1px black;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                }
-                .con{
-                    grid-column: 4/6;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-                    .choese{
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: space-between;
-                        gap: 1rem;
-                        button{
-                            scale: 1;
-                            transition: 0.25s;
-                        }
-                        button:hover{
-                            scale: 1.05;
-                        }
-                        .Check{
-                            margin-top: 2rem;
-                        }
-                    }
-                }
-            }
-            .Component{
-                grid-column: 1/5;
-                border: solid 1px black;
-                height: 80%;
-            }
-        }
+    height: 20%;
+    background-color: $primary-color;
+    font-size: $text-large;
+    padding: $gap--small;
+    p {
+      margin: auto 0 auto;
     }
-    .ImgArea{
-        width: 80%;
-    }
-}
-button {
-    height: 3rem;
-    font-size: xx-large;
+  }
+  .down-container {
+    height: 70%;
     width: 100%;
-    border: solid 1px black;
-    color: #000;
-    border-radius: 12px;
-    background-color: #FFF;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    gap: $gap--medium;
+    padding: $gap--medium;
+    .select-button__group {
+      height: 55%;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: $gap--small;
+      button {
+        @extend .button-basic;
+        border: none;
+        background-color: $primary-btn-bg;
+        height: 25%;
+        font-size: $text-small;
+      }
+    }
+    .component-container {
+      width: 35%;
+      // 適用於ImageContainer 這個 component
+      :deep(.image-container) {
+        img {
+          border-radius: 15px;
+        }
+      }
+    }
+    .container__right {
+      width: 50%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: $gap--medium;
+      button {
+        @extend .button-basic;
+        border-radius: 15px;
+        border: none;
+        font-size: $text-small;
+      }
+      .info__card {
+        height: 30%;
+        @extend .container-basic;
+        background-color: $info-color;
+        padding: $gap--small;
+        font-size: $text-medium;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        p {
+          margin: auto 0 auto;
+        }
+      }
+      .button--submit {
+        @extend .button--animation;
+        background-color: $submit-color;
+        height: 15%;
+        &:hover {
+          transform: scale($transform-scale);
+        }
+      }
+    }
+    .container__buttom {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      width: 100%;
+      height: 100%;
+      .info__card {
+        width: 40%;
+        @extend .container-basic;
+        background-color: $info-color;
+        padding: $gap--small;
+        font-size: $text-medium;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        p {
+          margin: auto 0 auto;
+        }
+      }
+      .right--container {
+        width: 50%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: $gap--medium;
+        .select-button__group {
+          height: 80%;
+        }
+      }
+      .button--submit {
+        @extend .button--animation;
+        background-color: $submit-color;
+        height: 15%;
+        &:hover {
+          transform: scale($transform-scale);
+        }
+      }
+    }
+  }
 }
-.OnSubmit {
-    animation: blink 1s linear infinite;
+.button--onsubmit {
+  animation: blink 1s linear infinite;
 }
 @keyframes blink {
-    0% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.05);
-    }
-    100% {
-        transform: scale(1);
-    }
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.03);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
-.Check{
-    background-color: #bde0fe;
-}
-.Selected{
-    background-color: #0298C0;
-    scale: 1.05;
+.button--onclick {
+  background-color: $primary-btn-hover-bg !important;
+  scale: 1.03;
 }
 </style>

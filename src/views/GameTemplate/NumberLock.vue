@@ -26,7 +26,7 @@
           @virtualpadinput-pop="Pop"
         ></VirtualNumPad>
       </div>
-      <button @click="CheckAnswer" class="button--submit">送出答案</button>
+      <button @click="CheckAnswer" class="button--submit">檢查答案</button>
     </div>
     {{ NowSelect }}
   </div>
@@ -44,9 +44,6 @@ export default {
     Input: defineAsyncComponent(() => import("@/components/ReplyInput.vue")),
     Fractions: defineAsyncComponent(() => import("@/components/Fractions.vue")),
     Markdown: defineAsyncComponent(() => import("@/components/Markdown.vue")),
-    NumberLineArrow: defineAsyncComponent(() =>
-      import("@/components/NumberLineV2.vue")
-    ),
     NumberLine: defineAsyncComponent(() =>
       import("@/components/NumberLine.vue")
     ),
@@ -55,6 +52,9 @@ export default {
     ),
     DragOnNumberLine: defineAsyncComponent(() =>
       import("@/components/DragOnNumberLine.vue")
+    ),
+    ImageContainer: defineAsyncComponent(() =>
+      import("@/components/ImageContainer.vue")
     ),
   },
   props: {
@@ -292,6 +292,7 @@ export default {
   padding: 10px;
   border-radius: 10px;
   border: solid;
+  max-height: 80vh;
 }
 .left-column {
   display: flex;
@@ -299,6 +300,7 @@ export default {
   justify-content: center;
   gap: $gap--small;
   .game-area {
+    max-height: 40vh;
     display: flex;
     justify-content: center;
     align-items: center;

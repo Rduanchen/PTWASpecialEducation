@@ -10,7 +10,7 @@
         <v-line
           v-for="pointSet in configGrid"
           :points="pointSet"
-          :stroke="'black'"
+          :stroke="'#aaa'"
         ></v-line>
         <v-image :config="configReturnBtn" @pointerdown="deleteLine"></v-image>
       </v-layer>
@@ -407,6 +407,7 @@ export default {
       return false;
     },
     deleteLine() {
+      if (this.configLine.length == 0) return;
       let id = this.configLine.length - 1;
       if (this.configLine[id].stroke != "brown") {
         this.configLine.splice(id, 1);

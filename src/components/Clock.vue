@@ -3,11 +3,8 @@
     <canvas id="clock" ref="Clock"></canvas>
   </div>
 </template>
-
 <script>
-import { GetSlotComponentData } from "../utilitys/get_assets";
-import Img from "../assets/SlotComponentData/Clock/Clock.png";
-
+import { getSlotComponentAssets } from "../utilitys/get_assets";
 export default {
   name: "Clock",
   data() {
@@ -45,7 +42,7 @@ export default {
       ctx.scale(dpr, dpr); // 根據設備像素比率縮放畫布
 
       let img = new Image();
-      img.src = Img;
+      img.src = getSlotComponentAssets("Clock", "Clock.png");
       img.onload = function () {
         ctx.drawImage(img, 0, 0, border, border);
       };
@@ -113,7 +110,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 /* Your component-specific styles go here */
 .Outter {
   width: 100%;
