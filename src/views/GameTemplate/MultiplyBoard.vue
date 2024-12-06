@@ -14,7 +14,7 @@
       </div>
     </div>
     <div class="drawingBoard" :style="canvasStyle">
-      <drawingBoard :Data="configBrush"></drawingBoard>
+      <drawingBoard :Data="configBrush" ref="canvas"></drawingBoard>
     </div>
     <div class="function">
       <button @click="drawingFunc('brush')">{{ brushStatusBtn }}</button>
@@ -101,6 +101,9 @@ export default {
             this.canvasStyle.zIndex = -1;
             this.brushStatusBtn = "brush";
           }
+          break;
+        case "clear":
+          this.$refs.canvas.clear();
           break;
       }
     },
