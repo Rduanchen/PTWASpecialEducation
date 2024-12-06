@@ -13,6 +13,9 @@
         <button v-for="i in buttons" :style="i.style"></button>
       </div>
     </div>
+    <div class="drawingBoard" :style="canvasStyle">
+      <drawingBoard :Data="configBrush"></drawingBoard>
+    </div>
     <div class="function">
       <button @click="drawingFunc('brush')">{{ brushStatusBtn }}</button>
       <button @click="drawingFunc('clear')">clear</button>
@@ -20,9 +23,6 @@
       <button @click="drawingFunc('visibility')">
         {{ drawingBoardStatusBtn }}
       </button>
-    </div>
-    <div class="drawingBoard" :style="canvasStyle">
-      <drawingBoard :Data="configBrush"></drawingBoard>
     </div>
   </div>
 </template>
@@ -54,7 +54,7 @@ export default {
         },
       ],
       brushStatusBtn: "brush",
-      drawingBoardStatusBtn: "show",
+      drawingBoardStatusBtn: "hide",
       configBrush: {
         color: "red",
         size: 5,
@@ -82,7 +82,23 @@ export default {
   mounted() {},
 
   methods: {
-    drawingFunc(btn) {},
+    drawingFunc(btn) {
+      switch (btn) {
+        case "visibility":
+          if (this.canvasStyle.visibility == "visible") {
+            this.canvasStyle.visibility = "hidden";
+            this.drawingBoardStatusBtn = "show";
+          } else if (this.canvasStyle.visibility == "hidden") {
+            this.canvasStyle.visibility = "visible";
+            this.drawingBoardStatusBtn = "hide";
+          }
+          break;
+        case "brush":
+          if (this.canvasStyle.zIndex == -1) this.canvasStyle.zIndex = 0;
+          else if (this.canvasStyle.zIndex == 0) this.canvasStyle.zIndex = -1;
+          break;
+      }
+    },
   },
 };
 </script>
