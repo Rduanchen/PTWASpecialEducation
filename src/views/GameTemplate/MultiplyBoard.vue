@@ -14,10 +14,15 @@
       </div>
     </div>
     <div class="function">
-      <button>brush</button>
-      <button>clear</button>
-      <button>eraser</button>
-      <button>hide</button>
+      <button @click="drawingFunc('brush')">{{ brushStatusBtn }}</button>
+      <button @click="drawingFunc('clear')">clear</button>
+      <button @click="drawingFunc('eraser')">eraser</button>
+      <button @click="drawingFunc('visibility')">
+        {{ drawingBoardStatusBtn }}
+      </button>
+    </div>
+    <div class="drawingBoard" :style="canvasStyle">
+      <drawingBoard :Data="configBrush"></drawingBoard>
     </div>
   </div>
 </template>
@@ -25,7 +30,11 @@
 <script>
 import { defineAsyncComponent } from "vue";
 export default {
-  components: {},
+  components: {
+    drawingBoard: defineAsyncComponent(() =>
+      import("@/components/DrawingBoard.vue")
+    ),
+  },
   data() {
     return {
       buttons: [
@@ -44,6 +53,16 @@ export default {
           },
         },
       ],
+      brushStatusBtn: "brush",
+      drawingBoardStatusBtn: "show",
+      configBrush: {
+        color: "red",
+        size: 5,
+      },
+      canvasStyle: {
+        visibility: "visible",
+        zIndex: -1,
+      },
     };
   },
 
@@ -60,13 +79,10 @@ export default {
 
   emits: ["play-effect", "add-record", "next-question"],
 
-  mounted() {
-    this.initializeScene();
-  },
+  mounted() {},
 
   methods: {
-    initializeScene() {},
-    update() {},
+    drawingFunc(btn) {},
   },
 };
 </script>
@@ -74,11 +90,13 @@ export default {
 <style scoped lang="scss">
 .container {
   height: 100%;
-  width: auto;
+  width: 100%;
 }
+
 .board {
   height: 90%;
-  background-color: darkcyan;
+  width: fit-content;
+  margin: auto;
 }
 .question {
   height: 35%;
@@ -107,17 +125,30 @@ export default {
   aspect-ratio: 3/4;
   border: none;
 }
+hr {
+  opacity: 100;
+  border: 1px solid black;
+}
 
 .function {
+  z-index: 2;
   height: 10%;
-  width: 100%;
+  width: 70%;
   background-color: aqua;
   display: flex;
   justify-content: space-evenly;
+  margin: auto;
 }
 .function button {
   border: none;
   margin: 2%;
   width: 20%;
+}
+
+.drawingBoard {
+  height: 95%;
+  width: 95%;
+  position: absolute;
+  top: 0;
 }
 </style>
