@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import { symOutlinedIndeterminateCheckBox } from "@quasar/extras/material-symbols-outlined";
 import { defineAsyncComponent } from "vue";
 export default {
   components: {
@@ -55,9 +56,13 @@ export default {
       ],
       brushStatusBtn: "brush",
       drawingBoardStatusBtn: "hide",
-      configBrush: {
-        color: "red",
+      brush: {
+        color: "black",
         size: 5,
+      },
+      eraser: {
+        color: "eraser",
+        size: 20,
       },
       canvasStyle: {
         visibility: "visible",
@@ -79,23 +84,19 @@ export default {
 
   emits: ["play-effect", "add-record", "next-question"],
 
+  beforeMount() {
+    this.configBrush = this.brush;
+  },
+
   mounted() {},
 
   methods: {
     drawingFunc(btn) {
       switch (btn) {
-        case "visibility":
-          if (this.canvasStyle.visibility == "visible") {
-            this.canvasStyle.visibility = "hidden";
-            this.drawingBoardStatusBtn = "show";
-          } else if (this.canvasStyle.visibility == "hidden") {
-            this.canvasStyle.visibility = "visible";
-            this.drawingBoardStatusBtn = "hide";
-          }
-          break;
         case "brush":
           if (this.canvasStyle.zIndex == -1) {
             this.canvasStyle.zIndex = 1;
+            this.configBrush = this.brush;
             this.brushStatusBtn = "control";
           } else if (this.canvasStyle.zIndex == 1) {
             this.canvasStyle.zIndex = -1;
@@ -104,6 +105,21 @@ export default {
           break;
         case "clear":
           this.$refs.canvas.clear();
+          break;
+        case "eraser":
+          this.canvasStyle.zIndex = -1;
+          this.configBrush = this.eraser;
+          this.canvasStyle.zIndex = 1;
+          this.brushStatusBtn = "control";
+          break;
+        case "visibility":
+          if (this.canvasStyle.visibility == "visible") {
+            this.canvasStyle.visibility = "hidden";
+            this.drawingBoardStatusBtn = "show";
+          } else if (this.canvasStyle.visibility == "hidden") {
+            this.canvasStyle.visibility = "visible";
+            this.drawingBoardStatusBtn = "hide";
+          }
           break;
       }
     },
