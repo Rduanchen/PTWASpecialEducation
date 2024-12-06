@@ -94,8 +94,13 @@ export default {
           }
           break;
         case "brush":
-          if (this.canvasStyle.zIndex == -1) this.canvasStyle.zIndex = 0;
-          else if (this.canvasStyle.zIndex == 0) this.canvasStyle.zIndex = -1;
+          if (this.canvasStyle.zIndex == -1) {
+            this.canvasStyle.zIndex = 1;
+            this.brushStatusBtn = "control";
+          } else if (this.canvasStyle.zIndex == 1) {
+            this.canvasStyle.zIndex = -1;
+            this.brushStatusBtn = "brush";
+          }
           break;
       }
     },
@@ -147,6 +152,7 @@ hr {
 }
 
 .function {
+  position: relative;
   z-index: 2;
   height: 10%;
   width: 70%;
