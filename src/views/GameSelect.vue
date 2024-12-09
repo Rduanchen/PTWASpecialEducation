@@ -1,30 +1,24 @@
 <template>
   <div class="outter">
     <header>
-      <nav
-        class="container navbar navbar-expand-md sticky-top"
-        style="width: 100%"
-      >
-        <a class="navbar-brand mt-2 mb-2" href="#" alt="Home">
+      <nav class="game-select__nav" style="width: 100%">
+        <div class="img-container">
           <img src="@/assets/images/nav_bar/logo.png" />
-        </a>
-        <form class="mx-auto">
-          <button class="btn btn-primary m-1" @click="ChangeSubject('Math')">
+        </div>
+        <!-- <div class="fake-img"></div> -->
+        <div class="subjects">
+          <button class="subject__btn" @click="ChangeSubject('Math')">
             {{ Subjects["Math"] }}
           </button>
-          <button class="btn btn-primary m-1" @click="ChangeSubject('Chinese')">
+          <button class="subject__btn" @click="ChangeSubject('Chinese')">
             {{ Subjects["Chinese"] }}
           </button>
-          <button
-            class="btn btn-primary m-1"
-            @click="ChangeSubject('Technology')"
-          >
+          <button class="subject__btn" @click="ChangeSubject('Technology')">
             {{ Subjects["Technology"] }}
           </button>
-        </form>
-        <div class="SearchGroup d-flex">
+        </div>
+        <div class="search-group">
           <input
-            class="form-control"
             :placeholder="
               this.ShowSearch ? '按下esc可以返回' : '輸入ID或者標題'
             "
@@ -33,7 +27,7 @@
             @keyup.esc="Return2Menu()"
           />
           <button
-            class="btn btn-primary text-nowrap"
+            class="search-group__btn-search"
             type="submit"
             v-on:click="SearchGame()"
           >
@@ -43,11 +37,8 @@
       </nav>
     </header>
     <section v-if="ShowMenu">
-      <div
-        class="d-flex flex-column align-items-center d-grid gap-5 justify-content-center Subject_container"
-        style="width: 100%; height: 90vh"
-      >
-        <p class="h1">請選科目</p>
+      <div class="subjects_container">
+        <p class="title">請選科目</p>
         <a
           v-on:click="
             ChangeSubject('Math');
@@ -72,77 +63,67 @@
       </div>
     </section>
     <section
-      class="GameSelectSection"
+      class="game-select__container"
       style="overflow-y: hidden"
       v-if="ShowContent"
     >
-      <div class="select-index">
-        <div class="side-bar">
-          <div>
-            <p class="Title">現在科目</p>
-            <button class="">{{ Subjects[Subject] }}</button>
-            <p class="Title">章節</p>
-            <div class="ButtonContainer">
-              <div v-for="(items, key) in this.ShowInfo" v-if="this.ShowInfo">
-                <button
-                  class="list-group-item"
-                  @click="
-                    () => {
-                      SelectChapter(key);
-                      MakeReadText('', '', (stop = true));
-                    }
-                  "
-                >
-                  {{ items.Title }}
-                </button>
-              </div>
-            </div>
-          </div>
+      <div class="side-bar">
+        <p class="title">現在科目</p>
+        <button class="">{{ Subjects[Subject] }}</button>
+        <p class="title">章節</p>
+        <div class="button-container">
+          <template v-for="(items, key) in this.ShowInfo" v-if="this.ShowInfo">
+            <button
+              class="list-group-item"
+              @click="
+                () => {
+                  SelectChapter(key);
+                  MakeReadText('', '', (stop = true));
+                }
+              "
+            >
+              {{ items.Title }}
+            </button>
+          </template>
         </div>
-        <!-- 遊戲卡片區域 -->
-        <div class="item-frame" v-if="Show" :key="Refresh">
-          <div
-            class="Charpter"
-            v-for="items in this.ShowInfo[SelectedChapter].Section"
-            v-if="this.ShowInfo"
-          >
-            <div>
-              <p class="card-title">{{ items.Title }}</p>
-              <div class="game-card__group">
-                <div class="card game-card" v-for="item in items.Games">
-                  <GameCard
-                    @enterGame="
-                      switchRouter({
-                        name: 'Game',
-                        params: {
-                          id: item.id,
-                          Grade: this.ShowGrade,
-                          Subject: this.Subject,
-                          GameName: item.Name,
-                        },
-                      })
-                    "
-                    @readText="MakeReadText"
-                    :gameInfo="{
+      </div>
+      <!-- 遊戲卡片區域 -->
+      <div class="game-display__container" v-if="Show" :key="Refresh">
+        <div
+          class="game-charpter__container"
+          v-for="items in this.ShowInfo[SelectedChapter].Section"
+          v-if="this.ShowInfo"
+        >
+          <p class="game-charpter__title">{{ items.Title }}</p>
+          <div class="game-card__group">
+            <div class="card game-card" v-for="item in items.Games">
+              <GameCard
+                @enterGame="
+                  switchRouter({
+                    name: 'Game',
+                    params: {
                       id: item.id,
-                      imgSrc: item.Img,
-                      name: item.Name,
-                      description: item.Description,
-                    }"
-                  />
-                </div>
-              </div>
+                      Grade: this.ShowGrade,
+                      Subject: this.Subject,
+                      GameName: item.Name,
+                    },
+                  })
+                "
+                @readText="MakeReadText"
+                :gameInfo="{
+                  id: item.id,
+                  imgSrc: item.Img,
+                  name: item.Name,
+                  description: item.Description,
+                }"
+              />
             </div>
           </div>
         </div>
       </div>
     </section>
     <section class="search_result" v-if="ShowSearch != false">
-      <div
-        v-if="SearchResult == undefined"
-        class="d-flex flex-column d-grid gap-2 align-items-center justify-content-center"
-        style="width: 100vw; height: 90vh"
-      >
+      <div v-if="SearchResult == undefined" class="serch-result__not-found">
         <div>
           <p class="h1">沒有搜尋結果</p>
           <br />
@@ -155,7 +136,7 @@
           </button>
         </div>
       </div>
-      <div v-else class="search-result-cotainer">
+      <div v-else class="search-result__container">
         <p class="h1 mb-3">搜尋結果:</p>
         <div class="game-card__group">
           <div
@@ -174,40 +155,20 @@
               })
             "
           >
-            <div class="card-body d-flex flex-column justify-content-between">
-              <img :src="item.Img" class="card-img-top" alt="..." />
-              <div
-                class="content d-flex flex-column align-content-end justify-content-end"
-              >
-                <a
-                  class="h5 card-title mt-2 d-flex flex-row justify-content-between"
-                >
-                  <router-link
-                    :to="{
-                      name: 'Game',
-                      params: {
-                        id: item.id,
-                        Grade: this.ShowGrade,
-                        Subject: this.Subject,
-                        GameName: item.Name,
-                      },
-                    }"
-                    @click="MakeReadText('', '', (stop = true))"
-                    class="align-self-center"
-                    >{{ item.Name }}</router-link
-                  ><a
-                    @click="MakeReadText(item.Name, item.Description)"
-                    class="btn btn-primary mx-2"
-                    ><i class="bi bi-volume-up-fill"></i></a
-                ></a>
-                <p class="text-truncate">{{ item.Description }}</p>
-              </div>
-            </div>
+            <GameCard
+              @readText="MakeReadText"
+              :gameInfo="{
+                id: item.id,
+                imgSrc: item.Img,
+                name: item.Name,
+                description: item.Description,
+              }"
+            />
           </div>
         </div>
-        <div class="row justify-content-center">
+        <div class="">
           <button
-            class="btn btn-primary btn-block m-5"
+            class="btn-back"
             v-on:click="Return2Menu()"
             style="height: 3em; width: 20rem"
           >
@@ -223,6 +184,7 @@ import fetchJson from "@/utilitys/fetch-json.js";
 import * as RD from "@/utilitys/readtext.js";
 import { getGameAssets } from "@/utilitys/get_assets.js";
 import gameCard from "@/components/game-system/GameCard.vue";
+import Game from "./Game.vue";
 export default {
   components: {
     GameCard: gameCard,
@@ -421,187 +383,381 @@ export default {
 
 <style lang="scss" scoped>
 header {
-  background-color: $primary-color;
   touch-action: none !important;
   user-select: none !important;
   -webkit-user-select: none !important;
   -moz-user-select: none !important;
   -ms-user-select: none !important;
-}
-.navbar {
-  background-color: $primary-color;
-  button {
-    background-color: $primary-btn-bg;
-    border: solid 1px $primary-btn-bg;
-    border-radius: $border-radius;
-    margin: 0 1rem;
-  }
-  button:hover {
-    background-color: $primary-btn-hover-bg;
-    transform: scale($transform-scale);
-  }
-  @media (min-width: 768px) {
-    height: 10vh;
-  }
-  @media (max-width: 768px) {
-    height: auto;
-  }
-  .navbar-brand {
-    img {
-      @media (max-width: 768px) {
-        max-width: 50vw;
+  .game-select__nav {
+    background-color: #cb9fcf;
+    height: 10vh !important;
+    padding: 0 2rem;
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: 1fr 2fr 2fr;
+    .img-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      img {
+        height: 8vh;
+        width: auto;
+        object-fit: contain;
       }
-      @media (min-width: 768px) {
-        max-width: 20vw;
+    }
+    .subjects {
+      height: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      .subject__btn {
+        width: 33%;
+        max-width: 9rem;
+        height: 3rem;
+        border-radius: $border-radius;
+        background-color: #bdb2ff;
+        border: none;
+      }
+    }
+    .search-group {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      input {
+        width: 70%;
+        height: 3rem;
+        border: solid;
+        border-radius: $border-radius;
+        border: none;
+        padding: 0 1rem;
+        &:focus {
+          outline: 3px solid blue;
+        }
+      }
+      .search-group__btn-search {
+        height: 3rem;
+        padding: 10px 1rem;
+        border-radius: $border-radius;
+        background-color: #bdb2ff;
+        border: none;
       }
     }
   }
-  img {
-    max-width: 80%;
-  }
 }
-
-.nav-link {
-  transition: transform 0.3s ease; /* 平滑過渡效果 */
-}
-
-section {
+.subjects_container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
   height: 90vh;
-  background-color: #ffff;
-}
-
-.breadcrumb .breadcrumb-item {
-  a {
-    color: #fff;
-    font-size: 1.2em;
-  }
-}
-
-.nav-link {
-  transition: transform 0.3s ease; /* 平滑過渡效果 */
-}
-
-.Subject_container {
-  img:hover {
-    transform: scale(1.1);
+  .title {
+    font-size: 3rem;
+    font-weight: bold;
   }
   img {
-    transition: transform 0.3s ease; /* 平滑過渡效果 */
+    width: 40vh;
   }
 }
-
-// 當尺寸小於 768px 時
-@media (max-width: 768px) {
-  .game-card__group {
-    grid-template-columns: 1fr !important;
-  }
-  .select-index {
-    grid-template-columns: 1fr 2fr !important;
-  }
-}
-
-.select-index {
+.game-select__container {
   display: grid;
-  grid-template-columns: 2fr 10fr;
+  grid-template-columns: 1fr 5fr;
+  height: 90vh;
   .side-bar {
-    touch-action: none !important;
-    user-select: none !important;
-    -webkit-user-select: none !important;
-    -moz-user-select: none !important;
-    -ms-user-select: none !important;
     display: flex;
     flex-direction: column;
     height: 90vh;
-    background-color: $sub-color;
-    padding: $gap--small;
+    background-color: #ddd;
+    padding: 0 1rem;
     button {
+      @extend .button-border;
       width: 100%;
-      background-color: $info-btn-bg;
-      border: none;
-      border-radius: $border-radius;
-      color: $secondary-btn-text;
-      font-weight: 700;
+      font-weight: 600;
       font-size: 1.2rem;
       height: 2.6rem;
     }
-    .Title {
+    .title {
       font-size: 1.5em;
-      margin-bottom: $gap--tiny;
+      margin: 1rem 0;
     }
-    .ButtonContainer {
+    .button-container {
       display: grid;
       gap: 1rem;
       button {
-        transition: transform 0.3s ease; /* 平滑的過渡效果 */
+        transition: transform 0.3s ease;
         font-size: 1rem;
-        font-weight: 800;
         background-color: #feece9;
-        border-radius: $border-radius;
-        color: $secondary-btn-text;
+        color: #333;
       }
       button:hover {
-        transform: scale($transform-scale);
-        background-color: $secondary-btn-hover-bg;
+        transform: scale(1.05);
+        background-color: #feece9;
       }
-    }
-  }
-  .item-frame {
-    max-height: 90vh;
-    overflow-y: scroll;
-    padding: $gap--medium;
-    @media (pointer: fine) {
-      -ms-overflow-style: none; /* IE/Edge */
-      &::-webkit-scrollbar {
-        display: none;
-      }
-    }
-    .Charpter {
-      margin-bottom: 2vh;
-    }
-    .card-title {
-      font-size: 1.5em;
-      margin-bottom: $gap--tiny;
     }
   }
 }
+
+.game-display__container {
+  padding: 1rem;
+  overflow-y: scroll;
+  .game-charpter__container {
+    margin-bottom: 2vh;
+  }
+  .game-charpter__title {
+    font-size: 1.5rem;
+  }
+}
+
 .game-card__group {
   display: grid;
   width: 100%;
   align-self: center;
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: auto;
-  gap: 2rem;
+  gap: 1.5rem;
   .game-card {
     border-radius: $border-radius;
     border: solid 2px #aaa;
-    transition: transform 0.3s ease; /* 平滑過渡效果 */
+    transition: transform 0.3s ease;
     min-height: 16rem;
-    .card-title {
-      font-size: 1.1rem;
-      margin-bottom: 1vh;
-    }
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
   }
   .game-card:hover {
-    transform: scale(1.05); /* 當滑鼠懸停時放大 5% */
-  }
-  @media (pointer: fine) {
-    -ms-overflow-style: none; /* IE/Edge */
-    &::-webkit-scrollbar {
-      display: none;
-    }
+    transform: scale(1.05);
   }
 }
+
 .search_result {
+  height: 90vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 1rem;
-  max-height: 90vh;
-  overflow-y: scroll;
+  .btn-back {
+    width: 20rem;
+    height: 3em;
+    background-color: $primary-btn-bg;
+    border: none;
+    &:hover {
+      background-color: $primary-btn-hover-bg;
+      scale: $transform-scale;
+    }
+  }
+  .serch-result__not-found {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    .h1 {
+      font-size: 3rem;
+      font-weight: bold;
+    }
+    button {
+      width: 10rem;
+      height: 3em;
+    }
+  }
+  .search-result__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    @extend .game-card__group;
+    width: 70%;
+    .game-card__group {
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+  }
 }
+
+// header {
+//   background-color: $primary-color;
+//   touch-action: none !important;
+//   user-select: none !important;
+//   -webkit-user-select: none !important;
+//   -moz-user-select: none !important;
+//   -ms-user-select: none !important;
+// }
+// .navbar {
+//   background-color: $primary-color;
+//   button {
+//     background-color: $primary-btn-bg;
+//     border: solid 1px $primary-btn-bg;
+//     border-radius: $border-radius;
+//     margin: 0 1rem;
+//   }
+//   button:hover {
+//     background-color: $primary-btn-hover-bg;
+//     transform: scale($transform-scale);
+//   }
+//   @media (min-width: 768px) {
+//     height: 10vh;
+//   }
+//   @media (max-width: 768px) {
+//     height: auto;
+//   }
+//   .navbar-brand {
+//     img {
+//       @media (max-width: 768px) {
+//         max-width: 50vw;
+//       }
+//       @media (min-width: 768px) {
+//         max-width: 20vw;
+//       }
+//     }
+//   }
+//   img {
+//     max-width: 80%;
+//   }
+// }
+
+// .nav-link {
+//   transition: transform 0.3s ease; /* 平滑過渡效果 */
+// }
+
+// section {
+//   height: 90vh;
+//   background-color: #ffff;
+// }
+
+// .breadcrumb .breadcrumb-item {
+//   a {
+//     color: #fff;
+//     font-size: 1.2em;
+//   }
+// }
+
+// .nav-link {
+//   transition: transform 0.3s ease; /* 平滑過渡效果 */
+// }
+
+// .Subject_container {
+//   img:hover {
+//     transform: scale(1.1);
+//   }
+//   img {
+//     transition: transform 0.3s ease; /* 平滑過渡效果 */
+//   }
+// }
+
+// // 當尺寸小於 768px 時
+// @media (max-width: 768px) {
+//   .game-card__group {
+//     grid-template-columns: 1fr !important;
+//   }
+//   .select-index {
+//     grid-template-columns: 1fr 2fr !important;
+//   }
+// }
+
+// .select-index {
+//   display: grid;
+//   grid-template-columns: 2fr 10fr;
+//   .side-bar {
+//     touch-action: none !important;
+//     user-select: none !important;
+//     -webkit-user-select: none !important;
+//     -moz-user-select: none !important;
+//     -ms-user-select: none !important;
+//     display: flex;
+//     flex-direction: column;
+//     height: 90vh;
+//     background-color: $sub-color;
+//     padding: $gap--small;
+//     button {
+//       width: 100%;
+//       background-color: $info-btn-bg;
+//       border: none;
+//       border-radius: $border-radius;
+//       color: $secondary-btn-text;
+//       font-weight: 700;
+//       font-size: 1.2rem;
+//       height: 2.6rem;
+//     }
+//     .Title {
+//       font-size: 1.5em;
+//       margin-bottom: $gap--tiny;
+//     }
+//     .ButtonContainer {
+//       display: grid;
+//       gap: 1rem;
+//       button {
+//         transition: transform 0.3s ease; /* 平滑的過渡效果 */
+//         font-size: 1rem;
+//         font-weight: 800;
+//         background-color: #feece9;
+//         border-radius: $border-radius;
+//         color: $secondary-btn-text;
+//       }
+//       button:hover {
+//         transform: scale($transform-scale);
+//         background-color: $secondary-btn-hover-bg;
+//       }
+//     }
+//   }
+//   .item-frame {
+//     max-height: 90vh;
+//     overflow-y: scroll;
+//     padding: $gap--medium;
+//     @media (pointer: fine) {
+//       -ms-overflow-style: none; /* IE/Edge */
+//       &::-webkit-scrollbar {
+//         display: none;
+//       }
+//     }
+//     .Charpter {
+//       margin-bottom: 2vh;
+//     }
+//     .card-title {
+//       font-size: 1.5em;
+//       margin-bottom: $gap--tiny;
+//     }
+//   }
+// }
+// .game-card__group {
+//   display: grid;
+//   width: 100%;
+//   align-self: center;
+//   grid-template-columns: 1fr 1fr 1fr;
+//   grid-template-rows: auto;
+//   gap: 2rem;
+//   .game-card {
+//     border-radius: $border-radius;
+//     border: solid 2px #aaa;
+//     transition: transform 0.3s ease; /* 平滑過渡效果 */
+//     min-height: 16rem;
+//     .card-title {
+//       font-size: 1.1rem;
+//       margin-bottom: 1vh;
+//     }
+//     img {
+//       width: 100%;
+//       height: 100%;
+//       object-fit: contain;
+//     }
+//   }
+//   .game-card:hover {
+//     transform: scale(1.05); /* 當滑鼠懸停時放大 5% */
+//   }
+//   @media (pointer: fine) {
+//     -ms-overflow-style: none; /* IE/Edge */
+//     &::-webkit-scrollbar {
+//       display: none;
+//     }
+//   }
+// }
+// .search_result {
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   padding: 1rem;
+//   max-height: 90vh;
+//   overflow-y: scroll;
+// }
 </style>
