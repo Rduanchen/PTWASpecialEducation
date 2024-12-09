@@ -7,7 +7,7 @@
       <DrawShapes
         id="draw-shapes"
         :Data="configDrawShapes"
-        :ID="this.id"
+        :ID="this.ID"
         @replyAnswer="getComponentsReply"
       ></DrawShapes>
     </div>
@@ -37,15 +37,15 @@ export default {
     };
   },
   props: {
-    GameConfig: {
-      type: Object,
-      required: true,
-    },
     GameData: {
       type: Object,
       required: true,
     },
-    id: {
+    GameConfig: {
+      type: Object,
+      required: true,
+    },
+    ID: {
       type: String,
       required: true,
     },

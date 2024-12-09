@@ -32,7 +32,7 @@
             <component
               :is="item[0].Name"
               :Data="item[0].Data"
-              :ID="this.id"
+              :ID="this.ID"
               @ReplyAnswer="SlotComponentReplyAnswer(0, $event)"
             ></component>
           </div>
@@ -57,7 +57,7 @@
             <component
               :is="item[1].Name"
               :Data="item[1].Data"
-              :ID="this.id"
+              :ID="this.ID"
               @ReplyAnswer="SlotComponentReplyAnswer(1, $event)"
             ></component>
           </div>
@@ -123,7 +123,7 @@ export default {
       type: Object,
       required: true,
     },
-    id: {
+    ID: {
       type: String,
       required: true,
     },

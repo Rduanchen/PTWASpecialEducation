@@ -69,6 +69,10 @@ export default {
       type: Object,
       required: true,
     },
+    ID: {
+      type: String,
+      required: true,
+    },
   },
 
   emits: ["play-effect", "add-record", "next-question"],

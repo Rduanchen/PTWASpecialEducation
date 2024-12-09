@@ -66,7 +66,7 @@ export default {
       type: Object,
       required: true,
     },
-    id: {
+    ID: {
       type: String,
       required: true,
     },
@@ -75,7 +75,7 @@ export default {
     return {
       NowSelect: null,
       ShowPad: false,
-      ID: this.id,
+      ID: this.ID,
       topComponentsAnswer: false,
       downComponentsAnswer: false,
       // GameData: {

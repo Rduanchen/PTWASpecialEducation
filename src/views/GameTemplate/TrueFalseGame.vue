@@ -9,7 +9,7 @@
         <component
           :is="this.SlotComponent"
           :Data="this.SlotData"
-          :ID="this.id"
+          :ID="this.ID"
         ></component>
       </div>
       <div class="SelectArea">
@@ -68,7 +68,7 @@ export default {
       type: Object,
       required: true,
     },
-    id: {
+    ID: {
       type: String,
       required: true,
     },
@@ -100,7 +100,7 @@ export default {
     },
   },
   created() {
-    this.imageUrl = getGameAssets(this.id, this.GameData.img);
+    this.imageUrl = getGameAssets(this.ID, this.GameData.img);
     this.SlotComponent = this.GameData.SlotComponents[0].Name;
     this.SlotData = this.GameData.SlotComponents[0].Data;
   },

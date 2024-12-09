@@ -90,12 +90,12 @@ export default {
       type: Object,
       required: true,
     },
-    id: {
-      type: String,
-      required: true,
-    },
     GameConfig: {
       type: Object,
+      required: true,
+    },
+    ID: {
+      type: String,
       required: true,
     },
   },

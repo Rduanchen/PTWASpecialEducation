@@ -44,7 +44,7 @@
         <component
           :is="Object.Name"
           :Data="Object.Data"
-          :ID="this.id"
+          :ID="this.ID"
           class="Component"
           :key="ComponentConfig"
         ></component>
@@ -93,16 +93,16 @@ export default {
     ),
   },
   props: {
-    id: {
-      type: String,
-      required: true,
-    },
     GameData: {
       type: Object,
       required: true,
     },
     GameConfig: {
       type: Object,
+      required: true,
+    },
+    ID: {
+      type: String,
       required: true,
     },
   },
@@ -563,7 +563,7 @@ export default {
   },
 };
 </script>
-<style scoped lang="scss"> 
+<style scoped lang="scss">
 /* Your component-specific styles go here */
 .Container {
   width: 100%;

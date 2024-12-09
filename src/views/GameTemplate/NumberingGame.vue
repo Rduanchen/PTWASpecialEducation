@@ -6,7 +6,7 @@
         <component
           :is="this.slotcomponent.Name"
           :Data="this.slotcomponent.Data"
-          :ID="this.id"
+          :ID="this.ID"
         ></component>
       </div>
       <div class="optionbar">
@@ -60,7 +60,7 @@ export default {
       type: Object,
       required: true,
     },
-    id: {
+    ID: {
       type: String,
       required: true,
     },
@@ -70,7 +70,7 @@ export default {
     this.slotcomponent.Data = this.GameData.SlotComponents[0].Data;
   },
   mounted() {
-    this.imageUrl = GamesGetAssetsFile(this.id, this.GameData.img);
+    this.imageUrl = GamesGetAssetsFile(this.ID, this.GameData.img);
     for (
       var i = this.GameData.Question.Range[0];
       i <= this.GameData.Question.Range[1];

@@ -69,19 +69,17 @@
 import { getGameAssets } from "@/utilitys/get_assets.js";
 export default {
   name: "LinktoImageGame",
-  props: {
-    GameData: {
-      type: Object,
-      required: true,
-    },
-    GameConfig: {
-      type: Object,
-      required: true,
-    },
-    id: {
-      type: String,
-      required: true,
-    },
+  GameData: {
+    type: Object,
+    required: true,
+  },
+  GameConfig: {
+    type: Object,
+    required: true,
+  },
+  ID: {
+    type: String,
+    required: true,
   },
   data() {
     return {
@@ -386,7 +384,7 @@ export default {
   },
   created() {
     let BGImage = new window.Image();
-    BGImage.src = getGameAssets(this.id, this.GameData.BGSrc);
+    BGImage.src = getGameAssets(this.ID, this.GameData.BGSrc);
 
     // 當圖片載入完成後再進行縮放和定位計算
     BGImage.onload = () => {

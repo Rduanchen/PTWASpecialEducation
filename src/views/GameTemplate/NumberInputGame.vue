@@ -4,7 +4,7 @@
     <div class="ImageCard" v-if="this.GameData.SlotComponents != undefined">
       <component
         class="component"
-        :ID="this.id"
+        :ID="this.ID"
         :Data="this.SlotData"
         :is="this.SlotComponent"
       ></component>
@@ -41,7 +41,7 @@ export default {
       type: Object,
       required: true,
     },
-    id: {
+    ID: {
       type: String,
       required: true,
     },

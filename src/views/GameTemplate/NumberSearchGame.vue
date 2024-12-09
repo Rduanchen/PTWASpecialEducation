@@ -84,14 +84,14 @@ export default {
       type: Object,
       required: true,
     },
-    id: {
+    ID: {
       type: String,
       required: true,
     },
   },
   created() {
     const image = new window.Image();
-    image.src = getGameAssets(this.id, this.GameData.img);
+    image.src = getGameAssets(this.ID, this.GameData.img);
     image.onload = () => {
       const aspectRatio = image.width / image.height;
       if (this.stageSize.width / this.stageSize.height > aspectRatio) {

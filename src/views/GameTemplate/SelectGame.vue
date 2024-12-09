@@ -12,7 +12,7 @@
       >
         <component
           :is="this.SlotComponent"
-          :ID="this.id"
+          :ID="this.ID"
           :Data="this.SlotData"
         ></component>
       </div>
@@ -95,12 +95,10 @@ export default {
       type: Object,
       required: true,
     },
-    id: {
+    ID: {
       type: String,
       required: true,
     },
-
-    //Other Game Methods
   },
   methods: {
     SelectItem(index) {
@@ -129,7 +127,7 @@ export default {
       this.question.push(this.GameData.Question[i]);
       this.Select.push(false);
     }
-    this.imageUrl = GamesGetAssetsFile(this.id, this.GameData.img);
+    this.imageUrl = GamesGetAssetsFile(this.ID, this.GameData.img);
     if (this.GameData.SlotComponents != undefined) {
       let SlotComponentData = this.GameData.SlotComponents[0];
       this.SlotData = SlotComponentData.Data;

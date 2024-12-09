@@ -88,7 +88,7 @@ export default {
       type: Object,
       required: true,
     },
-    id: {
+    ID: {
       type: String,
       required: true,
     },
@@ -138,7 +138,7 @@ export default {
         0; //Random number(Range: 0~picture_total-1)
       var name =
         "S_" + this.GameData.Question.ObjImgList[num] + this.picture_type;
-      var b = GamesGetAssetsFile(this.id, name);
+      var b = GamesGetAssetsFile(this.ID, name);
 
       console.log(b);
       return b;

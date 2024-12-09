@@ -3,7 +3,7 @@
     <div id="container" ref="container">
       <ImageContainer
         class="Background"
-        :id="this.id"
+        :ID="this.ID"
         :Data="this.Background"
       ></ImageContainer>
       <img
@@ -61,7 +61,7 @@ export default {
     };
   },
   props: {
-    Id: {
+    ID: {
       type: String,
       required: true,
     },
@@ -136,7 +136,7 @@ export default {
 
           const newImage = {
             //   src: GetSlotComponentData("FreeDrag", image.src),
-            src: GamesGetAssetsFile(this.id, image.src),
+            src: GamesGetAssetsFile(this.ID, image.src),
             alt: image.alt + " " + (i + 1),
             left: left,
             top: top,

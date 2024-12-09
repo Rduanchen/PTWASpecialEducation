@@ -5,7 +5,7 @@
       <div class="SlotArea">
         <component
           class="SlotItem"
-          :ID="this.id"
+          :ID="this.ID"
           v-for="slot in GameData.SlotComponents"
           :is="slot.Name"
           :Data="slot.Data"
@@ -76,7 +76,7 @@ export default {
       type: Object,
       required: true,
     },
-    id: {
+    ID: {
       type: String,
       required: true,
     },
@@ -144,7 +144,7 @@ export default {
   mounted() {
     if (this.GameConfig.WithImage) {
       this.WithImage = true;
-      this.ImgSrc = GamesGetAssetsFile(this.id, this.GameData.Img);
+      this.ImgSrc = GamesGetAssetsFile(this.ID, this.GameData.Img);
       const patten = /undefined/;
       if (patten.test(this.ImgSrc)) {
         this.WithImage = false;
