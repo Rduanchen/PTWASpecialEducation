@@ -33,7 +33,7 @@
               :is="item[0].Name"
               :Data="item[0].Data"
               :ID="this.ID"
-              @ReplyAnswer="SlotComponentReplyAnswer(0, $event)"
+              @replyAnswer="SlotComponentReplyAnswer(0, $event)"
             ></component>
           </div>
           <div class="SymbolContainer">
@@ -58,7 +58,7 @@
               :is="item[1].Name"
               :Data="item[1].Data"
               :ID="this.ID"
-              @ReplyAnswer="SlotComponentReplyAnswer(1, $event)"
+              @replyAnswer="SlotComponentReplyAnswer(1, $event)"
             ></component>
           </div>
         </section>

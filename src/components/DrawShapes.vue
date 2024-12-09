@@ -56,7 +56,7 @@ export default {
 
   props: ["Data", "ID"],
 
-  emits: ["ReplyAnswer", "replyAnswer"],
+  emits: ["replyAnswer"],
 
   mounted() {
     this.getData();
@@ -415,25 +415,20 @@ export default {
     },
     verify() {
       if (this.isIntersected()) {
-        this.$emit("ReplyAnswer", false);
         this.$emit("replyAnswer", false);
         return;
       } else if (this.Data.verifyOption == "shape") {
         switch (this.Data.answer) {
           case "triangle":
-            this.$emit("ReplyAnswer", this.isTriangle());
             this.$emit("replyAnswer", this.isTriangle());
             break;
           case "rectangle":
-            this.$emit("ReplyAnswer", this.isRectangle());
             this.$emit("replyAnswer", this.isRectangle());
             break;
           case "trapezium":
-            this.$emit("ReplyAnswer", this.isTrapezium());
             this.$emit("replyAnswer", this.isTrapezium());
             break;
           case "parallelogram":
-            this.$emit("ReplyAnswer", this.isParallelogram());
             this.$emit("replyAnswer", this.isParallelogram());
             break;
         }
@@ -447,12 +442,10 @@ export default {
           (this.Data.answer[0] == height && this.Data.answer[1] == width) ||
           (this.Data.answer[0] == width && this.Data.answer[1] == height)
         ) {
-          this.$emit("ReplyAnswer", true);
           this.$emit("replyAnswer", true);
           return;
         }
       }
-      this.$emit("ReplyAnswer", false);
       this.$emit("replyAnswer", false);
     },
   },

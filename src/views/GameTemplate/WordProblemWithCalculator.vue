@@ -8,14 +8,14 @@
         <Markdown
           class="markdown"
           :Data="markdownData"
-          @ReplyAnswer="this.markdownAnswer"
+          @replyAnswer="this.markdownAnswer"
         ></Markdown>
         <button class="submit" @click="checkAnswer">檢查答案</button>
       </div>
       <div class="right-container">
         <Calculator
           :Data="calculatorData"
-          @ReplyAnswer="this.calculatorAnswer"
+          @replyAnswer="this.calculatorAnswer"
         ></Calculator>
       </div>
     </div>

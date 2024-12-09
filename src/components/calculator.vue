@@ -231,7 +231,7 @@ export default {
       },
     };
   },
-  emits: ["ReplyAnswer"],
+  emits: ["replyAnswer"],
   created() {
     // this.Data = this.GameData;
     this.NumberAmount = this.Data.NumberAmount;
@@ -432,7 +432,7 @@ export default {
         }
       }
       if (AnswerCheck) {
-        this.$emit("ReplyAnswer", true);
+        this.$emit("replyAnswer", true);
       } else {
         var wrongAnswer = 0;
         var digits = Math.ceil(
@@ -448,7 +448,7 @@ export default {
         }
       }
       if (wrongAnswer) {
-        this.$emit("ReplyAnswer", false);
+        this.$emit("replyAnswer", false);
       }
     },
     parentRequestCheckAnswer() {
