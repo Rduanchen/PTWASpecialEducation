@@ -42,7 +42,7 @@
 import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
 import { defineAsyncComponent } from "vue";
 export default {
-  emits: ["replyAnswer"],
+  emits: ["replyAnswer", "ReplyAnswer"],
   components: {
     FloatingNumPad: defineAsyncComponent(() =>
       import("@/components/FloatNumPad.vue")
@@ -233,9 +233,13 @@ export default {
     },
     rectClicked(id, rect) {
       this.isClickRectID = id;
-      this.rectDeselcted();
+      this.deselectAllRects();
       this.rectClickedList[id] = true;
 
+      this.updateMenuPosition(rect);
+      this.openNumPad();
+    },
+    updateMenuPosition(rect) {
       const stage = this.$refs.stage.getStage();
       const pointerPos = stage.getPointerPosition();
 
@@ -246,38 +250,44 @@ export default {
       this.menuPosition = {
         top: rectTop + 10,
         left: rectLeft,
-        id: id,
+        id: this.isClickRectID,
       };
-      console.log(this.menuPosition);
+    },
+    openNumPad() {
       this.currentInput = "";
       this.virtualNumpadSwitch = true;
     },
-    updateRactNumber(num) {
+    updateRectNumber(num) {
+      if (!this.validateSelectedRect()) return;
+
+      const textID = this.configRect[this.isClickRectID].textID;
+      this.currentInput += num.toString();
+      this.configNumber[textID].text = this.currentInput;
+      this.blankContent[this.isClickRectID] = this.currentInput;
+
+      this.checkAnswer();
+    },
+    validateSelectedRect() {
       if (
         this.isClickRectID === undefined ||
         !this.configRect[this.isClickRectID]
       ) {
         console.error("無法更新，因為選中的方框 ID 無效");
-        return;
+        return false;
       }
-
       const textID = this.configRect[this.isClickRectID].textID;
       if (textID === undefined || !this.configNumber[textID]) {
         console.error("無法更新，因為 configNumber 中沒有相應的 textID");
-        return;
+        return false;
       }
-
-      if (this.currentInput.length < this.maxDigits) {
-        this.currentInput += num.toString();
-        this.configNumber[textID].text = this.currentInput;
-      }
+      return true;
     },
     closeNumpad() {
       if (this.isClickRectID !== undefined) {
         this.blankContent[this.isClickRectID] = this.currentInput;
       }
       this.virtualNumpadSwitch = false;
-      this.rectDeselcted();
+      this.deselectAllRects();
       this.checkAnswer();
     },
     clearInput() {
@@ -287,23 +297,25 @@ export default {
       }
     },
     checkAnswer() {
-      let isCorrect = true;
-      for (let i in this.blankContent) {
-        if (this.blankContent[i] == "") return false;
-        if (this.blankContent[i] != this.Data.blank_pos[i]) return false;
-      }
+      const isCorrect = this.blankContent.every(
+        (content, index) =>
+          content.toString() === this.Data.blank_pos[index].toString()
+      );
       this.$emit("ReplyAnswer", isCorrect);
     },
-    rectDeselcted() {
+    deselectAllRects() {
       this.rectClickedList = this.rectClickedList.map(() => false);
     },
     numPadButtonClicked(buttonLabel) {
-      if (buttonLabel === "清除") {
-        this.clearInput();
-      } else if (buttonLabel === "關閉") {
-        this.closeNumpad();
-      } else {
-        this.updateRactNumber(buttonLabel);
+      switch (buttonLabel) {
+        case "清除":
+          this.clearInput();
+          break;
+        case "關閉":
+          this.closeNumpad();
+          break;
+        default:
+          this.updateRectNumber(buttonLabel);
       }
     },
   },
