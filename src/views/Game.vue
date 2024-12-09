@@ -392,7 +392,7 @@ export default {
       try {
         const { filePath, sourceType } = this.getHintMediaData();
         return {
-          filePath: ImportUrl.GamesGetAssetsFile(this.GameID, filePath),
+          filePath: ImportUrl.getGameAssets(this.GameID, filePath),
           sourceType,
         };
       } catch {
@@ -430,7 +430,7 @@ export default {
     },
 
     getIntroVideoFilePath() {
-      const introFilePath = ImportUrl.GamesGetAssetsFile(
+      const introFilePath = ImportUrl.getGameAssets(
         this.GameID,
         this.GameData.introvideo
       ).toString();

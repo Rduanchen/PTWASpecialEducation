@@ -53,7 +53,7 @@
 </template>
 <script>
 import { defineAsyncComponent } from "vue";
-import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
+import { getGameAssets } from "@/utilitys/get_assets.js";
 import { getComponents } from "@/utilitys/get-components";
 export default {
   name: "FillinBlank",
@@ -144,7 +144,7 @@ export default {
   mounted() {
     if (this.GameConfig.WithImage) {
       this.WithImage = true;
-      this.ImgSrc = GamesGetAssetsFile(this.ID, this.GameData.Img);
+      this.ImgSrc = getGameAssets(this.ID, this.GameData.Img);
       const patten = /undefined/;
       if (patten.test(this.ImgSrc)) {
         this.WithImage = false;

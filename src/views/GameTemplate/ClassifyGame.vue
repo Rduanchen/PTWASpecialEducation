@@ -55,7 +55,6 @@
 <script>
 import draggable from "vuedraggable";
 import CardWithButton from "@/components/CardWithButton.vue";
-import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
 import { defineAsyncComponent } from "vue";
 import { getComponents } from "@/utilitys/get_components";
 export default {

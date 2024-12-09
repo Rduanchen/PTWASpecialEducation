@@ -39,7 +39,7 @@
         }
  * 
  */
-import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
+import { getGameAssets } from "@/utilitys/get_assets.js";
 import { defineAsyncComponent } from "vue";
 export default {
   Name: "NumberingGame",
@@ -70,7 +70,7 @@ export default {
     this.slotcomponent.Data = this.GameData.SlotComponents[0].Data;
   },
   mounted() {
-    this.imageUrl = GamesGetAssetsFile(this.ID, this.GameData.img);
+    this.imageUrl = getGameAssets(this.ID, this.GameData.img);
     for (
       var i = this.GameData.Question.Range[0];
       i <= this.GameData.Question.Range[1];

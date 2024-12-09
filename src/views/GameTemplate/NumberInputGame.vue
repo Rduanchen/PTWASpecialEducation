@@ -20,7 +20,6 @@
 </template>
 <script>
 import VirtualNumPad from "@/components/VirtualNumPad.vue";
-import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
 import { defineAsyncComponent } from "vue";
 export default {
   name: "NumberInputGame",

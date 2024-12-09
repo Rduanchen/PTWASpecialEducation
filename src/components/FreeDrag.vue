@@ -21,7 +21,7 @@
 <script>
 import { GetSlotComponentData } from "../utilitys/get_assets";
 import ImageContainer from "@/components/ImageContainer.vue";
-import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
+import { getGameAssets } from "@/utilitys/get_assets.js";
 //Data Structure
 // SlotData = {
 //     "Name" : "SlotData",
@@ -136,7 +136,7 @@ export default {
 
           const newImage = {
             //   src: GetSlotComponentData("FreeDrag", image.src),
-            src: GamesGetAssetsFile(this.ID, image.src),
+            src: getGameAssets(this.ID, image.src),
             alt: image.alt + " " + (i + 1),
             left: left,
             top: top,

@@ -4,8 +4,6 @@
 </template>
 
 <script>
-import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
-
 export default {
   data() {
     return {

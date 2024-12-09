@@ -4,7 +4,7 @@
   </div>
 </template>
 <script>
-import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
+import { getGameAssets } from "@/utilitys/get_assets.js";
 
 export default {
   name: "ImageContainer",
@@ -72,7 +72,7 @@ export default {
     },
   },
   mounted() {
-    this.imageUrl = GamesGetAssetsFile(this.ID, this.Data.Src);
+    this.imageUrl = getGameAssets(this.ID, this.Data.Src);
     console.log(this.imageUrl, this.Data.Alt, this.ID, this.Data.Src);
   },
 };

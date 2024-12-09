@@ -221,7 +221,7 @@
 <script>
 import fetchJson from "@/utilitys/fetch-json.js";
 import * as RD from "@/utilitys/readtext.js";
-import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
+import { getGameAssets } from "@/utilitys/get_assets.js";
 import gameCard from "@/components/game-system/GameCard.vue";
 export default {
   components: {
@@ -325,7 +325,7 @@ export default {
       for (var i in datas) {
         for (var z in datas[i].Section) {
           for (var x in datas[i].Section[z].Games) {
-            datas[i].Section[z].Games[x].Img = GamesGetAssetsFile(
+            datas[i].Section[z].Games[x].Img = getGameAssets(
               datas[i].Section[z].Games[x].id,
               datas[i].Section[z].Games[x].Img
             );

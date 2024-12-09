@@ -57,7 +57,7 @@
     },
 **/
 
-import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
+import { getGameAssets } from "@/utilitys/get_assets.js";
 export default {
   name: "AutoNumberingGame",
   data() {
@@ -138,7 +138,7 @@ export default {
         0; //Random number(Range: 0~picture_total-1)
       var name =
         "S_" + this.GameData.Question.ObjImgList[num] + this.picture_type;
-      var b = GamesGetAssetsFile(this.ID, name);
+      var b = getGameAssets(this.ID, name);
 
       console.log(b);
       return b;

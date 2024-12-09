@@ -92,7 +92,6 @@
   </div>
 </template>
 <script>
-import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
 import draggable from "vuedraggable";
 import { defineAsyncComponent } from "vue";
 import { GetComponents } from "@/utilitys/get-components.js";

@@ -72,7 +72,7 @@
   </div>
 </template>
 <script>
-import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
+import { getGameAssets } from "@/utilitys/get_assets.js";
 import { getComponents } from "@/utilitys/get-components.js";
 export default {
   name: "SelectGame",
@@ -127,7 +127,7 @@ export default {
       this.question.push(this.GameData.Question[i]);
       this.Select.push(false);
     }
-    this.imageUrl = GamesGetAssetsFile(this.ID, this.GameData.img);
+    this.imageUrl = getGameAssets(this.ID, this.GameData.img);
     if (this.GameData.SlotComponents != undefined) {
       let SlotComponentData = this.GameData.SlotComponents[0];
       this.SlotData = SlotComponentData.Data;

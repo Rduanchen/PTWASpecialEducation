@@ -22,7 +22,7 @@
 
 <script>
 import { GetSlotComponentData } from "@/utilitys/get_assets.js";
-import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
+import { getGameAssets } from "@/utilitys/get_assets.js";
 export default {
   name: "DrawImage",
   props: {
@@ -64,8 +64,8 @@ export default {
         );
         this.Alt = this.DataBase[this.Data.Object].Alt;
       } else if (this.Data.Src && this.Data.Src.First && this.Data.Src.Second) {
-        this.image1 = GamesGetAssetsFile(this.ID, this.Data.Src.First);
-        this.image2 = GamesGetAssetsFile(this.ID, this.Data.Src.Second);
+        this.image1 = getGameAssets(this.ID, this.Data.Src.First);
+        this.image2 = getGameAssets(this.ID, this.Data.Src.Second);
         this.Alt = this.Data.Alt;
       } else {
         this.image1 = GetSlotComponentData("DrawOnImage", "apple1.png");

@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
+import { getGameAssets } from "@/utilitys/get_assets.js";
 export default {
   name: "DrawImageTable",
   props: {
@@ -41,7 +41,7 @@ export default {
   },
   created() {
     this.Data.length = this.Data.Mother;
-    this.Src = GamesGetAssetsFile(this.ID, this.Data.Src);
+    this.Src = getGameAssets(this.ID, this.Data.Src);
   },
   computed: {
     totalCells() {
