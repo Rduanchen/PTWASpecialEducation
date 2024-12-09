@@ -57,7 +57,7 @@
       >
         <div class="d-flex align-items-center">
           <div class="">
-            <img src="@/assets/images/side_bar/start.png">
+            <img src="@/assets/images/side_bar/start.png" />
           </div>
           <div class="mx-auto">開始</div>
         </div>
@@ -68,7 +68,7 @@
       >
         <div class="d-flex align-items-center">
           <div class="">
-            <img src="@/assets/images/side_bar/restart.png">
+            <img src="@/assets/images/side_bar/restart.png" />
           </div>
           <div class="mx-auto">重新開始</div>
         </div>
@@ -157,7 +157,7 @@
       >
         <div class="d-flex align-items-center">
           <div class="">
-            <img src="@/assets/images/side_bar/reappear-code.png">
+            <img src="@/assets/images/side_bar/reappear-code.png" />
           </div>
           <div class="mx-auto">重現代碼</div>
         </div>
@@ -185,16 +185,37 @@
           <div class="mx-auto" @click="copyReappearCode">複製重現代碼</div>
         </div>
       </button>
+      <button
+        class="btn btn-primary text-nowrap img-hover-zoom"
+        v-if="!isFullScreen"
+      >
+        <div class="d-flex align-items-center">
+          <div class="">
+            <i class="bi bi-zoom-in"></i>
+          </div>
+          <div class="mx-auto" @click="handleEnterFullScreen">全螢幕</div>
+        </div>
+      </button>
+      <button
+        class="btn btn-primary text-nowrap img-hover-zoom"
+        v-if="isFullScreen"
+      >
+        <div class="d-flex align-items-center">
+          <div class="">
+            <i class="bi bi-zoom -out"></i>
+          </div>
+          <div class="mx-auto" @click="handleEnterFullScreen">退出全螢幕</div>
+        </div>
+      </button>
       <slot name="hint"></slot>
     </div>
-    
+
     <!-- 重現代碼 -->
     <div
       class="modal fade"
       id="reappear"
       tabindex="-1"
       aria-labelledby="reappearLabel"
-      aria-hidden="true"
     >
       <div class="modal-dialog">
         <div class="modal-content">
@@ -223,9 +244,7 @@
               請貼上正確的重現代碼，若確認代碼沒有錯卻無法送出，可能是遊戲已更新，代碼會自動失效
             </p>
             {{ this.gameCode }}
-            <button
-              class="btn btn-primary text-nowrap img-hover-zoom"
-            >
+            <button class="btn btn-primary text-nowrap img-hover-zoom">
               <div class="d-flex align-items-center">
                 <div class="">
                   <svg
@@ -242,7 +261,9 @@
                     />
                   </svg>
                 </div>
-                <div class="mx-auto" @click="copyReappearCode">複製重現代碼</div>
+                <div class="mx-auto" @click="copyReappearCode">
+                  複製重現代碼
+                </div>
               </div>
             </button>
           </div>
@@ -267,11 +288,12 @@
         </div>
       </div>
     </div>
+    {{ isFullScreen }}
   </div>
 </template>
 <script>
-import gameStore from '@/stores/game';
-import { mapWritableState } from 'pinia';
+import gameStore from "@/stores/game";
+import { mapWritableState } from "pinia";
 
 export default {
   name: "SideBar",
@@ -298,7 +320,7 @@ export default {
     },
   },
   computed: {
-    ...mapWritableState(gameStore, ['gameCode']),
+    ...mapWritableState(gameStore, ["gameCode"]),
     checkformat() {
       if (this.code == "origin") return true;
       if (this.code.split("-").length == this.levelAmount) {
@@ -308,11 +330,16 @@ export default {
       }
     },
   },
-  created() {},
+  created() {
+    if (document.fullscreenElement) {
+      this.isFullScreen = true;
+    }
+  },
   data() {
     return {
       CalculatorSwitch: false,
       code: "",
+      isFullScreen: false,
     };
   },
   methods: {
@@ -341,11 +368,12 @@ export default {
     copyReappearCode() {
       // 檢查瀏覽器是否支援 Clipboard API
       if (navigator.clipboard) {
-        navigator.clipboard.writeText(this.gameCode)
+        navigator.clipboard
+          .writeText(this.gameCode)
           .then(() => {
             alert("文字已成功複製");
           })
-          .catch(err => {
+          .catch((err) => {
             alert("無法複製文字", err);
           });
       } else {
@@ -373,11 +401,20 @@ export default {
         // 移除textarea
         document.body.removeChild(textarea);
       }
-    }
+    },
+    handleEnterFullScreen() {
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+        this.isFullScreen = false;
+      } else {
+        document.documentElement.requestFullscreen();
+        this.isFullScreen = true;
+      }
+    },
   },
 };
 </script>
-<style scoped>
+<style scoped lang="scss">
 .SideBar {
   border-left: solid 3px #aaa;
   background-color: #ffedda;
@@ -404,7 +441,7 @@ export default {
       height: 4rem;
       padding: 0.4rem;
 
-      img{
+      img {
         height: 80%;
         max-width: 40px;
         max-height: 40px;

@@ -319,7 +319,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 .gameContainer {
   display: flex;
   width: 100%;

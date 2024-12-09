@@ -16,7 +16,6 @@ const componentsMapping = {
     Input: () => import('@/components/ReplyInput.vue'),
     Fractions: () => import('@/components/Fractions.vue'),
     Markdown: () => import('@/components/Markdown.vue'),
-    NumberLine: () => import('@/components/NumberLineV2.vue'),
     Water: () => import('@/components/Water.vue'),
     MoneyGenerator: () => import('@/components/MoneyGenerator.vue'),
     CardWithButton: () => import('@/components/CardWithButton.vue'),

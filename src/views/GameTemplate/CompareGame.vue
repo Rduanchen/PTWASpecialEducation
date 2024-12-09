@@ -269,7 +269,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .Head {
   width: 100%;
   padding-left: 2rem;
@@ -384,5 +384,10 @@ export default {
     border-radius: 12px;
     font-size: x-large;
   }
+}
+:deep(.number-board-container) {
+  height: 70%;
+  width: 90%;
+  font-size: 1.2rem;
 }
 </style>

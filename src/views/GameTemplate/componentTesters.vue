@@ -5,7 +5,9 @@
       <option>fraction</option>
       <option>drawShapes</option>
       <option>dragToAlign</option>
-      <option selected>dragImages</option>
+      <option>dragImages</option>
+      <option>scale</option>
+      <option selected>drawingBroad</option>
     </select>
   </div>
   <div v-if="tester == 'fraction'">
@@ -35,6 +37,30 @@
   <div v-if="tester == 'dragImages'">
     <dragImages :Data="configDragImages" :ID="id"></dragImages>
   </div>
+  <div v-if="tester == 'scale'">
+    <scale :Data="configScale" :ID="id" @replyAnswer="printAns"></scale>
+  </div>
+  <div v-if="tester == 'drawingBroad'">
+    <drawingBroad :Data="configBrush"></drawingBroad>
+    <div class="btnContainer">
+      <button
+        @click="
+          configBrush.color = 'red';
+          configBrush.size = 10;
+        "
+      >
+        brush
+      </button>
+      <button
+        @click="
+          configBrush.color = 'eraser';
+          configBrush.size = 50;
+        "
+      >
+        eraser
+      </button>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -58,10 +84,14 @@ export default {
     dragImages: defineAsyncComponent(() =>
       import("@/components/DragImages.vue")
     ),
+    scale: defineAsyncComponent(() => import("@/components/Scale.vue")),
+    drawingBroad: defineAsyncComponent(() =>
+      import("@/components/DrawingBroad.vue")
+    ),
   },
   data() {
     return {
-      tester: "dragImages",
+      tester: "drawingBroad",
       configFraction: {
         verifyOption: "answer",
         shape: "circle",
@@ -78,7 +108,10 @@ export default {
         image: "apple.png",
       },
       configDrawShapes: {
-        //bgRatio: [],
+        bgRatio: {
+          width: 20,
+          height: 10,
+        },
         /*givenPoints: [
           [2, 2],
           [2, 5],
@@ -109,6 +142,14 @@ export default {
         ],
         background: "black",
       },
+      configScale: {
+        answer: 100,
+        //customScaleSrc: "sugar.png",
+      },
+      configBrush: {
+        color: "red",
+        size: 10,
+      },
       id: "Dev0105",
     };
   },
@@ -119,3 +160,17 @@ export default {
   },
 };
 </script>
+
+<style scoped lang="scss">
+div {
+  width: 70vw;
+  height: 70vh;
+}
+.btnContainer {
+  position: absolute;
+  top: 20%;
+  width: 0;
+  height: 0;
+  z-index: -1;
+}
+</style>

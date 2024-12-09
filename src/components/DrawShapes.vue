@@ -10,7 +10,7 @@
         <v-line
           v-for="pointSet in configGrid"
           :points="pointSet"
-          :stroke="'black'"
+          :stroke="'#aaa'"
         ></v-line>
         <v-image :config="configReturnBtn" @pointerdown="deleteLine"></v-image>
       </v-layer>
@@ -110,7 +110,7 @@ export default {
       returnBtn.src = getSystemAssets("backArrow.png", "icon");
       this.configReturnBtn.image = returnBtn;
       this.configReturnBtn.x = this.gameWidth * 0.85;
-      this.configReturnBtn.y = this.gameWidth * 0.85;
+      this.configReturnBtn.y = this.configKonva.height - this.gameWidth * 0.15;
       this.configReturnBtn.width = this.gameWidth * 0.15;
       this.configReturnBtn.height = this.gameWidth * 0.15;
     },
@@ -407,6 +407,7 @@ export default {
       return false;
     },
     deleteLine() {
+      if (this.configLine.length == 0) return;
       let id = this.configLine.length - 1;
       if (this.configLine[id].stroke != "brown") {
         this.configLine.splice(id, 1);

@@ -13,7 +13,7 @@
         "Unit": "Number",
         "CarryAmount": 1,
         "CustomeUnit": null,
-        "NumberAmount": 4,
+        "NumberAmount": 3,
         "Preset": {
           "Number": ["355", "62"],
           "Symbol": "-"
@@ -29,7 +29,7 @@
         "Unit": "Number",
         "CarryAmount": 1,
         "CustomeUnit": null,
-        "NumberAmount": 4,
+        "NumberAmount": 3,
         "Preset": {
           "Number": ["751", "83"],
           "Symbol": "-"
@@ -45,7 +45,7 @@
         "Unit": "Number",
         "CarryAmount": 1,
         "CustomeUnit": null,
-        "NumberAmount": 4,
+        "NumberAmount": 3,
         "Preset": {
           "Number": ["527", "65"],
           "Symbol": "-"
@@ -61,7 +61,7 @@
         "Unit": "Number",
         "CarryAmount": 1,
         "CustomeUnit": null,
-        "NumberAmount": 4,
+        "NumberAmount": 3,
         "Preset": {
           "Number": ["624", "59"],
           "Symbol": "-"
@@ -77,7 +77,7 @@
         "Unit": "Number",
         "CarryAmount": 1,
         "CustomeUnit": null,
-        "NumberAmount": 4,
+        "NumberAmount": 3,
         "Preset": {
           "Number": ["412", "63"],
           "Symbol": "-"
@@ -95,15 +95,15 @@
         "Unit": "Number",
         "CarryAmount": 1,
         "CustomeUnit": null,
-        "NumberAmount": 4,
+        "NumberAmount": 3,
         "Preset": {
-          "Number": ["355", "62"],
+          "Number": ["452", "138"],
           "Symbol": "-"
         },
         "Answer": {
           "Carry": [],
-          "Answer": "273",
-          "Number": ["355", "62"],
+          "Answer": "314",
+          "Number": ["452", "138"],
           "Symbol": "-"
         }
       },
@@ -111,15 +111,15 @@
         "Unit": "Number",
         "CarryAmount": 1,
         "CustomeUnit": null,
-        "NumberAmount": 4,
+        "NumberAmount": 3,
         "Preset": {
-          "Number": ["751", "83"],
+          "Number": ["363", "215"],
           "Symbol": "-"
         },
         "Answer": {
           "Carry": [],
-          "Answer": "668",
-          "Number": ["751", "83"],
+          "Answer": "148",
+          "Number": ["363", "215"],
           "Symbol": "-"
         }
       },
@@ -127,15 +127,15 @@
         "Unit": "Number",
         "CarryAmount": 1,
         "CustomeUnit": null,
-        "NumberAmount": 4,
+        "NumberAmount": 3,
         "Preset": {
-          "Number": ["527", "65"],
+          "Number": ["585", "427"],
           "Symbol": "-"
         },
         "Answer": {
           "Carry": [],
-          "Answer": "462",
-          "Number": ["527", "65"],
+          "Answer": "158",
+          "Number": ["585", "427"],
           "Symbol": "-"
         }
       },
@@ -143,15 +143,15 @@
         "Unit": "Number",
         "CarryAmount": 1,
         "CustomeUnit": null,
-        "NumberAmount": 4,
+        "NumberAmount": 3,
         "Preset": {
-          "Number": ["624", "59"],
+          "Number": ["674", "365"],
           "Symbol": "-"
         },
         "Answer": {
           "Carry": [],
-          "Answer": "565",
-          "Number": ["624", "59"],
+          "Answer": "309",
+          "Number": ["674", "365"],
           "Symbol": "-"
         }
       },
@@ -159,15 +159,15 @@
         "Unit": "Number",
         "CarryAmount": 1,
         "CustomeUnit": null,
-        "NumberAmount": 4,
+        "NumberAmount": 3,
         "Preset": {
-          "Number": ["412", "63"],
+          "Number": ["437", "119"],
           "Symbol": "-"
         },
         "Answer": {
           "Carry": [],
-          "Answer": "349",
-          "Number": ["412", "63"],
+          "Answer": "318",
+          "Number": ["437", "119"],
           "Symbol": "-"
         }
       }
@@ -177,7 +177,7 @@
         "Unit": "Number",
         "CarryAmount": 1,
         "CustomeUnit": null,
-        "NumberAmount": 4,
+        "NumberAmount": 3,
         "Preset": {
           "Number": ["925", "351"],
           "Symbol": "-"
@@ -193,7 +193,7 @@
         "Unit": "Number",
         "CarryAmount": 1,
         "CustomeUnit": null,
-        "NumberAmount": 4,
+        "NumberAmount": 3,
         "Preset": {
           "Number": ["738", "185"],
           "Symbol": "-"
@@ -209,7 +209,7 @@
         "Unit": "Number",
         "CarryAmount": 1,
         "CustomeUnit": null,
-        "NumberAmount": 4,
+        "NumberAmount": 3,
         "Preset": {
           "Number": ["612", "250"],
           "Symbol": "-"
@@ -225,7 +225,7 @@
         "Unit": "Number",
         "CarryAmount": 1,
         "CustomeUnit": null,
-        "NumberAmount": 4,
+        "NumberAmount": 3,
         "Preset": {
           "Number": ["841", "581"],
           "Symbol": "-"
@@ -241,7 +241,7 @@
         "Unit": "Number",
         "CarryAmount": 1,
         "CustomeUnit": null,
-        "NumberAmount": 4,
+        "NumberAmount": 3,
         "Preset": {
           "Number": ["746", "695"],
           "Symbol": "-"
@@ -259,7 +259,7 @@
         "Unit": "Number",
         "CarryAmount": 1,
         "CustomeUnit": null,
-        "NumberAmount": 4,
+        "NumberAmount": 3,
         "Preset": {
           "Number": ["455", "167"],
           "Symbol": "-"
@@ -275,7 +275,7 @@
         "Unit": "Number",
         "CarryAmount": 1,
         "CustomeUnit": null,
-        "NumberAmount": 4,
+        "NumberAmount": 3,
         "Preset": {
           "Number": ["621", "475"],
           "Symbol": "-"
@@ -291,7 +291,7 @@
         "Unit": "Number",
         "CarryAmount": 1,
         "CustomeUnit": null,
-        "NumberAmount": 4,
+        "NumberAmount": 3,
         "Preset": {
           "Number": ["567", "289"],
           "Symbol": "-"
@@ -307,7 +307,7 @@
         "Unit": "Number",
         "CarryAmount": 1,
         "CustomeUnit": null,
-        "NumberAmount": 4,
+        "NumberAmount": 3,
         "Preset": {
           "Number": ["470", "296"],
           "Symbol": "-"
@@ -323,7 +323,7 @@
         "Unit": "Number",
         "CarryAmount": 1,
         "CustomeUnit": null,
-        "NumberAmount": 4,
+        "NumberAmount": 3,
         "Preset": {
           "Number": ["845", "367"],
           "Symbol": "-"

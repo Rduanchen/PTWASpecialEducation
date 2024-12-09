@@ -157,7 +157,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .rtl-input {
   direction: rtl; /* 文字方向從右到左 */
   text-align: right; /* 文字對齊到右邊 */

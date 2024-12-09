@@ -67,10 +67,10 @@
     ]
   },
   {
-    "Title": "2-四位數加減",
+    "Title": "2-四位數加減法",
     "Section": [
       {
-        "Title": "四位數的加法",
+        "Title": "四位數加減法",
         "Games": [
           {
             "id": "MA3021",
@@ -82,20 +82,26 @@
             "id": "MA3022",
             "Name": "三位數的減法(計算+應用)",
             "Description": "透過直式計算板，將題目加加看",
-            "Img": "MA3021.png"
+            "Img": "MA3022.png"
           },
           {
             "id": "MA3023",
             "Name": "四位數的減法(計算+應用)",
             "Description": "透過直式計算板，將題目加加看",
-            "Img": "MA3021.png"
+            "Img": "MA3023.png"
+          },
+          {
+            "id": "MA3024",
+            "Name": "四位數的減法(計算+應用)",
+            "Description": "透過直式計算板，將題目加加看",
+            "Img": "MA3024.png"
           }
         ]
       }
     ]
   },
   {
-    "Title": "8 - 毫升公升",
+    "Title": "8 - 毫升和公升",
     "Section": [
       {
         "Title": "認識毫升",
@@ -104,7 +110,7 @@
             "id": "MA3081",
             "Name": "認識毫升",
             "Description": "將量杯填滿至指定的公升數",
-            "Img": "MA3031.png"
+            "Img": "MA3081.png"
           }
         ]
       },
@@ -115,13 +121,13 @@
             "id": "MA3082",
             "Name": "比大小",
             "Description": "比比看，並將正確的符號拖曳到框框中",
-            "Img": "MA3032.png"
+            "Img": "MA3082.png"
           },
           {
             "id": "MA3083",
             "Name": "認識毫升",
             "Description": "將量杯填滿至指定的公升數",
-            "Img": "MA3033.png"
+            "Img": "MA3083.png"
           }
         ]
       },
@@ -132,13 +138,13 @@
             "id": "MA3084",
             "Name": "容積的加減(計算題)",
             "Description": "使用定位版計算答案，並且填到框框中",
-            "Img": "MA3034.png"
+            "Img": "MA3084.png"
           },
           {
             "id": "MA3085",
             "Name": "容積的加減(應用題)",
             "Description": "使用定位版計算答案，並且填到框框中",
-            "Img": "MA3035.png"
+            "Img": "MA3085.png"
           }
         ]
       }
@@ -171,7 +177,7 @@
         ]
       },
       {
-        "Title": "公升與毫升",
+        "Title": "長度的計算",
         "Games": [
           {
             "id": "MA3034",
@@ -296,6 +302,68 @@
             "Name": "認識直角、銳角和鈍角",
             "Description": "請分辨圖片中的角度是什麼角",
             "Img": "MA3053.png"
+          },
+          {
+            "id": "MA3056",
+            "Name": "畫出正確的角度",
+            "Description": "請畫出題目指定的圖形",
+            "Img": "MA3056.png"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Title": "8 - 時間",
+    "Section": [
+      {
+        "Title": "1日24小時",
+        "Games": [
+          {
+            "id": "MA3181",
+            "Name": "時間配對",
+            "Description": "",
+            "Img": "MA3181.png"
+          },
+          {
+            "id": "MA3182",
+            "Name": "時間連連看",
+            "Description": "",
+            "Img": "MA3182.png"
+          }
+        ]
+      },
+      {
+        "Title": "1時、分和秒",
+        "Games": [
+          {
+            "id": "MA3183",
+            "Name": "時間單位換算",
+            "Description": "",
+            "Img": "MA3183.png"
+          },
+          {
+            "id": "MA3184",
+            "Name": "能理解並運用適當的時間單位",
+            "Description": "",
+            "Img": "MA3184.png"
+          }
+        ]
+      },
+      {
+        "Title": "時分的加減計算",
+        "Games": [
+          {
+            "id": "MA3185",
+            "Name": "時分的加減(計算題)",
+            "Description": "",
+            "Img": "MA3185.png"
+          },
+          {
+            "id": "MA3186",
+            "Name": "時分的加減(應用題)",
+            "Description": "",
+            "Img": "MA3186.png"
           }
         ]
       }

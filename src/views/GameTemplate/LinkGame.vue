@@ -91,10 +91,6 @@ export default {
     NumberBoard: defineAsyncComponent(() =>
       import("@/components/NumberBoard.vue")
     ),
-    ElectronicClock: defineAsyncComponent(() =>
-      import("@/components/ElectronicClock.vue")
-    ),
-    Clock: defineAsyncComponent(() => import("@/components/Clock.vue")),
   },
   props: {
     id: {
@@ -567,7 +563,7 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style scoped lang="scss">
 /* Your component-specific styles go here */
 .Container {
   width: 100%;
@@ -620,13 +616,9 @@ button {
   font-size: 2rem;
 }
 :deep(.NumberBoard) {
-  font-size: 0.6rem !important;
+  font-size: 1.2rem !important;
 }
 :deep(.EachBlanket) {
   font-size: 0.8rem !important;
-}
-:deep(.EachRow) {
-  min-height: 10px !important;
-  max-height: 60px !important;
 }
 </style>

@@ -46,6 +46,7 @@ export default {
       ],
       adjustedTop: "0px",
       adjustedLeft: "0px",
+      bais: 15,
     };
   },
   methods: {
@@ -63,8 +64,8 @@ export default {
         const viewportWidth = window.innerWidth;
         const viewportHeight = window.innerHeight;
 
-        let top = parseFloat(this.Data.top);
-        let left = parseFloat(this.Data.left);
+        let top = parseFloat(this.Data.top) + this.bais;
+        let left = parseFloat(this.Data.left) + this.bais;
 
         if (top + numpadHeight > viewportHeight) {
           top = viewportHeight - numpadHeight;

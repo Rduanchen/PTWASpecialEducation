@@ -43,3 +43,8 @@ export function randomPosition(boundaries){
         y: Math.random()*(boundaries.down-boundaries.up)+boundaries.up,
     }
 }
+
+export function angle(object_1, object_2){
+    if(object_2.x>object_1.x) return Math.atan((object_2.y-object_1.y)/(object_2.x-object_1.x))+Math.PI/2;
+    else return Math.atan((object_2.y-object_1.y)/(object_2.x-object_1.x))+Math.PI/2*3;
+}
