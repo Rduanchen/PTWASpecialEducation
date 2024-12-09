@@ -22,7 +22,6 @@
 import { GetSlotComponentData } from "../utilitys/get_assets";
 import ImageContainer from "@/components/ImageContainer.vue";
 import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
-import Img from "@/assets/GamePic/cover_info.jpeg";
 //Data Structure
 // SlotData = {
 //     "Name" : "SlotData",
@@ -48,7 +47,6 @@ import Img from "@/assets/GamePic/cover_info.jpeg";
 export default {
   data() {
     return {
-      ImgSrc: Img,
       images: [
         { src: "image1.png", alt: "Image 1", Amount: 2 },
         { src: "image2.png", alt: "Image 2", Amount: 3 },

@@ -213,7 +213,7 @@ export default {
   height: 45vh;
   padding: $padding--small;
   background-color: red;
-  background-image: url("@/assets/System/icon/delete.png");
+  background-image: url("@/assets/system/icon/delete.png");
   background-repeat: no-repeat;
   background-position: center;
   background-size: 30%;

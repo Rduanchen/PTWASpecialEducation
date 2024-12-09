@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { getSystemAssets } from "@/utilitys/get_assets.js";
+import { getGameStaticAssets } from "@/utilitys/get_assets.js";
 import * as canvasTools from "@/utilitys/canvasTools.js";
 import { defineAsyncComponent } from "vue";
 
@@ -94,7 +94,7 @@ export default {
     },
     drawBackground() {
       const backgroundImage = new window.Image();
-      backgroundImage.src = getSystemAssets("sky.jpg", "airplane");
+      backgroundImage.src = getGameStaticAssets("Airplane", "sky.jpg");
       this.configBG_1.image = backgroundImage;
       this.configBG_2.image = backgroundImage;
       this.configBG_1.width = this.gameWidth;

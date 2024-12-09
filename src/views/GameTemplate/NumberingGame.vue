@@ -39,7 +39,6 @@
         }
  * 
  */
-import Desribepng from "@/assets/GamePic/Source/description.png";
 import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
 import { defineAsyncComponent } from "vue";
 export default {

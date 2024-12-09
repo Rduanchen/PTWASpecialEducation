@@ -46,9 +46,9 @@
 </template>
 
 <script>
-import { getSystemAssets } from "@/utilitys/get_assets.js";
+import { getSystemAssets, getGameStaticAssets } from "@/utilitys/get_assets.js";
 import { defineAsyncComponent } from "vue";
-import { map } from "@/assets/System/mazeMap/map.json";
+import { map } from "@/assets/system/MazeMap/map.json";
 
 export default {
   components: {
@@ -138,6 +138,8 @@ export default {
         y: 0,
       },
       joystickVisible: false,
+
+      // map: getGameStaticAssets("MazeMap", "map.json"),
     };
   },
 
@@ -153,6 +155,7 @@ export default {
   },
 
   mounted() {
+    console.log(map);
     this.fitCanvasInScreen();
     this.generateMap();
     this.getOptionPosition();

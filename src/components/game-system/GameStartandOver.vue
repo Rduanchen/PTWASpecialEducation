@@ -38,7 +38,7 @@
       class="d-flex flex-column justify-content-center m-5"
       id="Done"
     >
-      <img src="@/assets/Effects/Firework.gif" id="Effects" />
+      <img src="@/assets/effects/Firework.gif" id="Effects" />
       <div class="d-flex justify-content-center d-grid gap-3 mt-3">
         <button
           class="btn btn-primary flex-grow-1"

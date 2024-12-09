@@ -136,7 +136,6 @@ export default {
       const num =
         Math.floor(Math.random() * this.GameData.Question.ObjImgList.length) +
         0; //Random number(Range: 0~picture_total-1)
-      // var b = new URL(`../../assets/Games/`+this.id+`/S_${this.GameData.Question.ObjImgList[num]}${this.picture_type}`, import.meta.url).href; //load picture
       var name =
         "S_" + this.GameData.Question.ObjImgList[num] + this.picture_type;
       var b = GamesGetAssetsFile(this.id, name);

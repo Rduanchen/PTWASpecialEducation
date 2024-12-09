@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { getSystemAssets } from "@/utilitys/get_assets.js";
+import { getSystemAssets, getGameStaticAssets } from "@/utilitys/get_assets.js";
 import * as canvasTools from "@/utilitys/canvasTools.js";
 import { defineAsyncComponent } from "vue";
 
@@ -56,9 +56,9 @@ export default {
       movement: "idle",
       currentOptionId: 0,
 
-      upBtn: getSystemAssets("arrowUp.jpg", "racingCar"),
-      rightBtn: getSystemAssets("arrowRight.jpg", "racingCar"),
-      downBtn: getSystemAssets("arrowDown.jpg", "racingCar"),
+      upBtn: getGameStaticAssets("RacingCar", "arrowUp.jpg"),
+      rightBtn: getGameStaticAssets("RacingCar", "arrowRight.jpg"),
+      downBtn: getGameStaticAssets("RacingCar", "arrowDown.jpg"),
     };
   },
 
@@ -98,7 +98,7 @@ export default {
     },
     drawRoad() {
       const roadImg = new window.Image();
-      roadImg.src = getSystemAssets("road.png", "racingCar");
+      roadImg.src = getGameStaticAssets("RacingCar", "road.png");
       this.laneWidth = this.gameWidth / 2 / this.options.length;
       this.roadX = 0;
       for (var i = 0; i < this.options.length; i++) {
@@ -114,7 +114,7 @@ export default {
     },
     drawTunnel() {
       const tunnelImg = new window.Image();
-      tunnelImg.src = getSystemAssets("tunnel.png", "racingCar");
+      tunnelImg.src = getGameStaticAssets("RacingCar", "tunnel.png");
       this.tunnelOffset = {
         x: this.gameWidth,
         y: 0,
@@ -165,7 +165,7 @@ export default {
     },
     drawCar() {
       const carImg = new window.Image();
-      carImg.src = getSystemAssets("car.png", "racingCar");
+      carImg.src = getGameStaticAssets("RacingCar", "car.png");
       this.configCar.image = carImg;
       this.configCar.height = this.laneWidth * 0.8;
       this.configCar.width = this.laneWidth * 0.8;
