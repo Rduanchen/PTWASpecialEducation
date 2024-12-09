@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { GetTheamsAssetsFile } from "@/utilitys/get_assets.js";
+import { getTheamsAssets } from "@/utilitys/get_assets.js";
 export default {
   name: "MA3020",
   emits: {
@@ -43,7 +43,7 @@ export default {
   mounted() {
     try {
       if (this.GameConfig.Theam) {
-        import(GetTheamsAssetsFile(this.GameConfig.Theam));
+        import(getTheamsAssets(this.GameConfig.Theam));
       }
     } catch {
       console.log("Using Default Theam");

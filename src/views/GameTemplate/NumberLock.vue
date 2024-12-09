@@ -34,8 +34,8 @@
 
 <script>
 import VirtualNumPad from "@/components/VirtualNumPadInput.vue";
-import { defineAsyncComponent, Text, toHandlerKey } from "vue";
-import { GetSlotComponentData } from "@/utilitys/get_assets.js";
+import { defineAsyncComponent } from "vue";
+import { getSlotComponentAssets } from "@/utilitys/get_assets.js";
 export default {
   name: "NumberLock",
   components: {
@@ -161,7 +161,7 @@ export default {
   },
   computed: {
     Arrow() {
-      return GetSlotComponentData("NumberLineV2", "ArrowRight.svg"); //FIXME
+      return getSlotComponentAssets("NumberLineV2", "ArrowRight.svg"); //FIXME
     },
   },
   methods: {

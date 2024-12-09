@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { GetSlotComponentData } from "@/utilitys/get_assets.js";
+import { getSlotComponentAssets } from "@/utilitys/get_assets.js";
 import { getGameAssets } from "@/utilitys/get_assets.js";
 export default {
   name: "DrawImage",
@@ -54,11 +54,11 @@ export default {
   created() {
     if (this.Data.Object != undefined) {
       if (this.Data.Object in this.DataBase) {
-        this.image1 = GetSlotComponentData(
+        this.image1 = getSlotComponentAssets(
           "DrawOnImage",
           this.DataBase[this.Data.Object].First
         );
-        this.image2 = GetSlotComponentData(
+        this.image2 = getSlotComponentAssets(
           "DrawOnImage",
           this.DataBase[this.Data.Object].Second
         );
@@ -68,8 +68,8 @@ export default {
         this.image2 = getGameAssets(this.ID, this.Data.Src.Second);
         this.Alt = this.Data.Alt;
       } else {
-        this.image1 = GetSlotComponentData("DrawOnImage", "apple1.png");
-        this.image2 = GetSlotComponentData("DrawOnImage", "apple2.png");
+        this.image1 = getSlotComponentAssets("DrawOnImage", "apple1.png");
+        this.image2 = getSlotComponentAssets("DrawOnImage", "apple2.png");
         this.Alt = "apple";
       }
     }

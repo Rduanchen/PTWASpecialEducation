@@ -43,18 +43,6 @@ export function GetAssetsFile(url) {
   return new URL(`../assets/` + url, import.meta.url).href;
 }
 
-export function GamesGetAssetsFile(id, url) {
-  return new URL(`../assets/games/${id}/${url}`, import.meta.url).href;
-}
-
-export function GetSystemEffectAssetsFile(url) {
-  return new URL(`../assets/system/effects/${url}`, import.meta.url).href;
-}
-
-export function GetTheamsAssetsFile(TheamName) {
-  return new URL(`../theams/${TheamName}`, import.meta.url).href;
-}
-
 export function GetSlotComponentData(name, url) {
   return new URL(`../assets/slot-component-data/${name}/${url}`, import.meta.url)
     .href;

@@ -24,7 +24,7 @@
 </template>
 <script>
 import { defineAsyncComponent } from "vue";
-import { GetSlotComponentData } from "@/utilitys/get_assets.js";
+import { getSlotComponentAssets } from "@/utilitys/get_assets.js";
 export default {
   name: "NumberLineV2",
   components: {
@@ -34,7 +34,7 @@ export default {
   },
   computed: {
     Arrow() {
-      return GetSlotComponentData("NumberLineV2", "ArrowRight.svg");
+      return getSlotComponentAssets("NumberLineV2", "ArrowRight.svg");
     },
   },
   props: {

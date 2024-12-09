@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { GetSlotComponentData } from "../utilitys/get_assets";
+import { getSlotComponentAssets } from "../utilitys/get_assets";
 
 export default {
   name: "Water",
@@ -96,7 +96,7 @@ export default {
     },
     loadImage() {
       const image = new window.Image();
-      image.src = GetSlotComponentData("Water", `${this.Data.Scale}.png`);
+      image.src = getSlotComponentAssets("Water", `${this.Data.Scale}.png`);
       image.onload = () => {
         this.image = image;
       };

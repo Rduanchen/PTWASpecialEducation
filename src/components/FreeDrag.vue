@@ -19,7 +19,7 @@
   </div>
 </template>
 <script>
-import { GetSlotComponentData } from "../utilitys/get_assets";
+import { getSlotComponentAssets } from "../utilitys/get_assets";
 import ImageContainer from "@/components/ImageContainer.vue";
 import { getGameAssets } from "@/utilitys/get_assets.js";
 //Data Structure
@@ -135,7 +135,6 @@ export default {
           }
 
           const newImage = {
-            //   src: GetSlotComponentData("FreeDrag", image.src),
             src: getGameAssets(this.ID, image.src),
             alt: image.alt + " " + (i + 1),
             left: left,
