@@ -22,7 +22,7 @@
   </div>
 </template>
 <script>
-import Calculator from "@/components/calculator.vue";
+import Calculator from "@/components/Calculator.vue";
 import Markdown from "@/components/Markdown.vue";
 import { subComponentsVerifyAnswer as emitter } from "@/utilitys/mitt.js";
 export default {

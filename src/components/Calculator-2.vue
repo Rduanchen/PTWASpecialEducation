@@ -155,8 +155,8 @@
 import draggable from "vuedraggable";
 import { subComponentsVerifyAnswer as emitter } from "@/utilitys/mitt.js";
 export default {
-  name: "calculator",
-  display: "calculator",
+  name: "Calculator",
+  display: "Calculator",
   components: {
     draggable,
   },
