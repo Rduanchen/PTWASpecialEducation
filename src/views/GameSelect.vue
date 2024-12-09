@@ -222,7 +222,7 @@
 import fetchJson from "@/utilitys/fetch-json.js";
 import * as RD from "@/utilitys/readtext.js";
 import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
-import gameCard from "@/components/game-system/QuestionCard.vue";
+import gameCard from "@/components/game-system/GameCard.vue";
 export default {
   components: {
     GameCard: gameCard,
