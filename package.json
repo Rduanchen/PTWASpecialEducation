@@ -7,8 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "docker-test": "docker-compose up --build --no-cache"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.8",
