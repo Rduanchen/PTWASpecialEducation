@@ -156,7 +156,7 @@ export default {
       import("@/components/VirtualNumPadInput.vue")
     ),
     Calculator: defineAsyncComponent(() =>
-      import("@/components/calculator.vue")
+      import("@/components/Calculator.vue")
     ),
     Clock: getComponents("Clock"),
   },

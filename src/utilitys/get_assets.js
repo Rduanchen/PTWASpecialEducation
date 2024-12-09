@@ -39,11 +39,4 @@ export function getDefaultHintAssets(url) {
 }
 
 // The following function are about to remove, please use the above functions instead.
-export function GetAssetsFile(url) {
-  return new URL(`../assets/` + url, import.meta.url).href;
-}
 
-export function GetSlotComponentData(name, url) {
-  return new URL(`../assets/slot-component-data/${name}/${url}`, import.meta.url)
-    .href;
-}
