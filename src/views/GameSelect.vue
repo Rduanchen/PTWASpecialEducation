@@ -420,8 +420,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+$header-color: #00e5ce;
+$sidebar-color: #ebe200;
+$header-btn: #7878fe;
+$sidebar-btn: #ffffff;
+$sidebar-banner: #ff69ee;
+
 header {
-  background-color: $primary-color;
+  background-color: $header-color;
   touch-action: none !important;
   user-select: none !important;
   -webkit-user-select: none !important;
@@ -429,15 +435,15 @@ header {
   -ms-user-select: none !important;
 }
 .navbar {
-  background-color: $primary-color;
+  background-color: $header-color;
   button {
-    background-color: $primary-btn-bg;
-    border: solid 1px $primary-btn-bg;
+    background-color: $header-btn;
+    border: none;
     border-radius: $border-radius;
     margin: 0 1rem;
   }
   button:hover {
-    background-color: $primary-btn-hover-bg;
+    background-color: $header-btn;
     transform: scale($transform-scale);
   }
   @media (min-width: 768px) {
@@ -512,11 +518,11 @@ section {
     display: flex;
     flex-direction: column;
     height: 90vh;
-    background-color: $sub-color;
+    background-color: $sidebar-color;
     padding: $gap--small;
     button {
       width: 100%;
-      background-color: $info-btn-bg;
+      background-color: $sidebar-banner;
       border: none;
       border-radius: $border-radius;
       color: $secondary-btn-text;
@@ -535,13 +541,13 @@ section {
         transition: transform 0.3s ease; /* 平滑的過渡效果 */
         font-size: 1rem;
         font-weight: 800;
-        background-color: #feece9;
+        background-color: $sidebar-btn;
         border-radius: $border-radius;
         color: $secondary-btn-text;
       }
       button:hover {
         transform: scale($transform-scale);
-        background-color: $secondary-btn-hover-bg;
+        background-color: $sidebar-btn;
       }
     }
   }
