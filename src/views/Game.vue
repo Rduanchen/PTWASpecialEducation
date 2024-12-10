@@ -1,7 +1,7 @@
 <template>
   <div id="GameView" ref="GameView">
     <Header
-      :grade="this.Grade"
+      :grade="Grade"
       :gameName="gameName"
       :subject="Subjects[Subject]"
       @previous-page="previousPage"
@@ -88,7 +88,7 @@
                   @download-record="ToCSV"
                   @restart="reloadPage"
                   @previous-page="previousPage"
-                  @open-teaching-modal="loadMediaForModal"
+                  @open-teaching-modal="openMediaModal"
                 ></GameStartandOver>
               </div>
             </div>
@@ -120,7 +120,7 @@
                 v-if="
                   GameStatus == 'Progressing' && this.Hint['Type'] != 'Method'
                 "
-                @open-hint-modal="loadMediaForModal"
+                @open-hint-modal="openMediaModal"
               >
               </hintbutton>
             </template>
@@ -170,10 +170,8 @@ export default {
       // gameType: "loading",
       download_data: [[]], //下載的資料，格式為二維陣列。
       header: [],
-      gameID: "",
       Subject: "",
       Grade: "",
-      gameName: "",
       Subjects: {
         Math: "數學",
         Chinese: "國語",
@@ -221,6 +219,7 @@ export default {
       "gameName",
       "gameType",
     ]),
+
     selfdefinetemplate() {
       return defineAsyncComponent(() =>
         import(
@@ -228,12 +227,12 @@ export default {
         )
       );
     },
-    // hintInfo() {
-    //   return {
-    //     WrongTimes: this.WrongTimes,
-    //     MaxWrongTimes: this.MaxWrongTimes,
-    //   };
-    // },
+    hintInfo() {
+      return {
+        WrongTimes: this.WrongTimes,
+        MaxWrongTimes: this.MaxWrongTimes,
+      };
+    },
   },
   created() {
     this.gameID = this.$route.params.id;
