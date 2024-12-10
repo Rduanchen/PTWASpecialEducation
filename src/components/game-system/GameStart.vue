@@ -2,9 +2,9 @@
   <div class="game-start container" v-if="Status == 'NotStart'">
     <div class="upper-container">
       <h1>{{ GameName }}</h1>
-      <div v-if="TextCheck" class="card">
-        <p v-if="IntroType == 'Html'" v-html="ShowContent"></p>
-        <p v-else-if="IntroType == 'PlainText'">{{ ShowContent }}</p>
+      <div class="card">
+        <p v-if="introType == 'Html'" v-html="ShowContent"></p>
+        <p v-else-if="introType == 'PlainText'">{{ ShowContent }}</p>
         <p v-else>無介紹文字</p>
       </div>
     </div>
@@ -12,8 +12,8 @@
       <button
         class="action-button"
         v-on:click="
-          StartGame();
-          MakeReadText('', '', (stop = true));
+          startGame();
+          makeReadText('', '', (stop = true));
         "
       >
         <img src="@/assets/images/game_images/start-game.png" />
@@ -21,7 +21,7 @@
       </button>
       <button
         class="action-button"
-        v-on:click="MakeReadText(GameName, ShowContent)"
+        v-on:click="makeReadText(GameName, ShowContent)"
       >
         <img src="@/assets/images/game_images/read-aloud.png" />
         朗讀
@@ -42,12 +42,8 @@ export default {
   emits: ["start-game", "download-record", "restart", "open-teaching-modal"],
   data() {
     return {
-      NameofThisComponent: "GameStartandOver Component said:",
-      TextCheck: false,
-      IntroType: "text",
-      ShowContent: "",
-      selectedVoice: null,
-      voices: [],
+      nameofThisComponent: "GameStartandOver Component said:",
+      introType: "",
     };
   },
   props: {
@@ -64,24 +60,33 @@ export default {
   },
   mounted() {
     Read.InitReadProccess();
-    try {
-      this.ShowContent = this.intro.Content;
-      this.TextCheck = true;
-      if (this.intro.Type == "Html" || this.intro.Type == "PlainText") {
-        this.IntroType = this.intro.Type;
-      }
-    } catch (e) {
-      console.warn(this.NameofThisComponent + "No intro text found");
-      // console.log(e);
-    }
+    this.initIntroType();
   },
   methods: {
-    MakeReadText(Title, Description, stop = false) {
-      let text = `標題:${Title}。說明:${Description}。`;
+    initIntroType() {
+      if (this.intro != undefined) {
+        if (this.intro.Type == "Html") {
+          this.introType = "Html";
+          this.ShowContent = this.intro.Content;
+        } else if (this.intro.Type == "PlainText") {
+          this.introType = "PlainText";
+          this.ShowContent = this.intro.Content;
+        } else {
+          this.introType = "undefined";
+        }
+      } else {
+        this.introType = "undefined";
+      }
+    },
+    makeReadText(title, description, stop = false) {
+      let text = `標題:${title}。說明:${description}。`;
       Read.ReadText(text, stop);
     },
-    StartGame() {
+    startGame() {
       this.$emit("start-game");
+    },
+    openTeachingMediaModal() {
+      this.$emit("open-teaching-modal");
     },
   },
 };

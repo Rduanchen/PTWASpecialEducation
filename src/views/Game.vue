@@ -78,18 +78,21 @@
                 </component>
               </div>
               <div class="intro" v-else>
-                <GameStartandOver
-                  v-if="Dataloaded"
+                <GameStart
+                  v-if="GameStatus == 'NotStart'"
                   :Status="GameStatus"
                   :intro="GameData.IntroText"
                   :GameName="gameName"
                   :key="this.Dataloaded"
                   @start-game="startGame"
-                  @download-record="ToCSV"
-                  @restart="reloadPage"
-                  @previous-page="previousPage"
                   @open-teaching-modal="openMediaModal"
-                ></GameStartandOver>
+                ></GameStart>
+                <GameOver
+                  v-if="GameStatus == 'Done'"
+                  @restart="reloadPage"
+                  @download-record="ToCSV"
+                  @previous-page="previousPage"
+                ></GameOver>
               </div>
             </div>
           </div>
@@ -147,8 +150,8 @@
 import fetchJson from "@/utilitys/fetch-json.js";
 import * as Arr2CSV from "@/utilitys/array2csv.js";
 import loading from "@/components/loading.vue";
-import GameStartandOver from "@/components/game-system/GameStartandOver.vue";
 import GameStart from "@/components/game-system/GameStart.vue";
+import GameOver from "@/components/game-system/GameOver.vue";
 import Header from "@/components/game-system/header.vue";
 import LevelAndTime from "@/components/game-system/LevelAndTime.vue";
 import MediaModal from "@/components/game-system/MediaModal.vue";
@@ -579,6 +582,7 @@ export default {
     scratchSheet,
     GameStartandOver,
     GameStart,
+    GameOver,
     Header,
     LevelAndTime,
     MediaModal,
