@@ -2,7 +2,7 @@
   <div id="GameView" ref="GameView">
     <Header
       :grade="this.Grade"
-      :gameName="this.Name"
+      :gameName="gameName"
       :subject="Subjects[Subject]"
       @previous-page="previousPage"
     />
@@ -34,11 +34,11 @@
                 ></EffectWindow>
                 <transition :name="transitionName" mode="out-in">
                   <component
-                    v-if="GameType != 'SelfDefine'"
-                    v-bind:is="this.GameType"
+                    v-if="gameType != 'SelfDefine'"
+                    v-bind:is="gameType"
                     ref="GameComponent"
                     :key="this.Nowlevel"
-                    :id="this.GameID"
+                    :ID="gameID"
                     :GameData="this.GameData.Questions[this.Nowlevel - 1]"
                     :GameConfig="this.GameConfig"
                     @add-record="gameDataRecord"
@@ -49,10 +49,10 @@
                 </transition>
 
                 <component
-                  v-if="GameType == 'SelfDefine'"
+                  v-if="gameType == 'SelfDefine'"
                   :key="this.Nowlevel"
                   :is="selfdefinetemplate"
-                  :id="this.GameID"
+                  :ID="gameID"
                   :GameData="this.GameData.Questions[this.Nowlevel - 1]"
                   :GameConfig="this.GameConfig"
                   :EnviromerntInfo="getAllInfo()"
@@ -82,7 +82,7 @@
                   v-if="Dataloaded"
                   :Status="GameStatus"
                   :intro="GameData.IntroText"
-                  :GameName="Name"
+                  :GameName="gameName"
                   :key="this.Dataloaded"
                   @start-game="startGame"
                   @download-record="ToCSV"
@@ -120,7 +120,7 @@
                 v-if="
                   GameStatus == 'Progressing' && this.Hint['Type'] != 'Method'
                 "
-                @open-teaching-modal="loadMediaForModal"
+                @open-hint-modal="loadMediaForModal"
               >
               </hintbutton>
             </template>
@@ -128,17 +128,15 @@
 
           <scratchSheet
             v-if="scratchSheetVisible"
-            @closeSheet="closeSratSheet"
+            @closeSheet="closeSratchSheet"
           ></scratchSheet>
 
-          <MediaModal
-            :showMediaModal="showMediaModal"
-            :modalTitle="modalTitle"
-            :modalContent="modalContent"
-            :mediaSrc="mediaSrc"
-            :mediaType="mediaType"
-            @closeModal="closeMediaModal"
-          />
+          <TechModal
+            v-if="showMediaModal"
+            :mediaData="this.GameData.introvideo"
+            @close="closeMediaModal"
+          >
+          </TechModal>
         </div>
       </div>
     </section>
@@ -162,20 +160,20 @@ import EffectWindow from "@/components/game-system/EffectWindow.vue";
 import gameStore from "@/stores/game";
 import { mapWritableState } from "pinia";
 import { soundManager } from "@/utilitys/sound-manager.js";
-
+import TechModal from "@/components/game-system/TechModal.vue";
 export default {
   data() {
     return {
       Dataloaded: false,
       introvideo: false,
       VideoSrc: "",
-      GameType: "loading",
+      // gameType: "loading",
       download_data: [[]], //下載的資料，格式為二維陣列。
       header: [],
-      GameID: "",
+      gameID: "",
       Subject: "",
       Grade: "",
-      Name: "",
+      gameName: "",
       Subjects: {
         Math: "數學",
         Chinese: "國語",
@@ -210,10 +208,6 @@ export default {
       questionCopy: [],
       isGif: false,
       showMediaModal: false,
-      modalTitle: "",
-      mediaType: "none",
-      mediaSrc: "",
-      modalContent: "",
       // SentData2ChildComponent: {},
     };
   },
@@ -223,6 +217,9 @@ export default {
       "transitionName",
       "GameStatus",
       "Nowlevel",
+      "gameID",
+      "gameName",
+      "gameType",
     ]),
     selfdefinetemplate() {
       return defineAsyncComponent(() =>
@@ -231,28 +228,28 @@ export default {
         )
       );
     },
-    hintInfo() {
-      return {
-        WrongTimes: this.WrongTimes,
-        MaxWrongTimes: this.MaxWrongTimes,
-      };
-    },
+    // hintInfo() {
+    //   return {
+    //     WrongTimes: this.WrongTimes,
+    //     MaxWrongTimes: this.MaxWrongTimes,
+    //   };
+    // },
   },
   created() {
-    this.GameID = this.$route.params.id;
+    this.gameID = this.$route.params.id;
     this.Subject = this.$route.params.Subject;
     this.Grade = this.$route.params.Grade;
-    this.Name = this.$route.params.GameName;
+    this.gameName = this.$route.params.GameName;
+    // this.gameID = this.$route.params.id;
     this.GameStatus = "NotStart";
     this.Nowlevel = 1;
     (async () => {
       try {
-        let res = await fetchJson(`./Grade${this.Grade}/${this.GameID}.json`);
+        let res = await fetchJson(`./Grade${this.Grade}/${this.gameID}.json`);
         this.GameData = res.data;
-        this.GameType = this.GameData.GameType;
+        this.gameType = this.GameData.GameType;
         this.GameConfig = this.GameData.GameConfig;
         this.questionCopy = this.GameData.Questions;
-        this.initHint();
         // this.InitIntroVideo();
         this.Dataloaded = true;
         this.randomChoice();
@@ -285,7 +282,6 @@ export default {
   },
   methods: {
     randomChoice() {
-      //Radom Select Questions via level
       let question = [];
       let temp = [];
       let checkcorrect = true;
@@ -294,7 +290,6 @@ export default {
         if (this.GameData.Questions[i].length != undefined) {
           let num = this.GameData.Questions[i].length;
           let rand = Math.floor(Math.random() * (num - 0 + 0));
-          console.log("rand", rand);
           question.push(this.GameData.Questions[i][rand]);
           record.push(rand);
         } else {
@@ -323,131 +318,6 @@ export default {
       this.GameData.Questions = question;
       this.questionOrder = this.gameCode;
     },
-    loadMediaForModal(contentType) {
-      this.setModalContent(contentType);
-      const mediaSource = this.getMediaSource(contentType);
-
-      if (mediaSource) {
-        this.setMediaSource(mediaSource);
-      } else {
-        this.handleMissingMedia();
-      }
-
-      this.openMediaModal();
-    },
-
-    setModalContent(contentType) {
-      const contentMap = {
-        hint: {
-          title: "需要提示嗎?",
-          content: "以下是遊戲的提示內容。",
-          hintType: this.Hint.Type,
-        },
-        teach: {
-          title: "不會玩嗎?請看教學影片:",
-          content: "以下是遊戲的教學內容。",
-          hintType: null,
-        },
-      };
-
-      if (contentMap[contentType]) {
-        this.modalTitle = contentMap[contentType].title;
-        this.modalContent = contentMap[contentType].content;
-
-        if (contentType === "hint" && contentMap[contentType].hintType) {
-          this.setHintMediaContent(contentMap[contentType].hintType);
-        }
-      }
-    },
-
-    setHintMediaContent(hintType) {
-      if (hintType === "Level") {
-        this.modalContent = "這是關卡提示";
-      } else if (hintType === "Single") {
-        this.modalContent = "這是單一提示";
-      }
-    },
-
-    getMediaSource(contentType) {
-      if (contentType === "hint") {
-        return this.fetchHintMedia();
-      } else if (contentType === "teach") {
-        return this.fetchIntroVideo();
-      }
-      return null;
-    },
-
-    setMediaSource(mediaSource) {
-      this.mediaSrc = mediaSource.filePath;
-      this.mediaType = mediaSource.sourceType === "video" ? "video" : "image";
-    },
-
-    handleMissingMedia() {
-      this.modalContent = "喔喔，沒有提供相關的資源";
-      this.mediaType = "none";
-      console.warn("No media available for the selected content type.");
-    },
-
-    fetchHintMedia() {
-      try {
-        const { filePath, sourceType } = this.getHintMediaData();
-        return {
-          filePath: ImportUrl.getGameAssets(this.GameID, filePath),
-          sourceType,
-        };
-      } catch {
-        console.warn("Missing data in Hint, type:", this.Hint.Type);
-        return null;
-      }
-    },
-
-    getHintMediaData() {
-      const hintType = this.Hint.Type;
-      if (hintType === "Level") {
-        return {
-          filePath: this.GameData.Hint.Data[this.Nowlevel - 1].FilePath,
-          sourceType: this.GameData.Hint.Data[this.Nowlevel - 1].SourceType,
-        };
-      } else if (hintType === "Single") {
-        return {
-          filePath: this.GameData.Hint.Data.FilePath,
-          sourceType: this.GameData.Hint.Data.SourceType,
-        };
-      }
-      throw new Error("Invalid hint type");
-    },
-
-    fetchIntroVideo() {
-      try {
-        const introFilePath = this.getIntroVideoFilePath();
-        return {
-          filePath: introFilePath,
-          sourceType: "video",
-        };
-      } catch {
-        return this.getFallbackMedia();
-      }
-    },
-
-    getIntroVideoFilePath() {
-      const introFilePath = ImportUrl.getGameAssets(
-        this.GameID,
-        this.GameData.introvideo
-      ).toString();
-      if (!introFilePath || introFilePath.includes("undefined")) {
-        throw new Error("Invalid intro video URL");
-      }
-      return introFilePath;
-    },
-
-    getFallbackMedia() {
-      const defaultGif = ImportUrl.getDefaultHintAssets(`${this.GameType}.gif`);
-      if (defaultGif) {
-        return { filePath: defaultGif, sourceType: "image" };
-      }
-      console.warn("No Intro Video and no default GIF available");
-      return null;
-    },
     openMediaModal() {
       this.showMediaModal = true;
     },
@@ -467,19 +337,19 @@ export default {
     ToCSV(data = this.download_data, defaultheader = true) {
       if (defaultheader) {
         let download = Arr2CSV.MadeCsvFile(
-          this.GameID,
-          this.Name,
+          this.gameID,
+          this.gameName,
           this.Grade,
           this.Subject,
           data,
           this.finaltime,
           this.gameCode
         );
-        Arr2CSV.DownloadCSV(download, this.Name);
+        Arr2CSV.DownloadCSV(download, this.gameName);
       } else {
         let download = Arr2CSV.MadeCsvFile(
-          this.GameID,
-          this.Name,
+          this.gameID,
+          this.gameName,
           this.Grade,
           this.Subject,
           data,
@@ -487,7 +357,7 @@ export default {
           this.gameCode,
           this.header
         );
-        Arr2CSV.DownloadCSV(download, this.Name);
+        Arr2CSV.DownloadCSV(download, this.gameName);
       }
     },
     reloadPage() {
@@ -676,9 +546,9 @@ export default {
       return {
         Subject: this.Subject,
         Grade: this.Grade,
-        Name: this.Name,
-        GameID: this.GameID,
-        GameType: this.GameType,
+        Name: this.gameName,
+        GameID: this.gameID,
+        GameType: this.gameType,
         GameConfig: this.GameConfig,
         GameData: this.GameData,
         GameStatus: this.GameStatus,
@@ -689,40 +559,12 @@ export default {
         EffectSrc: this.EffectSrc,
       };
     },
-    //hint app
-
-    initHint() {
-      // 紀錄提示種類，有則設定hint_type為提示種類，沒有則設定hint_type為None
-      // console.log(this.GameData.Hint)
-      let hint_exist = false;
-      let RuleType;
-      let hint_type;
-      try {
-        console.log("Hint type: " + this.GameData.Hint.ShowAs);
-        this.Hint["Type"] = this.GameData.Hint.ShowAs;
-      } catch {
-        this.Hint["Type"] = "None";
-        console.warn("No hint in this game");
-      }
-      try {
-        this.MaxWrongTimes = this.GameData.Hint.Data.MaxWrongTimes;
-        if (this.MaxWrongTimes == undefined) {
-          this.MaxWrongTimes = 2;
-          console.warn("No MaxWrongTimes in Hint Rule, set to default 2");
-        }
-      } catch {
-        this.MaxWrongTimes = 2;
-        console.warn(
-          "No Rule in Hint Rule, set to default:{Type:WrongTimes, Value:2}"
-        );
-      }
-    },
     previousPage() {
       soundManager.stopAllSounds();
       this.exitFullScreen();
       this.$router.replace({ path: `/${this.$route.params.Grade}` });
     },
-    closeSratSheet() {
+    closeSratchSheet() {
       this.scratchSheetVisible = false;
       let modal = document.getElementById("Calculator");
       modal.classList.remove("show");
@@ -733,6 +575,7 @@ export default {
     },
   },
   components: {
+    TechModal,
     hintbutton,
     scratchSheet,
     GameStartandOver,
