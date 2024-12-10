@@ -5,80 +5,69 @@
         <div class="img-container">
           <img src="@/assets/images/nav_bar/logo.png" />
         </div>
-        <!-- <div class="fake-img"></div> -->
         <div class="subjects">
-          <button class="subject__btn" @click="ChangeSubject('Math')">
+          <button class="subject__btn" @click="changeSubject('Math')">
             {{ Subjects["Math"] }}
           </button>
-          <button class="subject__btn" @click="ChangeSubject('Chinese')">
+          <button class="subject__btn" @click="changeSubject('Chinese')">
             {{ Subjects["Chinese"] }}
           </button>
-          <button class="subject__btn" @click="ChangeSubject('Technology')">
+          <button class="subject__btn" @click="changeSubject('Technology')">
             {{ Subjects["Technology"] }}
           </button>
         </div>
         <div class="search-group">
           <input
             :placeholder="
-              this.ShowSearch ? '按下esc可以返回' : '輸入ID或者標題'
+              this.showMode == 'search' ? '按下esc可以返回' : '輸入ID或者標題'
             "
-            v-model="SearchInput"
-            @keyup.enter="SearchGame()"
-            @keyup.esc="Return2Menu()"
+            v-model="searchInput"
+            @keyup.enter="searchGame()"
+            @keyup.esc="return2Menu()"
           />
           <button
             class="search-group__btn-search"
             type="submit"
-            v-on:click="SearchGame()"
+            v-on:click="searchGame()"
           >
             搜尋
           </button>
         </div>
       </nav>
     </header>
-    <section v-if="ShowMenu">
-      <div class="subjects_container">
-        <p class="title">請選科目</p>
-        <a
-          v-on:click="
-            ChangeSubject('Math');
-            MakeReadText('', '', (stop = true));
-          "
-          ><img src="@/assets/button/math.png" style="width: 40vh"
-        /></a>
-        <a
-          v-on:click="
-            ChangeSubject('Chinese');
-            MakeReadText('', '', (stop = true));
-          "
-          ><img src="@/assets/button/chinese.png" style="width: 40vh"
-        /></a>
-        <a
-          v-on:click="
-            ChangeSubject('Technology');
-            MakeReadText('', '', (stop = true));
-          "
-          ><img src="@/assets/button/technology.png" style="width: 40vh"
-        /></a>
+    <section v-if="showMode == 'menu'" class="subjects-menu">
+      <p class="title">請選科目</p>
+      <div class="subjects-menu__container">
+        <div class="subject" @click="changeSubject('Math')">
+          <img src="@/assets/images/subject/math.png" />
+          <p>數學</p>
+        </div>
+        <div class="subject" @click="changeSubject('Chinese')">
+          <img src="@/assets/images/subject/chinese.png" />
+          <p>國語</p>
+        </div>
+        <div class="subject" @click="changeSubject('Technology')">
+          <img src="@/assets/images/subject/technology.png" />
+          <p>多元科技</p>
+        </div>
       </div>
     </section>
     <section
       class="game-select__container"
       style="overflow-y: hidden"
-      v-if="ShowContent"
+      v-if="showMode == 'game'"
     >
       <div class="side-bar">
         <p class="title">現在科目</p>
-        <button class="">{{ Subjects[Subject] }}</button>
+        <button class="">{{ Subjects[nowSubject] }}</button>
         <p class="title">章節</p>
         <div class="button-container">
-          <template v-for="(items, key) in this.ShowInfo" v-if="this.ShowInfo">
+          <template v-for="(items, key) in this.showInfo" v-if="this.showInfo">
             <button
               class="list-group-item"
               @click="
                 () => {
-                  SelectChapter(key);
-                  MakeReadText('', '', (stop = true));
+                  selectChapter(key);
                 }
               "
             >
@@ -88,11 +77,12 @@
         </div>
       </div>
       <!-- 遊戲卡片區域 -->
-      <div class="game-display__container" v-if="Show" :key="Refresh">
+      <div class="game-display__container" v-if="showGameCards" :key="refresh">
         <div
           class="game-charpter__container"
-          v-for="items in this.ShowInfo[SelectedChapter].Section"
-          v-if="this.ShowInfo"
+          :key="selectedCharpter"
+          v-for="items in this.showInfo[selectedCharpter].Section"
+          v-if="this.showInfo"
         >
           <p class="game-charpter__title">{{ items.Title }}</p>
           <div class="game-card__group">
@@ -103,13 +93,13 @@
                     name: 'Game',
                     params: {
                       id: item.id,
-                      Grade: this.ShowGrade,
-                      Subject: this.Subject,
+                      Grade: this.grade,
+                      Subject: this.nowSubject,
                       GameName: item.Name,
                     },
                   })
                 "
-                @readText="MakeReadText"
+                @readText="makeReadText"
                 :gameInfo="{
                   id: item.id,
                   imgSrc: item.Img,
@@ -122,14 +112,14 @@
         </div>
       </div>
     </section>
-    <section class="search_result" v-if="ShowSearch != false">
-      <div v-if="SearchResult == undefined" class="serch-result__not-found">
+    <section class="search_result" v-if="showMode == 'search'">
+      <div v-if="searchResult == undefined" class="serch-result__not-found">
         <div>
           <p class="h1">沒有搜尋結果</p>
           <br />
           <button
-            class="btn btn-primary btn-lg w-100"
-            v-on:click="Return2Menu()"
+            class="btn-back"
+            v-on:click="return2Menu()"
             style="height: 3em; width: 10rem"
           >
             返回目錄
@@ -142,21 +132,21 @@
           <div
             class="card game-card"
             style="width: 18rem"
-            v-for="item in SearchResult"
+            v-for="item in searchResult"
             @click="
               switchRouter({
                 name: 'Game',
                 params: {
                   id: item.id,
-                  Grade: this.ShowGrade,
-                  Subject: this.Subject,
+                  Grade: this.grade,
+                  Subject: this.nowSubject,
                   GameName: item.Name,
                 },
               })
             "
           >
             <GameCard
-              @readText="MakeReadText"
+              @readText="makeReadText"
               :gameInfo="{
                 id: item.id,
                 imgSrc: item.Img,
@@ -169,7 +159,7 @@
         <div class="">
           <button
             class="btn-back"
-            v-on:click="Return2Menu()"
+            v-on:click="return2Menu()"
             style="height: 3em; width: 20rem"
           >
             返回目錄
@@ -181,24 +171,20 @@
 </template>
 <script>
 import fetchJson from "@/utilitys/fetch-json.js";
-import * as RD from "@/utilitys/readtext.js";
+import * as TEXTREADER from "@/utilitys/readtext.js";
 import { getGameAssets } from "@/utilitys/get_assets.js";
 import gameCard from "@/components/game-system/GameCard.vue";
-import Game from "./Game.vue";
 export default {
   components: {
     GameCard: gameCard,
   },
   data() {
     return {
-      SearchInput: "",
-      ShowSearch: false,
-      SearchResult: [],
-      ShowMenu: true,
-      ShowContent: false,
-      ShowGrade: 0,
-      Subject: "", //預設科目
-      ShowInfo: null,
+      searchInput: "",
+      searchResult: [],
+      grade: 0,
+      nowSubject: "", //預設科目
+      showInfo: null,
       MathShowInfo: null, //準備渲染的資料
       ChineseShowInfo: null,
       TechnologyShowInfo: null,
@@ -207,86 +193,69 @@ export default {
         Chinese: "國語",
         Technology: "多元科技",
       },
-      SelectedChapter: null,
-      Show: false,
-      Refresh: 0,
-      //定義科目種類
-      voices: [],
-      selectedVoice: null,
+      selectedCharpter: null,
+      showGameCards: false,
+      showMode: "menu", // menu, game, search
+      refresh: 0,
     };
   },
-  created() {
+  async created() {
     // 在這裡你可以存取 this.$route.params.id
-    this.ShowGrade = this.$route.params.id;
-    (async () => {
-      var res = await fetchJson(
-        "./Grade" + this.ShowGrade + "/MathGrade" + this.ShowGrade + ".json"
-      );
-      this.MathShowInfo = res.data;
-      res = await fetchJson(
-        "./Grade" + this.ShowGrade + "/ChineseGrade" + this.ShowGrade + ".json"
-      );
-      this.ChineseShowInfo = res.data;
-      res = await fetchJson(
-        "./Grade" +
-          this.ShowGrade +
-          "/TechnologyGrade" +
-          this.ShowGrade +
-          ".json"
-      );
-      this.TechnologyShowInfo = res.data;
-      console.log(
-        this.MathShowInfo,
-        this.ChineseShowInfo,
-        this.TechnologyShowInfo
-      );
-      this.MathShowInfo = await this.ConvertDatasImgURL(this.MathShowInfo);
-      this.ChineseShowInfo = await this.ConvertDatasImgURL(
-        this.ChineseShowInfo
-      );
-      this.TechnologyShowInfo = await this.ConvertDatasImgURL(
-        this.TechnologyShowInfo
-      );
-      let S = this.GetSubjectSession();
-      if (S != null) {
-        switch (S) {
-          case "Math":
-            this.ShowInfo = this.MathShowInfo;
-            this.Subject = "Math";
-            break;
-          case "Chinese":
-            this.ShowInfo = this.ChineseShowInfo;
-            this.Subject = "Chinese";
-            break;
-          case "Technology":
-            this.ShowInfo = this.TechnologyShowInfo;
-            this.Subject = "Technology";
-            break;
-          default:
-            this.ShowInfo = this.MathShowInfo;
-        }
-        this.ShowMenu = false;
-        this.ShowContent = true;
-      }
-      let C = this.GetChapterSession();
-      if (C != null) {
-        this.SelectedChapter = C;
-        this.Show = true;
-      }
-      RD.InitReadProccess();
-    })();
+    this.grade = this.$route.params.id;
+    await this.getEachSubjectJsonData();
+    this.handleSubjectSession();
+    this.handleChapterSession();
+    TEXTREADER.InitReadProccess();
   },
   methods: {
-    GetChapterSession() {
-      return sessionStorage.getItem("Chapter");
+    async getEachSubjectJsonData() {
+      try {
+        const [mathRes, chineseRes, technologyRes] = await Promise.all([
+          this.getJsonData("Math"),
+          this.getJsonData("Chinese"),
+          this.getJsonData("Technology"),
+        ]);
+        // 轉譯圖片路徑
+        this.MathShowInfo = this.convertGameDataImageURLs(mathRes.data);
+        this.ChineseShowInfo = this.convertGameDataImageURLs(chineseRes.data);
+        this.TechnologyShowInfo = this.convertGameDataImageURLs(
+          technologyRes.data
+        );
+      } catch (error) {
+        console.error(error);
+      }
     },
-    GetSubjectSession() {
-      return sessionStorage.getItem("Subject");
+    getJsonData(selectedSubject) {
+      let url = `./Grade${this.grade}/${selectedSubject}Grade${this.grade}.json`;
+      return fetchJson(url).catch((err) => {
+        throw `cannot load ${selectedSubject} 's JSON file`;
+      });
     },
-    ConvertDatasImgURL(datas) {
-      for (var i in datas) {
-        for (var z in datas[i].Section) {
-          for (var x in datas[i].Section[z].Games) {
+    handleSubjectSession() {
+      let subjectSession = this.handleSession("get", "Subject");
+      if (subjectSession) {
+        this.nowSubject = subjectSession;
+        if (subjectSession == "Math") {
+          this.showInfo = this.MathShowInfo;
+        } else if (subjectSession == "Chinese") {
+          this.showInfo = this.ChineseShowInfo;
+        } else if (subjectSession == "Technology") {
+          this.showInfo = this.TechnologyShowInfo;
+        }
+      }
+    },
+    handleChapterSession() {
+      let chapterSession = this.handleSession("get", "Chapter");
+      if (chapterSession) {
+        this.selectedCharpter = chapterSession;
+        this.showGameCards = true; // 若以前曾經打開過章節，則直接顯示章節內容
+      }
+    },
+    convertGameDataImageURLs(originalDatas) {
+      let datas = originalDatas;
+      for (let i in datas) {
+        for (let z in datas[i].Section) {
+          for (let x in datas[i].Section[z].Games) {
             datas[i].Section[z].Games[x].Img = getGameAssets(
               datas[i].Section[z].Games[x].id,
               datas[i].Section[z].Games[x].Img
@@ -296,92 +265,135 @@ export default {
       }
       return datas;
     },
-    MakeReadText(Title, Description, stop = false) {
-      let text = `標題:${Title}。說明:${Description}。`;
-      // this.ReadText(text);
-      RD.ReadText(text, stop);
-      console.log(text);
+    makeReadText(title, description, stop = false) {
+      let text = `標題:${title}。說明:${description}。`;
+      TEXTREADER.ReadText(text, stop);
     },
-    SelectChapter(key) {
-      this.Show = false;
-      sessionStorage.setItem("Chapter", key);
-      this.SelectedChapter = String(key);
-      this.Show = true;
+    selectChapter(key) {
+      this.showGameCards = false;
+      this.handleSession("set", "Chapter", key);
+      this.selectedCharpter = String(key);
+      this.showGameCards = true;
     },
-    ChangeSubject(Subject) {
-      this.ShowMenu = false;
-      this.ShowContent = true;
-      this.Subject = Subject;
-      if (Subject == "Math") {
-        this.ShowInfo = this.MathShowInfo;
-      } else if (Subject == "Chinese") {
-        this.ShowInfo = this.ChineseShowInfo;
-      } else if (Subject == "Technology") {
-        this.ShowInfo = this.TechnologyShowInfo;
+    handleSession(action, key, value) {
+      if (action == "set") {
+        sessionStorage.setItem(key, value);
+      } else if (action == "get") {
+        return sessionStorage.getItem(key);
+      } else if (action == "remove") {
+        sessionStorage.removeItem(key);
       }
-      sessionStorage.setItem("Subject", Subject);
-      sessionStorage.removeItem("Chapter");
-      this.Refresh += 1;
-      this.Show = false;
     },
-    FF(Flist, tar) {
-      let finded_id = [];
-      let find = [];
-      for (var i in Flist) {
-        for (var z in Flist[i].Section) {
-          for (var x in Flist[i].Section[z].Games) {
-            if (Flist[i].Section[z].Games[x].id.includes(tar)) {
-              if (!finded_id.includes(Flist[i].Section[z].Games[x].id)) {
-                finded_id.push(Flist[i].Section[z].Games[x].id);
-                let temp = Flist[i].Section[z].Games[x];
-                find.push(temp);
+    changeSubject(subject) {
+      this.nowSubject = subject;
+      if (subject == "Math") {
+        this.showInfo = this.MathShowInfo;
+      } else if (subject == "Chinese") {
+        this.showInfo = this.ChineseShowInfo;
+      } else if (subject == "Technology") {
+        this.showInfo = this.TechnologyShowInfo;
+      }
+      this.handleSession("set", "Subject", subject);
+      this.handleSession("remove", "Chapter");
+      this.refresh += 1;
+      this.showGameCards = false;
+      this.switchMode("game");
+    },
+    queryGame(searchList, tarSymbol) {
+      let finded_id = new Set();
+      let foundGames = [];
+      for (var i in searchList) {
+        for (var z in searchList[i].Section) {
+          for (var x in searchList[i].Section[z].Games) {
+            if (searchList[i].Section[z].Games[x].id.includes(tarSymbol)) {
+              if (!finded_id.has(searchList[i].Section[z].Games[x].id)) {
+                finded_id.add(searchList[i].Section[z].Games[x].id);
+                let temp = searchList[i].Section[z].Games[x];
+                foundGames.push(temp);
               }
             }
-            if (Flist[i].Section[z].Games[x].Name.includes(tar)) {
-              if (!finded_id.includes(Flist[i].Section[z].Games[x].id)) {
-                finded_id.push(Flist[i].Section[z].Games[x].id);
-                let temp = Flist[i].Section[z].Games[x];
+            if (searchList[i].Section[z].Games[x].Name.includes(tarSymbol)) {
+              if (!finded_id.has(searchList[i].Section[z].Games[x].id)) {
+                finded_id.add(searchList[i].Section[z].Games[x].id);
+                let temp = searchList[i].Section[z].Games[x];
                 find.push(temp);
               }
             }
           }
         }
       }
-      console.log(find);
-      if (find.length == 0) {
+      if (foundGames.length == 0) {
         return undefined;
       }
-      return find;
+      return foundGames;
     },
-    SearchGame() {
-      let keyword = this.SearchInput;
-      this.SearchResult = [];
-      this.SearchResult = this.FF(this.MathShowInfo, keyword);
-      this.ShowSearch = true;
-      this.Show = false;
-      this.ShowContent = false;
-      this.ShowMenu = false;
-      this.SearchInput = "";
-      console.log(this.SearchResult);
+    switchMode(mode) {
+      this.showMode = mode;
+      this.makeReadText("", "", (stop = true));
     },
-    Return2Menu() {
-      // location.reload();
-      this.MakeReadText("", "", (stop = true));
-      this.ShowSearch = false;
-      this.Show = true;
-      this.ShowContent = true;
-      this.ShowMenu = false;
-      this.SearchInput = "";
+    searchGame() {
+      let keyword = this.searchInput;
+      this.searchResult = [];
+      this.searchResult = this.queryGame(this.MathShowInfo, keyword);
+      this.searchInput = "";
+      this.switchMode("search");
+    },
+    return2Menu() {
+      this.switchMode("menu");
+      this.searchInput = "";
     },
     switchRouter(to) {
-      console.log(to);
+      this.makeReadText("", "", (stop = true));
       this.$router.push(to);
     },
   },
 };
 </script>
-
 <style lang="scss" scoped>
+.subjects-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 90vh;
+  .title {
+    font-size: 3rem;
+    font-weight: bold;
+    margin: 0rem;
+  }
+  .subjects-menu__container {
+    margin: 2rem;
+    width: 40%;
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 2rem;
+    @media (min-width: 1200px) {
+      width: 30%;
+    }
+    .subject {
+      @extend .container-basic;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: start;
+      background-color: $primary-color;
+      p {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin: 0;
+      }
+      img {
+        height: 20vh;
+        width: auto;
+        object-fit: contain;
+      }
+    }
+    .subject:hover {
+      transform: scale($transform-scale);
+    }
+  }
+}
+
 header {
   touch-action: none !important;
   user-select: none !important;
@@ -450,21 +462,7 @@ header {
     }
   }
 }
-.subjects_container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2rem;
-  height: 90vh;
-  .title {
-    font-size: 3rem;
-    font-weight: bold;
-  }
-  img {
-    width: 40vh;
-  }
-}
+
 .game-select__container {
   display: grid;
   grid-template-columns: 1fr 5fr;
@@ -513,7 +511,6 @@ header {
     font-size: 1.5rem;
   }
 }
-
 .game-card__group {
   display: grid;
   width: 100%;
@@ -541,6 +538,7 @@ header {
   .btn-back {
     width: 20rem;
     height: 3em;
+    margin: 2rem;
     background-color: $primary-btn-bg;
     border: none;
     &:hover {
@@ -567,197 +565,13 @@ header {
   .search-result__container {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
-    @extend .game-card__group;
-    width: 70%;
-    .game-card__group {
-      grid-template-columns: 1fr 1fr 1fr 1fr;
+    @media (min-width: 1200px) {
+      .game-card__group {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+      }
     }
   }
 }
-
-// header {
-//   background-color: $primary-color;
-//   touch-action: none !important;
-//   user-select: none !important;
-//   -webkit-user-select: none !important;
-//   -moz-user-select: none !important;
-//   -ms-user-select: none !important;
-// }
-// .navbar {
-//   background-color: $primary-color;
-//   button {
-//     background-color: $primary-btn-bg;
-//     border: solid 1px $primary-btn-bg;
-//     border-radius: $border-radius;
-//     margin: 0 1rem;
-//   }
-//   button:hover {
-//     background-color: $primary-btn-hover-bg;
-//     transform: scale($transform-scale);
-//   }
-//   @media (min-width: 768px) {
-//     height: 10vh;
-//   }
-//   @media (max-width: 768px) {
-//     height: auto;
-//   }
-//   .navbar-brand {
-//     img {
-//       @media (max-width: 768px) {
-//         max-width: 50vw;
-//       }
-//       @media (min-width: 768px) {
-//         max-width: 20vw;
-//       }
-//     }
-//   }
-//   img {
-//     max-width: 80%;
-//   }
-// }
-
-// .nav-link {
-//   transition: transform 0.3s ease; /* 平滑過渡效果 */
-// }
-
-// section {
-//   height: 90vh;
-//   background-color: #ffff;
-// }
-
-// .breadcrumb .breadcrumb-item {
-//   a {
-//     color: #fff;
-//     font-size: 1.2em;
-//   }
-// }
-
-// .nav-link {
-//   transition: transform 0.3s ease; /* 平滑過渡效果 */
-// }
-
-// .Subject_container {
-//   img:hover {
-//     transform: scale(1.1);
-//   }
-//   img {
-//     transition: transform 0.3s ease; /* 平滑過渡效果 */
-//   }
-// }
-
-// // 當尺寸小於 768px 時
-// @media (max-width: 768px) {
-//   .game-card__group {
-//     grid-template-columns: 1fr !important;
-//   }
-//   .select-index {
-//     grid-template-columns: 1fr 2fr !important;
-//   }
-// }
-
-// .select-index {
-//   display: grid;
-//   grid-template-columns: 2fr 10fr;
-//   .side-bar {
-//     touch-action: none !important;
-//     user-select: none !important;
-//     -webkit-user-select: none !important;
-//     -moz-user-select: none !important;
-//     -ms-user-select: none !important;
-//     display: flex;
-//     flex-direction: column;
-//     height: 90vh;
-//     background-color: $sub-color;
-//     padding: $gap--small;
-//     button {
-//       width: 100%;
-//       background-color: $info-btn-bg;
-//       border: none;
-//       border-radius: $border-radius;
-//       color: $secondary-btn-text;
-//       font-weight: 700;
-//       font-size: 1.2rem;
-//       height: 2.6rem;
-//     }
-//     .Title {
-//       font-size: 1.5em;
-//       margin-bottom: $gap--tiny;
-//     }
-//     .ButtonContainer {
-//       display: grid;
-//       gap: 1rem;
-//       button {
-//         transition: transform 0.3s ease; /* 平滑的過渡效果 */
-//         font-size: 1rem;
-//         font-weight: 800;
-//         background-color: #feece9;
-//         border-radius: $border-radius;
-//         color: $secondary-btn-text;
-//       }
-//       button:hover {
-//         transform: scale($transform-scale);
-//         background-color: $secondary-btn-hover-bg;
-//       }
-//     }
-//   }
-//   .item-frame {
-//     max-height: 90vh;
-//     overflow-y: scroll;
-//     padding: $gap--medium;
-//     @media (pointer: fine) {
-//       -ms-overflow-style: none; /* IE/Edge */
-//       &::-webkit-scrollbar {
-//         display: none;
-//       }
-//     }
-//     .Charpter {
-//       margin-bottom: 2vh;
-//     }
-//     .card-title {
-//       font-size: 1.5em;
-//       margin-bottom: $gap--tiny;
-//     }
-//   }
-// }
-// .game-card__group {
-//   display: grid;
-//   width: 100%;
-//   align-self: center;
-//   grid-template-columns: 1fr 1fr 1fr;
-//   grid-template-rows: auto;
-//   gap: 2rem;
-//   .game-card {
-//     border-radius: $border-radius;
-//     border: solid 2px #aaa;
-//     transition: transform 0.3s ease; /* 平滑過渡效果 */
-//     min-height: 16rem;
-//     .card-title {
-//       font-size: 1.1rem;
-//       margin-bottom: 1vh;
-//     }
-//     img {
-//       width: 100%;
-//       height: 100%;
-//       object-fit: contain;
-//     }
-//   }
-//   .game-card:hover {
-//     transform: scale(1.05); /* 當滑鼠懸停時放大 5% */
-//   }
-//   @media (pointer: fine) {
-//     -ms-overflow-style: none; /* IE/Edge */
-//     &::-webkit-scrollbar {
-//       display: none;
-//     }
-//   }
-// }
-// .search_result {
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-//   padding: 1rem;
-//   max-height: 90vh;
-//   overflow-y: scroll;
-// }
 </style>
