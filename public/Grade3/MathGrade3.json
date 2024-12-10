@@ -246,6 +246,72 @@
     ]
   },
   {
+    "Title": "4 - 公斤和公克",
+    "Section": [
+      {
+        "Title": "認識1公斤秤",
+        "Games": [
+          {
+            "id": "MA3141",
+            "Name": "認識1公斤秤",
+            "Description": "",
+            "Img": ""
+          }
+        ]
+      },
+      {
+        "Title": "認識3公斤秤",
+        "Games": [
+          {
+            "id": "MA3142",
+            "Name": "認識3公斤秤",
+            "Description": "",
+            "Img": ""
+          }
+        ]
+      },
+      {
+        "Title": "重量的量感與估測",
+        "Games": [
+          {
+            "id": "MA3143",
+            "Name": "重量的量感與估測",
+            "Description": "",
+            "Img": ""
+          }
+        ]
+      },
+      {
+        "Title": "公斤和公克的換算",
+        "Games": [
+          {
+            "id": "MA3144",
+            "Name": "公斤和公克的換算",
+            "Description": "",
+            "Img": ""
+          },
+          {
+            "id": "MA3145",
+            "Name": "比大小",
+            "Description": "",
+            "Img": ""
+          }
+        ]
+      },
+      {
+        "Title": "重量的加減計算",
+        "Games": [
+          {
+            "id": "MA3146",
+            "Name": "重量的加減(應用題)",
+            "Description": "",
+            "Img": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
     "Title": "4 - 乘法",
     "Section": [
       {
