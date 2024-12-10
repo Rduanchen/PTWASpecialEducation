@@ -1,47 +1,54 @@
 <template>
-    <div v-if="showMediaModal" class="mediaModal-overlay" @click.self="closeMediaModal">
-        <div class="mediaModal-container">
-            <div class="mediaModal-header">
-                <h1 class="mediaModal-title">{{ modalTitle }}</h1>
-            </div>
-            <div class="mediaModal-body">
-                <p class="mediaModal-content">{{ modalContent }}</p>
-                <video
-                v-if="mediaType === 'video'"
-                :src="mediaSrc"
-                controls
-                autoplay
-                class="media-content"></video>
-                <img 
-                v-else-if="mediaType === 'image'"
-                :src="mediaSrc"
-                class="media-content"/>
-                <img
-                v-else
-                src="@/assets/images/game_images/elephant.gif"
-                class="media-content" />
-            </div>
-            <div class="mediaModal-footer">
-                <button type="button" @click="closeMediaModal">我知道了!</button>
-            </div>
-        </div>
+  <div
+    v-if="showMediaModal"
+    class="mediaModal-overlay"
+    @click.self="closeMediaModal"
+  >
+    <div class="mediaModal-container">
+      <div class="mediaModal-header">
+        <h1 class="mediaModal-title">{{ modalTitle }}</h1>
+      </div>
+      <div class="mediaModal-body">
+        <p class="mediaModal-content">{{ modalContent }}</p>
+        <video
+          v-if="mediaType === 'video'"
+          :src="mediaSrc"
+          controls
+          autoplay
+          class="media-content"
+        ></video>
+        <img
+          v-else-if="mediaType === 'image'"
+          :src="mediaSrc"
+          class="media-content"
+        />
+        <img
+          v-else
+          src="@/assets/images/game_images/elephant.gif"
+          class="media-content"
+        />
+      </div>
+      <div class="mediaModal-footer">
+        <button type="button" @click="closeMediaModal">我知道了!</button>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
 export default {
-    props: {
-        showMediaModal: Boolean,
-        modalTitle: String,
-        modalContent: String,
-        mediaSrc: String,
-        mediaType: String
+  props: {
+    showMediaModal: Boolean,
+    modalTitle: String,
+    modalContent: String,
+    mediaSrc: String,
+    mediaType: String,
+  },
+  methods: {
+    closeMediaModal() {
+      this.$emit("closeModal");
     },
-    methods: {
-        closeMediaModal() {
-            this.$emit('closeModal');
-        }
-    }
+  },
 };
 </script>
 
@@ -95,7 +102,7 @@ export default {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  flex-grow: 1; 
+  flex-grow: 1;
 }
 
 .mediaModal-footer {
@@ -136,5 +143,4 @@ img.media-content {
   margin: 0;
   font-size: 1.5rem;
 }
-
 </style>
