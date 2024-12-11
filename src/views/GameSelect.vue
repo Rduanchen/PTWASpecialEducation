@@ -3,7 +3,7 @@
     <header>
       <nav class="game-select__nav" style="width: 100%">
         <div class="img-container">
-          <img src="@/assets/images/nav_bar/logo.png" />
+          <img :src="navLogoSrc" />
         </div>
         <div class="subjects">
           <button class="subject__btn" @click="changeSubject('Math')">
@@ -172,7 +172,7 @@
 <script>
 import fetchJson from "@/utilitys/fetch-json.js";
 import * as TEXTREADER from "@/utilitys/readtext.js";
-import { getGameAssets } from "@/utilitys/get_assets.js";
+import { getGameAssets, getSystemAssets } from "@/utilitys/get_assets.js";
 import gameCard from "@/components/game-system/GameCard.vue";
 export default {
   components: {
@@ -180,6 +180,7 @@ export default {
   },
   data() {
     return {
+      navLogoSrc: getSystemAssets("logo.png", "nav_bar"),
       searchInput: "",
       searchResult: [],
       grade: 0,
