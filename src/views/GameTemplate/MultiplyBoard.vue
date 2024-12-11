@@ -2,16 +2,13 @@
   <div class="container">
     <div class="board">
       <div class="question">
-        <button v-for="i in buttons" :style="i.style"></button>
+        <numBtn :Data="test"></numBtn>
+        <numBtn :Data="test2"></numBtn>
       </div>
       <hr />
-      <div class="calculation">
-        <button v-for="i in buttons" :style="i.style"></button>
-      </div>
+      <div class="calculation"></div>
       <hr />
-      <div class="answer">
-        <button v-for="i in buttons" :style="i.style"></button>
-      </div>
+      <div class="answer"></div>
     </div>
     <div class="drawingBoard" :style="canvasStyle">
       <drawingBoard :Data="configBrush" ref="canvas"></drawingBoard>
@@ -28,32 +25,26 @@
 </template>
 
 <script>
-import { symOutlinedIndeterminateCheckBox } from "@quasar/extras/material-symbols-outlined";
 import { defineAsyncComponent } from "vue";
 export default {
   components: {
     drawingBoard: defineAsyncComponent(() =>
       import("@/components/DrawingBoard.vue")
     ),
+    numBtn: defineAsyncComponent(() =>
+      import("@/components/ButtonWithNumPad.vue")
+    ),
   },
   data() {
     return {
-      buttons: [
-        {
-          style: {
-            backgroundColor: "blue",
-            gridColumn: 9,
-            gridRow: 1,
-          },
-        },
-        {
-          style: {
-            backgroundColor: "red",
-            gridColumn: 3,
-            gridRow: 1,
-          },
-        },
-      ],
+      test: {
+        color: "red",
+        padPosition: "lowerRight",
+      },
+      test2: {
+        color: "blue",
+        padPosition: "lowerRight",
+      },
       brushStatusBtn: "brush",
       drawingBoardStatusBtn: "hide",
       brush: {
@@ -135,35 +126,34 @@ export default {
 
 .board {
   height: 90%;
-  width: fit-content;
+  width: 90%;
   margin: auto;
 }
 .question {
   height: 35%;
+  width: 100%;
   display: grid;
   grid-template-columns: repeat(9, 1fr);
   grid-template-rows: repeat(2, 1fr);
-  gap: 5%;
-  padding: 2%;
+  gap: 10px;
+  padding: 10px;
 }
 .calculation {
   height: 35%;
+  width: 100%;
   display: grid;
   grid-template-columns: repeat(9, 1fr);
   grid-template-rows: repeat(2, 1fr);
-  gap: 5%;
-  padding: 2%;
+  gap: 10px;
+  padding: 10px;
 }
 .answer {
   height: 17.5%;
+  width: 100%;
   display: grid;
   grid-template-columns: repeat(9, 1fr);
-  gap: 5%;
-  padding: 2%;
-}
-.board button {
-  aspect-ratio: 3/4;
-  border: none;
+  gap: 10px;
+  padding: 10px;
 }
 hr {
   opacity: 100;
