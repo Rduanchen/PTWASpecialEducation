@@ -676,9 +676,6 @@ export default {
     MoneyDrag: defineAsyncComponent(() =>
       import("@/views/GameTemplate/MoneyDrag.vue")
     ),
-    ScaleGame: defineAsyncComponent(() =>
-      import("@/views/GameTemplate/ScaleGame.vue")
-    ),
   },
 };
 </script>
