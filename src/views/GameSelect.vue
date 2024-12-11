@@ -39,15 +39,15 @@
       <p class="title">請選科目</p>
       <div class="subjects-menu__container">
         <div class="subject" @click="changeSubject('Math')">
-          <img src="@/assets/images/subject/math.png" />
+          <img :src="mathLogoSrc" />
           <p>數學</p>
         </div>
         <div class="subject" @click="changeSubject('Chinese')">
-          <img src="@/assets/images/subject/chinese.png" />
+          <img :src="chineseLogoSrc" />
           <p>國語</p>
         </div>
         <div class="subject" @click="changeSubject('Technology')">
-          <img src="@/assets/images/subject/technology.png" />
+          <img :src="technologyLogoSrc" />
           <p>多元科技</p>
         </div>
       </div>
@@ -180,6 +180,9 @@ export default {
   },
   data() {
     return {
+      mathLogoSrc: getSystemAssets("math.png", "subject"),
+      chineseLogoSrc: getSystemAssets("chinese.png", "subject"),
+      technologyLogoSrc: getSystemAssets("technology.png", "subject"),
       navLogoSrc: getSystemAssets("logo.png", "nav_bar"),
       searchInput: "",
       searchResult: [],
