@@ -38,5 +38,9 @@ export function getDefaultHintAssets(url) {
   return path;
 }
 
+export function getSoundAssets(serviceName, url) {
+  return new URL(`../assets/sounds/${serviceName}/${url}`, import.meta.url).href;
+}
+
 // The following function are about to remove, please use the above functions instead.
 
