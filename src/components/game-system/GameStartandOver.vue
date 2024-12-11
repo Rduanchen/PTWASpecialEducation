@@ -38,7 +38,7 @@
       class="d-flex flex-column justify-content-center m-5"
       id="Done"
     >
-      <!-- <img src="@/assets/system/effects/Firework.gif" id="Effects" /> -->
+      <img src="@/assets/system/effects/Firework.gif" id="Effects" />
       <div class="d-flex justify-content-center d-grid gap-3 mt-3">
         <button
           class="btn btn-primary flex-grow-1"
@@ -58,7 +58,7 @@
 </template>
 <script>
 import * as Read from "@/utilitys/readtext.js";
-
+import { getSystemEffectAssets } from "@/utilitys/get_assets.js";
 export default {
   name: "GameStartandOver",
   emits: ["start-game", "download-record", "restart", "open-teaching-modal"],
