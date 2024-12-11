@@ -21,7 +21,7 @@
 
 <script>
 import {
-  getDefaultIntroVideoAssets,
+  getDefaultHintAssets,
   getGameAssets,
   getSystemAssets,
 } from "@/utilitys/get_assets.js";
@@ -72,9 +72,7 @@ export default {
   },
   methods: {
     checkDefaultMediaAvailability() {
-      const defaultTechVideo = getDefaultIntroVideoAssets(
-        `${this.gameType}.gif`
-      );
+      const defaultTechVideo = getDefaultHintAssets(`${this.gameType}.gif`);
       if (defaultTechVideo.includes("undefined")) {
         return "";
       } else {
