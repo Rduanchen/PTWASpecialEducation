@@ -23,14 +23,15 @@ export default {
       padStyle: {
         visibility: "hidden",
       },
-      Data: {
-        padPosition: "upperRight",
-        color: "#6da1f1",
-      },
     };
   },
 
-  props: {},
+  props: {
+    Data: {
+      type: Object,
+      required: true,
+    },
+  },
 
   emits: ["replyAnswer", "ReplyAnswer"],
 
@@ -106,6 +107,7 @@ export default {
   background-color: #9b8c7c;
   padding: 10px;
   border-radius: 20px;
+  z-index: 1;
 }
 .keysBtn {
   aspect-ratio: 1;

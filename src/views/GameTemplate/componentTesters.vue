@@ -63,7 +63,7 @@
     </div>
   </div>
   <div v-if="tester == 'numPad'" class="numPad testArea">
-    <numPad @replyAnswer="printAns"></numPad>
+    <numPad :Data="configNumPad" @replyAnswer="printAns"></numPad>
   </div>
 </template>
 
@@ -156,6 +156,10 @@ export default {
       configBrush: {
         color: "red",
         size: 10,
+      },
+      configNumPad: {
+        padPosition: "upperRight",
+        color: "#6da1f1",
       },
       id: "Dev0105",
     };
