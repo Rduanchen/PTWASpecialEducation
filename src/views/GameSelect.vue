@@ -208,7 +208,6 @@ export default {
     this.grade = this.$route.params.id;
     await this.getEachSubjectJsonData();
     this.handleSubjectSession();
-    this.handleChapterSession();
     TEXTREADER.InitReadProccess();
   },
   methods: {
@@ -241,18 +240,26 @@ export default {
         this.nowSubject = subjectSession;
         if (subjectSession == "Math") {
           this.showInfo = this.mathShowInfo;
+          this.changeSubject("Math");
+          this.handleChapterSession("Math");
         } else if (subjectSession == "Chinese") {
           this.showInfo = this.chineseShowInfo;
+          this.changeSubject("Chinese");
+          this.handleChapterSession("Chinese");
         } else if (subjectSession == "Technology") {
           this.showInfo = this.technologyShowInfo;
+          this.changeSubject("Technology");
+          this.handleChapterSession("Technology");
         }
       }
     },
-    handleChapterSession() {
-      let chapterSession = this.handleSession("get", "Chapter");
+    handleChapterSession(subject) {
+      let chapterSession = this.handleSession("get", `${subject}Chapter`);
       if (chapterSession) {
-        this.selectedCharpter = chapterSession;
-        this.showGameCards = true; // 若以前曾經打開過章節，則直接顯示章節內容
+        this.selectChapter(chapterSession);
+      } else {
+        this.selectedCharpter = 0;
+        this.showGameCards = false;
       }
     },
     convertGameDataImageURLs(originalDatas) {
@@ -275,8 +282,9 @@ export default {
     },
     selectChapter(key) {
       this.showGameCards = false;
-      this.handleSession("set", "Chapter", key);
+      this.handleSession("set", `${this.nowSubject}Chapter`, key);
       this.selectedCharpter = String(key);
+      this.refresh += 1;
       this.showGameCards = true;
     },
     handleSession(action, key, value) {
@@ -292,10 +300,16 @@ export default {
       this.nowSubject = subject;
       if (subject == "Math") {
         this.showInfo = this.mathShowInfo;
+        this.handleSession("set", "Subject", subject);
+        this.handleChapterSession("Math");
       } else if (subject == "Chinese") {
         this.showInfo = this.chineseShowInfo;
+        this.handleSession("set", "Subject", subject);
+        this.handleChapterSession("Chinese");
       } else if (subject == "Technology") {
         this.showInfo = this.technologyShowInfo;
+        this.handleSession("set", "Subject", subject);
+        this.handleChapterSession("Technology");
       }
       this.handleSession("set", "Subject", subject);
       this.handleSession("remove", "Chapter");
