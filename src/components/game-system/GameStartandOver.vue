@@ -59,6 +59,7 @@
 <script>
 import * as Read from "@/utilitys/readtext.js";
 import { getSystemEffectAssets } from "@/utilitys/get_assets.js";
+import img from "@/assets/system/effects/Firework.gif";
 export default {
   name: "GameStartandOver",
   emits: ["start-game", "download-record", "restart", "open-teaching-modal"],
@@ -70,7 +71,7 @@ export default {
       ShowContent: "",
       selectedVoice: null,
       voices: [],
-      fireworkSrc: getSystemEffectAssets("Firework.gif"),
+      fireworkSrc: img,
     };
   },
   props: {
