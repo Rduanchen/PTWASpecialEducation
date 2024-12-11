@@ -7,13 +7,13 @@
         </div>
         <div class="subjects">
           <button class="subject__btn" @click="changeSubject('Math')">
-            {{ Subjects["Math"] }}
+            {{ subjects["Math"] }}
           </button>
           <button class="subject__btn" @click="changeSubject('Chinese')">
-            {{ Subjects["Chinese"] }}
+            {{ subjects["Chinese"] }}
           </button>
           <button class="subject__btn" @click="changeSubject('Technology')">
-            {{ Subjects["Technology"] }}
+            {{ subjects["Technology"] }}
           </button>
         </div>
         <div class="search-group">
@@ -59,7 +59,7 @@
     >
       <div class="side-bar">
         <p class="title">現在科目</p>
-        <button class="">{{ Subjects[nowSubject] }}</button>
+        <button class="">{{ subjects[nowSubject] }}</button>
         <p class="title">章節</p>
         <div class="button-container">
           <template v-for="(items, key) in this.showInfo" v-if="this.showInfo">
@@ -189,10 +189,10 @@ export default {
       grade: 0,
       nowSubject: "", //預設科目
       showInfo: null,
-      MathShowInfo: null, //準備渲染的資料
-      ChineseShowInfo: null,
-      TechnologyShowInfo: null,
-      Subjects: {
+      mathShowInfo: null, //準備渲染的資料
+      chineseShowInfo: null,
+      technologyShowInfo: null,
+      subjects: {
         Math: "數學",
         Chinese: "國語",
         Technology: "多元科技",
@@ -220,9 +220,9 @@ export default {
           this.getJsonData("Technology"),
         ]);
         // 轉譯圖片路徑
-        this.MathShowInfo = this.convertGameDataImageURLs(mathRes.data);
-        this.ChineseShowInfo = this.convertGameDataImageURLs(chineseRes.data);
-        this.TechnologyShowInfo = this.convertGameDataImageURLs(
+        this.mathShowInfo = this.convertGameDataImageURLs(mathRes.data);
+        this.chineseShowInfo = this.convertGameDataImageURLs(chineseRes.data);
+        this.technologyShowInfo = this.convertGameDataImageURLs(
           technologyRes.data
         );
       } catch (error) {
@@ -240,11 +240,11 @@ export default {
       if (subjectSession) {
         this.nowSubject = subjectSession;
         if (subjectSession == "Math") {
-          this.showInfo = this.MathShowInfo;
+          this.showInfo = this.mathShowInfo;
         } else if (subjectSession == "Chinese") {
-          this.showInfo = this.ChineseShowInfo;
+          this.showInfo = this.chineseShowInfo;
         } else if (subjectSession == "Technology") {
-          this.showInfo = this.TechnologyShowInfo;
+          this.showInfo = this.technologyShowInfo;
         }
       }
     },
@@ -291,11 +291,11 @@ export default {
     changeSubject(subject) {
       this.nowSubject = subject;
       if (subject == "Math") {
-        this.showInfo = this.MathShowInfo;
+        this.showInfo = this.mathShowInfo;
       } else if (subject == "Chinese") {
-        this.showInfo = this.ChineseShowInfo;
+        this.showInfo = this.chineseShowInfo;
       } else if (subject == "Technology") {
-        this.showInfo = this.TechnologyShowInfo;
+        this.showInfo = this.technologyShowInfo;
       }
       this.handleSession("set", "Subject", subject);
       this.handleSession("remove", "Chapter");
@@ -338,7 +338,7 @@ export default {
     searchGame() {
       let keyword = this.searchInput;
       this.searchResult = [];
-      this.searchResult = this.queryGame(this.MathShowInfo, keyword);
+      this.searchResult = this.queryGame(this.mathShowInfo, keyword);
       this.searchInput = "";
       this.switchMode("search");
     },
