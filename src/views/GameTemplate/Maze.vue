@@ -48,7 +48,7 @@
 <script>
 import { getSystemAssets, getGameStaticAssets } from "@/utilitys/get_assets.js";
 import { defineAsyncComponent } from "vue";
-import map from "@/assets/system/MazeMap/map.json";
+import fetchJson from "@/utilitys/fetch-json";
 
 export default {
   components: {
@@ -58,6 +58,7 @@ export default {
   },
   data() {
     return {
+      isBgImage: false,
       configKonva: {},
       configBg: {
         fill: "black",
@@ -139,7 +140,7 @@ export default {
       },
       joystickVisible: false,
 
-      // map: getGameStaticAssets("MazeMap", "map.json"),
+      map: {},
     };
   },
 
@@ -157,9 +158,9 @@ export default {
       required: true,
     },
   },
-
-  mounted() {
-    console.log(map);
+  async mounted() {
+    this.map = await fetchJson(getGameStaticAssets("Maze", "map.json"));
+    this.map = this.map.data.map;
     this.fitCanvasInScreen();
     this.generateMap();
     this.getOptionPosition();
@@ -173,7 +174,7 @@ export default {
       this.configKonva.height = this.gameWidth * 0.5;
     },
     generateMap() {
-      this.randomMapId = Math.floor(Math.random() * map.length);
+      this.randomMapId = Math.floor(Math.random() * this.map.length);
       this.laneWidth = this.gameWidth * 0.05;
       const mapBG = new window.Image();
       mapBG.src = getSystemAssets(
@@ -198,9 +199,9 @@ export default {
               width: this.laneWidth,
               height: this.laneWidth,
             };
-            if (map[this.randomMapId][j][i] == 1) {
+            if (this.map[this.randomMapId][j][i] == 1) {
               this.configBounds.push(block);
-            } else if (map[this.randomMapId][j][i] != 0) {
+            } else if (this.map[this.randomMapId][j][i] != 0) {
               this.configSafeArea.push(block);
             }
           }
@@ -211,7 +212,7 @@ export default {
     getOptionPosition() {
       for (var i = 0; i < 20; ++i) {
         for (var j = 0; j < 10; ++j) {
-          switch (map[this.randomMapId][j][i]) {
+          switch (this.map[this.randomMapId][j][i]) {
             case 2:
               if (this.optionMap[0] == 0) this.optionMap[0] = { x: i, y: j };
               break;
@@ -246,7 +247,7 @@ export default {
       for (var i = 0; i < 10; ++i) {
         for (var j = 0; j < 20; ++j) {
           if (j >= 8 && j <= 11) continue;
-          if (map[this.randomMapId][i][j] == 0) {
+          if (this.map[this.randomMapId][i][j] == 0) {
             this.configGhost_1.x = this.laneWidth * (j + 0.5);
             this.configGhost_1.y = this.laneWidth * (i + 0.5);
             break;
@@ -256,7 +257,7 @@ export default {
       for (var i = 9; i > -1; --i) {
         for (var j = 19; j > -1; --j) {
           if (j >= 8 && j <= 11) continue;
-          if (map[this.randomMapId][i][j] == 0) {
+          if (this.map[this.randomMapId][i][j] == 0) {
             this.configGhost_2.x = this.laneWidth * (j + 0.5);
             this.configGhost_2.y = this.laneWidth * (i + 0.5);
             break;
@@ -268,7 +269,7 @@ export default {
       var possiblePosition = [];
       for (var i = 4; i < 6; ++i) {
         for (var j = 9; j < 11; ++j) {
-          if (map[this.randomMapId][i][j] == 0) {
+          if (this.map[this.randomMapId][i][j] == 0) {
             possiblePosition.push({ x: j, y: i });
           }
         }
@@ -285,7 +286,7 @@ export default {
       }
       for (var i = 3; i < 7; ++i) {
         for (var j = 8; j < 12; ++j) {
-          if (map[this.randomMapId][i][j] == 0) {
+          if (this.map[this.randomMapId][i][j] == 0) {
             possiblePosition.push({ x: j, y: i });
           }
         }
@@ -401,10 +402,10 @@ export default {
 
       if (entity.xyGrid.x <= 0) entity.collision.left = true;
       else if (entity.movement == "left" && entity.xyGrid.x <= roundedX) {
-        if (map[this.randomMapId][roundedY][roundedX - 1] == 1)
+        if (this.map[this.randomMapId][roundedY][roundedX - 1] == 1)
           entity.collision.left = true;
         if (
-          map[this.randomMapId][roundedY][roundedX - 1] != 0 &&
+          this.map[this.randomMapId][roundedY][roundedX - 1] != 0 &&
           entity.tag == "ghost"
         )
           entity.collision.left = true;
@@ -416,20 +417,20 @@ export default {
         entity.xyGrid.x % 1 <= margin &&
         entity.xyGrid.x >= roundedX
       ) {
-        if (map[this.randomMapId][roundedY][roundedX + 1] == 1)
+        if (this.map[this.randomMapId][roundedY][roundedX + 1] == 1)
           entity.collision.right = true;
         if (
-          map[this.randomMapId][roundedY][roundedX + 1] != 0 &&
+          this.map[this.randomMapId][roundedY][roundedX + 1] != 0 &&
           entity.tag == "ghost"
         )
           entity.collision.right = true;
       }
       if (entity.xyGrid.y <= 0) entity.collision.up = true;
       else if (entity.movement == "up" && entity.xyGrid.y <= roundedY) {
-        if (map[this.randomMapId][roundedY - 1][roundedX] == 1)
+        if (this.map[this.randomMapId][roundedY - 1][roundedX] == 1)
           entity.collision.up = true;
         if (
-          map[this.randomMapId][roundedY - 1][roundedX] != 0 &&
+          this.map[this.randomMapId][roundedY - 1][roundedX] != 0 &&
           entity.tag == "ghost"
         )
           entity.collision.up = true;
@@ -440,10 +441,10 @@ export default {
         entity.xyGrid.y % 1 <= margin &&
         entity.xyGrid.y >= roundedY
       ) {
-        if (map[this.randomMapId][roundedY + 1][roundedX] == 1)
+        if (this.map[this.randomMapId][roundedY + 1][roundedX] == 1)
           entity.collision.down = true;
         if (
-          map[this.randomMapId][roundedY + 1][roundedX] != 0 &&
+          this.map[this.randomMapId][roundedY + 1][roundedX] != 0 &&
           entity.tag == "ghost"
         )
           entity.collision.down = true;
@@ -458,44 +459,44 @@ export default {
       switch (entity.movement) {
         case "left":
           if (roundedY > 0) {
-            if (map[this.randomMapId][roundedY - 1][roundedX] == 0)
+            if (this.map[this.randomMapId][roundedY - 1][roundedX] == 0)
               possibleDirection.push("up");
           }
           if (roundedY < 9) {
-            if (map[this.randomMapId][roundedY + 1][roundedX] == 0)
+            if (this.map[this.randomMapId][roundedY + 1][roundedX] == 0)
               possibleDirection.push("down");
           }
 
           break;
         case "right":
           if (roundedY > 0) {
-            if (map[this.randomMapId][roundedY - 1][roundedX] == 0)
+            if (this.map[this.randomMapId][roundedY - 1][roundedX] == 0)
               possibleDirection.push("up");
           }
           if (roundedY < 9) {
-            if (map[this.randomMapId][roundedY + 1][roundedX] == 0)
+            if (this.map[this.randomMapId][roundedY + 1][roundedX] == 0)
               possibleDirection.push("down");
           }
 
           break;
         case "up":
           if (roundedX > 0) {
-            if (map[this.randomMapId][roundedY][roundedX - 1] == 0)
+            if (this.map[this.randomMapId][roundedY][roundedX - 1] == 0)
               possibleDirection.push("left");
           }
           if (roundedX < 19) {
-            if (map[this.randomMapId][roundedY][roundedX + 1] == 0)
+            if (this.map[this.randomMapId][roundedY][roundedX + 1] == 0)
               possibleDirection.push("right");
           }
 
           break;
         case "down":
           if (roundedX > 0) {
-            if (map[this.randomMapId][roundedY][roundedX - 1] == 0)
+            if (this.map[this.randomMapId][roundedY][roundedX - 1] == 0)
               possibleDirection.push("left");
           }
           if (roundedX < 19) {
-            if (map[this.randomMapId][roundedY][roundedX + 1] == 0)
+            if (this.map[this.randomMapId][roundedY][roundedX + 1] == 0)
               possibleDirection.push("right");
           }
 
@@ -539,17 +540,17 @@ export default {
             entity.xyGrid.x % 1 >= 1 - margin &&
             entity.xyGrid.x <= roundedX
           ) {
-            if (map[this.randomMapId][roundedY - 1][roundedX] == 0)
+            if (this.map[this.randomMapId][roundedY - 1][roundedX] == 0)
               possibleDirection.push("up");
-            if (map[this.randomMapId][roundedY + 1][roundedX] == 0)
+            if (this.map[this.randomMapId][roundedY + 1][roundedX] == 0)
               possibleDirection.push("down");
           }
           break;
         case "right":
           if (entity.xyGrid.x % 1 <= margin && entity.xyGrid.x >= roundedX) {
-            if (map[this.randomMapId][roundedY - 1][roundedX] == 0)
+            if (this.map[this.randomMapId][roundedY - 1][roundedX] == 0)
               possibleDirection.push("up");
-            if (map[this.randomMapId][roundedY + 1][roundedX] == 0)
+            if (this.map[this.randomMapId][roundedY + 1][roundedX] == 0)
               possibleDirection.push("down");
           }
           break;
@@ -558,17 +559,17 @@ export default {
             entity.xyGrid.y % 1 >= 1 - margin &&
             entity.xyGrid.y <= roundedY
           ) {
-            if (map[this.randomMapId][roundedY][roundedX - 1] == 0)
+            if (this.map[this.randomMapId][roundedY][roundedX - 1] == 0)
               possibleDirection.push("left");
-            if (map[this.randomMapId][roundedY][roundedX + 1] == 0)
+            if (this.map[this.randomMapId][roundedY][roundedX + 1] == 0)
               possibleDirection.push("right");
           }
           break;
         case "down":
           if (entity.xyGrid.y % 1 <= margin && entity.xyGrid.y >= roundedY) {
-            if (map[this.randomMapId][roundedY][roundedX - 1] == 0)
+            if (this.map[this.randomMapId][roundedY][roundedX - 1] == 0)
               possibleDirection.push("left");
-            if (map[this.randomMapId][roundedY][roundedX + 1] == 0)
+            if (this.map[this.randomMapId][roundedY][roundedX + 1] == 0)
               possibleDirection.push("right");
           }
           break;
@@ -682,24 +683,24 @@ export default {
     },
     playerEnterSafeZone() {
       if (
-        map[this.randomMapId][Math.round(this.entityInfo.player.xyGrid.y)][
+        this.map[this.randomMapId][Math.round(this.entityInfo.player.xyGrid.y)][
           Math.round(this.entityInfo.player.xyGrid.x)
         ] != 0 &&
-        map[this.randomMapId][Math.round(this.entityInfo.player.xyGrid.y)][
+        this.map[this.randomMapId][Math.round(this.entityInfo.player.xyGrid.y)][
           Math.round(this.entityInfo.player.xyGrid.x)
         ] != 1
       ) {
         if (
           this.GameData.Answer + 2 ==
-          map[this.randomMapId][Math.round(this.entityInfo.player.xyGrid.y)][
-            Math.round(this.entityInfo.player.xyGrid.x)
-          ]
+          this.map[this.randomMapId][
+            Math.round(this.entityInfo.player.xyGrid.y)
+          ][Math.round(this.entityInfo.player.xyGrid.x)]
         ) {
           this.$emit("play-effect", "CorrectSound");
           this.$emit("add-record", [
             this.GameData.Options[this.GameData.Answer],
             this.GameData.Options[
-              map[this.randomMapId][
+              this.map[this.randomMapId][
                 Math.round(this.entityInfo.player.xyGrid.y)
               ][Math.round(this.entityInfo.player.xyGrid.x)] - 2
             ],
@@ -713,7 +714,7 @@ export default {
           this.$emit("add-record", [
             this.GameData.Options[this.GameData.Answer],
             this.GameData.Options[
-              map[this.randomMapId][
+              this.map[this.randomMapId][
                 Math.round(this.entityInfo.player.xyGrid.y)
               ][Math.round(this.entityInfo.player.xyGrid.x)] - 2
             ],
