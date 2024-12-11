@@ -151,6 +151,67 @@
     ]
   },
   {
+    "Title": "9 - 分數",
+    "Section": [
+      {
+        "Title": "幾分之幾(一)",
+        "Games": [
+          {
+            "id": "MA3091",
+            "Name": "幾分之幾(連續量情境的分數概念)",
+            "Description": "",
+            "Img": "MA3091.png"
+          },
+          {
+            "id": "MA3092",
+            "Name": "分數連連看",
+            "Description": "",
+            "Img": "MA3092.png"
+          }
+        ]
+      },
+      {
+        "Title": "幾分之幾(二)",
+        "Games": [
+          {
+            "id": "MA3093",
+            "Name": "幾分之幾(離散量情境的分數概念)",
+            "Description": "",
+            "Img": "MA3093.png"
+          }
+        ]
+      },
+      {
+        "Title": "幾分之幾(二)",
+        "Games": [
+          {
+            "id": "MA3094",
+            "Name": "分數數詞序列一",
+            "Description": "",
+            "Img": "MA3094.png"
+          },
+          {
+            "id": "MA3095",
+            "Name": "分數數詞序列二",
+            "Description": "",
+            "Img": "MA3095.png"
+          }
+        ]
+      },
+      {
+        "Title": "分數的大小比較",
+        "Games": [
+          {
+            "id": "MA3096",
+            "Name": "分數的大小比較",
+            "Description": "",
+            "Img": "MA3096.png"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "Title": "3 - 毫米",
     "Section": [
       {
