@@ -580,7 +580,6 @@ export default {
     TechModal,
     hintbutton,
     scratchSheet,
-    GameStartandOver,
     GameStart,
     GameOver,
     Header,
