@@ -5,7 +5,7 @@
       style="justify-content: flex-start !important"
     >
       <a class="navbar-brand mx-3" href="#" alt="Home">
-        <img src="@/assets/images/nav_bar/logo.png" />
+        <img :src="logo" />
       </a>
       <button
         class="navbar-toggler btn btn-primary mx-auto"
@@ -26,23 +26,20 @@
         >
           <ol class="breadcrumb mb-0">
             <li class="breadcrumb-item">
-              <img src="@/assets/images/game_header/home.png" /><a href="#">
-                主頁</a
-              >
+              <img :src="home" />
+              <a href="#">主頁</a>
             </li>
             <li
               class="breadcrumb-item"
               aria-current="page"
               @click="PreviousPage"
             >
-              <img src="@/assets/images/game_header/math.png" /><a
-                >{{ grade }} 年級 {{ subject }}</a
-              >
+              <img :src="math" />
+              <a>{{ grade }} 年級 {{ subject }}</a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">
-              <img src="@/assets/images/game_header/game.png" /><a>
-                {{ gameName }}</a
-              >
+              <img :src="game" />
+              <a> {{ gameName }}</a>
             </li>
           </ol>
         </div>
@@ -52,9 +49,15 @@
 </template>
 
 <script>
+import { getSystemAssets } from "@/utilitys/get_assets.js";
 export default {
   data() {
-    return {};
+    return {
+      logo: getSystemAssets("logo.png", "nav_bar"),
+      home: getSystemAssets("home.png", "game_header"),
+      math: getSystemAssets("math.png", "game_header"),
+      game: getSystemAssets("game.png", "game_header"),
+    };
   },
   props: {
     grade: {
