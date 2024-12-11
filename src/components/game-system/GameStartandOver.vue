@@ -59,7 +59,7 @@
 <script>
 import * as Read from "@/utilitys/readtext.js";
 import { getSystemEffectAssets } from "@/utilitys/get_assets.js";
-import img from "@/assets/system/effects/Firework.gif";
+import img from "@/assets/images/game_images/pin.png";
 export default {
   name: "GameStartandOver",
   emits: ["start-game", "download-record", "restart", "open-teaching-modal"],
