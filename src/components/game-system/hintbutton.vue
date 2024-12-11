@@ -65,7 +65,7 @@ export default {
     HintInfo: {
       handler: function () {
         this.updated_hint_status();
-        this.ShrinkHint();
+        this.shrinkHint();
         console.log(this.HintInfo.WrongTimes);
       },
       deep: true,
@@ -77,15 +77,9 @@ export default {
     },
   },
   methods: {
-    PauseIntroVideo() {
-      try {
-        let video = document.getElementById("introvideo");
-        video.pause();
-      } catch {}
-    },
     gethint() {
       const mediaType = "hint";
-      this.$emit("open-teaching-modal", mediaType);
+      this.$emit("open-hint-modal", mediaType);
     },
     updated_hint_status() {
       let temp =
@@ -99,7 +93,7 @@ export default {
         this.showhint = true;
       }
     },
-    async ShrinkHint() {
+    async shrinkHint() {
       this.Shake = true;
       await new Promise((r) => setTimeout(r, 300));
       this.Shake = false;
