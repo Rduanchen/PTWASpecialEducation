@@ -22,11 +22,7 @@
           :src="mediaSrc"
           class="media-content"
         />
-        <img
-          v-else
-          src="@/assets/images/game_images/elephant.gif"
-          class="media-content"
-        />
+        <img v-else :src="notFoundSrc" class="media-content" />
       </div>
       <div class="mediaModal-footer">
         <button type="button" @click="closeMediaModal">我知道了!</button>
@@ -36,6 +32,7 @@
 </template>
 
 <script>
+import { getSystemAssets } from "@/utilitys/get_assets.js";
 export default {
   props: {
     showMediaModal: Boolean,
@@ -43,6 +40,7 @@ export default {
     modalContent: String,
     mediaSrc: String,
     mediaType: String,
+    notFoundSrc: getSystemAssets("elephant.gif", "game_images"),
   },
   methods: {
     closeMediaModal() {

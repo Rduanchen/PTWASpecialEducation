@@ -16,18 +16,18 @@
           makeReadText('', '', (stop = true));
         "
       >
-        <img src="@/assets/images/game_images/start-game.png" />
+        <img :src="startGameIconSrc" />
         開始遊戲
       </button>
       <button
         class="action-button"
         v-on:click="makeReadText(GameName, ShowContent)"
       >
-        <img src="@/assets/images/game_images/read-aloud.png" />
+        <img src="" />
         朗讀
       </button>
       <button class="action-button" @click="openTeachingMediaModal">
-        <img src="@/assets/images/game_images/tutorial-video.png" />
+        <img :src="tutorialVideoIconSrc" />
         教學影片
       </button>
     </div>
@@ -36,7 +36,7 @@
 
 <script>
 import * as Read from "@/utilitys/readtext.js";
-
+import { getSystemAssets } from "@/utilitys/get_assets.js";
 export default {
   name: "GameStart",
   emits: ["start-game", "download-record", "restart", "open-teaching-modal"],
@@ -44,6 +44,12 @@ export default {
     return {
       nameofThisComponent: "GameStartandOver Component said:",
       introType: "",
+      startGameIconSrc: getSystemAssets("start-game.png", "game_images"),
+      readAloudIconSrc: getSystemAssets("read-aloud.png", "game_images"),
+      tutorialVideoIconSrc: getSystemAssets(
+        "tutorial-video.png",
+        "game_images"
+      ),
     };
   },
   props: {
