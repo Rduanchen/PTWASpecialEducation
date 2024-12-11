@@ -43,8 +43,9 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
-      this.$refs.gradeContainer.style.backgroundImage = `url(${getAssets(
-        "system/cover_info.png"
+      this.$refs.gradeContainer.style.backgroundImage = `url(${getSystemAssets(
+        "cover_info.png",
+        "general"
       )})`;
     });
   },
