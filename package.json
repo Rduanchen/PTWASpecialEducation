@@ -8,7 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "docker-test": "docker-compose build --no-cache && docker-compose up",
-    "test-all": "npm run build && npm run docker-test"
+    "test-all": "npm run build && npm run docker-test && npm run preview"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.8",
