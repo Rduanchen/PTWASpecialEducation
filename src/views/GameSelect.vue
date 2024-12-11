@@ -3,7 +3,7 @@
     <header>
       <nav class="game-select__nav" style="width: 100%">
         <div class="img-container">
-          <img :src="navLogoSrc" />
+          <img :src="navLogoSrc" @click="switchRouter({ name: 'Home' })" />
         </div>
         <div class="subjects">
           <button class="subject__btn" @click="changeSubject('Math')">
