@@ -57,7 +57,7 @@
       >
         <div class="d-flex align-items-center">
           <div class="">
-            <img src="@/assets/images/side_bar/start.png" />
+            <img :src="startGameIconSrc" />
           </div>
           <div class="mx-auto">開始</div>
         </div>
@@ -68,7 +68,7 @@
       >
         <div class="d-flex align-items-center">
           <div class="">
-            <img src="@/assets/images/side_bar/restart.png" />
+            <img :src="restartIconSrc" />
           </div>
           <div class="mx-auto">重新開始</div>
         </div>
@@ -157,7 +157,7 @@
       >
         <div class="d-flex align-items-center">
           <div class="">
-            <img src="@/assets/images/side_bar/reappear-code.png" />
+            <img :src="reappearIconSrc" />
           </div>
           <div class="mx-auto">重現代碼</div>
         </div>
@@ -294,6 +294,7 @@
 <script>
 import gameStore from "@/stores/game";
 import { mapWritableState } from "pinia";
+import { getSystemAssets } from "@/utilitys/get_assets";
 
 export default {
   name: "SideBar",
@@ -340,6 +341,9 @@ export default {
       CalculatorSwitch: false,
       code: "",
       isFullScreen: false,
+      startGameIconSrc: getSystemAssets("start.png", "side_bar"),
+      restartIconSrc: getSystemAssets("restart.png", "side_bar"),
+      reappearIconSrc: getSystemAssets("reappear-code.png", "side_bar"),
     };
   },
   methods: {
