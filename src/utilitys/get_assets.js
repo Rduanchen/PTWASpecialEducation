@@ -32,7 +32,7 @@ export function getGameStaticAssets(gameName, url) {
   return new URL(`../assets/game-static/${gameName}/${url}`, import.meta.url).href;
 }
 
-export function getDefaultIntroVideoAssets(url) {
+export function getDefaultHintAssets(url) {
   let path = new URL(`../assets/system/hint-library/${url}`, import.meta.url)
     .href;
   return path;
