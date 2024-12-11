@@ -27,7 +27,7 @@
 
 <script>
 import NavBar from "./NavBar.vue";
-import { getAssets } from "@/utilitys/get_assets.js";
+import { getSystemAssets, getAssets } from "@/utilitys/get_assets.js";
 export default {
   data() {
     return {
@@ -38,13 +38,13 @@ export default {
   methods: {},
   created() {
     for (let i = 1; i <= 6; i++) {
-      this.imgSrcs.push(getAssets(`images/grade_btn/g${i}_hover.png`));
+      this.imgSrcs.push(getSystemAssets(`g${i}_hover.png`, "grade_btn"));
     }
   },
   mounted() {
     this.$nextTick(() => {
       this.$refs.gradeContainer.style.backgroundImage = `url(${getAssets(
-        "images/pics/cover_info.png"
+        "system/cover_info.png"
       )})`;
     });
   },
