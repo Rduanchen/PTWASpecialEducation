@@ -11,22 +11,6 @@
       ></div>
     </div>
     <div class="gameAndQuestion">
-      <!-- Life bar section -->
-      <!-- <div class="life-bar">
-      <div class="life-container">
-        <img v-for="index in totalLives" :key="index" :src="index <= remainingLives ? heartImageUrl : deadHeartImageUrl"
-          class="heart-icon" />
-      </div>
-      <div class="volume-control">
-        <img :src="isMuted ? muteIconUrl : unmuteIconUrl" @click="toggleMute" class="volume-icon" />
-        <div v-if="showVolumeSlider" class="slider-container">
-          <input type="range" min="0" max="1" step="0.01" v-model="volume" @input="adjustVolume"
-            class="volume-slider" />
-        </div>
-      </div>
-    </div> -->
-
-      <!-- Conveyor belt section -->
       <div class="box ratio-7">
         <div
           class="conveyor-belt"
@@ -37,6 +21,7 @@
             class="conveyor-item"
             v-for="(item, index) in currentQuestions"
             :key="index"
+            ref="conveyorItem"
           >
             <div class="question-container">
               <component
@@ -73,27 +58,20 @@
   </div>
 </template>
 <script>
-import heartImageUrl from "@/assets/images/pics/heart.png";
-import deadHeartImageUrl from "@/assets/images/pics/dead_heart.png";
-import muteIconUrl from "@/assets/images/pics/mute.png";
-import unmuteIconUrl from "@/assets/images/pics/unmute.png";
-import gameplayMusic from "@/assets/sounds/game_sounds/gameplay-music.mp3";
-import clickSound from "@/assets/sounds/game_sounds/click-sound.mp3";
-import wrongSound from "@/assets/sounds/game_sounds/wrong_sound_effect.mp3";
 import { getComponents } from "@/utilitys/get-components.js";
 import { soundManager } from "@/utilitys/sound-manager.js";
+import {
+  getSystemAssets,
+  getGameStaticAssets,
+  getSoundAssets,
+} from "@/utilitys/get_assets";
 
 export default {
   name: "QuizComponent",
   data() {
     return {
-      heartImageUrl,
-      deadHeartImageUrl,
-      gameplayMusic,
-      muteIconUrl,
-      unmuteIconUrl,
-      clickSound,
-      wrongSound,
+      gameplayMusic: getSoundAssets("game_sounds", "gameplay-music.mp3"),
+      clickSound: getSoundAssets("game_sounds", "click-sound.mp3"),
       showHomePage: true,
       totalLives: 3,
       remainingLives: 3,
@@ -107,6 +85,7 @@ export default {
       currentQuestions: [], //題目陣列位置
       currentQuestionIndex: 0, //目前的題目
       isPaused: true,
+      backgroundImage: getGameStaticAssets("Track", "track2.png"),
     };
   },
   props: {
@@ -238,11 +217,18 @@ export default {
   created() {
     soundManager.registerSound(
       "trackBackgroundMusic",
-      `${gameplayMusic}`,
+      this.gameplayMusic,
       true
     );
-    soundManager.registerSound("trackClickSound", `${clickSound}`, true);
+    soundManager.registerSound("trackClickSound", `${this.clickSound}`, true);
     this.startQuiz();
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.$refs.conveyorItem.forEach((item) => {
+        item.style.backgroundImage = `url(${this.backgroundImage})`;
+      });
+    });
   },
 };
 </script>
@@ -314,7 +300,7 @@ export default {
 .conveyor-item {
   width: calc(100% / 3);
   height: 100%;
-  background-image: url("@/assets/images/pics/track2.png");
+  // background-image: url("@/assets/images/pics/track2.png");
   background-size: cover;
   display: flex;
   align-items: center;
