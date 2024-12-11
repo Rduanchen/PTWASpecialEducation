@@ -12,6 +12,7 @@
         <template #item="{ element }">
           <component
             :is="element.name"
+            :ID="ID"
             :Data="element.Data"
             @touchstart="startTrashMode"
             @mousedown="startTrashMode"
@@ -22,7 +23,7 @@
 
     <div class="game__action-section">
       <div class="game__quation">
-        <component :is="slotComponent" :Data="slotData" :ID="id" />
+        <component :is="slotComponent" :Data="slotData" :ID="ID" />
       </div>
 
       <draggable
@@ -48,6 +49,7 @@
         class="game__delete-area--trash-mode"
         item-key="dragItemId"
         @add="stopTrashMode"
+        ref="deleteArea"
       >
         <template #item="{ element }">
           <!-- Empty content for delete area -->
@@ -64,6 +66,7 @@
 <script>
 import draggable from "vuedraggable";
 import { getComponents } from "@/utilitys/get-components.js";
+import { getSystemAssets } from "@/utilitys/get_assets.js";
 
 export default {
   components: {
@@ -83,6 +86,7 @@ export default {
       dragGroup: { name: "money", pull: true, put: true },
       dragGroupForClone: { name: "money", pull: "clone", put: false },
       dragGroupForDelete: { name: "money", pull: false, put: true },
+      trashBin: getSystemAssets("delete.png", "icon"),
     };
   },
   props: {
@@ -90,12 +94,12 @@ export default {
       type: Object,
       required: true,
     },
-    id: {
-      type: String,
-      required: true,
-    },
     GameConfig: {
       type: Object,
+      required: true,
+    },
+    ID: {
+      type: String,
       required: true,
     },
   },
@@ -148,7 +152,9 @@ export default {
     this.slotComponent = this.GameData.upperComponent.Name;
     this.slotData = this.GameData.upperComponent.Data;
   },
-  mounted() {},
+  mounted() {
+    this.$refs.deleteArea.$el.style.backgroundImage = `url(${this.GameConfig.trashBin})`;
+  },
 };
 </script>
 
@@ -213,7 +219,6 @@ export default {
   height: 45vh;
   padding: $padding--small;
   background-color: red;
-  background-image: url("@/assets/System/icon/delete.png");
   background-repeat: no-repeat;
   background-position: center;
   background-size: 30%;

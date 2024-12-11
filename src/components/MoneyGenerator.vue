@@ -29,7 +29,7 @@
   </div>
 </template>
 <script setup>
-import { GetSlotComponentData } from "../utilitys/get_assets";
+import { getSlotComponentAssets } from "../utilitys/get_assets";
 import { ref, onMounted, nextTick } from "vue";
 
 const props = defineProps({
@@ -55,20 +55,22 @@ const loadData = () => {
   if (Data.value.Thousands) {
     for (let i = 0; i < Data.value.Thousands; i++) {
       UpContainer.value.push(
-        GetSlotComponentData("MoneyGenerator", "1000.png")
+        getSlotComponentAssets("MoneyGenerator", "1000.png")
       );
     }
   }
   if (Data.value.FiveHundreds) {
     for (let i = 0; i < Data.value.FiveHundreds; i++) {
-      UpContainer.value.push(GetSlotComponentData("MoneyGenerator", "500.png"));
+      UpContainer.value.push(
+        getSlotComponentAssets("MoneyGenerator", "500.png")
+      );
     }
   }
 
   if (Data.value.Hundreds) {
     for (let i = 0; i < Data.value.Hundreds; i++) {
       MiddleContainer.value.push(
-        GetSlotComponentData("MoneyGenerator", "100.png")
+        getSlotComponentAssets("MoneyGenerator", "100.png")
       );
     }
   }
@@ -80,10 +82,10 @@ const loadData = () => {
       if (Cnt > 10) {
         DownContainer.value.push(TempContainer);
         TempContainer = [];
-        TempContainer.push(GetSlotComponentData("MoneyGenerator", "50.png"));
+        TempContainer.push(getSlotComponentAssets("MoneyGenerator", "50.png"));
         Cnt = 0;
       } else {
-        TempContainer.push(GetSlotComponentData("MoneyGenerator", "50.png"));
+        TempContainer.push(getSlotComponentAssets("MoneyGenerator", "50.png"));
         Cnt++;
       }
     }
@@ -93,10 +95,10 @@ const loadData = () => {
       if (Cnt > 10) {
         DownContainer.value.push(TempContainer);
         TempContainer = [];
-        TempContainer.push(GetSlotComponentData("MoneyGenerator", "10.png"));
+        TempContainer.push(getSlotComponentAssets("MoneyGenerator", "10.png"));
         Cnt = 0;
       } else {
-        TempContainer.push(GetSlotComponentData("MoneyGenerator", "10.png"));
+        TempContainer.push(getSlotComponentAssets("MoneyGenerator", "10.png"));
         Cnt++;
       }
     }
@@ -106,10 +108,10 @@ const loadData = () => {
       if (Cnt > 10) {
         DownContainer.value.push(TempContainer);
         TempContainer = [];
-        TempContainer.push(GetSlotComponentData("MoneyGenerator", "5.png"));
+        TempContainer.push(getSlotComponentAssets("MoneyGenerator", "5.png"));
         Cnt = 0;
       } else {
-        TempContainer.push(GetSlotComponentData("MoneyGenerator", "5.png"));
+        TempContainer.push(getSlotComponentAssets("MoneyGenerator", "5.png"));
         Cnt++;
       }
     }
@@ -119,10 +121,10 @@ const loadData = () => {
       if (Cnt > 10) {
         DownContainer.value.push(TempContainer);
         TempContainer = [];
-        TempContainer.push(GetSlotComponentData("MoneyGenerator", "1.png"));
+        TempContainer.push(getSlotComponentAssets("MoneyGenerator", "1.png"));
         Cnt = 0;
       } else {
-        TempContainer.push(GetSlotComponentData("MoneyGenerator", "1.png"));
+        TempContainer.push(getSlotComponentAssets("MoneyGenerator", "1.png"));
         Cnt++;
       }
     }

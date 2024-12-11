@@ -6,7 +6,7 @@
           :is="GameData.topComponent.Name"
           :Data="GameData.topComponent.Data"
           :ID="this.ID"
-          @ReplyAnswer="topReply"
+          @replyAnswer="topReply"
         ></component>
       </div>
       <div class="game-area--down game-area" v-if="this.GameConfig.layout.down">
@@ -14,7 +14,7 @@
           :is="GameData.downComponent.Name"
           :Data="GameData.downComponent.Data"
           :ID="this.ID"
-          @ReplyAnswer="downReply"
+          @replyAnswer="downReply"
         ></component>
       </div>
     </div>
@@ -34,8 +34,8 @@
 
 <script>
 import VirtualNumPad from "@/components/VirtualNumPadInput.vue";
-import { defineAsyncComponent, Text, toHandlerKey } from "vue";
-import { GetSlotComponentData } from "@/utilitys/get_assets.js";
+import { defineAsyncComponent } from "vue";
+import { getSlotComponentAssets } from "@/utilitys/get_assets.js";
 export default {
   name: "NumberLock",
   components: {
@@ -66,7 +66,7 @@ export default {
       type: Object,
       required: true,
     },
-    id: {
+    ID: {
       type: String,
       required: true,
     },
@@ -75,7 +75,7 @@ export default {
     return {
       NowSelect: null,
       ShowPad: false,
-      ID: this.id,
+      ID: this.ID,
       topComponentsAnswer: false,
       downComponentsAnswer: false,
       // GameData: {
@@ -161,7 +161,7 @@ export default {
   },
   computed: {
     Arrow() {
-      return GetSlotComponentData("NumberLineV2", "ArrowRight.svg"); //FIXME
+      return getSlotComponentAssets("NumberLineV2", "ArrowRight.svg"); //FIXME
     },
   },
   methods: {

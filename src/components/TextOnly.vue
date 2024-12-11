@@ -4,7 +4,7 @@
   </div>
 </template>
 <script>
-import { FONT_PACK } from "@/utilitys/get_scss_variables";
+import { FONT_PACK } from "@/utilitys/get-scss-variables";
 export default {
   name: "TextOnly",
   props: {

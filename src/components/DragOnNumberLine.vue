@@ -49,7 +49,7 @@ export default {
 
   props: ["Data", "ID"], //{spacing, max, min, image, init_pos, finalPositon}
 
-  emits: ["ReplyAnswer"],
+  emits: ["replyAnswer"],
 
   mounted() {
     this.initializeScene();
@@ -217,9 +217,9 @@ export default {
     checkAnswer(output) {
       console.log(output, this.Data.finalPosition);
       if (output == this.Data.finalPosition) {
-        this.$emit("ReplyAnswer", true);
+        this.$emit("replyAnswer", true);
       } else {
-        this.$emit("ReplyAnswer", false);
+        this.$emit("replyAnswer", false);
       }
     },
     horizontalBound(pos) {

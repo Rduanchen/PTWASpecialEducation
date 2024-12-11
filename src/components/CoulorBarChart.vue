@@ -104,9 +104,9 @@ export default {
         }
       }
       if (TempAnswer == this.Data.Child) {
-        this.$emit("ReplyAnswer", true);
+        this.$emit("replyAnswer", true);
       } else {
-        this.$emit("ReplyAnswer", false);
+        this.$emit("replyAnswer", false);
       }
     },
     GetAnswer1() {

@@ -2,9 +2,9 @@
   <div class="game-start container" v-if="Status == 'NotStart'">
     <div class="upper-container">
       <h1>{{ GameName }}</h1>
-      <div v-if="TextCheck" class="card">
-        <p v-if="IntroType == 'Html'" v-html="ShowContent"></p>
-        <p v-else-if="IntroType == 'PlainText'">{{ ShowContent }}</p>
+      <div class="card">
+        <p v-if="introType == 'Html'" v-html="ShowContent"></p>
+        <p v-else-if="introType == 'PlainText'">{{ ShowContent }}</p>
         <p v-else>無介紹文字</p>
       </div>
     </div>
@@ -12,22 +12,22 @@
       <button
         class="action-button"
         v-on:click="
-          StartGame();
-          MakeReadText('', '', (stop = true));
+          startGame();
+          makeReadText('', '', (stop = true));
         "
       >
-        <img src="@/assets/images/game_images/start-game.png" />
+        <img :src="startGameIconSrc" />
         開始遊戲
       </button>
       <button
         class="action-button"
-        v-on:click="MakeReadText(GameName, ShowContent)"
+        v-on:click="makeReadText(GameName, ShowContent)"
       >
-        <img src="@/assets/images/game_images/read-aloud.png" />
+        <img src="" />
         朗讀
       </button>
       <button class="action-button" @click="openTeachingMediaModal">
-        <img src="@/assets/images/game_images/tutorial-video.png" />
+        <img :src="tutorialVideoIconSrc" />
         教學影片
       </button>
     </div>
@@ -36,18 +36,20 @@
 
 <script>
 import * as Read from "@/utilitys/readtext.js";
-
+import { getSystemAssets } from "@/utilitys/get_assets.js";
 export default {
   name: "GameStart",
   emits: ["start-game", "download-record", "restart", "open-teaching-modal"],
   data() {
     return {
-      NameofThisComponent: "GameStartandOver Component said:",
-      TextCheck: false,
-      IntroType: "text",
-      ShowContent: "",
-      selectedVoice: null,
-      voices: [],
+      nameofThisComponent: "GameStartandOver Component said:",
+      introType: "",
+      startGameIconSrc: getSystemAssets("start-game.png", "game_images"),
+      readAloudIconSrc: getSystemAssets("read-aloud.png", "game_images"),
+      tutorialVideoIconSrc: getSystemAssets(
+        "tutorial-video.png",
+        "game_images"
+      ),
     };
   },
   props: {
@@ -64,24 +66,33 @@ export default {
   },
   mounted() {
     Read.InitReadProccess();
-    try {
-      this.ShowContent = this.intro.Content;
-      this.TextCheck = true;
-      if (this.intro.Type == "Html" || this.intro.Type == "PlainText") {
-        this.IntroType = this.intro.Type;
-      }
-    } catch (e) {
-      console.warn(this.NameofThisComponent + "No intro text found");
-      // console.log(e);
-    }
+    this.initIntroType();
   },
   methods: {
-    MakeReadText(Title, Description, stop = false) {
-      let text = `標題:${Title}。說明:${Description}。`;
+    initIntroType() {
+      if (this.intro != undefined) {
+        if (this.intro.Type == "Html") {
+          this.introType = "Html";
+          this.ShowContent = this.intro.Content;
+        } else if (this.intro.Type == "PlainText") {
+          this.introType = "PlainText";
+          this.ShowContent = this.intro.Content;
+        } else {
+          this.introType = "undefined";
+        }
+      } else {
+        this.introType = "undefined";
+      }
+    },
+    makeReadText(title, description, stop = false) {
+      let text = `標題:${title}。說明:${description}。`;
       Read.ReadText(text, stop);
     },
-    StartGame() {
+    startGame() {
       this.$emit("start-game");
+    },
+    openTeachingMediaModal() {
+      this.$emit("open-teaching-modal");
     },
   },
 };

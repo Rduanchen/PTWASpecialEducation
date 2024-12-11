@@ -4,20 +4,35 @@
       <p class="question">{{ GameData.Text }}</p>
       <p class="game__remaining">剩餘題數：{{ remainingQuestions }}</p>
       <div class="progress">
-        <div class="progress-bar" role="progressbar" :style="{ width: progressBarWidth }"
-          aria-valuenow="progressPercentage" aria-valuemin="0" aria-valuemax="100"></div>
+        <div
+          class="progress-bar"
+          role="progressbar"
+          :style="{ width: progressBarWidth }"
+          aria-valuenow="progressPercentage"
+          aria-valuemin="0"
+          aria-valuemax="100"
+        ></div>
       </div>
       <div class="game">
-        <v-stage ref="stage" :config="stageSize" @click="handleMouseClick" @touchstart="handleMouseClick">
+        <v-stage
+          ref="stage"
+          :config="stageSize"
+          @click="handleMouseClick"
+          @touchstart="handleMouseClick"
+        >
           <v-layer ref="layer">
             <v-image :config="imageConfig" />
-            <v-circle v-for="(circle, index) in circles" :key="index" :config="circle" />
+            <v-circle
+              v-for="(circle, index) in circles"
+              :key="index"
+              :config="circle"
+            />
           </v-layer>
         </v-stage>
         <div class="game__controls">
           <div class="game__actions">
             <button class="game__sound-btn" @click="playNumberSound">
-              <img src="@/assets/GamePic/SpeakerIcon.png" alt="Speaker Icon" />
+              <img :src="speakerIcon" alt="Speaker Icon" />
             </button>
             <button class="button-pre" @click="previousQuestion">上一題</button>
             <button class="button-nxt" @click="nextQuestion">下一題</button>
@@ -29,9 +44,12 @@
 </template>
 
 <script>
-import { getGameAssets } from "@/utilitys/get_assets.js";
-import { getSystemAssets } from "@/utilitys/get_assets.js";
-import { soundManager } from '@/utilitys/sound-manager.js';
+import {
+  getGameAssets,
+  getSystemAssets,
+  getGameStaticAssets,
+} from "@/utilitys/get_assets.js";
+import { soundManager } from "@/utilitys/sound-manager.js";
 export default {
   name: "NumberSearchGame",
   data() {
@@ -42,18 +60,19 @@ export default {
       randomQuestionOrder: [],
       stageSize: {
         width: 800,
-        height: 600
+        height: 600,
       },
       imageConfig: {
         x: 0,
         y: 0,
         width: 800,
         height: 600,
-        image: null
+        image: null,
       },
       circles: [],
       clickFirst: false,
-      value: []
+      value: [],
+      speakerIcon: getGameStaticAssets("NumberSearchGame", "speaker-icon.png"),
     };
   },
   props: {
@@ -65,14 +84,14 @@ export default {
       type: Object,
       required: true,
     },
-    id: {
+    ID: {
       type: String,
       required: true,
     },
   },
   created() {
     const image = new window.Image();
-    image.src = getGameAssets(this.id, this.GameData.img);
+    image.src = getGameAssets(this.ID, this.GameData.img);
     image.onload = () => {
       const aspectRatio = image.width / image.height;
       if (this.stageSize.width / this.stageSize.height > aspectRatio) {
@@ -91,7 +110,7 @@ export default {
       const numberSound = getSystemAssets(`${i}.mp3`, "read-numbers");
       soundManager.registerSound(`${i}`, numberSound);
     }
-    this.playNumberSound()
+    this.playNumberSound();
     this.value[0] = [];
   },
   methods: {
@@ -146,7 +165,7 @@ export default {
       const radius =
         Math.sqrt(
           (obj.xRange[1] - obj.xRange[0]) ** 2 +
-          (obj.yRange[1] - obj.yRange[0]) ** 2
+            (obj.yRange[1] - obj.yRange[0]) ** 2
         ) / 2;
 
       this.circles.push({
@@ -177,8 +196,7 @@ export default {
         setTimeout(() => {
           this.$emit("next-question", true);
         }, delayTime);
-      }
-      else {
+      } else {
         this.skipAnsweredQuestions();
         this.playNumberSound();
       }
@@ -217,7 +235,7 @@ export default {
     },
     remainingQuestions() {
       return this.GameData.ObjNum - this.rightAnswerCount;
-    }
+    },
   },
 };
 </script>

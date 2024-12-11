@@ -67,9 +67,9 @@ export default {
         }
       }
       if (check) {
-        this.$emit("ReplyAnswer", true);
+        this.$emit("replyAnswer", true);
       } else {
-        this.$emit("ReplyAnswer", false);
+        this.$emit("replyAnswer", false);
       }
     },
   },

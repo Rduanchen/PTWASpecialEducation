@@ -4,7 +4,7 @@
     <div class="ImageCard" v-if="this.GameData.SlotComponents != undefined">
       <component
         class="component"
-        :ID="this.id"
+        :ID="this.ID"
         :Data="this.SlotData"
         :is="this.SlotComponent"
       ></component>
@@ -20,7 +20,6 @@
 </template>
 <script>
 import VirtualNumPad from "@/components/VirtualNumPad.vue";
-import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
 import { defineAsyncComponent } from "vue";
 export default {
   name: "NumberInputGame",
@@ -41,7 +40,7 @@ export default {
       type: Object,
       required: true,
     },
-    id: {
+    ID: {
       type: String,
       required: true,
     },

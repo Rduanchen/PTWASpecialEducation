@@ -25,7 +25,7 @@ export default {
   methods: {
     Reply2Parent() {
       let ans = this.ReplyDatas == this.Data.Text ? true : false;
-      this.$emit("ReplyAnswer", ans);
+      this.$emit("replyAnswer", ans);
     },
   },
 };

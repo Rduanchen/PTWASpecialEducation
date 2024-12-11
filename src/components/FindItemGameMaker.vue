@@ -42,7 +42,6 @@
   </div>
 </template>
 <script>
-import gamepic from "@/assets/GamePic/FindItemGameSample1.jpg";
 export default {
   name: "FindTheItem",
   data() {

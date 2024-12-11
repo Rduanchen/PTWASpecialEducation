@@ -15,7 +15,7 @@
                 <component
                   :is="element.Name"
                   :Data="element.Data"
-                  :ID="this.id"
+                  :ID="this.ID"
                 ></component>
               </div>
             </template>
@@ -37,7 +37,7 @@
                   <component
                     :is="element.Name"
                     :Data="element.Data"
-                    :ID="this.id"
+                    :ID="this.ID"
                   ></component>
                 </div>
               </template>
@@ -79,7 +79,7 @@ export default {
       type: Object,
       required: true,
     },
-    id: {
+    ID: {
       type: String,
       required: true,
     },

@@ -3,7 +3,7 @@
     <div id="container" ref="container">
       <ImageContainer
         class="Background"
-        :id="this.id"
+        :ID="this.ID"
         :Data="this.Background"
       ></ImageContainer>
       <img
@@ -19,10 +19,9 @@
   </div>
 </template>
 <script>
-import { GetSlotComponentData } from "../utilitys/get_assets";
+import { getSlotComponentAssets } from "../utilitys/get_assets";
 import ImageContainer from "@/components/ImageContainer.vue";
-import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
-import Img from "@/assets/GamePic/cover_info.jpeg";
+import { getGameAssets } from "@/utilitys/get_assets.js";
 //Data Structure
 // SlotData = {
 //     "Name" : "SlotData",
@@ -48,7 +47,6 @@ import Img from "@/assets/GamePic/cover_info.jpeg";
 export default {
   data() {
     return {
-      ImgSrc: Img,
       images: [
         { src: "image1.png", alt: "Image 1", Amount: 2 },
         { src: "image2.png", alt: "Image 2", Amount: 3 },
@@ -63,7 +61,7 @@ export default {
     };
   },
   props: {
-    Id: {
+    ID: {
       type: String,
       required: true,
     },
@@ -137,8 +135,7 @@ export default {
           }
 
           const newImage = {
-            //   src: GetSlotComponentData("FreeDrag", image.src),
-            src: GamesGetAssetsFile(this.id, image.src),
+            src: getGameAssets(this.ID, image.src),
             alt: image.alt + " " + (i + 1),
             left: left,
             top: top,

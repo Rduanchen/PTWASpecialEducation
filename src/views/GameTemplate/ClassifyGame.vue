@@ -18,7 +18,7 @@
               <component
                 :is="element['Name']"
                 :Data="element['Data']"
-                :ID="this.id"
+                :ID="this.ID"
               ></component>
             </div>
           </template>
@@ -39,7 +39,7 @@
                 <component
                   :is="element['Name']"
                   :Data="element['Data']"
-                  :ID="this.id"
+                  :ID="this.ID"
                 ></component>
               </div>
             </template>
@@ -55,7 +55,6 @@
 <script>
 import draggable from "vuedraggable";
 import CardWithButton from "@/components/CardWithButton.vue";
-import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
 import { defineAsyncComponent } from "vue";
 import { getComponents } from "@/utilitys/get_components";
 export default {
@@ -78,7 +77,7 @@ export default {
       type: Object,
       required: true,
     },
-    id: {
+    ID: {
       type: String,
       required: true,
     },

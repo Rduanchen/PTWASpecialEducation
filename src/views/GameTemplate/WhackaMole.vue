@@ -58,6 +58,10 @@ export default {
       type: Object,
       required: true,
     },
+    ID: {
+      type: String,
+      required: true,
+    },
   },
   mounted() {
     this.initializeScene();
@@ -76,19 +80,22 @@ export default {
     },
     setAttributes() {
       this.images.bg = new window.Image();
-      this.images.bg.src = getSystemAssets("background.png", "whackAMole");
+      this.images.bg.src = getGameStaticAssets("WhackaMole", "background.png");
       this.images.board = new window.Image();
-      this.images.board.src = getSystemAssets("answerBoard.png", "whackAMole");
+      this.images.board.src = getGameStaticAssets(
+        "WhackaMole",
+        "answerBoard.png"
+      );
       this.images.hole = new window.Image();
-      this.images.hole.src = getSystemAssets("hole.png", "whackAMole");
+      this.images.hole.src = getGameStaticAssets("WhackaMole", "hole.png");
       this.images.holeup = new window.Image();
-      this.images.holeup.src = getSystemAssets("holeup.png", "whackAMole");
+      this.images.holeup.src = getGameStaticAssets("WhackaMole", "holeup.png");
       this.images.mole = new window.Image();
-      this.images.mole.src = getSystemAssets("mole.png", "whackAMole");
+      this.images.mole.src = getGameStaticAssets("WhackaMole", "mole.png");
       this.images.moleWhacked = new window.Image();
-      this.images.moleWhacked.src = getSystemAssets(
-        "moleWhacked.png",
-        "whackAMole"
+      this.images.moleWhacked.src = getGameStaticAssets(
+        "WhackaMole",
+        "moleWhacked.png"
       );
 
       this.offsets.board = {

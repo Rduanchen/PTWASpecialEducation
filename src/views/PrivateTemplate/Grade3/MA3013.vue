@@ -12,14 +12,14 @@
         <Markdown
           class="markdown"
           :Data="markdownData"
-          @ReplyAnswer="markdownReplyAnswer"
+          @replyAnswer="markdownReplyAnswer"
         ></Markdown>
       </div>
       <div class="right-component">
         <NumberBoardInput
           class="number-board"
           :Data="numberInputData"
-          @ReplyAnswer="numberBoardReply"
+          @replyAnswer="numberBoardReply"
         ></NumberBoardInput>
         <VirtualNumPad
           @virtualpadinput-Input="push"
@@ -57,7 +57,7 @@ export default {
       type: Object,
       required: true,
     },
-    id: {
+    ID: {
       type: String,
       required: true,
     },

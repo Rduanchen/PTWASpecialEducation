@@ -44,7 +44,6 @@
 </template>
 
 <script>
-import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
 import { defineAsyncComponent } from "vue";
 export default {
   components: {
@@ -238,8 +237,8 @@ export default {
         if (this.blankContent[i] != this.Data.blank_pos[i]) return false;
       }
       isCorrect == true
-        ? this.$emit("ReplyAnswer", true)
-        : this.$emit("ReplyAnswer", false);
+        ? this.$emit("replyAnswer", true)
+        : this.$emit("replyAnswer", false);
     },
   },
 };

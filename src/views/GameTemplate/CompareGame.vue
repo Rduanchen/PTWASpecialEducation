@@ -32,8 +32,8 @@
             <component
               :is="item[0].Name"
               :Data="item[0].Data"
-              :ID="this.id"
-              @ReplyAnswer="SlotComponentReplyAnswer(0, $event)"
+              :ID="this.ID"
+              @replyAnswer="SlotComponentReplyAnswer(0, $event)"
             ></component>
           </div>
           <div class="SymbolContainer">
@@ -57,8 +57,8 @@
             <component
               :is="item[1].Name"
               :Data="item[1].Data"
-              :ID="this.id"
-              @ReplyAnswer="SlotComponentReplyAnswer(1, $event)"
+              :ID="this.ID"
+              @replyAnswer="SlotComponentReplyAnswer(1, $event)"
             ></component>
           </div>
         </section>
@@ -92,7 +92,6 @@
   </div>
 </template>
 <script>
-import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
 import draggable from "vuedraggable";
 import { defineAsyncComponent } from "vue";
 import { GetComponents } from "@/utilitys/get-components.js";
@@ -123,7 +122,7 @@ export default {
       type: Object,
       required: true,
     },
-    id: {
+    ID: {
       type: String,
       required: true,
     },

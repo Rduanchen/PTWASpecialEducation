@@ -8,7 +8,7 @@
   </div>
 </template>
 <script>
-import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
+import { getGameAssets } from "@/utilitys/get_assets.js";
 import ImageContainer from "@/components/ImageContainer.vue";
 export default {
   name: "ImageWithText",
@@ -33,7 +33,7 @@ export default {
   },
   mounted() {
     // Your code here
-    this.imageUrl = GamesGetAssetsFile(this.ID, this.Data.Src);
+    this.imageUrl = getGameAssets(this.ID, this.Data.Src);
     this.text = this.Data.Text;
   },
 };

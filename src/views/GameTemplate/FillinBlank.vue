@@ -5,7 +5,7 @@
       <div class="SlotArea">
         <component
           class="SlotItem"
-          :ID="this.id"
+          :ID="this.ID"
           v-for="slot in GameData.SlotComponents"
           :is="slot.Name"
           :Data="slot.Data"
@@ -53,7 +53,7 @@
 </template>
 <script>
 import { defineAsyncComponent } from "vue";
-import { GamesGetAssetsFile } from "@/utilitys/get_assets.js";
+import { getGameAssets } from "@/utilitys/get_assets.js";
 import { getComponents } from "@/utilitys/get-components";
 export default {
   name: "FillinBlank",
@@ -76,7 +76,7 @@ export default {
       type: Object,
       required: true,
     },
-    id: {
+    ID: {
       type: String,
       required: true,
     },
@@ -144,7 +144,7 @@ export default {
   mounted() {
     if (this.GameConfig.WithImage) {
       this.WithImage = true;
-      this.ImgSrc = GamesGetAssetsFile(this.id, this.GameData.Img);
+      this.ImgSrc = getGameAssets(this.ID, this.GameData.Img);
       const patten = /undefined/;
       if (patten.test(this.ImgSrc)) {
         this.WithImage = false;
@@ -156,7 +156,7 @@ export default {
       import("@/components/VirtualNumPadInput.vue")
     ),
     Calculator: defineAsyncComponent(() =>
-      import("@/components/calculator.vue")
+      import("@/components/Calculator.vue")
     ),
     Clock: getComponents("Clock"),
   },
