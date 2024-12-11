@@ -48,7 +48,7 @@
 <script>
 import { getSystemAssets, getGameStaticAssets } from "@/utilitys/get_assets.js";
 import { defineAsyncComponent } from "vue";
-import { map } from "@/assets/system/MazeMap/map.json";
+import map from "@/assets/system/MazeMap/map.json";
 
 export default {
   components: {
