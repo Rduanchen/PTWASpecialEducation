@@ -19,7 +19,7 @@
       >
         上一頁
       </button>
-      <div class="collapse navbar-collapse mx-3" id="navbarText">
+      <div id="navbarText" class="collapse navbar-collapse mx-3">
         <div
           class="container sticky-top d-flex justify-content-end"
           style="--bs-breadcrumb-divider: '>'"
@@ -51,6 +51,21 @@
 <script>
 import { getSystemAssets } from "@/utilitys/get_assets.js";
 export default {
+  props: {
+    grade: {
+      type: String,
+      required: true,
+    },
+    gameName: {
+      type: String,
+      required: true,
+    },
+    subject: {
+      type: String,
+      required: true,
+    },
+  },
+  emits: ["previous-page"],
   data() {
     return {
       logo: getSystemAssets("logo.png", "nav_bar"),
@@ -58,17 +73,6 @@ export default {
       math: getSystemAssets("math.png", "game_header"),
       game: getSystemAssets("game.png", "game_header"),
     };
-  },
-  props: {
-    grade: {
-      type: String,
-    },
-    gameName: {
-      type: String,
-    },
-    subject: {
-      type: String,
-    },
   },
   methods: {
     PreviousPage() {

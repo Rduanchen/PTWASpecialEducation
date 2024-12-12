@@ -49,11 +49,11 @@
 
         <div class="error">
           <p
-            class="header"
             v-if="
               ErrorMesseagesSwitch.AllAnswerNotFinish ||
               ErrorMesseagesSwitch.WrongAnswer
             "
+            class="header"
           >
             錯誤
           </p>
@@ -81,6 +81,7 @@ export default {
     type: String,
     required: true,
   },
+  emits: ["play-effect", "add-record", "next-question"],
   data() {
     return {
       stageConfig: {
@@ -119,6 +120,70 @@ export default {
         "F28482",
       ],
     };
+  },
+  created() {
+    let BGImage = new window.Image();
+    BGImage.src = getGameAssets(this.ID, this.GameData.BGSrc);
+
+    // 當圖片載入完成後再進行縮放和定位計算
+    BGImage.onload = () => {
+      let StageHeight = this.stageConfig.height - this.SelectionHeight * 2;
+
+      let imgWidth = BGImage.width;
+      let imgHeight = BGImage.height;
+
+      // 計算寬高比
+      let ration = imgWidth / imgHeight;
+
+      // 計算適合的寬度和高度，使其不超過stage的寬高
+      let NewImageWidth, NewImageHeight;
+
+      if (this.stageConfig.width / StageHeight > ration) {
+        // 如果stage更寬，根據高度來縮放
+        NewImageHeight = StageHeight - 30;
+        NewImageWidth = NewImageHeight * ration;
+      } else {
+        // 如果stage更高，根據寬度來縮放
+        NewImageWidth = this.stageConfig.width - 30;
+        NewImageHeight = NewImageWidth / ration;
+      }
+
+      // 計算圖片的位置，使其居中顯示
+      let NewX = (this.stageConfig.width - NewImageWidth) / 2;
+      let NewY = (StageHeight - NewImageHeight) / 2;
+      console.log(NewX, NewY);
+      // 設定ImageConfig
+      this.ImageConfig = {
+        image: BGImage,
+        width: NewImageWidth,
+        height: NewImageHeight,
+        x: NewX,
+        y: NewY + this.SelectionHeight,
+      };
+
+      console.log(this.ImageConfig.x, this.ImageConfig.y);
+      this.GameData.MountPoint.forEach((item) => {
+        this.ImageMountPoint.push({
+          x: item.x + NewX,
+          y: item.y + NewY + this.SelectionHeight,
+          radius: 10,
+          fill: "yellow",
+        });
+      });
+    };
+
+    this.configRect();
+    this.configPoint();
+  },
+  mounted() {
+    // Stage border
+    // this.InitAnswer();
+    let layer = this.$refs.layer.getNode();
+    layer.moveToBottom();
+    layer.draw();
+    let RectContainer = this.$refs.RectContainer.getNode();
+    RectContainer.moveToTop();
+    RectContainer.draw();
   },
   methods: {
     StartDrawing(index) {
@@ -381,70 +446,6 @@ export default {
         }
       }
     },
-  },
-  created() {
-    let BGImage = new window.Image();
-    BGImage.src = getGameAssets(this.ID, this.GameData.BGSrc);
-
-    // 當圖片載入完成後再進行縮放和定位計算
-    BGImage.onload = () => {
-      let StageHeight = this.stageConfig.height - this.SelectionHeight * 2;
-
-      let imgWidth = BGImage.width;
-      let imgHeight = BGImage.height;
-
-      // 計算寬高比
-      let ration = imgWidth / imgHeight;
-
-      // 計算適合的寬度和高度，使其不超過stage的寬高
-      let NewImageWidth, NewImageHeight;
-
-      if (this.stageConfig.width / StageHeight > ration) {
-        // 如果stage更寬，根據高度來縮放
-        NewImageHeight = StageHeight - 30;
-        NewImageWidth = NewImageHeight * ration;
-      } else {
-        // 如果stage更高，根據寬度來縮放
-        NewImageWidth = this.stageConfig.width - 30;
-        NewImageHeight = NewImageWidth / ration;
-      }
-
-      // 計算圖片的位置，使其居中顯示
-      let NewX = (this.stageConfig.width - NewImageWidth) / 2;
-      let NewY = (StageHeight - NewImageHeight) / 2;
-      console.log(NewX, NewY);
-      // 設定ImageConfig
-      this.ImageConfig = {
-        image: BGImage,
-        width: NewImageWidth,
-        height: NewImageHeight,
-        x: NewX,
-        y: NewY + this.SelectionHeight,
-      };
-
-      console.log(this.ImageConfig.x, this.ImageConfig.y);
-      this.GameData.MountPoint.forEach((item) => {
-        this.ImageMountPoint.push({
-          x: item.x + NewX,
-          y: item.y + NewY + this.SelectionHeight,
-          radius: 10,
-          fill: "yellow",
-        });
-      });
-    };
-
-    this.configRect();
-    this.configPoint();
-  },
-  mounted() {
-    // Stage border
-    // this.InitAnswer();
-    let layer = this.$refs.layer.getNode();
-    layer.moveToBottom();
-    layer.draw();
-    let RectContainer = this.$refs.RectContainer.getNode();
-    RectContainer.moveToTop();
-    RectContainer.draw();
   },
 };
 </script>

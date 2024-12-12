@@ -1,8 +1,8 @@
 <template>
   <Teleport to="body">
     <div
-      class="floating-num-pad"
       ref="numpad"
+      class="floating-num-pad"
       :style="{ top: adjustedTop, left: adjustedLeft }"
     >
       <button
@@ -20,13 +20,13 @@
 <script>
 export default {
   name: "FloatNumPad",
-  emits: ["button-clicked"],
   props: {
     Data: {
       type: Object,
       required: true,
     },
   },
+  emits: ["button-clicked"],
   data() {
     return {
       // 使用物件陣列來描述每個按鈕，並設定其標籤和類型
@@ -48,6 +48,21 @@ export default {
       adjustedLeft: "0px",
       bais: 15,
     };
+  },
+  watch: {
+    Data: {
+      handler() {
+        this.adjustPosition();
+      },
+      deep: true,
+    },
+  },
+  mounted() {
+    this.adjustPosition();
+    window.addEventListener("resize", this.adjustPosition);
+  },
+  beforeUnmount() {
+    window.removeEventListener("resize", this.adjustPosition);
   },
   methods: {
     handleClick(label) {
@@ -90,21 +105,6 @@ export default {
       if (label === "關閉") return "button-close";
       return "button-number";
     },
-  },
-  watch: {
-    Data: {
-      handler() {
-        this.adjustPosition();
-      },
-      deep: true,
-    },
-  },
-  mounted() {
-    this.adjustPosition();
-    window.addEventListener("resize", this.adjustPosition);
-  },
-  beforeDestroy() {
-    window.removeEventListener("resize", this.adjustPosition);
   },
 };
 </script>

@@ -8,7 +8,7 @@
         aria-valuenow="progressPercentage"
         aria-valuemin="0"
         aria-valuemax="100"
-      ></div>
+      />
     </div>
     <div class="gameAndQuestion">
       <div class="box ratio-7">
@@ -18,17 +18,17 @@
           :style="conveyorStyle"
         >
           <div
-            class="conveyor-item"
             v-for="(item, index) in currentQuestions"
             :key="index"
             ref="conveyorItem"
+            class="conveyor-item"
           >
             <div class="question-container">
               <component
-                :is="this.GameData.Question[currentQuestions[index]].name"
-                :Data="this.GameData.Question[currentQuestions[index]].Data"
-                :ID="this.ID"
-              ></component>
+                :is="GameData.Question[currentQuestions[index]].name"
+                :Data="GameData.Question[currentQuestions[index]].Data"
+                :ID="ID"
+              />
               <!-- <p class="question-text">{{ item.Question }}</p> -->
             </div>
           </div>
@@ -40,7 +40,7 @@
       <div class="box ratio-3">
         <div class="button-container">
           <button
-            v-for="(selection, index) in this.GameData.Question[
+            v-for="(selection, index) in GameData.Question[
               currentQuestions[currentQuestionIndex]
             ].Selections"
             :key="index"
@@ -68,6 +68,25 @@ import {
 
 export default {
   name: "QuizComponent",
+  components: {
+    TextOnly: getComponents("TextOnly"),
+    ImageContainer: getComponents("ImageContainer"),
+  },
+  props: {
+    GameData: {
+      type: Object,
+      required: true,
+    },
+    GameConfig: {
+      type: Object,
+      required: true,
+    },
+    ID: {
+      type: String,
+      required: true,
+    },
+  },
+  emits: ["play-effect", "next-question", "add-record"],
   data() {
     return {
       gameplayMusic: getSoundAssets("game_sounds", "gameplay-music.mp3"),
@@ -88,20 +107,6 @@ export default {
       backgroundImage: getGameStaticAssets("Track", "track2.png"),
     };
   },
-  props: {
-    GameData: {
-      type: Object,
-      required: true,
-    },
-    GameConfig: {
-      type: Object,
-      required: true,
-    },
-    ID: {
-      type: String,
-      required: true,
-    },
-  },
   computed: {
     conveyorStyle() {
       const numQuestions = this.currentQuestions.length;
@@ -121,6 +126,22 @@ export default {
     progressBarWidth() {
       return `${this.progressPercentage}%`;
     },
+  },
+  created() {
+    soundManager.registerSound(
+      "trackBackgroundMusic",
+      this.gameplayMusic,
+      true
+    );
+    soundManager.registerSound("trackClickSound", `${this.clickSound}`, true);
+    this.startQuiz();
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.$refs.conveyorItem.forEach((item) => {
+        item.style.backgroundImage = `url(${this.backgroundImage})`;
+      });
+    });
   },
   methods: {
     startQuiz() {
@@ -209,26 +230,6 @@ export default {
       }
       return order;
     },
-  },
-  components: {
-    TextOnly: getComponents("TextOnly"),
-    ImageContainer: getComponents("ImageContainer"),
-  },
-  created() {
-    soundManager.registerSound(
-      "trackBackgroundMusic",
-      this.gameplayMusic,
-      true
-    );
-    soundManager.registerSound("trackClickSound", `${this.clickSound}`, true);
-    this.startQuiz();
-  },
-  mounted() {
-    this.$nextTick(() => {
-      this.$refs.conveyorItem.forEach((item) => {
-        item.style.backgroundImage = `url(${this.backgroundImage})`;
-      });
-    });
   },
 };
 </script>

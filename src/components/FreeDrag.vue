@@ -3,9 +3,9 @@
     <div id="container" ref="container">
       <ImageContainer
         class="Background"
-        :ID="this.ID"
-        :Data="this.Background"
-      ></ImageContainer>
+        :ID="ID"
+        :Data="Background"
+      />
       <img
         v-for="(image, index) in expandedImages"
         :key="index"
@@ -14,7 +14,7 @@
         :alt="image.alt"
         :style="{ left: image.left + 'px', top: image.top + 'px' }"
         @mousedown="onMouseDown($event, index)"
-      />
+      >
     </div>
   </div>
 </template>
@@ -45,6 +45,19 @@ import { getGameAssets } from "@/utilitys/get_assets.js";
 //     }
 // }
 export default {
+  components: {
+    ImageContainer,
+  },
+  props: {
+    ID: {
+      type: String,
+      required: true,
+    },
+    Data: {
+      type: Object,
+      required: true,
+    },
+  },
   data() {
     return {
       images: [
@@ -60,15 +73,11 @@ export default {
       },
     };
   },
-  props: {
-    ID: {
-      type: String,
-      required: true,
-    },
-    Data: {
-      type: Object,
-      required: true,
-    },
+  created() {
+    this.Background = this.Data.Background;
+  },
+  mounted() {
+    this.expandImages();
   },
   methods: {
     onMouseDown(event, index) {
@@ -144,15 +153,6 @@ export default {
         }
       });
     },
-  },
-  components: {
-    ImageContainer,
-  },
-  created() {
-    this.Background = this.Data.Background;
-  },
-  mounted() {
-    this.expandImages();
   },
 };
 </script>

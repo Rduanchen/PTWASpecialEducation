@@ -1,10 +1,12 @@
 <template>
   <div class="image-with-text">
     <ImageContainer
-      :ID="this.ID"
-      :Data="{ Src: this.Data.Src, Alt: this.Data.Alt }"
-    ></ImageContainer>
-    <p class="h1">{{ text }}</p>
+      :ID="ID"
+      :Data="{ Src: Data.Src, Alt: Data.Alt }"
+    />
+    <p class="h1">
+      {{ text }}
+    </p>
   </div>
 </template>
 <script>

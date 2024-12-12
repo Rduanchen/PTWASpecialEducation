@@ -6,17 +6,21 @@
   >
     <div class="mediaModal-container">
       <div class="mediaModal-header">
-        <h1 class="mediaModal-title">{{ modalTitle }}</h1>
+        <h1 class="mediaModal-title">
+          {{ modalTitle }}
+        </h1>
       </div>
       <div class="mediaModal-body">
-        <p class="mediaModal-content">{{ modalContent }}</p>
+        <p class="mediaModal-content">
+          {{ modalContent }}
+        </p>
         <video
           v-if="mediaType === 'video'"
           :src="mediaSrc"
           controls
           autoplay
           class="media-content"
-        ></video>
+        />
         <img
           v-else-if="mediaType === 'image'"
           :src="mediaSrc"
@@ -35,12 +39,32 @@
 import { getSystemAssets } from "@/utilitys/get_assets.js";
 export default {
   props: {
-    showMediaModal: Boolean,
-    modalTitle: String,
-    modalContent: String,
-    mediaSrc: String,
-    mediaType: String,
-    notFoundSrc: getSystemAssets("elephant.gif", "game_images"),
+    showMediaModal: {
+      type: Boolean,
+      required: true,
+    },
+    modalTitle: {
+      type: String,
+      required: true,
+    },
+    modalContent: {
+      type: String,
+      required: true,
+    },
+    mediaSrc: {
+      type: String,
+      required: true,
+    },
+    mediaType: {
+      type: String,
+      required: true,
+    },
+  },
+  emits: ["closeModal"],
+  data() {
+    return {
+      notFoundSrc: getSystemAssets("404.png", "icon"),
+    };
   },
   methods: {
     closeMediaModal() {

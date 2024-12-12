@@ -1,19 +1,19 @@
 <template>
   <div class="Outter">
-    <div class="TopContainer" v-if="GameData.TopContainer != undefined">
+    <div v-if="GameData.TopContainer != undefined" class="TopContainer">
       <component
         :is="GameData.TopContainer.Name"
         :Data="GameData.TopContainer.Data"
-        :ID="this.ID"
-      ></component>
+        :ID="ID"
+      />
     </div>
 
-    <div class="ComponentArea Rect" v-if="GameData.SlotComponent != undefined">
+    <div v-if="GameData.SlotComponent != undefined" class="ComponentArea Rect">
       <component
-        :ID="this.ID"
         :is="GameData.SlotComponent.Name"
+        :ID="ID"
         :Data="GameData.SlotComponent.Data"
-      ></component>
+      />
     </div>
     <transition :name="transitionName" mode="out-in">
       <div :key="currentQuestionIndex" class="Question">
@@ -22,23 +22,25 @@
           :key="partIndex"
           class="part-container"
         >
-          <p v-if="!isPlaceHolder(item)">{{ item }}</p>
+          <p v-if="!isPlaceHolder(item)">
+            {{ item }}
+          </p>
           <div
-            v-else
             v-for="(Selection, itemIndex) in currentQuestion.Selection"
+            v-else
             :key="itemIndex"
-            @click="SelectItem(currentQuestionIndex, itemIndex)"
             class="select-component"
             :class="{
               'selected-component':
                 SelectionRecord[currentQuestionIndex] === itemIndex,
             }"
+            @click="SelectItem(currentQuestionIndex, itemIndex)"
           >
             <component
-              :ID="id"
               :is="GameData.SelectionType"
+              :ID="id"
               :Data="Selection"
-            ></component>
+            />
           </div>
         </div>
       </div>
@@ -48,8 +50,8 @@
       <!-- <button @click="nextQuestion" class="SubmitAnswer" v-if="currentQuestionIndex != this.currentQuestion.Selection.length -1">下一題</button> -->
       <!-- <button @click="CheckAnswer" class="SubmitAnswer">送出答案</button> -->
 
-      <button @click="submitSingleAnswer" class="SubmitAnswer">送出答案</button>
-      <button @click="nextQuestion" class="SubmitAnswer" v-if="nextable">
+      <button class="SubmitAnswer" @click="submitSingleAnswer">送出答案</button>
+      <button v-if="nextable" class="SubmitAnswer" @click="nextQuestion">
         下一題
       </button>
     </div>
@@ -82,11 +84,7 @@ export default {
       required: true,
     },
   },
-  computed: {
-    currentQuestion() {
-      return this.GameData.Questions[this.currentQuestionIndex];
-    },
-  },
+  emits: ["play-effect", "add-record", "next-question"],
   data() {
     return {
       SelectionRecord: [],
@@ -96,6 +94,11 @@ export default {
       submitAnswerAmount: 0,
       nextable: false,
     };
+  },
+  computed: {
+    currentQuestion() {
+      return this.GameData.Questions[this.currentQuestionIndex];
+    },
   },
   created() {
     for (var i in this.GameData.Questions) {

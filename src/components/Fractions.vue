@@ -15,6 +15,7 @@ export default {
       required: true,
     },
   },
+  emits: ["replyAnswer"],
   data() {
     return {
       // Your data properties here
@@ -29,6 +30,9 @@ export default {
       //     Son: 0
       // }
     };
+  },
+  mounted() {
+    // Code to run when the component is mounted
   },
   methods: {
     // Your methods here
@@ -46,9 +50,6 @@ export default {
         this.$emit("replyAnswer", false);
       }
     },
-  },
-  mounted() {
-    // Code to run when the component is mounted
   },
 };
 </script>

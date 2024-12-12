@@ -8,7 +8,9 @@
     "build": "vite build",
     "preview": "vite preview",
     "docker-test": "docker-compose build --no-cache && docker-compose up",
-    "test-all": "npm run build && npm run docker-test && npm run preview"
+    "test-all": "npm run build && npm run docker-test && npm run preview",
+    "lint": "eslint .",
+    "lint-fix": "eslint --fix ."
   },
   "dependencies": {
     "@popperjs/core": "^2.11.8",
@@ -34,6 +36,9 @@
   "devDependencies": {
     "@quasar/vite-plugin": "^1.7.0",
     "@vitejs/plugin-vue": "^4.1.0",
+    "eslint": "^9.16.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-vue": "^9.32.0",
     "gh-pages": "^6.1.1",
     "globals": "^15.8.0",
     "sass": "^1.33.0",

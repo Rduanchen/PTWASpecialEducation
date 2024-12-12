@@ -18,17 +18,17 @@
         </div>
         <div class="search-group">
           <input
-            :placeholder="
-              this.showMode == 'search' ? '按下esc可以返回' : '輸入ID或者標題'
-            "
             v-model="searchInput"
+            :placeholder="
+              showMode == 'search' ? '按下esc可以返回' : '輸入ID或者標題'
+            "
             @keyup.enter="searchGame()"
             @keyup.esc="return2Menu()"
           />
           <button
             class="search-group__btn-search"
             type="submit"
-            v-on:click="searchGame()"
+            @click="searchGame()"
           >
             搜尋
           </button>
@@ -53,16 +53,18 @@
       </div>
     </section>
     <section
+      v-if="showMode == 'game'"
       class="game-select__container"
       style="overflow-y: hidden"
-      v-if="showMode == 'game'"
     >
       <div class="side-bar">
         <p class="title">現在科目</p>
-        <button class="">{{ subjects[nowSubject] }}</button>
+        <button class="">
+          {{ subjects[nowSubject] }}
+        </button>
         <p class="title">章節</p>
-        <div class="button-container">
-          <template v-for="(items, key) in this.showInfo" v-if="this.showInfo">
+        <div v-if="showInfo" class="button-container">
+          <template v-for="(items, key) in showInfo" :key="key">
             <button
               class="list-group-item"
               @click="
@@ -77,50 +79,51 @@
         </div>
       </div>
       <!-- 遊戲卡片區域 -->
-      <div class="game-display__container" v-if="showGameCards" :key="refresh">
+      <div v-if="showGameCards" :key="refresh" class="game-display__container">
         <div
+          v-for="(items, index) in showInfo[selectedCharpter].Section"
+          :key="index"
           class="game-charpter__container"
-          :key="selectedCharpter"
-          v-for="items in this.showInfo[selectedCharpter].Section"
-          v-if="this.showInfo"
         >
-          <p class="game-charpter__title">{{ items.Title }}</p>
+          <p class="game-charpter__title">
+            {{ items.Title }}
+          </p>
           <div class="game-card__group">
-            <div class="card game-card" v-for="item in items.Games">
+            <div v-for="item in items.Games" class="card game-card">
               <GameCard
-                @enterGame="
-                  switchRouter({
-                    name: 'Game',
-                    params: {
-                      id: item.id,
-                      Grade: this.grade,
-                      Subject: this.nowSubject,
-                      GameName: item.Name,
-                    },
-                  })
-                "
-                @readText="makeReadText"
-                :gameInfo="{
+                :game-info="{
                   id: item.id,
                   imgSrc: item.Img,
                   name: item.Name,
                   description: item.Description,
                 }"
+                @enter-game="
+                  switchRouter({
+                    name: 'Game',
+                    params: {
+                      id: item.id,
+                      Grade: grade,
+                      Subject: nowSubject,
+                      GameName: item.Name,
+                    },
+                  })
+                "
+                @read-text="makeReadText"
               />
             </div>
           </div>
         </div>
       </div>
     </section>
-    <section class="search_result" v-if="showMode == 'search'">
+    <section v-if="showMode == 'search'" class="search_result">
       <div v-if="searchResult == undefined" class="serch-result__not-found">
         <div>
           <p class="h1">沒有搜尋結果</p>
           <br />
           <button
             class="btn-back"
-            v-on:click="return2Menu()"
             style="height: 3em; width: 10rem"
+            @click="return2Menu()"
           >
             返回目錄
           </button>
@@ -130,37 +133,37 @@
         <p class="h1 mb-3">搜尋結果:</p>
         <div class="game-card__group">
           <div
+            v-for="item in searchResult"
             class="card game-card"
             style="width: 18rem"
-            v-for="item in searchResult"
             @click="
               switchRouter({
                 name: 'Game',
                 params: {
                   id: item.id,
-                  Grade: this.grade,
-                  Subject: this.nowSubject,
+                  Grade: grade,
+                  Subject: nowSubject,
                   GameName: item.Name,
                 },
               })
             "
           >
             <GameCard
-              @readText="makeReadText"
-              :gameInfo="{
+              :game-info="{
                 id: item.id,
                 imgSrc: item.Img,
                 name: item.Name,
                 description: item.Description,
               }"
+              @read-text="makeReadText"
             />
           </div>
         </div>
         <div class="">
           <button
             class="btn-back"
-            v-on:click="return2Menu()"
             style="height: 3em; width: 20rem"
+            @click="return2Menu()"
           >
             返回目錄
           </button>

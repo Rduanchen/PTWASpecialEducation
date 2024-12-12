@@ -1,32 +1,32 @@
 <template>
   <div class="outter-container">
     <div class="left-column">
-      <div class="game-area--top game-area" v-if="this.GameConfig.layout.top">
+      <div v-if="GameConfig.layout.top" class="game-area--top game-area">
         <component
           :is="GameData.topComponent.Name"
           :Data="GameData.topComponent.Data"
-          :ID="this.ID"
-          @replyAnswer="topReply"
-        ></component>
+          :ID="ID"
+          @reply-answer="topReply"
+        />
       </div>
-      <div class="game-area--down game-area" v-if="this.GameConfig.layout.down">
+      <div v-if="GameConfig.layout.down" class="game-area--down game-area">
         <component
           :is="GameData.downComponent.Name"
           :Data="GameData.downComponent.Data"
-          :ID="this.ID"
-          @replyAnswer="downReply"
-        ></component>
+          :ID="ID"
+          @reply-answer="downReply"
+        />
       </div>
     </div>
     <div class="right-column">
-      <div class="number-pad" v-if="ShowPad && this.GameConfig.layout.pad">
+      <div v-if="ShowPad && GameConfig.layout.pad" class="number-pad">
         <VirtualNumPad
-          @virtualpadinput-Input="Input"
+          @virtualpadinput-input="Input"
           @virtualpadinput-delete="Delete"
           @virtualpadinput-pop="Pop"
-        ></VirtualNumPad>
+        />
       </div>
-      <button @click="CheckAnswer" class="button--submit">檢查答案</button>
+      <button class="button--submit" @click="CheckAnswer">檢查答案</button>
     </div>
     {{ NowSelect }}
   </div>
@@ -41,7 +41,6 @@ export default {
   components: {
     VirtualNumPad,
     TextOnly: defineAsyncComponent(() => import("@/components/TextOnly.vue")),
-    Input: defineAsyncComponent(() => import("@/components/ReplyInput.vue")),
     Fractions: defineAsyncComponent(() => import("@/components/Fractions.vue")),
     Markdown: defineAsyncComponent(() => import("@/components/Markdown.vue")),
     NumberLine: defineAsyncComponent(() =>
@@ -71,11 +70,11 @@ export default {
       required: true,
     },
   },
+  emits: ["play-effect", "add-record", "next-question"],
   data() {
     return {
       NowSelect: null,
       ShowPad: false,
-      ID: this.ID,
       topComponentsAnswer: false,
       downComponentsAnswer: false,
       // GameData: {
@@ -140,6 +139,11 @@ export default {
       // },
     };
   },
+  computed: {
+    Arrow() {
+      return getSlotComponentAssets("NumberLineV2", "ArrowRight.svg"); //FIXME
+    },
+  },
   created() {
     let NewArr = [];
     let cnt = 0;
@@ -159,10 +163,12 @@ export default {
     }
     this.FinalData = NewArr;
   },
-  computed: {
-    Arrow() {
-      return getSlotComponentAssets("NumberLineV2", "ArrowRight.svg"); //FIXME
-    },
+  mounted() {
+    if (this.GameConfig.NumberPadAutoDisappear == false) {
+      this.SlidAnimation("in");
+      this.ShowPad = true;
+    }
+    document.addEventListener("click", this.NowClick);
   },
   methods: {
     downReply(result) {
@@ -271,13 +277,6 @@ export default {
         this.$emit("add-record", ["不支援顯示", "不支援顯示", `錯誤`]);
       }
     },
-  },
-  mounted() {
-    if (this.GameConfig.NumberPadAutoDisappear == false) {
-      this.SlidAnimation("in");
-      this.ShowPad = true;
-    }
-    document.addEventListener("click", this.NowClick);
   },
 };
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div class="digital-clock"></div>
+  <div class="digital-clock" />
 </template>
 <script>
 import { getSlotComponentAssets } from "@/utilitys/get_assets.js";

@@ -3,17 +3,25 @@
     <h2>{{ GameData.Question }}</h2>
     <v-stage :config="configKonva">
       <v-layer>
-        <v-image :config="configBG_1"></v-image>
-        <v-image :config="configBG_2"></v-image>
+        <v-image :config="configBG_1" />
+        <v-image :config="configBG_2" />
       </v-layer>
 
       <v-layer>
-        <v-circle v-for="target in configTarget" :config="target"></v-circle>
-        <v-text v-for="option in configOptions" :config="option"></v-text>
+        <v-circle
+          v-for="(target, index) in configTarget"
+          :key="index"
+          :config="target"
+        />
+        <v-text
+          v-for="(option, index) in configOptions"
+          :key="index"
+          :config="option"
+        />
       </v-layer>
 
       <v-layer>
-        <v-rect :config="configPlane" @dragmove="keepInBound"></v-rect>
+        <v-rect :config="configPlane" @dragmove="keepInBound" />
       </v-layer>
     </v-stage>
   </div>
@@ -26,6 +34,23 @@ import { defineAsyncComponent } from "vue";
 
 export default {
   components: {},
+
+  props: {
+    GameData: {
+      type: Object,
+      required: true,
+    },
+    GameConfig: {
+      type: Object,
+      required: true,
+    },
+    ID: {
+      type: String,
+      required: true,
+    },
+  },
+
+  emits: ["play-effect", "add-record", "next-question"],
   data() {
     return {
       configKonva: {},
@@ -53,23 +78,6 @@ export default {
       trueOptions: [],
     };
   },
-
-  props: {
-    GameData: {
-      type: Object,
-      required: true,
-    },
-    GameConfig: {
-      type: Object,
-      required: true,
-    },
-    ID: {
-      type: String,
-      required: false,
-    },
-  },
-
-  emits: ["play-effect", "add-record", "next-question"],
 
   mounted() {
     this.initializeScene();

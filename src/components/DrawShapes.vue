@@ -8,19 +8,25 @@
     >
       <v-layer>
         <v-line
-          v-for="pointSet in configGrid"
+          v-for="(pointSet, index) in configGrid"
+          :key="index"
           :points="pointSet"
           :stroke="'#aaa'"
-        ></v-line>
-        <v-image :config="configReturnBtn" @pointerdown="deleteLine"></v-image>
+        />
+        <v-image :config="configReturnBtn" @pointerdown="deleteLine" />
       </v-layer>
       <v-layer>
         <v-line
-          v-for="line in configLine"
+          v-for="(line, index) in configLine"
+          :key="index"
           :config="line"
-          :strokeWidth="5"
-        ></v-line>
-        <v-circle v-for="point in configGivenPoint" :config="point"></v-circle>
+          :stroke-width="5"
+        />
+        <v-circle
+          v-for="(point, index) in configGivenPoint"
+          :key="index"
+          :config="point"
+        />
       </v-layer>
     </v-stage>
   </div>
@@ -32,6 +38,19 @@ import * as canvasTools from "@/utilitys/canvasTools.js";
 import { defineAsyncComponent } from "vue";
 export default {
   components: {},
+
+  props: {
+    Data: {
+      type: Object,
+      required: true,
+    },
+    ID: {
+      type: String,
+      required: true,
+    },
+  },
+
+  emits: ["replyAnswer"],
   data() {
     return {
       configKonva: {},
@@ -53,10 +72,6 @@ export default {
       sides: [],
     };
   },
-
-  props: ["Data", "ID"],
-
-  emits: ["replyAnswer"],
 
   mounted() {
     this.getData();

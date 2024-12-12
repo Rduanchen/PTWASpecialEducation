@@ -1,13 +1,17 @@
 <template>
   <div class="container">
     <div class="Header">
-      <p class="h2">{{ QuestionWord }}</p>
+      <p class="h2">
+        {{ QuestionWord }}
+      </p>
     </div>
     <div class="QuestionArea">
       <div class="Selection">
-        <p class="h2">{{ this.GameData.InitBox }}</p>
+        <p class="h2">
+          {{ GameData.InitBox }}
+        </p>
         <draggable
-          :list="this.Items"
+          :list="Items"
           item-key="Tag"
           :sort="false"
           :group="{ name: 'SelectItem' }"
@@ -18,15 +22,17 @@
               <component
                 :is="element['Name']"
                 :Data="element['Data']"
-                :ID="this.ID"
-              ></component>
+                :ID="ID"
+              />
             </div>
           </template>
         </draggable>
       </div>
-      <div class="PutGroup" ref="putGroup">
-        <div v-for="(items, index) in Groups" class="Group" :key="index">
-          <p class="h2">{{ this.GameData.Answer[index].GroupName }}</p>
+      <div ref="putGroup" class="PutGroup">
+        <div v-for="(items, index) in Groups" :key="index" class="Group">
+          <p class="h2">
+            {{ GameData.Answer[index].GroupName }}
+          </p>
           <draggable
             :list="Groups[index]"
             item-key="Tag"
@@ -39,8 +45,8 @@
                 <component
                   :is="element['Name']"
                   :Data="element['Data']"
-                  :ID="this.ID"
-                ></component>
+                  :ID="ID"
+                />
               </div>
             </template>
           </draggable>
@@ -67,7 +73,6 @@ export default {
     Clock: getComponents("Clock"),
     Water: getComponents("Water"),
   },
-  emits: ["play-effect", "add-record", "next-level"],
   props: {
     GameData: {
       type: Object,
@@ -82,6 +87,7 @@ export default {
       required: true,
     },
   },
+  emits: ["play-effect", "add-record", "next-question"],
   data() {
     return {
       QuestionWord: "",

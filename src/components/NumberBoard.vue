@@ -2,10 +2,14 @@
   <!-- Your component's HTML template goes here -->
   <table class="number-board-container">
     <tr class="EachRow">
-      <td v-for="unit in this.Unit" class="UnitEachBlanket">{{ unit }}</td>
+      <td v-for="unit in Unit" class="UnitEachBlanket">
+        {{ unit }}
+      </td>
     </tr>
     <tr class="EachRow">
-      <td v-for="number in this.Number" class="EachBlanket">{{ number }}</td>
+      <td v-for="number in Number" class="EachBlanket">
+        {{ number }}
+      </td>
     </tr>
   </table>
 </template>
@@ -14,17 +18,17 @@
 import { set } from "@vueuse/core";
 export default {
   name: "NumberBoard",
-  data() {
-    return {
-      Number: null,
-      Unit: null,
-    };
-  },
   props: {
     Data: {
       type: Object,
       required: true,
     },
+  },
+  data() {
+    return {
+      Number: null,
+      Unit: null,
+    };
   },
   created() {
     // 如果單位和數字的長度不一樣，則補齊。

@@ -1,7 +1,7 @@
 <template>
   <div
-    class="row levelbutton d-sm-none d-md-block d-none d-sm-block"
     v-if="GameStatus == 'Progressing'"
+    class="row levelbutton d-sm-none d-md-block d-none d-sm-block"
   >
     <div class="d-grid gap-2 d-flex justify-content-center mb-3 levebar">
       <button
@@ -26,18 +26,18 @@
         </button>
       </div>
       <button
+        v-if="GameStatus == 'Progressing'"
         type="button"
         class="btn btn-primary flex-fill text-nowrap"
         disabled
-        v-if="GameStatus == 'Progressing'"
       >
         時間 : {{ time }}
       </button>
       <button
+        v-if="GameStatus == 'Progressing'"
         type="button"
         class="btn btn-primary flex-fill text-nowrap"
         disabled
-        v-if="GameStatus == 'Progressing'"
       >
         總計時間 : {{ totaltime }}
       </button>
@@ -50,19 +50,30 @@ import { mapWritableState } from "pinia";
 import gameStore from "@/stores/game";
 
 export default {
-  data() {
-    return {};
-  },
   props: {
     time: {
       type: Number,
+      required: true,
     },
     totaltime: {
       type: Number,
+      required: true,
     },
     questions: {
       type: Array,
+      required: true,
     },
+  },
+  emits: ["pause-timer", "reset-timer", "start-timer", "reset-wrong-timer"],
+  data() {
+    return {};
+  },
+  computed: {
+    ...mapWritableState(gameStore, [
+      "transitionName",
+      "GameStatus",
+      "Nowlevel",
+    ]),
   },
   methods: {
     changelevel(change2level) {
@@ -94,13 +105,6 @@ export default {
     resetWrongTimes() {
       this.$emit("reset-wrong-timer");
     },
-  },
-  computed: {
-    ...mapWritableState(gameStore, [
-      "transitionName",
-      "GameStatus",
-      "Nowlevel",
-    ]),
   },
 };
 </script>

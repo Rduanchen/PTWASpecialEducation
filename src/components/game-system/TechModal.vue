@@ -6,14 +6,14 @@
         <h1>教學影片</h1>
       </div>
       <div class="tech-modal__media">
-        <video controls class="tech-modal__content" v-if="isVideo">
+        <video v-if="isVideo" controls class="tech-modal__content">
           <source :src="mediaSrc" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
-        <img class="tech-modal__content" :src="mediaSrc" v-else />
+        <img v-else class="tech-modal__content" :src="mediaSrc" />
       </div>
       <div class="tech-modal__footer">
-        <button @click="closeModal" class="button-close">關閉</button>
+        <button class="button-close" @click="closeModal">關閉</button>
       </div>
     </div>
   </Modal>
@@ -35,16 +35,17 @@ export default {
   },
   props: {
     mediaData: {
+      type: String,
       required: true,
     },
   },
+  emits: ["close"],
   data() {
     return {
       isVideo: false,
       mediaSrc: "",
     };
   },
-  emits: ["close"],
   computed: {
     ...mapWritableState(gameStore, ["gameID", "gameType"]),
   },

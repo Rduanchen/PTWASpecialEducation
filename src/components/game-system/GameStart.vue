@@ -1,17 +1,18 @@
 <template>
-  <div class="game-start container" v-if="Status == 'NotStart'">
+  <div v-if="Status == 'NotStart'" class="game-start container">
     <div class="upper-container">
       <h1>{{ GameName }}</h1>
       <div class="card">
-        <p v-if="introType == 'Html'" v-html="ShowContent"></p>
-        <p v-else-if="introType == 'PlainText'">{{ ShowContent }}</p>
+        <p v-if="introType == 'PlainText'">
+          {{ ShowContent }}
+        </p>
         <p v-else>無介紹文字</p>
       </div>
     </div>
     <div class="buttons">
       <button
         class="action-button"
-        v-on:click="
+        @click="
           startGame();
           makeReadText('', '', (stop = true));
         "
@@ -21,7 +22,7 @@
       </button>
       <button
         class="action-button"
-        v-on:click="makeReadText(GameName, ShowContent)"
+        @click="makeReadText(GameName, ShowContent)"
       >
         <img src="" />
         朗讀
@@ -39,6 +40,20 @@ import * as Read from "@/utilitys/readtext.js";
 import { getSystemAssets } from "@/utilitys/get_assets.js";
 export default {
   name: "GameStart",
+  props: {
+    GameName: {
+      type: String,
+      required: true,
+    },
+    intro: {
+      type: Object,
+      required: true,
+    },
+    Status: {
+      type: String,
+      required: true,
+    },
+  },
   emits: ["start-game", "download-record", "restart", "open-teaching-modal"],
   data() {
     return {
@@ -51,18 +66,6 @@ export default {
         "game_images"
       ),
     };
-  },
-  props: {
-    GameName: {
-      type: String,
-    },
-    intro: {
-      type: Object,
-    },
-    Status: {
-      type: String,
-      required: true,
-    },
   },
   mounted() {
     Read.InitReadProccess();

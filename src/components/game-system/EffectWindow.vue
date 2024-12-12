@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <!-- Your component's HTML template goes here -->
-    <img id="Show" :src="Src" alt="Hahah" />
+    <img id="Show" :src="Src" alt="Hahah">
   </div>
 </template>
 
@@ -9,19 +9,16 @@
 import { getSlotComponentAssets } from "@/utilitys/get_assets.js";
 export default {
   name: "EffectWindow",
-  data() {
-    return {
-      Src: "",
-    };
-  },
   props: {
     Data: {
       type: Object,
       required: true,
     },
   },
-  methods: {
-    // Your component's methods go here
+  data() {
+    return {
+      Src: "",
+    };
   },
   computed: {
     // Your computed properties go here
@@ -37,6 +34,9 @@ export default {
   },
   mounted() {
     // Code to run when the component is mounted goes here
+  },
+  methods: {
+    // Your component's methods go here
   },
 };
 </script>

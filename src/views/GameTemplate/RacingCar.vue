@@ -1,20 +1,36 @@
 <template>
-  <div class="gameContainer" ref="container">
+  <div ref="container" class="gameContainer">
     <div>
       <h2>{{ GameData.Question }}</h2>
       <v-stage :config="configKonva">
         <v-layer>
-          <v-image v-for="road in configRoad" :config="road"></v-image>
+          <v-image
+            v-for="(road, index) in configRoad"
+            :key="index"
+            :config="road"
+          />
         </v-layer>
 
         <v-layer>
-          <v-image :config="configCar"></v-image>
+          <v-image :config="configCar" />
         </v-layer>
 
         <v-layer>
-          <v-image v-for="tunnel in configTunnel" :config="tunnel"></v-image>
-          <v-rect v-for="box in configTextBox" :config="box"></v-rect>
-          <v-text v-for="option in configOption" :config="option"></v-text>
+          <v-image
+            v-for="(tunnel, index) in configTunnel"
+            :key="index"
+            :config="tunnel"
+          />
+          <v-rect
+            v-for="(box, index) in configTextBox"
+            :key="index"
+            :config="box"
+          />
+          <v-text
+            v-for="(option, index) in configOption"
+            :key="index"
+            :config="option"
+          />
         </v-layer>
       </v-stage>
     </div>
@@ -42,6 +58,22 @@ import * as canvasTools from "@/utilitys/canvasTools.js";
 import { defineAsyncComponent } from "vue";
 
 export default {
+  props: {
+    GameData: {
+      type: Object,
+      required: true,
+    },
+    GameConfig: {
+      type: Object,
+      required: true,
+    },
+    ID: {
+      type: String,
+      required: true,
+    },
+  },
+
+  emits: ["play-effect", "add-record", "next-question"],
   data() {
     return {
       configKonva: {},
@@ -61,23 +93,6 @@ export default {
       downBtn: getGameStaticAssets("RacingCar", "arrowDown.jpg"),
     };
   },
-
-  props: {
-    GameData: {
-      type: Object,
-      required: true,
-    },
-    GameConfig: {
-      type: Object,
-      required: true,
-    },
-    ID: {
-      type: String,
-      required: true,
-    },
-  },
-
-  emits: ["play-effect", "add-record", "next-question"],
 
   mounted() {
     this.options = canvasTools.shuffleOptions(this.GameData.Options);

@@ -1,15 +1,15 @@
 <template>
   <div class="outter-container container">
     <div class="head-container">
-      {{ this.GameData.headQuestion }}
+      {{ GameData.headQuestion }}
     </div>
     <div class="game-area">
       <DrawShapes
         id="draw-shapes"
         :Data="configDrawShapes"
-        :ID="this.ID"
-        @replyAnswer="getComponentsReply"
-      ></DrawShapes>
+        :ID="ID"
+        @reply-answer="getComponentsReply"
+      />
     </div>
     <button class="submit-btn" @click="checkAnswer">檢查答案</button>
   </div>
@@ -21,20 +21,6 @@ export default {
   name: "MA3056",
   components: {
     DrawShapes,
-  },
-  data() {
-    return {
-      id: "MA3056",
-      componentsReplyAnswer: false,
-      configDrawShapes: {
-        verifyOption: "rect", //none, rect, shape
-        answer: [5, 3], //[5, 3], // triangle, rectangle, trapezium, parallelogram
-        bgRatio: {
-          width: 10,
-          height: 10,
-        },
-      },
-    };
   },
   props: {
     GameData: {
@@ -49,6 +35,24 @@ export default {
       type: String,
       required: true,
     },
+  },
+  emits: ["play-effect", "next-question"],
+  data() {
+    return {
+      id: "MA3056",
+      componentsReplyAnswer: false,
+      configDrawShapes: {
+        verifyOption: "rect", //none, rect, shape
+        answer: [5, 3], //[5, 3], // triangle, rectangle, trapezium, parallelogram
+        bgRatio: {
+          width: 10,
+          height: 10,
+        },
+      },
+    };
+  },
+  computed: {
+    // Add your computed properties here
   },
   created() {
     // Add your created methods here
@@ -67,9 +71,6 @@ export default {
         this.$emit("play-effect", "WrongSound");
       }
     },
-  },
-  computed: {
-    // Add your computed properties here
   },
 };
 </script>
