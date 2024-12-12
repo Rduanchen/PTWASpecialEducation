@@ -314,11 +314,11 @@ export default {
             this.MinGap + index * (RectWidth + this.MinGap),
             0,
             RectWidth,
-            100
+            this.SelectionHeight
           );
           this.addText({
-            x: this.MinGap + index * (RectWidth + this.MinGap) + RectWidth / 2,
-            y: 50,
+            x: this.MinGap + index * (RectWidth + this.MinGap),
+            y: (this.SelectionHeight - this.FontSize) / 2,
             text: item,
             width: RectWidth,
           });
@@ -414,7 +414,7 @@ export default {
       // 計算圖片的位置，使其居中顯示
       let NewX = (this.stageConfig.width - NewImageWidth) / 2;
       let NewY = (StageHeight - NewImageHeight) / 2;
-      console.log(NewX, NewY);
+      console.log(NewX, NewY, this.SelectionHeight);
       // 設定ImageConfig
       this.ImageConfig = {
         image: BGImage,
