@@ -2,14 +2,10 @@
   <!-- Your component's HTML template goes here -->
   <table class="number-board-container">
     <tr class="EachRow">
-      <td v-for="unit in Unit" class="UnitEachBlanket">
-        {{ unit }}
-      </td>
+      <td v-for="unit in Unit" class="UnitEachBlanket">{{ unit }}</td>
     </tr>
     <tr class="EachRow">
-      <td v-for="number in Number" class="EachBlanket">
-        {{ number }}
-      </td>
+      <td v-for="number in numbers" class="EachBlanket">{{ number }}</td>
     </tr>
   </table>
 </template>
@@ -26,42 +22,33 @@ export default {
   },
   data() {
     return {
-      Number: null,
+      numbers: [],
       Unit: null,
+      putOnNumberArray: [],
     };
   },
   created() {
     // 如果單位和數字的長度不一樣，則補齊。
     this.Unit = this.Data.Unit;
-    this.Number = this.Data.Number;
+    this.numbers = this.Data.Number;
+    console.log(this.Data.Number);
     if (typeof this.Data.Number === "number") {
-      this.Number = this.Data.Number.toString().split("");
+      this.numbers = this.Data.Number.toString().split("");
     }
-    if (this.Data.Unit.length != this.Number.length) {
-      if (this.Data.Unit.length > this.Number.length) {
-        let diff = this.Data.Unit.length - this.Number.length;
+    if (this.Data.Unit.length != this.numbers.length) {
+      if (this.Data.Unit.length > this.numbers.length) {
+        let diff = this.Data.Unit.length - this.numbers.length;
         for (let i = 0; i < diff; i++) {
-          this.Number.unshift(" ");
+          this.numbers.unshift(" ");
         }
       } else {
-        let diff = this.Number.length - this.Data.Unit.length;
+        let diff = this.numbers.length - this.Data.Unit.length;
         for (let i = 0; i < diff; i++) {
           this.Unit.unshift(" ");
         }
       }
     }
-    // 如果數字有雙位數，則縮小字體。
-    // let DoubleWord = false;
-    // for (var i in this.Unit){
-    //     if (this.Unit[i].toString().length > 1){
-    //         DoubleWord = true;
-    //         break;
-    //     }
-    // }
-    // if (DoubleWord){
-    //     let NumberBoard = document.getElementsByClassName('NumberBoard')[0];
-    //     NumberBoard.style.gridTemplateRows = '2fr 1fr';
-    // }
+    console.log(this.numbers);
   },
 };
 </script>
