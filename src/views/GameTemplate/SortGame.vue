@@ -1,8 +1,8 @@
 <template>
   <div class="container">
-    <h1>{{ this.GameData.Question.text }}</h1>
+    <h1>{{ GameData.Question.text }}</h1>
     <hr />
-    <draggable :list="options" :key="options[0]" group="Sentense">
+    <draggable :key="options[0]" :list="options" group="Sentense">
       <template #item="{ element }">
         <button type="button" class="btn btn-primary m-1 my-btn">
           {{ element }}
@@ -42,6 +42,7 @@ export default {
       required: true,
     },
   },
+  emits: ["play-effect", "add-record", "next-question"],
   data() {
     return {
       QuestionWord: "",

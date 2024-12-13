@@ -1,29 +1,29 @@
 <template>
   <div
-    class="Container"
     ref="Container"
+    class="Container"
     :style="{
       width: containerSize.width + 'px',
       height: containerSize.height + 'px',
     }"
   >
     <div
-      class="Up MoneyContainer papaer-money"
+      v-if="Data.Thousands || Data.FiveHundreds"
       :key="containerRef"
-      v-if="this.Data.Thousands || this.Data.FiveHundreds"
+      class="Up MoneyContainer papaer-money"
     >
       <img v-for="item in UpContainer" :src="item" />
     </div>
     <div
-      class="Middle MoneyContainer papaer-money"
+      v-if="Data.Hundreds"
       :key="containerRef"
-      v-if="this.Data.Hundreds"
+      class="Middle MoneyContainer papaer-money"
     >
       <img v-for="item in MiddleContainer" :src="item" />
     </div>
-    <div class="Down CoinContainer" v-for="item in DownContainer">
-      <div class="PerCoin" v-for="coin in item">
-        <img :src="coin" v-if="coin != ''" />
+    <div v-for="item in DownContainer" class="Down CoinContainer">
+      <div v-for="coin in item" class="PerCoin">
+        <img v-if="coin != ''" :src="coin" />
       </div>
     </div>
   </div>
@@ -39,7 +39,7 @@ const props = defineProps({
   },
   ID: {
     type: String,
-    required: false,
+    required: true,
   },
 });
 
@@ -137,7 +137,7 @@ const loadData = () => {
   }
 };
 function updateContainerSize() {
-  if (Container) {
+  if (Container.value) {
     const { width, height } = Container.value.getBoundingClientRect();
     console.log(width, height);
     containerSize.value = { width, height };

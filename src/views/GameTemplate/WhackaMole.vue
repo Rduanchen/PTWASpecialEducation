@@ -3,21 +3,31 @@
     <h2>{{ GameData.Question }}</h2>
     <v-stage :config="configKonva">
       <v-layer>
-        <v-image :config="configBG"></v-image>
+        <v-image :config="configBG" />
       </v-layer>
 
       <v-layer>
-        <v-image v-for="board in configObjects.board" :config="board"></v-image>
-        <v-text
-          v-for="option in configObjects.option"
-          :config="option"
-        ></v-text>
         <v-image
-          v-for="mole in configObjects.mole"
+          v-for="(board, index) in configObjects.board"
+          :key="index"
+          :config="board"
+        />
+        <v-text
+          v-for="(option, index) in configObjects.option"
+          :key="index"
+          :config="option"
+        />
+        <v-image
+          v-for="(mole, index) in configObjects.mole"
+          :key="index"
           :config="mole"
           @pointerdown="whacked"
-        ></v-image>
-        <v-image v-for="hole in configObjects.hole" :config="hole"></v-image>
+        />
+        <v-image
+          v-for="(hole, index) in configObjects.hole"
+          :key="index"
+          :config="hole"
+        />
       </v-layer>
     </v-stage>
   </div>
@@ -29,6 +39,21 @@ import * as canvasTools from "@/utilitys/canvasTools.js";
 import { defineAsyncComponent } from "vue";
 
 export default {
+  props: {
+    GameData: {
+      type: Object,
+      required: true,
+    },
+    GameConfig: {
+      type: Object,
+      required: true,
+    },
+    ID: {
+      type: String,
+      required: true,
+    },
+  },
+  emits: ["play-effect", "add-record", "next-question"],
   data() {
     return {
       configKonva: {},
@@ -47,21 +72,6 @@ export default {
 
       startId: 0,
     };
-  },
-
-  props: {
-    GameData: {
-      type: Object,
-      required: true,
-    },
-    GameConfig: {
-      type: Object,
-      required: true,
-    },
-    ID: {
-      type: String,
-      required: true,
-    },
   },
   mounted() {
     this.initializeScene();

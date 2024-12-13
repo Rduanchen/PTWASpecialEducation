@@ -1,12 +1,21 @@
 <template>
-  <div class="gameContainer" ref="container">
+  <div ref="container" class="gameContainer">
     <v-stage :config="configKonva">
       <v-layer>
-        <v-line v-for="line in configNumberLine" :config="line"></v-line>
+        <v-line
+          v-for="(line, index) in configNumberLine"
+          :key="index"
+          :config="line"
+        />
         <!-- <v-circle v-for="circle in configCircle" :config="circle"></v-circle> -->
-        <v-text v-for="number in configNumber" :config="number"></v-text>
+        <v-text
+          v-for="(number, index) in configNumber"
+          :key="index"
+          :config="number"
+        />
         <v-rect
           v-for="(rect, id) in configRect"
+          :key="id"
           :config="{
             x: rect.x,
             y: rect.y,
@@ -14,27 +23,27 @@
             height: rect.height,
             fill: rect.fill,
             cornerRadius: rect.conerRadius,
-            stroke: this.rectClickedList[id] ? 'blue' : 'black',
-            strokeWidth: this.rectClickedList[id] ? 3 : 1,
+            stroke: rectClickedList[id] ? 'blue' : 'black',
+            strokeWidth: rectClickedList[id] ? 3 : 1,
           }"
           @click="rectClicked(id)"
           @touchstart="rectClicked(id)"
-        ></v-rect>
+        />
       </v-layer>
     </v-stage>
     <div
-      class="virtualNumpad-modal"
       v-if="virtualNumpadSwitch"
-      @click="this.virtualNumpadSwitch = false"
-      @touchstart="this.virtualNumpadSwitch = false"
+      class="virtualNumpad-modal"
+      @click="virtualNumpadSwitch = false"
+      @touchstart="virtualNumpadSwitch = false"
     >
       <div class="modal__body" @click.stop @touchstart.stop>
         <p>請輸入數字</p>
-        <VirtualNumpad @submit="updateRactNumber"></VirtualNumpad>
+        <VirtualNumpad @submit="updateRactNumber" />
         <button
-          @click="this.virtualNumpadSwitch = false"
-          @touchstart="this.virtualNumpadSwitch = false"
           class="button__close-modal"
+          @click="virtualNumpadSwitch = false"
+          @touchstart="virtualNumpadSwitch = false"
         >
           關閉視窗
         </button>
@@ -61,6 +70,7 @@ export default {
       required: true,
     },
   },
+  emits: ["replyAnswer"],
   data() {
     return {
       configKonva: {},
@@ -94,7 +104,6 @@ export default {
   },
 
   // props: ["config"], //{spacing, max, min, image, init_pos}
-
   beforeMount() {},
   mounted() {
     this.initializeScene();

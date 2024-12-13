@@ -1,10 +1,21 @@
 <template>
-  <v-circle :config="configBase" @touchmove="getTouchPosition"></v-circle>
-  <v-circle :config="configStick"></v-circle>
+  <v-circle :config="configBase" @touchmove="getTouchPosition" />
+  <v-circle :config="configStick" />
 </template>
 
 <script>
 export default {
+  props: {
+    position: {
+      type: Object,
+      required: true,
+    },
+    radius: {
+      type: Number,
+      required: true,
+    },
+  },
+  emits: ["move"],
   data() {
     return {
       configBase: {
@@ -20,10 +31,6 @@ export default {
       touchPosition: {},
     };
   },
-
-  props: ["radius", "position"],
-
-  emits: ["move"],
 
   mounted() {
     this.initialize();

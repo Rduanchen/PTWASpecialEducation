@@ -7,31 +7,37 @@
       @touchend="touchEnd"
     >
       <v-layer v-if="isBgImage">
-        <v-image :config="configBgImage"></v-image>
+        <v-image :config="configBgImage" />
       </v-layer>
 
       <v-layer v-if="!isBgImage">
-        <v-rect :config="configBg"></v-rect>
+        <v-rect :config="configBg" />
         <v-rect
-          v-for="block in configBounds"
+          v-for="(block, index) in configBounds"
+          :key="index"
           :config="block"
           :fill="'blue'"
-          :strokeEnabled="false"
-        ></v-rect>
+          :stroke-enabled="false"
+        />
         <v-rect
-          v-for="block in configSafeArea"
+          v-for="(block, index) in configSafeArea"
+          :key="index"
           :config="block"
           :fill="'green'"
-          :strokeEnabled="false"
-        ></v-rect>
+          :stroke-enabled="false"
+        />
       </v-layer>
       <v-layer>
-        <v-text v-for="option in configOption" :config="option"></v-text>
+        <v-text
+          v-for="(option, index) in configOption"
+          :key="index"
+          :config="option"
+        />
       </v-layer>
       <v-layer>
-        <v-shape :config="configPlayer"></v-shape>
-        <v-circle :config="configGhost_1"></v-circle>
-        <v-circle :config="configGhost_2"></v-circle>
+        <v-shape :config="configPlayer" />
+        <v-circle :config="configGhost_1" />
+        <v-circle :config="configGhost_2" />
       </v-layer>
       <v-layer>
         <joystick
@@ -39,7 +45,7 @@
           :radius="laneWidth * 1.5"
           :position="touchPosition"
           @move="moveByJoystick"
-        ></joystick>
+        />
       </v-layer>
     </v-stage>
   </div>
@@ -56,6 +62,22 @@ export default {
       import("@/components/touchscreenJoystick.vue")
     ),
   },
+
+  props: {
+    GameData: {
+      type: Object,
+      required: true,
+    },
+    GameConfig: {
+      type: Object,
+      required: true,
+    },
+    ID: {
+      type: String,
+      required: true,
+    },
+  },
+  emits: ["play-effect", "add-record", "next-question"],
   data() {
     return {
       isBgImage: false,
@@ -142,21 +164,6 @@ export default {
 
       map: {},
     };
-  },
-
-  props: {
-    GameData: {
-      type: Object,
-      required: true,
-    },
-    GameConfig: {
-      type: Object,
-      required: true,
-    },
-    ID: {
-      type: String,
-      required: true,
-    },
   },
   async mounted() {
     this.map = await fetchJson(getGameStaticAssets("Maze", "map.json"));

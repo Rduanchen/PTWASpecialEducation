@@ -1,6 +1,8 @@
 <template>
   <div class="word">
-    <p ref="textOnlyContainer">{{ this.Data.Text }}</p>
+    <p ref="textOnlyContainer">
+      {{ Data.Text }}
+    </p>
   </div>
 </template>
 <script>

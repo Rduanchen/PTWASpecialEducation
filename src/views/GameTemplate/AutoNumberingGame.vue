@@ -3,20 +3,27 @@
     <br />
     <br />
     <div class="container">
-      <p class="h1">{{ this.GameData.Question.Text }}</p>
-      <div class="d-flex justify-content-between flex-row" id="MainContainer">
+      <p class="h1">
+        {{ GameData.Question.Text }}
+      </p>
+      <div id="MainContainer" class="d-flex justify-content-between flex-row">
         <div class="canvascontainer">
-          <canvas ref="canvas" width="700" height="400"></canvas>
+          <canvas ref="canvas" width="700" height="400" />
         </div>
         <div
           class="optionbar d-flex flex-column justify-content-center align-self-center"
           style="width: 100%"
         >
-          <p class="h5">{{ this.GameConfig.OptionBarText }}</p>
-          <div id="error_msg">{{ errorMsg }}</div>
+          <p class="h5">
+            {{ GameConfig.OptionBarText }}
+          </p>
+          <div id="error_msg">
+            {{ errorMsg }}
+          </div>
           <div class="Buttons" style="width: 100%">
             <button
               v-for="(items, index) in btn"
+              :key="index"
               class="Button"
               @click="judgeAnswer(items)"
             >
@@ -60,6 +67,21 @@
 import { getGameAssets } from "@/utilitys/get_assets.js";
 export default {
   name: "AutoNumberingGame",
+  props: {
+    GameData: {
+      type: Object,
+      required: true,
+    },
+    GameConfig: {
+      type: Object,
+      required: true,
+    },
+    ID: {
+      type: String,
+      required: true,
+    },
+  },
+  emits: ["play-effect", "next-question", "add-record"],
   data() {
     return {
       picture_total: 0,
@@ -78,20 +100,6 @@ export default {
       errorMsg: "",
       btn: [],
     };
-  },
-  props: {
-    GameData: {
-      type: Object,
-      required: true,
-    },
-    GameConfig: {
-      type: Object,
-      required: true,
-    },
-    ID: {
-      type: String,
-      required: true,
-    },
   },
   created() {
     // this.picture_type="sth"//FIXME

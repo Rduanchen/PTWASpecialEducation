@@ -1,12 +1,10 @@
 <template>
-  <div class="game-over__container" id="Done">
+  <div id="Done" class="game-over__container">
     <img :src="fireworkSrc" class="effects" />
     <div class="game-over__button-group">
-      <button class="action-btn" v-on:click="endGame">結束遊戲</button>
-      <button class="action-btn" v-on:click="download">
-        結束遊戲(下載紀錄)
-      </button>
-      <button class="action-btn" v-on:click="restartGame">重新開始</button>
+      <button class="action-btn" @click="endGame">結束遊戲</button>
+      <button class="action-btn" @click="download">結束遊戲(下載紀錄)</button>
+      <button class="action-btn" @click="restartGame">重新開始</button>
     </div>
   </div>
 </template>
@@ -15,6 +13,12 @@
 import { getSystemEffectAssets } from "@/utilitys/get_assets.js";
 export default {
   name: "GameOver",
+  emits: ["restart", "download-record", "previous-page"],
+  computed: {
+    fireworkSrc() {
+      return getSystemEffectAssets("Firework.gif");
+    },
+  },
   methods: {
     restartGame() {
       this.$emit("restart");
@@ -24,11 +28,6 @@ export default {
     },
     endGame() {
       this.$emit("previous-page");
-    },
-  },
-  computed: {
-    fireworkSrc() {
-      return getSystemEffectAssets("Firework.gif");
     },
   },
 };

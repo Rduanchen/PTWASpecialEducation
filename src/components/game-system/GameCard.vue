@@ -1,23 +1,28 @@
 <template>
   <div class="game-card__container" @click="enterGame">
-    <div class="id-container">{{ gameInfo.id }}</div>
+    <div class="id-container">
+      {{ gameInfo.id }}
+    </div>
     <div class="image-outter">
       <img
-        :src="this.imageSrc"
+        :src="imageSrc"
         class="image--container"
         :alt="`${gameInfo.id}的介紹圖片`"
-      />
+      >
     </div>
     <div class="card-info">
       <div class="info--top">
-        <p class="title">{{ gameInfo.name }}</p>
+        <p class="title">
+          {{ gameInfo.name }}
+        </p>
         <a
-          @click="MakeReadText(item.Name, item.Description)"
           class="btn btn-primary mx-2"
-          ><i class="bi bi-volume-up-fill"></i
-        ></a>
+          @click="MakeReadText(item.Name, item.Description)"
+        ><i class="bi bi-volume-up-fill" /></a>
       </div>
-      <p class="description">{{ gameInfo.description }}</p>
+      <p class="description">
+        {{ gameInfo.description }}
+      </p>
     </div>
   </div>
 </template>

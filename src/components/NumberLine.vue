@@ -1,6 +1,6 @@
 <template>
   <div class="OutterContainer">
-    <v-stage ref="stage" :config="configStage" id="stage">
+    <v-stage id="stage" ref="stage" :config="configStage">
       <v-layer>
         <v-line :config="mainLineConfig" />
         <v-line
@@ -17,9 +17,9 @@
     </v-stage>
     <input
       v-for="(inputConfig, index) in inputConfigs"
+      :id="`Box${index}`"
       :key="index"
       class="InputBox"
-      :id="`Box${index}`"
       :style="{
         position: 'absolute',
         left: `${inputConfig.x - 22.5 + Offset.x}px`,
@@ -49,6 +49,7 @@ export default {
       required: true,
     },
   },
+  emits: ["replyAnswer"],
   data() {
     return {
       bais: 20,
@@ -143,6 +144,20 @@ export default {
       index++;
     }
   },
+  mounted() {
+    // Code to run when the component is mounted goes here
+    // Get Stage BoundingsClientRect
+    let stage = this.$refs.stage.$el;
+    stage.style.border = "solid 1px black";
+    let stageBound = stage.getBoundingClientRect();
+    let OutterContainer = document.getElementsByClassName("OutterContainer")[0];
+    let OutterContainerBound = OutterContainer.getBoundingClientRect();
+    // this.Offset.x = stageBound.x;
+    // this.Offset.y = stageBound.y;
+    this.Offset.x = stageBound.x - OutterContainerBound.x;
+    this.Offset.y = stageBound.y - 2 * OutterContainerBound.y + this.FontSize;
+    console.log(this.Offset);
+  },
   methods: {
     CountGap(CanvasWidth) {
       this.Gap =
@@ -163,20 +178,6 @@ export default {
       }
       this.$emit("replyAnswer", Answer);
     },
-  },
-  mounted() {
-    // Code to run when the component is mounted goes here
-    // Get Stage BoundingsClientRect
-    let stage = this.$refs.stage.$el;
-    stage.style.border = "solid 1px black";
-    let stageBound = stage.getBoundingClientRect();
-    let OutterContainer = document.getElementsByClassName("OutterContainer")[0];
-    let OutterContainerBound = OutterContainer.getBoundingClientRect();
-    // this.Offset.x = stageBound.x;
-    // this.Offset.y = stageBound.y;
-    this.Offset.x = stageBound.x - OutterContainerBound.x;
-    this.Offset.y = stageBound.y - 2 * OutterContainerBound.y + this.FontSize;
-    console.log(this.Offset);
   },
 };
 </script>

@@ -2,7 +2,9 @@
   <div class="outter-container">
     <!-- <div class="container-top"> -->
     <div class="container-title title">
-      <p class="title__text">{{ this.GameData.Title }}</p>
+      <p class="title__text">
+        {{ GameData.Title }}
+      </p>
     </div>
     <!-- <draggable
             class="drag-container"
@@ -22,27 +24,27 @@
               :is="element.Name"
               :Data="element.Data"
               :ID="element.ID"
-              @click="deleteItem(index)"
               class="list-group-item"
-            ></component>
+              @click="deleteItem(index)"
+            />
           </template>
         </draggable>
       </div>
       <div class="box-source">
         <div class="box question">
-          <p v-for="(question, index) in this.GameData.Questions" :key="index">
+          <p v-for="(question, index) in GameData.Questions" :key="index">
             {{ question }}
           </p>
         </div>
         <div class="source box">
           <draggable
+            :key="sourceList.key"
             class="item-container"
             :list="sourceList"
             :group="{ name: 'items', pull: 'clone', put: true }"
-            @change="init"
             :sort="false"
-            :key="sourceList.key"
             item-key="ID"
+            @change="init"
           >
             <template #item="{ element }">
               <component
@@ -50,7 +52,7 @@
                 :Data="element.Data"
                 :ID="element.ID"
                 class="list-group-item"
-              ></component>
+              />
             </template>
           </draggable>
         </div>
@@ -88,6 +90,7 @@ export default {
       required: true,
     },
   },
+  emits: ["play-effect", "next-question", "add-record"],
   data() {
     return {
       // Your data properties go here
@@ -120,6 +123,9 @@ export default {
   created() {
     // Code to run when the component is created goes here
     this.init();
+  },
+  mounted() {
+    // Code to run when the component is mounted goes here
   },
   methods: {
     // Your methods go here
@@ -165,9 +171,6 @@ export default {
         this.$emit("play-effect", "WrongSound");
       }
     },
-  },
-  mounted() {
-    // Code to run when the component is mounted goes here
   },
 };
 </script>

@@ -2,7 +2,7 @@
   <Teleport to="body">
     <div class="system-modal" @click="close">
       <div class="system-modal__body" @click.stop>
-        <slot></slot>
+        <slot />
       </div>
     </div>
   </Teleport>

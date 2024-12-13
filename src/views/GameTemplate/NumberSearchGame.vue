@@ -1,7 +1,9 @@
 <template>
   <div class="game-container">
     <div class="gameAndQuestion">
-      <p class="question">{{ GameData.Text }}</p>
+      <p class="question">
+        {{ GameData.Text }}
+      </p>
       <p class="game__remaining">剩餘題數：{{ remainingQuestions }}</p>
       <div class="progress">
         <div
@@ -11,7 +13,7 @@
           aria-valuenow="progressPercentage"
           aria-valuemin="0"
           aria-valuemax="100"
-        ></div>
+        />
       </div>
       <div class="game">
         <v-stage
@@ -52,6 +54,21 @@ import {
 import { soundManager } from "@/utilitys/sound-manager.js";
 export default {
   name: "NumberSearchGame",
+  props: {
+    GameData: {
+      type: Object,
+      required: true,
+    },
+    GameConfig: {
+      type: Object,
+      required: true,
+    },
+    ID: {
+      type: String,
+      required: true,
+    },
+  },
+  emits: ["play-effect", "add-record", "next-question"],
   data() {
     return {
       questionNum: 0,
@@ -75,18 +92,16 @@ export default {
       speakerIcon: getGameStaticAssets("NumberSearchGame", "speaker-icon.png"),
     };
   },
-  props: {
-    GameData: {
-      type: Object,
-      required: true,
+  computed: {
+    progressPercentage() {
+      const percentageFactor = 100;
+      return (this.rightAnswerCount / this.GameData.ObjNum) * percentageFactor;
     },
-    GameConfig: {
-      type: Object,
-      required: true,
+    progressBarWidth() {
+      return `${this.progressPercentage}%`;
     },
-    ID: {
-      type: String,
-      required: true,
+    remainingQuestions() {
+      return this.GameData.ObjNum - this.rightAnswerCount;
     },
   },
   created() {
@@ -223,18 +238,6 @@ export default {
     },
     gameOver() {
       return this.rightAnswerCount >= this.GameData.ObjNum;
-    },
-  },
-  computed: {
-    progressPercentage() {
-      const percentageFactor = 100;
-      return (this.rightAnswerCount / this.GameData.ObjNum) * percentageFactor;
-    },
-    progressBarWidth() {
-      return `${this.progressPercentage}%`;
-    },
-    remainingQuestions() {
-      return this.GameData.ObjNum - this.rightAnswerCount;
     },
   },
 };

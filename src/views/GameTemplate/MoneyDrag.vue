@@ -1,7 +1,9 @@
 <template>
   <div class="game">
     <div class="game__target-section">
-      <h1 class="game__title">{{ GameData.title }}</h1>
+      <h1 class="game__title">
+        {{ GameData.title }}
+      </h1>
       <draggable
         class="game__drop-area"
         :list="answerList"
@@ -32,8 +34,8 @@
         :group="dragGroupForClone"
         class="game__drag-area"
         item-key="dragItemId"
-        @end="stopTrashMode"
         :sort="false"
+        @end="stopTrashMode"
       >
         <template #item="{ element }">
           <div>
@@ -42,14 +44,14 @@
           </div>
         </template>
       </draggable>
-
+      <!-- eslint-disable vue/no-unused-vars -->
       <draggable
         v-show="isTrashMode"
+        ref="deleteArea"
         :group="dragGroupForDelete"
         class="game__delete-area--trash-mode"
         item-key="dragItemId"
         @add="stopTrashMode"
-        ref="deleteArea"
       >
         <template #item="{ element }">
           <!-- Empty content for delete area -->
@@ -75,6 +77,20 @@ export default {
     ImageContainer: getComponents("ImageContainer"),
     MoneyDisplay: getComponents("MoneyDisplay"),
   },
+  props: {
+    GameData: {
+      type: Object,
+      required: true,
+    },
+    GameConfig: {
+      type: Object,
+      required: true,
+    },
+    ID: {
+      type: String,
+      required: true,
+    },
+  },
   emits: ["add-record", "play-effect", "next-question", "WrongSound"],
   data() {
     return {
@@ -89,19 +105,13 @@ export default {
       trashBin: getSystemAssets("delete.png", "icon"),
     };
   },
-  props: {
-    GameData: {
-      type: Object,
-      required: true,
-    },
-    GameConfig: {
-      type: Object,
-      required: true,
-    },
-    ID: {
-      type: String,
-      required: true,
-    },
+  created() {
+    this.init();
+    this.slotComponent = this.GameData.upperComponent.Name;
+    this.slotData = this.GameData.upperComponent.Data;
+  },
+  mounted() {
+    this.$refs.deleteArea.$el.style.backgroundImage = `url(${this.GameConfig.trashBin})`;
   },
   methods: {
     init() {
@@ -146,14 +156,6 @@ export default {
       const result = isAnswerRight ? "正確" : "錯誤";
       this.$emit("add-record", [correctAnswer, userAnswer, result]);
     },
-  },
-  created() {
-    this.init();
-    this.slotComponent = this.GameData.upperComponent.Name;
-    this.slotData = this.GameData.upperComponent.Data;
-  },
-  mounted() {
-    this.$refs.deleteArea.$el.style.backgroundImage = `url(${this.GameConfig.trashBin})`;
   },
 };
 </script>

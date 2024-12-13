@@ -1,8 +1,12 @@
 <template>
   <div>
-    <p class="h1" id="Hello">fffffffff</p>
+    <p id="Hello" class="h1">
+      fffffffff
+    </p>
     this is a private moduel sample
-    <button @click="sound">Play Sound</button>
+    <button @click="sound">
+      Play Sound
+    </button>
     {{ GameData }}
     {{ GameConfig }}
     {{ id }}
@@ -13,14 +17,6 @@
 import { getTheamsAssets } from "@/utilitys/get_assets.js";
 export default {
   name: "MA3020",
-  emits: {
-    "play-effect": null,
-  },
-  data() {
-    return {
-      // Your data properties go here
-    };
-  },
   props: {
     GameData: {
       type: Object,
@@ -35,10 +31,13 @@ export default {
       required: true,
     },
   },
-  methods: {
-    sound() {
-      this.$emit("play-effect", "CorrectSound");
-    },
+  emits: {
+    "play-effect": null,
+  },
+  data() {
+    return {
+      // Your data properties go here
+    };
   },
   mounted() {
     try {
@@ -48,6 +47,11 @@ export default {
     } catch {
       console.log("Using Default Theam");
     }
+  },
+  methods: {
+    sound() {
+      this.$emit("play-effect", "CorrectSound");
+    },
   },
 };
 </script>

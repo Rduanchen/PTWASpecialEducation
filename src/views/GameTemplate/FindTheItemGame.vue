@@ -1,12 +1,14 @@
 <template>
   <div class="container">
     <div class="gameAndQuestion">
-      <p class="h1">{{ this.GameData.Text }}</p>
+      <p class="h1">
+        {{ GameData.Text }}
+      </p>
       <div class="ObjList">
         <p class="h4">尚未被找到:</p>
         <div class="Objects">
           <button
-            v-for="(button, index) in this.GameData.Objs"
+            v-for="(button, index) in GameData.Objs"
             class="Object"
             :class="{ activebutton: answered[index] }"
           >
@@ -38,6 +40,22 @@
 import { getGameAssets } from "@/utilitys/get_assets.js";
 export default {
   name: "FindTheItem",
+  props: {
+    GameData: {
+      type: Object,
+      required: true,
+    },
+    GameConfig: {
+      type: Object,
+      required: true,
+    },
+    ID: {
+      type: String,
+      required: true,
+    },
+    //Other Game Methods
+  },
+  emits: ["play-effect", "add-record", "next-question"],
   data() {
     return {
       questionNum: 0,
@@ -58,21 +76,6 @@ export default {
       circles: [],
       answered: [],
     };
-  },
-  props: {
-    GameData: {
-      type: Object,
-      required: true,
-    },
-    GameConfig: {
-      type: Object,
-      required: true,
-    },
-    ID: {
-      type: String,
-      required: true,
-    },
-    //Other Game Methods
   },
   created() {
     const image = new window.Image();

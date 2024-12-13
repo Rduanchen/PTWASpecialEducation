@@ -1,12 +1,20 @@
 <template>
   <div class="Container">
-    <p v-if="this.Data.Text != undefined">{{ this.Data.Text }}</p>
+    <p v-if="Data.Text != undefined">
+      {{ Data.Text }}
+    </p>
     <div class="Division">
-      <p class="Child">{{ Data.Child }}</p>
+      <p class="Child">
+        {{ Data.Child }}
+      </p>
       <hr class="Fraction-line" />
-      <p class="Mother">{{ Data.Mother }}</p>
+      <p class="Mother">
+        {{ Data.Mother }}
+      </p>
     </div>
-    <p class="Unit">{{ Data.Unit }}</p>
+    <p class="Unit">
+      {{ Data.Unit }}
+    </p>
     <div class="table-container">
       <div
         v-for="(item, index) in Items"
@@ -35,6 +43,7 @@ export default {
       required: true,
     },
   },
+  emits: ["replyAnswer"],
   data() {
     return {
       Items: [],

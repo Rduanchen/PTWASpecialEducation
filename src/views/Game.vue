@@ -1,8 +1,8 @@
 <template>
   <div id="GameView" ref="GameView">
-    <Header
+    <GameHeader
       :grade="Grade"
-      :gameName="gameName"
+      :game-name="gameName"
       :subject="Subjects[Subject]"
       @previous-page="previousPage"
     />
@@ -23,38 +23,37 @@
             <div class="row Game_Component">
               <!-- Dynamic import component -->
               <div
-                class="games"
                 v-if="GameStatus == 'Progressing'"
                 id="GameContainer"
+                class="games"
               >
                 <EffectWindow
+                  v-if="ShowReply"
                   id="CorrecIncorrect"
                   :Data="CorrectIncorrect"
-                  v-if="ShowReply"
-                ></EffectWindow>
+                />
                 <transition :name="transitionName" mode="out-in">
                   <component
+                    :is="gameType"
                     v-if="gameType != 'SelfDefine'"
-                    v-bind:is="gameType"
                     ref="GameComponent"
-                    :key="this.Nowlevel"
+                    :key="Nowlevel"
                     :ID="gameID"
-                    :GameData="this.GameData.Questions[this.Nowlevel - 1]"
-                    :GameConfig="this.GameConfig"
+                    :GameData="GameData.Questions[Nowlevel - 1]"
+                    :GameConfig="GameConfig"
                     @add-record="gameDataRecord"
                     @play-effect="effectPlayer"
                     @next-question="nextQuestion"
-                  >
-                  </component>
+                  />
                 </transition>
 
                 <component
-                  v-if="gameType == 'SelfDefine'"
-                  :key="this.Nowlevel"
                   :is="selfdefinetemplate"
+                  v-if="gameType == 'SelfDefine'"
+                  :key="Nowlevel"
                   :ID="gameID"
-                  :GameData="this.GameData.Questions[this.Nowlevel - 1]"
-                  :GameConfig="this.GameConfig"
+                  :GameData="GameData.Questions[Nowlevel - 1]"
+                  :GameConfig="GameConfig"
                   :EnviromerntInfo="getAllInfo()"
                   @get-info="getAllInfo"
                   @add-record="gameDataRecord"
@@ -74,37 +73,36 @@
                       scratchSheetVisible = true;
                     }
                   "
-                >
-                </component>
+                />
               </div>
-              <div class="intro" v-else>
+              <div v-else class="intro">
                 <GameStart
                   v-if="GameStatus == 'NotStart'"
+                  :key="Dataloaded"
                   :Status="GameStatus"
                   :intro="GameData.IntroText"
                   :GameName="gameName"
-                  :key="this.Dataloaded"
                   @start-game="startGame"
                   @open-teaching-modal="openMediaModal"
-                ></GameStart>
+                />
                 <GameOver
                   v-if="GameStatus == 'Done'"
                   @restart="reloadPage"
                   @download-record="ToCSV"
                   @previous-page="previousPage"
-                ></GameOver>
+                />
               </div>
             </div>
           </div>
           <SideBar
-            class="SideBar col-2"
             v-if="Dataloaded"
+            class="SideBar col-2"
             :GameStatus="GameStatus"
             :HintInfo="hintInfo"
             :Hint="Hint"
             :download_data="download_data"
-            :levelAmount="this.GameData.Questions.length"
-            :reAppeareCode="questionOrder"
+            :level-amount="GameData.Questions.length"
+            :re-appeare-code="questionOrder"
             @to-csv="ToCSV"
             @previous-question="previousQuestion"
             @next-question="nextQuestion"
@@ -119,30 +117,21 @@
           >
             <template #hint>
               <hintbutton
+                v-if="GameStatus == 'Progressing' && Hint['Type'] != 'Method'"
                 :HintInfo="hintInfo"
-                v-if="
-                  GameStatus == 'Progressing' && this.Hint['Type'] != 'Method'
-                "
                 @open-hint-modal="openMediaModal"
-              >
-              </hintbutton>
+              />
             </template>
           </SideBar>
-
-          <scratchSheet
-            v-if="scratchSheetVisible"
-            @closeSheet="closeSratchSheet"
-          ></scratchSheet>
-
-          <TechModal
-            v-if="showMediaModal"
-            :mediaData="this.GameData.introvideo"
-            @close="closeMediaModal"
-          >
-          </TechModal>
         </div>
       </div>
     </section>
+    <scratchSheet v-if="scratchSheetVisible" @close-sheet="closeSratchSheet" />
+    <TechModal
+      v-if="showMediaModal"
+      :media-data="GameData.introvideo"
+      @close="closeMediaModal"
+    />
   </div>
 </template>
 
@@ -165,6 +154,108 @@ import { mapWritableState } from "pinia";
 import { soundManager } from "@/utilitys/sound-manager.js";
 import TechModal from "@/components/game-system/TechModal.vue";
 export default {
+  components: {
+    TechModal,
+    hintbutton,
+    scratchSheet,
+    GameStart,
+    GameOver,
+    GameHeader: Header,
+    LevelAndTime,
+    MediaModal,
+    loading,
+    LinkGame: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/LinkGame.vue")
+    ),
+    CompareGame: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/CompareGame.vue")
+    ),
+    TrueFalseGame: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/TrueFalseGame.vue")
+    ),
+    SelectGame: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/SelectGame.vue")
+    ),
+    NumberInputGame: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/NumberInputGame.vue")
+    ),
+    ClassifyGame: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/ClassifyGame.vue")
+    ),
+    SortGame: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/SortGame.vue")
+    ),
+    FindTheItemGame: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/FindTheItemGame.vue")
+    ),
+    AutoNumberingGame: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/AutoNumberingGame.vue")
+    ),
+    NumberingGame: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/NumberingGame.vue")
+    ),
+    CompareGame: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/CompareGame.vue")
+    ),
+    FillinBlank: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/FillinBlank.vue")
+    ),
+    CalculatorGame: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/CalculatorGame.vue")
+    ),
+    PairingGame: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/PairingGame.vue")
+    ),
+    NumberLock: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/NumberLock.vue")
+    ),
+    RacingCar: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/RacingCar.vue")
+    ),
+    WhackaMole: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/WhackaMole.vue")
+    ),
+    Maze: defineAsyncComponent(() => import("@/views/GameTemplate/Maze.vue")),
+    NumberLock: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/NumberLock.vue")
+    ),
+    SelectGameMulti: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/SelectGameMulti.vue")
+    ),
+    NumberSearchGame: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/NumberSearchGame.vue")
+    ),
+    // eslint-disable-next-line vue/no-reserved-component-names
+    Track: defineAsyncComponent(() => import("@/views/GameTemplate/Track.vue")),
+    EffectWindow,
+    SideBar: defineAsyncComponent(() =>
+      import("@/components/game-system/SideBar.vue")
+    ),
+    CopyItem: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/CopyItem.vue")
+    ),
+    Airplane: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/Airplane.vue")
+    ),
+    ComponentTesters: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/componentTesters.vue")
+    ), //for testing only
+    BalloonShooting: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/BalloonShooting.vue")
+    ),
+    NumberLock: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/NumberLock.vue")
+    ),
+    LinkToImage: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/LinktoImage.vue")
+    ),
+    WordProblemWithCalculator: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/WordProblemWithCalculator.vue")
+    ),
+    MoneyDrag: defineAsyncComponent(() =>
+      import("@/views/GameTemplate/MoneyDrag.vue")
+    ),
+  },
   data() {
     return {
       Dataloaded: false,
@@ -575,107 +666,6 @@ export default {
     resetWrongTimes() {
       this.WrongTimes = 0;
     },
-  },
-  components: {
-    TechModal,
-    hintbutton,
-    scratchSheet,
-    GameStart,
-    GameOver,
-    Header,
-    LevelAndTime,
-    MediaModal,
-    loading,
-    LinkGame: defineAsyncComponent(() =>
-      import("@/views/GameTemplate/LinkGame.vue")
-    ),
-    CompareGame: defineAsyncComponent(() =>
-      import("@/views/GameTemplate/CompareGame.vue")
-    ),
-    TrueFalseGame: defineAsyncComponent(() =>
-      import("@/views/GameTemplate/TrueFalseGame.vue")
-    ),
-    SelectGame: defineAsyncComponent(() =>
-      import("@/views/GameTemplate/SelectGame.vue")
-    ),
-    NumberInputGame: defineAsyncComponent(() =>
-      import("@/views/GameTemplate/NumberInputGame.vue")
-    ),
-    ClassifyGame: defineAsyncComponent(() =>
-      import("@/views/GameTemplate/ClassifyGame.vue")
-    ),
-    SortGame: defineAsyncComponent(() =>
-      import("@/views/GameTemplate/SortGame.vue")
-    ),
-    FindTheItemGame: defineAsyncComponent(() =>
-      import("@/views/GameTemplate/FindTheItemGame.vue")
-    ),
-    AutoNumberingGame: defineAsyncComponent(() =>
-      import("@/views/GameTemplate/AutoNumberingGame.vue")
-    ),
-    NumberingGame: defineAsyncComponent(() =>
-      import("@/views/GameTemplate/NumberingGame.vue")
-    ),
-    CompareGame: defineAsyncComponent(() =>
-      import("@/views/GameTemplate/CompareGame.vue")
-    ),
-    FillinBlank: defineAsyncComponent(() =>
-      import("@/views/GameTemplate/FillinBlank.vue")
-    ),
-    CalculatorGame: defineAsyncComponent(() =>
-      import("@/views/GameTemplate/CalculatorGame.vue")
-    ),
-    PairingGame: defineAsyncComponent(() =>
-      import("@/views/GameTemplate/PairingGame.vue")
-    ),
-    NumberLock: defineAsyncComponent(() =>
-      import("@/views/GameTemplate/NumberLock.vue")
-    ),
-    RacingCar: defineAsyncComponent(() =>
-      import("@/views/GameTemplate/RacingCar.vue")
-    ),
-    WhackaMole: defineAsyncComponent(() =>
-      import("@/views/GameTemplate/WhackaMole.vue")
-    ),
-    Maze: defineAsyncComponent(() => import("@/views/GameTemplate/Maze.vue")),
-    NumberLock: defineAsyncComponent(() =>
-      import("@/views/GameTemplate/NumberLock.vue")
-    ),
-    SelectGameMulti: defineAsyncComponent(() =>
-      import("@/views/GameTemplate/SelectGameMulti.vue")
-    ),
-    NumberSearchGame: defineAsyncComponent(() =>
-      import("@/views/GameTemplate/NumberSearchGame.vue")
-    ),
-    Track: defineAsyncComponent(() => import("@/views/GameTemplate/Track.vue")),
-    EffectWindow,
-    SideBar: defineAsyncComponent(() =>
-      import("@/components/game-system/SideBar.vue")
-    ),
-    CopyItem: defineAsyncComponent(() =>
-      import("@/views/GameTemplate/CopyItem.vue")
-    ),
-    Airplane: defineAsyncComponent(() =>
-      import("@/views/GameTemplate/Airplane.vue")
-    ),
-    ComponentTesters: defineAsyncComponent(() =>
-      import("@/views/GameTemplate/componentTesters.vue")
-    ), //for testing only
-    BalloonShooting: defineAsyncComponent(() =>
-      import("@/views/GameTemplate/BalloonShooting.vue")
-    ),
-    NumberLock: defineAsyncComponent(() =>
-      import("@/views/GameTemplate/NumberLock.vue")
-    ),
-    LinkToImage: defineAsyncComponent(() =>
-      import("@/views/GameTemplate/LinktoImage.vue")
-    ),
-    WordProblemWithCalculator: defineAsyncComponent(() =>
-      import("@/views/GameTemplate/WordProblemWithCalculator.vue")
-    ),
-    MoneyDrag: defineAsyncComponent(() =>
-      import("@/views/GameTemplate/MoneyDrag.vue")
-    ),
   },
 };
 </script>
