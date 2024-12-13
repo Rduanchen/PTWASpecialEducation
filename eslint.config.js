@@ -16,6 +16,13 @@ export default [
       'vue/max-attributes-per-line': 'off', // this might conflict with prettier
       'vue/html-self-closing': 'off', // this might conflict with prettier
       'vue/singleline-html-element-content-newline': 'off', // this might conflict with prettier
+      "vue/custom-event-name-casing": ["error",
+        "camelCase",
+        {
+          "ignores": ['/next-question/', '/play-effect/', '/add-record/' ]
+        }
+      ],
+      "vue/v-on-event-hyphenation": 'off',
     }
   }
 ]

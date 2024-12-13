@@ -19,8 +19,8 @@
           @reply-answer="numberBoardReply"
         />
         <VirtualNumPad
-          @virtualpadinput-input="push"
-          @virtualpadinput-delete="clear"
+          @virtualpadinputInputt="push"
+          @virtualpadinputDelete="clear"
           @virtualpadinput-pop="pop"
         />
         <button class="btn-submit" @click="checkAnswer">檢查答案</button>
@@ -59,7 +59,7 @@ export default {
       required: true,
     },
   },
-  emits: ["play-effect", "next-question", "add-record", "scratch-sheet"],
+  emits: ["play-effect", "next-question", "add-record", "scratchSheet"],
   data() {
     return {
       moneyGeneratorData: {},
@@ -168,7 +168,7 @@ export default {
       }
     },
     openScratchSheet() {
-      this.$emit("scratch-sheet");
+      this.$emit("scratchSheet");
     },
   },
 };

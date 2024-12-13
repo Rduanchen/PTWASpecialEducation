@@ -321,12 +321,12 @@ export default {
     },
   },
   emits: [
-    "previous-question",
+    "previousQuestion",
     "next-question",
-    "start-game",
-    "to-csv",
-    "scratch-sheet",
-    "reappear-code",
+    "startGame",
+    "toCsv",
+    "scratchSheet",
+    "reappearCode",
   ],
   data() {
     return {
@@ -356,26 +356,26 @@ export default {
   },
   methods: {
     previousQuestion() {
-      this.$emit("previous-question");
+      this.$emit("previousQuestion");
     },
     nextQuestion() {
       this.$emit("next-question");
     },
     startGame() {
-      this.$emit("start-game");
+      this.$emit("startGame");
     },
     reloadPage() {
       location.reload();
     },
     toCSV(data) {
-      this.$emit("to-csv", data);
+      this.$emit("toCsv", data);
     },
     scratchSheet() {
-      this.$emit("scratch-sheet");
+      this.$emit("scratchSheet");
     },
     reappearCode() {
       this.gameCode = this.code;
-      this.$emit("reappear-code");
+      this.$emit("reappearCode");
     },
     copyReappearCode() {
       // 檢查瀏覽器是否支援 Clipboard API

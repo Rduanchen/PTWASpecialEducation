@@ -1,4 +1,4 @@
-import { defineAsyncComponent } from 'vue'
+import { defineAsyncComponent } from "vue";
 
 const componentsMapping = {
     ImageContainer: defineAsyncComponent(() => import('@/components/ImageContainer.vue')),
@@ -22,9 +22,9 @@ const componentsMapping = {
 }
 
 export function GetComponents(name) {
-    return componentsMapping[name] || null
+  return componentsMapping[name] || null;
 }
 
 export function getComponents(name) {
-    return componentsMapping[name] || null
+  return componentsMapping[name] || null;
 }

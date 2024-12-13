@@ -4,7 +4,7 @@
       :grade="Grade"
       :game-name="gameName"
       :subject="Subjects[Subject]"
-      @previous-page="previousPage"
+      @previousPage="previousPage"
     />
     <section>
       <div class="">
@@ -15,10 +15,10 @@
               :totaltime="totaltime"
               :questions="GameData.Questions"
               :nowlevel="Nowlevel"
-              @pause-timer="pauseTimer"
-              @reset-timer="resetTimer"
-              @start-timer="startTimer"
-              @reset-wrong-timer="resetWrongTimes"
+              @pauseTimer="pauseTimer"
+              @resetTimer="resetTimer"
+              @startTimer="startTimer"
+              @resetWrongTimer="resetWrongTimes"
             />
             <div class="row Game_Component">
               <!-- Dynamic import component -->
@@ -68,7 +68,7 @@
                   @timer-start="startTimer"
                   @timer-pause="pauseTimer"
                   @timer-reset="resetTimer"
-                  @scratch-sheet="
+                  @scratchSheet="
                     () => {
                       scratchSheetVisible = true;
                     }
@@ -88,8 +88,8 @@
                 <GameOver
                   v-if="GameStatus == 'Done'"
                   @restart="reloadPage"
-                  @download-record="ToCSV"
-                  @previous-page="previousPage"
+                  @downloadRecord="ToCSV"
+                  @previousPage="previousPage"
                 />
               </div>
             </div>
@@ -102,13 +102,13 @@
             :Hint="Hint"
             :download_data="download_data"
             :level-amount="GameData.Questions.length"
-            :re-appeare-code="questionOrder"
-            @to-csv="ToCSV"
-            @previous-question="previousQuestion"
+            :reappeareCode="questionOrder"
+            @toCsv="ToCSV"
+            @previousQuestion="previousQuestion"
             @next-question="nextQuestion"
-            @start-game="startGame"
+            @startGame="startGame"
             @reload-page="reloadPage"
-            @scratch-sheet="
+            @scratchSheet="
               () => {
                 scratchSheetVisible = true;
               }
@@ -119,7 +119,7 @@
               <hintbutton
                 v-if="GameStatus == 'Progressing' && Hint['Type'] != 'Method'"
                 :HintInfo="hintInfo"
-                @open-hint-modal="openMediaModal"
+                @openHintModal="openMediaModal"
               />
             </template>
           </SideBar>

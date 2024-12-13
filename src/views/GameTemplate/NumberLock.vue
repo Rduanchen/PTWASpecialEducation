@@ -6,23 +6,23 @@
           :is="GameData.topComponent.Name"
           :Data="GameData.topComponent.Data"
           :ID="ID"
-          @reply-answer="topReply"
-        />
+          @replyAnswer="topReply"
+        ></component>
       </div>
       <div v-if="GameConfig.layout.down" class="game-area--down game-area">
         <component
           :is="GameData.downComponent.Name"
           :Data="GameData.downComponent.Data"
           :ID="ID"
-          @reply-answer="downReply"
-        />
+          @replyAnswer="downReply"
+        ></component>
       </div>
     </div>
     <div class="right-column">
       <div v-if="ShowPad && GameConfig.layout.pad" class="number-pad">
         <VirtualNumPad
-          @virtualpadinput-input="Input"
-          @virtualpadinput-delete="Delete"
+          @virtualpadinputInput="Input"
+          @virtualpadinputDelete="Delete"
           @virtualpadinput-pop="Pop"
         />
       </div>
@@ -193,46 +193,6 @@ export default {
           this.ShowPad = false;
           this.SlidAnimation("out");
         }
-      }
-    },
-    Delete() {
-      if (this.GameConfig.layout.pad == false) return;
-      const activeElement = this.NowSelect;
-      if (activeElement) {
-        const start = activeElement.selectionStart;
-        const end = activeElement.selectionEnd;
-        const value = activeElement.value;
-        activeElement.value = "";
-        activeElement.selectionStart = activeElement.selectionEnd = start - 1;
-        const event = new Event("input", { bubbles: true });
-        activeElement.dispatchEvent(event);
-      }
-    },
-    Pop() {
-      if (this.GameConfig.layout.pad == false) return;
-      const activeElement = this.NowSelect;
-      if (activeElement) {
-        const start = activeElement.selectionStart;
-        const end = activeElement.selectionEnd;
-        const value = activeElement.value;
-        activeElement.value = value.slice(0, end - 1);
-        activeElement.selectionStart = activeElement.selectionEnd = start + 1;
-        const event = new Event("input", { bubbles: true });
-        activeElement.dispatchEvent(event);
-      }
-    },
-    Input(ch) {
-      if (this.GameConfig.layout.pad == false) return;
-      console.log(ch);
-      const activeElement = this.NowSelect;
-      if (activeElement) {
-        const start = activeElement.selectionStart;
-        const end = activeElement.selectionEnd;
-        const value = activeElement.value;
-        activeElement.value = activeElement.value + ch;
-        activeElement.selectionStart = activeElement.selectionEnd = start + 1;
-        const event = new Event("input", { bubbles: true });
-        activeElement.dispatchEvent(event);
       }
     },
     SlidAnimation(action) {

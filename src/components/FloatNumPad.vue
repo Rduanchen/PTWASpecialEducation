@@ -26,7 +26,7 @@ export default {
       required: true,
     },
   },
-  emits: ["button-clicked"],
+  emits: ["buttonClicked"],
   data() {
     return {
       // 使用物件陣列來描述每個按鈕，並設定其標籤和類型
@@ -66,7 +66,7 @@ export default {
   },
   methods: {
     handleClick(label) {
-      this.$emit("button-clicked", label);
+      this.$emit("buttonClicked", label);
     },
     adjustPosition() {
       this.$nextTick(() => {

@@ -13,7 +13,7 @@
 import { getSystemEffectAssets } from "@/utilitys/get_assets.js";
 export default {
   name: "GameOver",
-  emits: ["restart", "download-record", "previous-page"],
+  emits: ["restart", "downloadRecord", "previousPage"],
   computed: {
     fireworkSrc() {
       return getSystemEffectAssets("Firework.gif");
@@ -24,10 +24,10 @@ export default {
       this.$emit("restart");
     },
     download() {
-      this.$emit("download-record");
+      this.$emit("downloadRecord");
     },
     endGame() {
-      this.$emit("previous-page");
+      this.$emit("previousPage");
     },
   },
 };
