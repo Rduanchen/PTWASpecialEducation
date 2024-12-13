@@ -1,6 +1,6 @@
 <template>
   <div id="ImageContainer" ref="ImageContainer" class="image-container">
-    <img id="Img" ref="Image" :src="imageUrl" :alt="Data.Alt">
+    <img id="Img" ref="Image" :src="imageUrl" :alt="Data.Alt" />
   </div>
 </template>
 <script>
