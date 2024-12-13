@@ -68,7 +68,7 @@ export default {
     },
   },
 
-  emits: ["replyAnswer"],
+  emits: ["replyAnswer", "recordAnswer"],
   data() {
     return {
       configKonva: {},
@@ -229,7 +229,7 @@ export default {
         let answer = this.Data.answer.numerator / this.Data.answer.denominator;
         let isCorrect = answer.toFixed(2) == total.toFixed(2);
         this.$emit("replyAnswer", isCorrect);
-        this.$emit("record-answer", [
+        this.$emit("recordAnswer", [
           answer.toFixed(2),
           total.toFixed(2),
           isCorrect ? "正確" : "錯誤",

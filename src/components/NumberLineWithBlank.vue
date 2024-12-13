@@ -1,6 +1,6 @@
 <template>
   <div ref="container" class="gameContainer">
-    <v-stage :config="configKonva" ref="stage">
+    <v-stage ref="stage" :config="configKonva">
       <v-layer>
         <v-line
           v-for="(line, index) in configNumberLine"
@@ -28,14 +28,13 @@
           }"
           @click="rectClicked(id, rect)"
           @touchstart="rectClicked(id, rect)"
-          :key="id"
         ></v-rect>
       </v-layer>
     </v-stage>
     <FloatingNumPad
       v-if="virtualNumpadSwitch"
       :Data="{ top: menuPosition.top + 'px', left: menuPosition.left + 'px' }"
-      @button-clicked="numPadButtonClicked"
+      @buttonClicked="numPadButtonClicked"
     />
   </div>
 </template>
@@ -43,7 +42,6 @@
 <script>
 import { defineAsyncComponent } from "vue";
 export default {
-  emits: ["replyAnswer", "ReplyAnswer"],
   components: {
     FloatingNumPad: defineAsyncComponent(() =>
       import("@/components/FloatNumPad.vue")

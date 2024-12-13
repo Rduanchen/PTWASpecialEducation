@@ -26,7 +26,7 @@
       <FloatNumPad
         v-if="isShowNumPad"
         :Data="floatNumPadLocation"
-        @button-clicked="fillToInput"
+        @buttonClicked="fillToInput"
       />
     </template>
   </div>

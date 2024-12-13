@@ -54,7 +54,7 @@ export default {
       required: true,
     },
   },
-  emits: ["start-game", "download-record", "restart", "open-teaching-modal"],
+  emits: ["restart", "openTeachingModal", "startGame"],
   data() {
     return {
       nameofThisComponent: "GameStartandOver Component said:",
@@ -92,10 +92,10 @@ export default {
       Read.ReadText(text, stop);
     },
     startGame() {
-      this.$emit("start-game");
+      this.$emit("startGame");
     },
     openTeachingMediaModal() {
-      this.$emit("open-teaching-modal");
+      this.$emit("openTeachingModal");
     },
   },
 };

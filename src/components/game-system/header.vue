@@ -65,7 +65,7 @@ export default {
       required: true,
     },
   },
-  emits: ["previous-page"],
+  emits: ["previousPage"],
   data() {
     return {
       logo: getSystemAssets("logo.png", "nav_bar"),
@@ -76,7 +76,7 @@ export default {
   },
   methods: {
     PreviousPage() {
-      this.$emit("previous-page");
+      this.$emit("previousPage");
     },
   },
 };

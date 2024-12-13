@@ -21,8 +21,8 @@
     <div class="right-column">
       <div v-if="ShowPad && GameConfig.layout.pad" class="number-pad">
         <VirtualNumPad
-          @virtualpadinput-input="Input"
-          @virtualpadinput-delete="Delete"
+          @virtualpadinputInput="Input"
+          @virtualpadinputDelete="Delete"
           @virtualpadinput-pop="Pop"
         />
       </div>

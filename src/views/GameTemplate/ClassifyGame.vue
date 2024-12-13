@@ -35,10 +35,10 @@
       </div>
       <div class="answer-area__drop">
         <div
-          v-for="(draggableItems, index) in groupedItems"
+          v-for="(items, index) in groupedItems"
           class="drop-area__container"
         >
-          <p class="drop-area__title">{{ GameData.Answer[index].GroupName }}</p>
+          <p class="drop-area__title">{{ items.GroupName }}</p>
           <draggable
             :list="groupedItems[index]"
             item-key="Tag"

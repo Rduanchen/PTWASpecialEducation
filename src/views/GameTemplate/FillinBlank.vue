@@ -50,8 +50,8 @@
       <div v-for="slot in GameData.AssistiveComponent">
         <component
           :is="slot"
-          @virtualpadinput-input="VNInput"
-          @virtualpadinput-delete="VNDelete"
+          @virtualpadinputInput="VNInput"
+          @virtualpadinputDelete="VNDelete"
           @virtualpadinput-pop="VNPop"
         />
       </div>

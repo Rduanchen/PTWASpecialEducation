@@ -54,7 +54,7 @@ export default {
       required: true,
     },
   },
-  emits: ["open-hint-modal"],
+  emits: ["openHintModal"],
   data() {
     return {
       showhint: false,
@@ -84,7 +84,7 @@ export default {
   methods: {
     gethint() {
       const mediaType = "hint";
-      this.$emit("open-hint-modal", mediaType);
+      this.$emit("openHintModal", mediaType);
     },
     updated_hint_status() {
       let temp =

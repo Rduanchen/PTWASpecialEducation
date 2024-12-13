@@ -64,7 +64,7 @@ export default {
       required: true,
     },
   },
-  emits: ["pause-timer", "reset-timer", "start-timer", "reset-wrong-timer"],
+  emits: ["pauseTimer", "resetTimer", "startTimer", "resetWrongTimer"],
   data() {
     return {};
   },
@@ -94,16 +94,16 @@ export default {
       }
     },
     pauseTimer() {
-      this.$emit("pause-timer");
+      this.$emit("pauseTimer");
     },
     resetTimer() {
-      this.$emit("reset-timer");
+      this.$emit("resetTimer");
     },
     startTimer() {
-      this.$emit("start-timer");
+      this.$emit("startTimer");
     },
     resetWrongTimes() {
-      this.$emit("reset-wrong-timer");
+      this.$emit("resetWrongTimer");
     },
   },
 };

@@ -216,7 +216,6 @@ export default {
         if (this.getAnswer() != this.answer) {
           this.answer = this.getAnswer();
           this.configWeight.text = this.getAnswer();
-          this.$emit("ReplyAnswer", this.answer);
           this.$emit("replyAnswer", this.answer);
         }
       }

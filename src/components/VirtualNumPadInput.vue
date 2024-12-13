@@ -65,9 +65,9 @@
 export default {
   name: "VirtualNumPad",
   emits: [
-    "virtualpadinput-Input",
-    "virtualpadinput-delete",
-    "virtualpadinput-pop",
+    "virtualpadinputInput",
+    "virtualpadinputDelete",
+    "virtualpadinputPop",
   ],
   data() {
     return {
@@ -77,13 +77,13 @@ export default {
   methods: {
     input(num) {
       console.log("VirtualNumPad input:" + num);
-      this.$emit("virtualpadinput-Input", num);
+      this.$emit("virtualpadinputInput", num);
     },
     delete_num() {
-      this.$emit("virtualpadinput-delete");
+      this.$emit("virtualpadinputDelete");
     },
     back() {
-      this.$emit("virtualpadinput-pop");
+      this.$emit("virtualpadinputPop");
     },
   },
 };
