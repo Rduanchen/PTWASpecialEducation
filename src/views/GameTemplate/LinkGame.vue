@@ -95,6 +95,10 @@ export default {
     NumberBoard: defineAsyncComponent(() =>
       import("@/components/NumberBoard.vue")
     ),
+    ElectronicClock: defineAsyncComponent(() =>
+      import("@/components/ElectronicClock.vue")
+    ),
+    Clock: defineAsyncComponent(() => import("@/components/Clock.vue")),
   },
   props: {
     GameData: {

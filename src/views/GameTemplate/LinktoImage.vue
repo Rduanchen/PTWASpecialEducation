@@ -377,11 +377,11 @@ export default {
             this.MinGap + index * (RectWidth + this.MinGap),
             0,
             RectWidth,
-            100
+            this.SelectionHeight
           );
           this.addText({
-            x: this.MinGap + index * (RectWidth + this.MinGap) + RectWidth / 2,
-            y: 50,
+            x: this.MinGap + index * (RectWidth + this.MinGap),
+            y: (this.SelectionHeight - this.FontSize) / 2,
             text: item,
             width: RectWidth,
           });
