@@ -7,43 +7,34 @@
       <option>dragToAlign</option>
       <option>dragImages</option>
       <option>scale</option>
-      <option selected>
-        drawingBroad
-      </option>
+      <option>drawingBroad</option>
+      <option selected>numPad</option>
     </select>
   </div>
-  <div v-if="tester == 'fraction'">
-    <dragFraction
-      :Data="configFraction"
-      :ID="id"
-      @reply-answer="printAns"
-    />
+  <div v-if="tester == 'fraction'" class="testArea">
+    <dragFraction :Data="configFraction" :ID="id" @reply-answer="printAns" />
   </div>
-  <div v-if="tester == 'numberLine'">
+  <div v-if="tester == 'numberLine'" class="testArea">
     <numberLine
       :Data="configNumberLine"
       :ID="id"
       @get-drag-position="printAns"
     />
   </div>
-  <div v-if="tester == 'drawShapes'">
-    <drawShapes
-      :Data="configDrawShapes"
-      :ID="id"
-      @reply-answer="printAns"
-    />
+  <div v-if="tester == 'drawShapes'" class="testArea">
+    <drawShapes :Data="configDrawShapes" :ID="id" @reply-answer="printAns" />
   </div>
-  <div v-if="tester == 'dragToAlign'">
+  <div v-if="tester == 'dragToAlign'" class="testArea">
     <dragToAlign :Data="configDragToAlign" :ID="id" />
   </div>
-  <div v-if="tester == 'dragImages'">
+  <div v-if="tester == 'dragImages'" class="testArea">
     <dragImages :Data="configDragImages" :ID="id" />
   </div>
-  <div v-if="tester == 'scale'">
-    <scale :Data="configScale" :ID="id" @reply-answer="printAns" />
+  <div v-if="tester == 'scale'" class="testArea">
+    <scale :Data="configScale" :ID="id" @replyAnswer="printAns" />
   </div>
-  <div v-if="tester == 'drawingBroad'">
-    <drawingBroad :Data="configBrush" />
+  <div v-if="tester == 'drawingBoard'" class="testArea">
+    <drawingBoard :Data="configBrush"></drawingBoard>
     <div class="btnContainer">
       <button
         @click="
@@ -62,6 +53,9 @@
         eraser
       </button>
     </div>
+  </div>
+  <div v-if="tester == 'numPad'" class="numPad testArea">
+    <numPad :Data="configNumPad" @replyAnswer="printAns"></numPad>
   </div>
 </template>
 
@@ -87,13 +81,17 @@ export default {
       import("@/components/DragImages.vue")
     ),
     scale: defineAsyncComponent(() => import("@/components/Scale.vue")),
-    drawingBroad: defineAsyncComponent(() =>
-      import("@/components/DrawingBroad.vue")
+    drawingBoard: defineAsyncComponent(() =>
+      import("@/components/DrawingBoard.vue")
+    ),
+    numPad: defineAsyncComponent(() =>
+      import("@/components/ButtonWithNumPad.vue")
     ),
   },
   data() {
     return {
-      tester: "drawingBroad",
+      id: "",
+      tester: "numPad",
       configFraction: {
         verifyOption: "answer",
         shape: "circle",
@@ -152,6 +150,10 @@ export default {
         color: "red",
         size: 10,
       },
+      configNumPad: {
+        padPosition: "upperRight",
+        color: "#6da1f1",
+      },
       id: "Dev0105",
     };
   },
@@ -164,7 +166,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-div {
+.testArea {
   width: 70vw;
   height: 70vh;
 }
@@ -174,5 +176,8 @@ div {
   width: 0;
   height: 0;
   z-index: -1;
+}
+.numPad {
+  width: 10%;
 }
 </style>
