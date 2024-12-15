@@ -12,26 +12,34 @@
     </select>
   </div>
   <div v-if="tester == 'fraction'" class="testArea">
-    <dragFraction :Data="configFraction" :ID="id" @reply-answer="printAns" />
+    <dragFraction
+      :Data="configFraction"
+      :ID="gameid"
+      @reply-answer="printAns"
+    />
   </div>
   <div v-if="tester == 'numberLine'" class="testArea">
     <numberLine
       :Data="configNumberLine"
-      :ID="id"
+      :ID="gameid"
       @get-drag-position="printAns"
     />
   </div>
   <div v-if="tester == 'drawShapes'" class="testArea">
-    <drawShapes :Data="configDrawShapes" :ID="id" @reply-answer="printAns" />
+    <drawShapes
+      :Data="configDrawShapes"
+      :ID="gameid"
+      @reply-answer="printAns"
+    />
   </div>
   <div v-if="tester == 'dragToAlign'" class="testArea">
-    <dragToAlign :Data="configDragToAlign" :ID="id" />
+    <dragToAlign :Data="configDragToAlign" :ID="gameid" />
   </div>
   <div v-if="tester == 'dragImages'" class="testArea">
-    <dragImages :Data="configDragImages" :ID="id" />
+    <dragImages :Data="configDragImages" :ID="gameid" />
   </div>
   <div v-if="tester == 'scale'" class="testArea">
-    <scale :Data="configScale" :ID="id" @replyAnswer="printAns" />
+    <scale :Data="configScale" :ID="gameid" @replyAnswer="printAns" />
   </div>
   <div v-if="tester == 'drawingBoard'" class="testArea">
     <drawingBoard :Data="configBrush"></drawingBoard>
@@ -90,7 +98,6 @@ export default {
   },
   data() {
     return {
-      id: "",
       tester: "numPad",
       configFraction: {
         verifyOption: "answer",
@@ -154,7 +161,7 @@ export default {
         padPosition: "upperRight",
         color: "#6da1f1",
       },
-      id: "Dev0105",
+      gameid: "Dev0105",
     };
   },
   methods: {
