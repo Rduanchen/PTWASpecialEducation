@@ -128,7 +128,7 @@
     </section>
     <scratchSheet v-if="scratchSheetVisible" @close-sheet="closeSratchSheet" />
     <TechModal
-      v-if="showMediaModal"
+      v-if="showTeachModal"
       :media-data="GameData.introvideo"
       @close="closeMediaModal"
     />
@@ -153,6 +153,7 @@ import gameStore from "@/stores/game";
 import { mapWritableState } from "pinia";
 import { soundManager } from "@/utilitys/sound-manager.js";
 import TechModal from "@/components/game-system/TechModal.vue";
+import HintModal from "@/components/game-system/HintModal.vue";
 export default {
   components: {
     TechModal,
@@ -298,8 +299,9 @@ export default {
       isPassLevel: [],
       questionOrder: [],
       questionCopy: [],
-      isGif: false,
-      showMediaModal: false,
+      showTeachModal: false,
+      hintConfig: {}
+
       // SentData2ChildComponent: {},
     };
   },
@@ -412,10 +414,10 @@ export default {
       this.questionOrder = this.gameCode;
     },
     openMediaModal() {
-      this.showMediaModal = true;
+      this.showTeachModal = true;
     },
     closeMediaModal() {
-      this.showMediaModal = false;
+      this.showTeachModal = false;
     },
     changeGameStatus(status) {
       this.GameStatus = status;
@@ -666,6 +668,9 @@ export default {
     resetWrongTimes() {
       this.WrongTimes = 0;
     },
+    initHintApp() {
+      this.hintConfig = this.GameData.hint;++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    }
   },
 };
 </script>
