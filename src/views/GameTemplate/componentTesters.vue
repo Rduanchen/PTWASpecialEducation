@@ -5,35 +5,65 @@
       <option>fraction</option>
       <option>drawShapes</option>
       <option>dragToAlign</option>
-      <option selected>dragImages</option>
+      <option>dragImages</option>
+      <option>scale</option>
+      <option>drawingBroad</option>
+      <option selected>numPad</option>
     </select>
   </div>
-  <div v-if="tester == 'fraction'">
+  <div v-if="tester == 'fraction'" class="testArea">
     <dragFraction
       :Data="configFraction"
-      :ID="id"
-      @replyAnswer="printAns"
-    ></dragFraction>
+      :ID="gameid"
+      @reply-answer="printAns"
+    />
   </div>
-  <div v-if="tester == 'numberLine'">
+  <div v-if="tester == 'numberLine'" class="testArea">
     <numberLine
       :Data="configNumberLine"
-      :ID="id"
-      @getDragPosition="printAns"
-    ></numberLine>
+      :ID="gameid"
+      @get-drag-position="printAns"
+    />
   </div>
-  <div v-if="tester == 'drawShapes'">
+  <div v-if="tester == 'drawShapes'" class="testArea">
     <drawShapes
       :Data="configDrawShapes"
-      :ID="id"
-      @replyAnswer="printAns"
-    ></drawShapes>
+      :ID="gameid"
+      @reply-answer="printAns"
+    />
   </div>
-  <div v-if="tester == 'dragToAlign'">
-    <dragToAlign :Data="configDragToAlign" :ID="id"></dragToAlign>
+  <div v-if="tester == 'dragToAlign'" class="testArea">
+    <dragToAlign :Data="configDragToAlign" :ID="gameid" />
   </div>
-  <div v-if="tester == 'dragImages'">
-    <dragImages :Data="configDragImages" :ID="id"></dragImages>
+  <div v-if="tester == 'dragImages'" class="testArea">
+    <dragImages :Data="configDragImages" :ID="gameid" />
+  </div>
+  <div v-if="tester == 'scale'" class="testArea">
+    <scale :Data="configScale" :ID="gameid" @replyAnswer="printAns" />
+  </div>
+  <div v-if="tester == 'drawingBoard'" class="testArea">
+    <drawingBoard :Data="configBrush"></drawingBoard>
+    <div class="btnContainer">
+      <button
+        @click="
+          configBrush.color = 'red';
+          configBrush.size = 10;
+        "
+      >
+        brush
+      </button>
+      <button
+        @click="
+          configBrush.color = 'eraser';
+          configBrush.size = 50;
+        "
+      >
+        eraser
+      </button>
+    </div>
+  </div>
+  <div v-if="tester == 'numPad'" class="numPad testArea">
+    <numPad :Data="configNumPad" @replyAnswer="printAns"></numPad>
   </div>
 </template>
 
@@ -58,10 +88,17 @@ export default {
     dragImages: defineAsyncComponent(() =>
       import("@/components/DragImages.vue")
     ),
+    scale: defineAsyncComponent(() => import("@/components/Scale.vue")),
+    drawingBoard: defineAsyncComponent(() =>
+      import("@/components/DrawingBoard.vue")
+    ),
+    numPad: defineAsyncComponent(() =>
+      import("@/components/ButtonWithNumPad.vue")
+    ),
   },
   data() {
     return {
-      tester: "dragImages",
+      tester: "numPad",
       configFraction: {
         verifyOption: "answer",
         shape: "circle",
@@ -78,7 +115,10 @@ export default {
         image: "apple.png",
       },
       configDrawShapes: {
-        //bgRatio: [],
+        bgRatio: {
+          width: 20,
+          height: 10,
+        },
         /*givenPoints: [
           [2, 2],
           [2, 5],
@@ -109,7 +149,19 @@ export default {
         ],
         background: "black",
       },
-      id: "Dev0105",
+      configScale: {
+        answer: 100,
+        //customScaleSrc: "sugar.png",
+      },
+      configBrush: {
+        color: "red",
+        size: 10,
+      },
+      configNumPad: {
+        padPosition: "upperRight",
+        color: "#6da1f1",
+      },
+      gameid: "Dev0105",
     };
   },
   methods: {
@@ -119,3 +171,20 @@ export default {
   },
 };
 </script>
+
+<style scoped lang="scss">
+.testArea {
+  width: 70vw;
+  height: 70vh;
+}
+.btnContainer {
+  position: absolute;
+  top: 20%;
+  width: 0;
+  height: 0;
+  z-index: -1;
+}
+.numPad {
+  width: 10%;
+}
+</style>
