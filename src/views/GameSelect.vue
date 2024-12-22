@@ -420,11 +420,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$header-color: #00e5ce;
-$sidebar-color: #ebe200;
-$header-btn: #7878fe;
-$sidebar-btn: #ffffff;
-$sidebar-banner: #ff69ee;
+$header-color: $primary-color;
+$sidebar-color: #dfedb3;
+$header-btn: #f4fc93;
+$sidebar-btn: #f8fbe8;
+$sidebar-banner: #a8c2ea;
 
 header {
   background-color: $header-color;
@@ -444,6 +444,7 @@ header {
   }
   button:hover {
     background-color: $header-btn;
+    color: black;
     transform: scale($transform-scale);
   }
   @media (min-width: 768px) {

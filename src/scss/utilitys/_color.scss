@@ -1,7 +1,7 @@
-$primary-color: #c4cfc5;
+$primary-color: #c4c49f; // 淺綠色主色
 $sub-color: #f0f4ef;
 $accent-color: #0077b6; // 藍色點綴色
-$dark-color: #1D1D1D;
+$dark-color: #1d1d1d;
 $light-color: #ffffff;
 $submit-color: #80cbc4;
 $success-color: #64b5f6; // 藍色成功色
@@ -12,14 +12,13 @@ $alert-color: #ff6f61;
 $info-color: lighten($success-color, 20%);
 $hyperlink-color: #0077b6;
 
-
 $primary-btn-bg: $primary-color;
 $primary-btn-hover-bg: darken($primary-color, 20%);
 $primary-btn-text: #ffffff;
 
 $secondary-btn-bg: lighten($accent-color, 20%);
 $secondary-btn-hover-bg: lighten($accent-color, 10%);
-$secondary-btn-text: #1D1D1D;
+$secondary-btn-text: #1d1d1d;
 
 $success-btn-bg: $success-color;
 $success-btn-hover-bg: darken($success-color, 10%);
@@ -44,6 +43,6 @@ $submit-btn-text: #ffffff;
 // $info-btn-hover-bg: darken(#6c757d, 2%); // 懸停時按鈕顏色稍微加深
 // $info-btn-text: #ffffff; // 白色文字顏色
 
-$info-btn-bg: #A9B6AD;
+$info-btn-bg: #a9b6ad;
 
 $hightlight-color: #198754;
