@@ -84,7 +84,7 @@ export default {
 
 <style scoped lang="scss">
 header {
-  background-color: #f19c79;
+  background-color: #f4c49f;
   height: 10vh !important;
   touch-action: none;
   user-select: none;
@@ -97,7 +97,7 @@ header {
 }
 
 .navbar {
-  background-color: #f19c79;
+  background-color: $primary-color;
 
   .navbar-brand {
     img {
@@ -118,8 +118,9 @@ header {
 }
 
 .breadcrumb .breadcrumb-item {
+  cursor: pointer;
   a {
-    color: #fff; /* 替換為你想要的顏色 */
+    color: black;
     font-size: 1.2em;
   }
 }
