@@ -1,6 +1,7 @@
 <template>
   <div id="GameView" ref="GameView">
     <GameHeader
+      class="game-header"
       :grade="Grade"
       :game-name="gameName"
       :subject="Subjects[Subject]"
