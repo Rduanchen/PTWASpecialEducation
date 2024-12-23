@@ -288,7 +288,6 @@
         </div>
       </div>
     </div>
-    {{ isFullScreen }}
   </div>
 </template>
 <script>
@@ -427,6 +426,9 @@ export default {
 };
 </script>
 <style scoped lang="scss">
+$side-bar-color: #dfedb3;
+$side-bar-button-color: #f19c79;
+
 .SideBar {
   border-left: solid 3px #aaa;
   background-color: #ffedda;
@@ -445,6 +447,7 @@ export default {
     flex-direction: column;
     gap: 1rem;
     justify-content: stretch;
+    background-color: $side-bar-color;
     button {
       align-self: center;
       width: 93%;
@@ -452,7 +455,13 @@ export default {
       border-radius: 12px;
       height: 4rem;
       padding: 0.4rem;
-
+      background-color: $side-bar-button-color;
+      border: none;
+      &:hover {
+        background-color: $side-bar-button-color;
+        color: black;
+        scale: $transform-scale;
+      }
       img {
         height: 80%;
         max-width: 40px;
