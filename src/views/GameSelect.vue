@@ -59,7 +59,7 @@
     >
       <div class="side-bar">
         <p class="title">現在科目</p>
-        <button class="">
+        <button class="sidebar-subject-banner">
           {{ subjects[nowSubject] }}
         </button>
         <p class="title">章節</p>
@@ -355,7 +355,7 @@ export default {
     searchGame() {
       let keyword = this.searchInput;
       this.searchResult = [];
-      this.searchResult = this.queryGame(this.mathShowInfo, keyword);
+      this.searchResult = this.queryGame(this.mathShowInfo, keyword); //FIXME: 只能搜尋數學，這樣不好
       this.searchInput = "";
       this.switchMode("search");
     },
@@ -371,6 +371,12 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+$header-color: $primary-color;
+$sidebar-color: #dfedb3;
+$header-btn: #f4fc93;
+$sidebar-btn: #f8fbe8;
+$sidebar-banner: #a8c2ea;
+
 .subjects-menu {
   display: flex;
   flex-direction: column;
@@ -422,7 +428,7 @@ header {
   -moz-user-select: none !important;
   -ms-user-select: none !important;
   .game-select__nav {
-    background-color: #cb9fcf;
+    background-color: $header-color;
     height: 10vh !important;
     padding: 0 2rem;
     display: grid;
@@ -452,8 +458,11 @@ header {
         max-width: 9rem;
         height: 3rem;
         border-radius: $border-radius;
-        background-color: #bdb2ff;
+        background-color: $header-btn;
         border: none;
+        &:hover {
+          scale: $transform-scale;
+        }
       }
     }
     .search-group {
@@ -477,7 +486,7 @@ header {
         height: 3rem;
         padding: 10px 1rem;
         border-radius: $border-radius;
-        background-color: #bdb2ff;
+        background-color: $header-btn;
         border: none;
       }
     }
@@ -492,7 +501,7 @@ header {
     display: flex;
     flex-direction: column;
     height: 90vh;
-    background-color: #ddd;
+    background-color: $sidebar-color;
     padding: 0 1rem;
     button {
       @extend .button-border;
@@ -505,18 +514,25 @@ header {
       font-size: 1.5em;
       margin: 1rem 0;
     }
+    .sidebar-subject-banner {
+      background-color: $sidebar-banner;
+      font-size: 1.5rem;
+      font-weight: bold;
+      height: 3rem;
+    }
     .button-container {
       display: grid;
       gap: 1rem;
+      overflow-y: auto;
+      overflow-x: hidden;
       button {
         transition: transform 0.3s ease;
         font-size: 1rem;
-        background-color: #feece9;
-        color: #333;
+        background-color: $sidebar-btn;
       }
       button:hover {
         transform: scale(1.05);
-        background-color: #feece9;
+        background-color: $sidebar-btn;
       }
     }
   }
